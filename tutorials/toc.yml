@@ -1,0 +1,27 @@
+
+- name: NetOffice Tutorials
+  href: index.md
+
+- name: 1. Understand COM Proxy Management
+  href: tutorial01.md
+
+- name: 2. Efficient using Dispose
+  href: tutorial02.md
+
+- name: 3. Using Dispose with event exporting Objects
+  href: tutorial03.md
+
+- name: 4. Observable COM Proxy Count
+  href: tutorial04.md
+
+- name: 5. Understanding COMObject
+  href: tutorial05.md
+
+- name: 6. Understand Variant Type
+  href: tutorial06.md
+
+- name: 7. Understand Variant Type
+  href: tutorial07.md
+
+- name: 8. Check for a specific entity support at runtime
+  href: tutorial08.md
