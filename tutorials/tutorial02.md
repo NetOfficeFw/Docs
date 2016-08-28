@@ -43,4 +43,5 @@ public void Tutorial02Main()
     application.Dispose();
 }
 ```
+
 [Tutorial 3: Using Dispose with event exporting Objects](tutorial03.md)

@@ -20,7 +20,7 @@
 - name: 6. Understand Variant Type
   href: tutorial06.md
 
-- name: 7. Understand Variant Type
+- name: 7. Invoker
   href: tutorial07.md
 
 - name: 8. Check for a specific entity support at runtime
