@@ -1,8 +1,10 @@
 
 - name: Tutorials
-  href: tutorials/index.md
+  href: tutorials/
+  topicHref: tutorials/
 - name: Toolbox
-  href: toolbox/index.md
+  href: toolbox/
+  topicHref: toolbox/
 - name: Api Documentation
   href: api/
   homepage: api/index.md
