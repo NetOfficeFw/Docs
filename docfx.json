@@ -23,15 +23,8 @@
       { "files": [ "tutorials/**.md", "tutorials/**/toc.yml" ] }
     ],
     "resource": [
-      {
-        "files": [
-          "images/**"
-        ],
-        "exclude": [
-          "obj/**",
-          "_site/**"
-        ]
-      }
+      { "files": [ "images/**" ], "exclude": [ "obj/**", "_site/**" ] },
+      { "files": [ "CNAME", ".nojekyll" ] }
     ],
     "overwrite": [
       {
