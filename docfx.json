@@ -18,7 +18,7 @@
   ],
   "build": {
     "content": [
-      { "files": [ "toc.yml", "*.md" ], "exclude": [ "obj/**", "_site/**" ] },
+      { "files": [ "toc.yml", "*.md" ], "exclude": [ "obj/**", "_site/**", "README.md" ] },
       { "files": [ "documentation/**.md", "documentation/**/toc.yml" ] },
       { "files": [ "toolbox/**.md", "toolbox/**/toc.yml" ] },
       { "files": [ "tutorials/**.md", "tutorials/**/toc.yml" ] },

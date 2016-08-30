@@ -3,3 +3,5 @@
   href: index.md
 - name: Technical Documentation
   href: technical/toc.yml
+- name: FAQ
+  href: faq.md
