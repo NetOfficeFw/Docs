@@ -1,3 +1,7 @@
+---
+uid: tutorial05_csharp
+---
+
 # Understanding COMObject
 
 COMObject is the common base type for all objects in NetOffice which are based on

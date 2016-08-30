@@ -1,3 +1,7 @@
+---
+uid: tutorial06_csharp
+---
+
 # Understand Variant Type
 
 The datatype Variant is not plain supported by .NET CLR but common in an

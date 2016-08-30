@@ -1,3 +1,6 @@
+---
+uid: tutorial01_csharp
+---
 
 # Understand COM Proxy Management
 

@@ -1,3 +1,6 @@
+---
+uid: tutorial02_csharp
+---
 
 # Efficient using Dispose & DisposeChildInstances
 

@@ -5,6 +5,9 @@
 - name: Toolbox
   href: toolbox/
   topicHref: toolbox/
+- name: Documentation
+  href: documentation/
+  topicHref: documentation/
 - name: Api Documentation
   href: api/
   homepage: api/index.md

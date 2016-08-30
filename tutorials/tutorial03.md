@@ -1,3 +1,7 @@
+---
+uid: tutorial03_csharp
+---
+
 # Using Dispose with event exporting Objects
 
 This tutorial shows how to use `Dipose()` and `DiposeChildInstances()` method

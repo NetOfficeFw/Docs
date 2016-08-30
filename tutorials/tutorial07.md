@@ -1,3 +1,7 @@
+---
+uid: tutorial07_csharp
+---
+
 # Invoker
 
 The static class LateBindingApi.Core.Invoker is the low level interface from

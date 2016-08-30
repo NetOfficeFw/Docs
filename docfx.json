@@ -18,14 +18,16 @@
   ],
   "build": {
     "content": [
-      { "files": [ "api/**.yml", "api/index.md" ] },
-      { "files": [ "articles/**.md", "articles/**/toc.yml", "toc.yml", "*.md" ], "exclude": [ "obj/**", "_site/**" ] },
+      { "files": [ "toc.yml", "*.md" ], "exclude": [ "obj/**", "_site/**" ] },
+      { "files": [ "documentation/**.md", "documentation/**/toc.yml" ] },
       { "files": [ "toolbox/**.md", "toolbox/**/toc.yml" ] },
-      { "files": [ "tutorials/**.md", "tutorials/**/toc.yml" ] }
+      { "files": [ "tutorials/**.md", "tutorials/**/toc.yml" ] },
+      { "files": [ "api/**.yml", "api/index.md" ] }
     ],
     "resource": [
       { "files": [ "images/**" ], "exclude": [ "obj/**", "_site/**" ] },
       { "files": [ "CNAME", ".nojekyll" ] },
+      { "files": [ "documentation/assets/**" ] },
       { "files": [ "toolbox/assets/**" ] }
     ],
     "overwrite": [

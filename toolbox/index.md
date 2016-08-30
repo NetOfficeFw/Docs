@@ -14,6 +14,9 @@ create solutions with and for Microsoft Office.
 | [Office UI][6]             | Find and delete dead UI Items                                                   |
 | [Project Wizard][7]        | Project assistant for VS(Express Solutions)                                     |
 
+
+## Download
+
 [Download NetOffice Developer Toolbox][toolbox_releases]
 
 [1]: office_compatiblity.md

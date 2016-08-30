@@ -1,3 +1,7 @@
+---
+uid: tutorial04_csharp
+---
+
 # Observable COM Proxy Count
 
 Sometimes it is very useful to know the count of open COM Proxies in your application.

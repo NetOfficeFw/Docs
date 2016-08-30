@@ -1,3 +1,7 @@
+---
+uid: tutorial08_csharp
+---
+
 # Check for a specific entity support at runtime
 
 Any object in NetOffice implements a special method too see at runtime a specified property or method is available
