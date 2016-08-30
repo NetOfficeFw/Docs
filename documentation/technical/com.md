@@ -108,7 +108,7 @@ By calling `book.Dispose();` book and all other elements created through it will
 be freed. In this example these are Worksheet and the 3 Worksheet references. By
 calling  `application.Dispose();` you free the remaining 2 COM Proxies.
 
-### Example projects
+### Related Tutorials
 
 0. [Tutorial01](xref:tutorial01_csharp)
 0. [Tutorial02](xref:tutorial02_csharp)
