@@ -5,11 +5,6 @@
 
 NetOffice supports extending and automating Microsoft Office applications: Excel, Word, Outlook, PowerPoint, Access, Project and Visio.
 
-## Getting Started
-
-```ps
-Install-Package NetOffice.Word -Prerelease -Source https://www.myget.org/F/netofficefw-dev/api/v2
-```
 
 ## Features
 
