@@ -3,25 +3,25 @@
   href: index.md
 
 - name: 1. Understand COM Proxy Management
-  href: tutorial01.md
+  href: tutorial01_en_cs.md
 
 - name: 2. Efficient using Dispose
-  href: tutorial02.md
+  href: tutorial02_en_cs.md
 
 - name: 3. Using Dispose with event exporting Objects
-  href: tutorial03.md
+  href: tutorial03_en_cs.md
 
 - name: 4. Observable COM Proxy Count
-  href: tutorial04.md
+  href: tutorial04_en_cs.md
 
 - name: 5. Understanding COMObject
-  href: tutorial05.md
+  href: tutorial05_en_cs.md
 
 - name: 6. Understand Variant Type
-  href: tutorial06.md
+  href: tutorial06_en_cs.md
 
 - name: 7. Invoker
-  href: tutorial07.md
+  href: tutorial07_en_cs.md
 
 - name: 8. Check for a specific entity support at runtime
-  href: tutorial08.md
+  href: tutorial08_en_cs.md
