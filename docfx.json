@@ -26,7 +26,7 @@
     ],
     "resource": [
       { "files": [ "images/**" ], "exclude": [ "obj/**", "_site/**" ] },
-      { "files": [ "CNAME", ".nojekyll" ] },
+      { "files": [ "CNAME", ".nojekyll", "README.txt" ] },
       { "files": [ "documentation/assets/**" ] },
       { "files": [ "toolbox/assets/**" ] }
     ],
