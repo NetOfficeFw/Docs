@@ -35,4 +35,4 @@ private void Tutorial07Main()
 }
 ```
 
-[Tutorial 8: Check for a specific entity support at runtime](tutorial08.md)
+[Tutorial 8: Check for a specific entity support at runtime](tutorial08_en_cs.md)

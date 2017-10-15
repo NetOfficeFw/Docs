@@ -44,4 +44,4 @@ public void Tutorial01Main()
 }
 ```
 
-[Tutorial 2: Efficient using Dispose & DisposeChildInstances](tutorial02.md)
+[Tutorial 2: Efficient using Dispose & DisposeChildInstances](tutorial02_en_cs.md)

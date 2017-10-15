@@ -47,4 +47,4 @@ private void Tutorial06Main()
 }
 ```
 
-[Tutorial 7: Invoker](tutorial07.md)
+[Tutorial 7: Invoker](tutorial07_en_cs.md)

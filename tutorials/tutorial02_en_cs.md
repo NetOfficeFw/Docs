@@ -4,7 +4,7 @@ uid: tutorial02_csharp
 
 # Efficient using Dispose & DisposeChildInstances
 
-In [Tutorial 1](tutorial01.md) you have seen how to use Dispose() to release an object
+In [Tutorial 1](tutorial01_en_cs.md) you have seen how to use Dispose() to release an object
 and its created children. This tutorial shows you how to use the method
 `DisposeChildInstances()` to release all children with one call.
 
@@ -47,4 +47,4 @@ public void Tutorial02Main()
 }
 ```
 
-[Tutorial 3: Using Dispose with event exporting Objects](tutorial03.md)
+[Tutorial 3: Using Dispose with event exporting Objects](tutorial03_en_cs.md)
