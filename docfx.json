@@ -44,6 +44,7 @@
     "dest": "_site",
     "globalMetadata": {
       "_appTitle": "NetOffice Framework",
+      "_appTitleShort": "NetOffice",
       "_disableContribution": true,
       "_appFooter": "Copyright © 2016 NetOffice Framework.<br>Documentation licensed under <a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0<a/>.",
       "_appLogoPath": "images/NetOfficeOriginalLogo_96x96.png",

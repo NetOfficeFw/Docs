@@ -1,3 +1,8 @@
-<a class="navbar-brand" href="{{_rel}}index.html" title="{{_appTitle}}">
-  <img id="logo" src="{{_rel}}{{_appLogoPath}}" alt="{{_appName}}" width="48" height="48">
-</a>
+<div class="usa-logo" id="basic-logo">
+  <span class="usa-logo-text">
+    <a href="{{_rel}}index.html" title="{{_appTitle}}">
+      <img id="logo" class="logo" src="{{_rel}}{{_appLogoPath}}" alt="{{_appTitleShort}} logo" width="32" height="32">
+      {{_appTitleShort}}
+    </a>
+  </span>
+</div>
