@@ -5,3 +5,21 @@
   width: 32px;
   height: 32px;
 }
+
+.usa-footer-secondary_section {
+  background-color: #e1f3f8;
+}
+
+.landing-page .usa-hero {
+  background-image: url(../images/landing_page_hero_3960x720.jpg);
+  padding-bottom: 7.2rem;
+  padding-top: 3.5rem;
+  background-position: center;
+  background-size: cover;
+}
+
+@media screen and (min-width: 481px) {
+  .usa-hero-callout {
+    max-width: 60rem;
+  }
+}

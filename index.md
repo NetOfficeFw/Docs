@@ -1,9 +1,9 @@
-
-# NetOffice Framework
-
-> NetOffice Framework is set of libraries and tools for building addins, extending and automating Microsoft Office applications.
-
-NetOffice supports extending and automating Microsoft Office applications: Excel, Word, Outlook, PowerPoint, Access, Project and Visio.
+---
+_body_class: landing-page
+_is_landing_page: true
+hero_title: NetOffice Framework
+hero_body: "NetOffice Framework is set of libraries and tools for building addins, extending and automating Microsoft Office applications.<br><br>NetOffice supports extending and automating Microsoft Office applications: Excel, Word, Outlook, PowerPoint, Access, Project and Visio."
+---
 
 
 ## Features
