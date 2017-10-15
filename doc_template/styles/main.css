@@ -1,4 +1,6 @@
-
+body {
+  font-size: 1.4rem;
+}
 
 .usa-header img.logo {
   vertical-align: text-top;
@@ -16,6 +18,10 @@
   padding-top: 3.5rem;
   background-position: center;
   background-size: cover;
+}
+
+.usa-hero-callout {
+  border-radius: 0.3rem;
 }
 
 @media screen and (min-width: 481px) {
