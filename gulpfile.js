@@ -41,10 +41,6 @@ gulp.task('lint', () => {
   return lint('app/scripts/**/*.js')
     .pipe(gulp.dest('app/scripts'));
 });
-gulp.task('lint:test', () => {
-  return lint('test/spec/**/*.js')
-    .pipe(gulp.dest('test/spec'));
-});
 
 gulp.task('html', ['styles', 'scripts'], () => {
   return gulp.src('app/*.html')
@@ -119,25 +115,6 @@ gulp.task('serve:dist', ['default'], () => {
       baseDir: ['dist']
     }
   });
-});
-
-gulp.task('serve:test', ['scripts'], () => {
-  browserSync.init({
-    notify: false,
-    port: 9000,
-    ui: false,
-    server: {
-      baseDir: 'test',
-      routes: {
-        '/scripts': '.tmp/scripts',
-        '/node_modules': 'node_modules'
-      }
-    }
-  });
-
-  gulp.watch('app/scripts/**/*.js', ['scripts']);
-  gulp.watch(['test/spec/**/*.js', 'test/index.html']).on('change', reload);
-  gulp.watch('test/spec/**/*.js', ['lint:test']);
 });
 
 gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
