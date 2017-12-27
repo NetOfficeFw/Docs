@@ -4,6 +4,9 @@ const gulpLoadPlugins = require('gulp-load-plugins');
 const browserSync = require('browser-sync').create();
 const del = require('del');
 const runSequence = require('run-sequence');
+const markdown = require('markit-json');
+const fs = require('fs');
+const assign = require('object-assign');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -42,7 +45,7 @@ gulp.task('lint', () => {
     .pipe(gulp.dest('app/scripts'));
 });
 
-gulp.task('html', ['styles', 'scripts'], () => {
+gulp.task('html', ['styles', 'scripts', 'handlebars'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
@@ -71,9 +74,25 @@ gulp.task('fonts', () => {
     .pipe($.if(dev, gulp.dest('.tmp/fonts'), gulp.dest('dist/fonts')));
 });
 
+gulp.task('handlebars', function () {
+  $.hbs.registerPartial('head', fs.readFileSync('app/partials/head.hbs', 'utf8'));
+
+  var templateData = JSON.parse(fs.readFileSync('app/docfx.json', 'utf8')).build.globalMetadata;
+  return gulp.src(['app/*.md'])
+      .pipe(markdown())
+      .pipe($.hbs('app/layout/master.hbs', { dataSource: (file) => {
+        var data = JSON.parse(file.contents.toString());
+        data = assign(data, templateData);
+        return data;
+      }}))
+      .pipe(gulp.dest('.tmp'));
+});
+
 gulp.task('extras', () => {
   return gulp.src([
     'app/*',
+    '!app/**/*.hbs',
+    '!app/**/*.md',
     '!app/*.html'
   ], {
     dot: true
@@ -83,7 +102,7 @@ gulp.task('extras', () => {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('serve', () => {
-  runSequence(['clean'], ['styles', 'scripts', 'fonts'], () => {
+  runSequence(['clean'], ['styles', 'scripts', 'fonts', 'handlebars'], () => {
     browserSync.init({
       notify: false,
       port: 9000,
@@ -104,6 +123,7 @@ gulp.task('serve', () => {
     gulp.watch('app/styles/**/*.css', ['styles']);
     gulp.watch('app/scripts/**/*.js', ['scripts']);
     gulp.watch('app/fonts/**/*', ['fonts']);
+    gulp.watch('app/**/*.hbs', ['handlebars']);
   });
 });
 

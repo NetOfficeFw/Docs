@@ -15,6 +15,7 @@
     "gulp-cache": "^0.4.2",
     "gulp-cssnano": "^2.0.0",
     "gulp-eslint": "^3.0.0",
+    "gulp-hbs": "^0.2.0",
     "gulp-htmlmin": "^3.0.0",
     "gulp-if": "^2.0.2",
     "gulp-imagemin": "^3.0.1",
@@ -24,6 +25,9 @@
     "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^2.0.0",
     "gulp-useref": "^3.0.0",
+    "helper-markdown": "^1.0.0",
+    "markit-json": "^0.2.1",
+    "object-assign": "^4.1.1",
     "run-sequence": "^1.2.2"
   },
   "eslintConfig": {
@@ -38,5 +42,6 @@
         "single"
       ]
     }
-  }
+  },
+  "dependencies": {}
 }
