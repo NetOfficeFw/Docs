@@ -159,6 +159,14 @@ gulp.task('serve:dist', ['default'], () => {
   });
 });
 
+gulp.task('deploy', ['default'], () => {
+  return gulp.src('dist/**/*')
+    .pipe($.ghPages({
+      remoteUrl: 'git@github.com:NetOfficeFw/netofficefw.github.io.git',
+      branch: 'master'
+    }));
+});
+
 gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
