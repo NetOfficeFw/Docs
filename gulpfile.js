@@ -118,12 +118,15 @@ gulp.task('serve', () => {
     gulp.watch([
       'app/*.html',
       'app/images/**/*',
+      '.tmp/**/*.html',
       '.tmp/fonts/**/*'
     ]).on('change', reload);
 
     gulp.watch('app/styles/**/*.css', ['styles']);
     gulp.watch('app/scripts/**/*.js', ['scripts']);
     gulp.watch('app/fonts/**/*', ['fonts']);
+    gulp.watch('app/docfx.json', ['handlebars']);
+    gulp.watch('app/**/*.md', ['handlebars']);
     gulp.watch('app/**/*.hbs', ['handlebars']);
   });
 });
