@@ -109,6 +109,7 @@ gulp.task('handlebars', function () {
 gulp.task('extras', () => {
   return gulp.src([
     'app/*',
+    'app/**/assets/**/*',
     '!app/**/*.hbs',
     '!app/**/*.md',
     '!app/*.html'
