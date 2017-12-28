@@ -3,13 +3,14 @@ _nav_id: tutorials
 uid: tutorial02_csharp
 ---
 
-# Efficient using Dispose & DisposeChildInstances
+# Efficiently Disposing COM Proxies
 
-In [Tutorial 1](tutorial01_en_cs.html) you have seen how to use Dispose() to release an object
-and its created children. This tutorial shows you how to use the method
-`DisposeChildInstances()` to release all children with one call.
+In [Tutorial 1](tutorial01_en_cs.html) you have seen how to use `Dispose()` method to release an object
+and its child objects.
 
-See chapter1 and chapter5 in technical documentation for further info.
+This tutorial shows you how to use the `DisposeChildInstances()` method to release all child objects with one call.
+
+See chapter1 and chapter5 in technical documentation for more information.
 
 ```csharp
 public void Tutorial02Main()
@@ -22,7 +23,8 @@ public void Tutorial02Main()
     Excel.Worksheet sheet = (Excel.Worksheet)book.Worksheets.Add();
 
     /*
-     * we have 5 created proxies now in proxy table as follows
+     * We have created 5 proxy objects.
+     * Proxy table looks as follows:
      *
      * Application
      *   + Workbooks
@@ -31,18 +33,19 @@ public void Tutorial02Main()
      *            + Worksheet
      */
 
-    // we dispose the child instances of the workbook
+    // We dispose the child instances of the workbook
     book.DisposeChildInstances();
 
     /*
-     * we have 3 created proxies now, the childs from book are disposed
+     * We have 3 proxy objects now.
+     * Children objects of book instance were disposed.
      *
      * Application
      *   + Workbooks
      *     + Workbook
      */
 
-    // close Excel and release the application instance and child workbooks
+    // close Excel, release the application instance and child workbooks
     application.Quit();
     application.Dispose();
 }

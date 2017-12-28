@@ -17,7 +17,7 @@ bool EntityIsAvailable(string name, SupportEntityType searchType);
 
 This example shows you how to check if API is available in current Microsoft Office application.
 
-See chapter8 in technical documentation for further info.
+See chapter8 in technical documentation for more information.
 
 
 ```csharp

@@ -5,11 +5,11 @@ uid: tutorial06_csharp
 
 # Understand Variant Type
 
-The datatype Variant is not plain supported by .NET CLR but common in an
-unmanaged COM Environment. NetOffice mapped the type to object but you never
-have to fear you lost the COM Proxy management from NetOffice.
+The datatype Variant is not directly supported by .NET CLR, it is common in
+unmanaged COM environments though. NetOffice maps the type to object but you never
+have to fear you lose the COM Proxy management functions from NetOffice.
 
-See chapter2 in technical documentation for further info.
+See chapter2 in technical documentation for more information.
 
 ```csharp
 private void Tutorial06Main()
@@ -23,11 +23,11 @@ private void Tutorial06Main()
     Excel.Worksheet sheet = (Excel.Worksheet)book.Worksheets[1];
     Excel.Range range = sheet.Cells[1,1];
 
-    // Style is defined as Variant in Excel Type Library and represents
-    // as object in NetOffice
+    // Style is defined as Variant in Excel Type Library and
+    // it is represented as object type in NetOffice
     Excel.Style style = (Excel.Style)range.Style;
 
-    // variant types can be a scalar type, another way to us is
+    // variant types can be scalar types, another way to us is
     if (range.Style is string)
     {
         string myStyle = range.Style as string;
@@ -37,7 +37,7 @@ private void Tutorial06Main()
         Excel.Style myStyle = (Excel.Style)range.Style;
     }
 
-    // Name, Bold, Size are bool but defined as Variant and also
+    // Name, Bold, Size are defined as Variant and also
     // converted to object
     style.Font.Name = "Arial";
     style.Font.Bold = true;

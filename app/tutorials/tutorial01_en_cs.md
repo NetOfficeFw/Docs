@@ -3,11 +3,11 @@ _nav_id: tutorials
 uid: tutorial01_csharp
 ---
 
-# Understand COM Proxy Management
+# Understanding COM Proxy Management
 
 NetOffice manages COM proxies for you to avoid any kind of memory leaks
-and makes sure instance of your `Excel.Application` object is cleaned up.
-This removes `Excel.exe` from the process list.
+and it makes sure the instance of the `Excel.Application` object is cleaned up.
+This shutdowns the `Excel.exe` process.
 
 ```csharp
 public void Tutorial01Main()

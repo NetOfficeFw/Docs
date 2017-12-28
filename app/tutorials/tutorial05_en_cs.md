@@ -6,10 +6,11 @@ uid: tutorial05_csharp
 # Understanding COMObject
 
 COMObject is the common base type for all objects in NetOffice which are based on
-CoClasses or Interfaces and also the type for anonymous COM Proxies at design time.
-This example shows you how to use.
+CoClasses or Interfaces and also the type for anonymous COM Proxy objects at design time.
 
-See chapter1 and chapter2 in technical documentation for further info.
+This example shows you how to use the `COMObject` type.
+
+See chapter1 and chapter2 in technical documentation for more information.
 
 ```csharp
 private void Tutorial05Main()
@@ -22,7 +23,7 @@ private void Tutorial05Main()
     Excel.Workbook book = application.Workbooks.Add();
 
     // ActiveSheet is defined as unkown Proxy in Excel Type Library, it can
-    // have multiple types at runtime but its always a COM Proxy, never a
+    // have multiple types at runtime but it is always a COM Proxy, never a
     // scalar type like bool or int. In VBA or PIA it is converted to object,
     // in NetOffice it is represented as COMObject
     // All NetOffice classes inherit from COMObject
