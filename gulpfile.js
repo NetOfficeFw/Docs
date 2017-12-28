@@ -7,6 +7,7 @@ const runSequence = require('run-sequence');
 const fs = require('fs');
 const assign = require('object-assign');
 const hbsHelpers = require('handlebars-helpers');
+const highlight = require('highlight.js');
 
 const $ = gulpLoadPlugins({
   rename: {
@@ -87,7 +88,16 @@ gulp.task('handlebars', function () {
 
   var templateData = JSON.parse(fs.readFileSync('app/docfx.json', 'utf8')).build.globalMetadata;
   return gulp.src(['app/**/*.md'])
-      .pipe($.markdown())
+      .pipe($.markdown({
+        langPrefix: 'hljs lang-',
+        highlight: function(code, lang) {
+          if (lang && highlight.getLanguage(lang)) {
+            let ignoreIllegals = true;
+            return highlight.highlight(lang, code, ignoreIllegals).value;
+          }
+          return code;
+        }
+      }))
       .pipe($.hbs('app/layout/master.hbs', { dataSource: (file) => {
         var data = JSON.parse(file.contents.toString());
         data = assign(data, templateData);
