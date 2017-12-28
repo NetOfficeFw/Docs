@@ -50,18 +50,18 @@ gulp.task('lint', () => {
     .pipe(gulp.dest('app/scripts'));
 });
 
-gulp.task('html', ['styles', 'scripts', 'handlebars'], () => {
-  return gulp.src('app/*.html')
+gulp.task('html', ['styles', 'scripts'], () => {
+  return gulp.src(['app/*.html', '.tmp/**/*.html'])
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
     .pipe($.if(/\.css$/, $.cssnano({safe: true, autoprefixer: false})))
     .pipe($.if(/\.html$/, $.htmlmin({
-      collapseWhitespace: true,
+      collapseWhitespace: false,
       minifyCSS: true,
       minifyJS: {compress: {drop_console: true}},
       processConditionalComments: true,
       removeComments: true,
-      removeEmptyAttributes: true,
+      removeEmptyAttributes: false,
       removeScriptTypeAttributes: true,
       removeStyleLinkTypeAttributes: true
     })))
@@ -165,6 +165,6 @@ gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
 gulp.task('default', () => {
   return new Promise(resolve => {
     dev = false;
-    runSequence(['clean'], 'build', resolve);
+    runSequence(['clean'], ['handlebars'], 'build', resolve);
   });
 });
