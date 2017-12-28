@@ -29,6 +29,45 @@ body {
   background-image: url(../images/search.svg);
 }
 
+
+.footer-contact-links h4, .footer-contact-links a {
+  font-size: 1.3rem;
+}
+
+.footer-contact-links h4 {
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 3px;
+}
+
+.footer-contact-links a {
+  color: #205493;
+  text-decoration: underline;
+}
+
+.footer-contact-links a:hover {
+  color: #212121;
+}
+
+.footer-section-bottom {
+  padding-top: 1.6rem;
+  padding-bottom: 1.3rem;
+  background-color: #112e51;
+}
+
+.footer-section-bottom p {
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin-top: 0;
+  overflow: hidden;
+}
+
+.footer-section-bottom a {
+  color: #ffffff;
+}
+
+
 @media screen and (min-width: 481px) {
   .usa-hero-callout {
     max-width: 60rem;
