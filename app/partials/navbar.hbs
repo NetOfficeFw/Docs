@@ -11,7 +11,7 @@
 
     <ul class="site-nav-primary usa-nav-primary usa-accordion nav-level0">
     {{#each items}}
-      <li class="{{#is this._nav_id @root._nav_id}} usa-current{{/is}}">
+      <li>
         {{#if href}}
         <a href="{{@root._rel}}{{href}}" title="{{name}}" class="usa-nav-link {{#is this._nav_id @root._nav_id}} usa-current{{/is}}">{{name}}</a>
         {{/if}}
