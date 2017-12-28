@@ -48,7 +48,20 @@
       "_disableContribution": true,
       "_disableBreadcrumb": true,
       "_appFooter": "Copyright © 2016-2017 NetOffice Framework.<br>Documentation licensed under <a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0<a/>.",
-      "_appLogoPath": "images/NetOfficeOriginalLogo_96x96.png"
+      "_appLogoPath": "images/NetOfficeOriginalLogo_96x96.png",
+      "_rel": "/",
+      "_nav": true,
+      "items": [{
+        "name": "Tutorials",
+        "href": "tutorials/"
+      },{
+        "name": "Toolbox",
+        "href": "toolbox/"
+      },{
+        "name": "Documentation",
+        "href": "documentation/"
+      }
+      ]
     },
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],

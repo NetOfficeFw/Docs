@@ -77,9 +77,11 @@ gulp.task('fonts', () => {
 gulp.task('handlebars', function () {
   $.hbs.registerPartial('partials/head', fs.readFileSync('app/partials/head.hbs', 'utf8'));
   $.hbs.registerPartial('partials/footer', fs.readFileSync('app/partials/footer.hbs', 'utf8'));
+  $.hbs.registerPartial('partials/navbar', fs.readFileSync('app/partials/navbar.hbs', 'utf8'));
+  $.hbs.registerPartial('partials/logo', fs.readFileSync('app/partials/logo.hbs', 'utf8'));
 
   var templateData = JSON.parse(fs.readFileSync('app/docfx.json', 'utf8')).build.globalMetadata;
-  return gulp.src(['app/*.md'])
+  return gulp.src(['app/**/*.md'])
       .pipe(markdown())
       .pipe($.hbs('app/layout/master.hbs', { dataSource: (file) => {
         var data = JSON.parse(file.contents.toString());

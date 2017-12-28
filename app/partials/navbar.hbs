@@ -9,20 +9,15 @@
       <img src="/assets/img/close.svg" alt="close">
     </button>
 
-    {{#_nav}}
-    <ul class="usa-nav-primary usa-accordion nav-level{{level}}">
-    {{#items}}
+    <ul class="usa-nav-primary usa-accordion nav-level0">
+    {{#each items}}
       <li class="{{#active}} usa-current{{/active}}">
-        {{#href}}
+        {{#if href}}
         <a href="{{href}}" title="{{name}}" class="usa-nav-link {{#active}}usa-current{{/active}}">{{name}}</a>
-        {{/href}}
-        {{^href}}
-        <a class="usa-nav-link {{#active}}usa-current{{/active}}">{{{name}}}</a>
-        {{/href}}
+        {{/if}}
       </li>
-    {{/items}}
+    {{/each}}
     </ul>
-    {{/_nav}}
 
     <form class="usa-search usa-search-small ">
       <div role="search">
