@@ -1,4 +1,5 @@
 ---
+_nav_id: tutorials
 uid: tutorial07_csharp
 ---
 
