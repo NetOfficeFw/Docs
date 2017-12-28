@@ -1,3 +1,7 @@
+---
+title: Why NetOffice?
+---
+
 ## Why NetOffice?
 
 The usual methods for accessing Microsoft Office. NET are the Primary Interop Assemblies and VSTO. Both access methods involve various disadvantages.

@@ -1,6 +1,8 @@
-# Documentation
+---
+title: Frequently Asked Questions (FAQ)
+---
 
-## FAQ
+## Frequently Asked Questions (FAQ)
 
 ### My programming language does not support properties with parameters?
 
