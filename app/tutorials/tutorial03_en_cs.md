@@ -40,4 +40,4 @@ void book_BeforeCloseEvent(ref bool Cancel)
 }
 ```
 
-[Tutorial 4: Observable COM Proxy Count](tutorial04_en_cs.md)
+[Tutorial 4: Observable COM Proxy Count](tutorial04_en_cs.html)

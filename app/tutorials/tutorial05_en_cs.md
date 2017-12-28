@@ -41,5 +41,5 @@ private void Tutorial05Main()
 }
 ```
 
-[Tutorial 6: Understand Variant Type](tutorial06_en_cs.md)
+[Tutorial 6: Understand Variant Type](tutorial06_en_cs.html)
 

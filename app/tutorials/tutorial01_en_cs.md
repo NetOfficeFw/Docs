@@ -11,11 +11,11 @@ This removes `Excel.exe` from the process list.
 ```csharp
 public void Tutorial01Main()
 {
-   // start application
-   Excel.Application application = new Excel.Application();
-   application.DisplayAlerts = false;
+    // start application
+    Excel.Application application = new Excel.Application();
+    application.DisplayAlerts = false;
 
-   Excel.Workbook book = application.Workbooks.Add();
+    Excel.Workbook book = application.Workbooks.Add();
 
    /*
     * now we have 2 new COM Proxies created.
@@ -44,4 +44,4 @@ public void Tutorial01Main()
 }
 ```
 
-[Tutorial 2: Efficient using Dispose & DisposeChildInstances](tutorial02_en_cs.md)
+[Tutorial 2: Efficient using Dispose & DisposeChildInstances](tutorial02_en_cs.html)
