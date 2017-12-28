@@ -4,12 +4,15 @@ const gulpLoadPlugins = require('gulp-load-plugins');
 const browserSync = require('browser-sync').create();
 const del = require('del');
 const runSequence = require('run-sequence');
-const markdown = require('markit-json');
 const fs = require('fs');
 const assign = require('object-assign');
 const hbsHelpers = require('handlebars-helpers');
 
-const $ = gulpLoadPlugins();
+const $ = gulpLoadPlugins({
+  rename: {
+    'gulp-marked-json': 'markdown'
+  }
+});
 const reload = browserSync.reload;
 
 let dev = true;
@@ -84,7 +87,7 @@ gulp.task('handlebars', function () {
 
   var templateData = JSON.parse(fs.readFileSync('app/docfx.json', 'utf8')).build.globalMetadata;
   return gulp.src(['app/**/*.md'])
-      .pipe(markdown())
+      .pipe($.markdown())
       .pipe($.hbs('app/layout/master.hbs', { dataSource: (file) => {
         var data = JSON.parse(file.contents.toString());
         data = assign(data, templateData);
