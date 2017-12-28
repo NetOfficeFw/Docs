@@ -24,8 +24,19 @@ body {
   border-radius: 0.3rem;
 }
 
+.usa-search.usa-search-small [type=submit],
+.usa-search.usa-search-small .usa-search-submit  {
+  background-image: url(../images/search.svg);
+}
+
 @media screen and (min-width: 481px) {
   .usa-hero-callout {
     max-width: 60rem;
   }
+
+  .usa-search.usa-search-small [type=submit],
+  .usa-search.usa-search-small .usa-search-submit {
+    background-image: url(../images/search.svg);
+  }
+
 }
