@@ -1,3 +1,7 @@
+---
+_nav_id: toolbox
+---
+
 # Application Observer
 
 ## What does the Application Observer do for you?

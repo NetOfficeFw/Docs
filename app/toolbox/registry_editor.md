@@ -1,3 +1,7 @@
+---
+_nav_id: toolbox
+---
+
 # Registry Editor
 
 ## What can the Registry Editor do for you?

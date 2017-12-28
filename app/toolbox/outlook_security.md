@@ -1,3 +1,7 @@
+---
+_nav_id: toolbox
+---
+
 # Outlook Security
 
 ## What can the Outlook Security do for you?

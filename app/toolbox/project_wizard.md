@@ -1,3 +1,7 @@
+---
+_nav_id: toolbox
+---
+
 # Project Wizard
 
 ## What does the Project Wizard for you?

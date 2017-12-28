@@ -24,11 +24,11 @@ create solutions with and for Microsoft Office.
 
 [Download NetOffice Developer Toolbox][toolbox_releases]
 
-[1]: office_compatiblity.md
-[2]: app_observer.md
-[3]: registry_editor.md
-[4]: addin_guard.md
-[5]: outlook_security.md
-[6]: office_ui.md
-[7]: project_wizard.md
+[1]: office_compatiblity.html
+[2]: app_observer.html
+[3]: registry_editor.html
+[4]: addin_guard.html
+[5]: outlook_security.html
+[6]: office_ui.html
+[7]: project_wizard.html
 [toolbox_releases]: https://github.com/NetOfficeFw/NetOfficeToolbox/releases

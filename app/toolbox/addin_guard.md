@@ -1,3 +1,7 @@
+---
+_nav_id: toolbox
+---
+
 # Addin Guard
 
 ## What can the Addin Guard do for you?
