@@ -52,12 +52,15 @@
       "_rel": "/",
       "_nav": true,
       "items": [{
+        "_nav_id": "tutorials",
         "name": "Tutorials",
         "href": "tutorials/"
       },{
+        "_nav_id": "toolbox",
         "name": "Toolbox",
         "href": "toolbox/"
       },{
+        "_nav_id": "documentation",
         "name": "Documentation",
         "href": "documentation/"
       }

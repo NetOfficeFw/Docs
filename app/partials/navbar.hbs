@@ -9,11 +9,11 @@
       <img src="/assets/img/close.svg" alt="close">
     </button>
 
-    <ul class="usa-nav-primary usa-accordion nav-level0">
+    <ul class="site-nav-primary usa-nav-primary usa-accordion nav-level0">
     {{#each items}}
-      <li class="{{#active}} usa-current{{/active}}">
+      <li class="{{#is this._nav_id @root._nav_id}} usa-current{{/is}}">
         {{#if href}}
-        <a href="{{href}}" title="{{name}}" class="usa-nav-link {{#active}}usa-current{{/active}}">{{name}}</a>
+        <a href="{{@root._rel}}{{href}}" title="{{name}}" class="usa-nav-link {{#is this._nav_id @root._nav_id}} usa-current{{/is}}">{{name}}</a>
         {{/if}}
       </li>
     {{/each}}

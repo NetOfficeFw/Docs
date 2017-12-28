@@ -7,6 +7,7 @@ const runSequence = require('run-sequence');
 const markdown = require('markit-json');
 const fs = require('fs');
 const assign = require('object-assign');
+const hbsHelpers = require('handlebars-helpers');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -75,6 +76,7 @@ gulp.task('fonts', () => {
 });
 
 gulp.task('handlebars', function () {
+  hbsHelpers({ handlebars: $.hbs.handlebars });
   $.hbs.registerPartial('partials/head', fs.readFileSync('app/partials/head.hbs', 'utf8'));
   $.hbs.registerPartial('partials/footer', fs.readFileSync('app/partials/footer.hbs', 'utf8'));
   $.hbs.registerPartial('partials/navbar', fs.readFileSync('app/partials/navbar.hbs', 'utf8'));
