@@ -1,22 +1,18 @@
-{{!include(/^styles/.*/)}}
-{{!include(/^fonts/.*/)}}
-{{!include(search-stopwords.json)}}
 <!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
 {{>partials/head}}
 <body data-spy="scroll" data-target="#affix" class="{{#_body_class}}{{_body_class}}{{/_body_class}}">
     <header class="usa-header usa-header-basic" role="banner">
-      {{^_disableNavbar}}
-      {{>partials/navbar}}
-      {{/_disableNavbar}}
-      {{^_disableBreadcrumb}}
-      {{>partials/breadcrumb}}
-      {{/_disableBreadcrumb}}
+      {{!^_disableNavbar}}
+      {{!>partials/navbar}}
+      {{!/_disableNavbar}}
+      {{!^_disableBreadcrumb}}
+      {{!>partials/breadcrumb}}
+      {{!/_disableBreadcrumb}}
     </header>
     {{#_enableSearch}}
     <div class="container body-content">
-      {{>partials/searchResults}}
+      {{!>partials/searchResults}}
     </div>
     {{/_enableSearch}}
 
@@ -33,7 +29,7 @@
       {{/_is_landing_page}}
 
     {{^_disableToc}}
-      {{>partials/toc}}
+      {{!>partials/toc}}
       <div class="usa-grid grid-right">
     {{/_disableToc}}
     {{#_disableToc}}
@@ -46,17 +42,17 @@
         <div class="col-md-10">
         {{/_disableAffix}}
           <article class="content wrap" id="_content" data-uid="{{uid}}">
-              {{!body}}
+              {{{body}}}
           </article>
         </div>
         {{^_disableAffix}}
-        {{>partials/affix}}
+        {{!>partials/affix}}
         {{/_disableAffix}}
       </div>
     </main>
     {{^_disableFooter}}
     {{>partials/footer}}
     {{/_disableFooter}}
-  {{>partials/scripts}}
+  {{!>partials/scripts}}
 </body>
 </html>

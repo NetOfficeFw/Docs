@@ -75,7 +75,8 @@ gulp.task('fonts', () => {
 });
 
 gulp.task('handlebars', function () {
-  $.hbs.registerPartial('head', fs.readFileSync('app/partials/head.hbs', 'utf8'));
+  $.hbs.registerPartial('partials/head', fs.readFileSync('app/partials/head.hbs', 'utf8'));
+  $.hbs.registerPartial('partials/footer', fs.readFileSync('app/partials/footer.hbs', 'utf8'));
 
   var templateData = JSON.parse(fs.readFileSync('app/docfx.json', 'utf8')).build.globalMetadata;
   return gulp.src(['app/*.md'])
