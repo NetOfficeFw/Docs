@@ -4,15 +4,17 @@ uid: tutorial08_csharp
 
 # Check for a specific entity support at runtime
 
-Any object in NetOffice implements a special method too see at runtime a specified property or method is available
-This very important because not any property or method is available in any office version
+Any object in NetOffice implements a special method that checks at runtime if a specified
+property or method is available.
+This very important because not every property and/or method is available in all Microsoft
+Office versions.
 
 ```csharp
 bool EntityIsAvailable(string name);
 bool EntityIsAvailable(string name, SupportEntityType searchType);
 ```
 
-This example shows you how to use.
+This example shows you how to check if API is available in current Microsoft Office application.
 
 See chapter8 in technical documentation for further info.
 
