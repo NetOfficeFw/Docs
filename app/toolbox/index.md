@@ -1,3 +1,8 @@
+---
+_nav_id: toolbox
+title: Developer Toolbox
+---
+
 # NetOffice Developer Toolbox
 
 The NetOffice Developer Toolbox is a Productivity Tool for .NET developers who

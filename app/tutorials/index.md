@@ -1,3 +1,8 @@
+---
+_nav_id: tutorials
+title: Tutorials
+---
+
 # NetOffice Tutorials
 
 0. [Understand COM Proxy Management](tutorial01_en_cs.md)
