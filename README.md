@@ -1,4 +1,4 @@
-# NetOffice documenation
+# NetOffice Documenation
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
@@ -9,7 +9,10 @@ Source code is built to a static website that is published
 to [netofficefw.github.io](https://github.com/NetOfficeFw/netofficefw.github.io)
 repository and is available online at [netoffice.io](https://netoffice.io)
 
-## Install
+
+## Getting Start with Documentation
+
+### Install
 
 This website requires [node](https://nodejs.org), [npm](https://npmjs.com) and [yarn](https://yarnpkg.com).
 
@@ -19,7 +22,7 @@ To install packages required to build the website, run:
 yarn install
 ```
 
-## Usage
+### Usage
 
 To run the website locally, run:
 
@@ -33,7 +36,7 @@ gulp serve
 
 ## Contribute
 
-PRs accepted.
+Pull requests (PRs) accepted.
 
 Small note: If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
 
