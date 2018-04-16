@@ -1,0 +1,78 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "src/**.csproj"
+          ],
+          "exclude": [
+            "**/obj/**",
+            "**/bin/**",
+            "_site/**"
+          ]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "content": [
+      { "files": [ "toc.yml", "*.md" ], "exclude": [ "obj/**", "_site/**", "README.md" ] },
+      { "files": [ "documentation/**.md", "documentation/**/toc.yml" ] },
+      { "files": [ "toolbox/**.md", "toolbox/**/toc.yml" ] },
+      { "files": [ "tutorials/**.md", "tutorials/**/toc.yml" ] },
+      { "files": [ "api/**.yml", "api/index.md" ] }
+    ],
+    "resource": [
+      { "files": [ "images/**" ], "exclude": [ "obj/**", "_site/**" ] },
+      { "files": [ "CNAME", ".nojekyll", "README.txt" ] },
+      { "files": [ "documentation/assets/**" ] },
+      { "files": [ "toolbox/assets/**" ] }
+    ],
+    "overwrite": [
+      {
+        "files": [
+          "apidoc/**.md"
+        ],
+        "exclude": [
+          "obj/**",
+          "_site/**"
+        ]
+      }
+    ],
+    "dest": "_site",
+    "globalMetadata": {
+      "_appTitle": "NetOffice Framework",
+      "_appTitleShort": "NetOffice",
+      "_disableContribution": true,
+      "_disableBreadcrumb": true,
+      "_appFooter": "Copyright © 2016-2017 NetOffice Framework. Documentation licensed under <a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0</a>.",
+      "_appLogoPath": "images/NetOfficeOriginalLogo_96x96.png",
+      "_rel": "/",
+      "_nav": true,
+      "items": [{
+        "_nav_id": "tutorials",
+        "name": "Tutorials",
+        "href": "tutorials/"
+      },{
+        "_nav_id": "toolbox",
+        "name": "Toolbox",
+        "href": "toolbox/"
+      },{
+        "_nav_id": "documentation",
+        "name": "Documentation",
+        "href": "documentation/"
+      }
+      ]
+    },
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "template": [
+      "default",
+      "doc_template"
+    ],
+    "postProcessors": [],
+    "noLangKeyword": false
+  }
+}

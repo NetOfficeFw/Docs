@@ -1,0 +1,32 @@
+<div class="usa-nav-container">
+  <div class="usa-navbar">
+    {{>partials/logo}}
+    <button class="usa-menu-btn">Menu</button>
+  </div>
+
+  <nav role="navigation" class="usa-nav">
+    <button class="usa-nav-close">
+      <img src="/assets/img/close.svg" alt="close">
+    </button>
+
+    <ul class="site-nav-primary usa-nav-primary usa-accordion nav-level0">
+    {{#each items}}
+      <li>
+        {{#if href}}
+        <a href="{{@root._rel}}{{href}}" title="{{name}}" class="usa-nav-link {{#is this._nav_id @root._nav_id}} usa-current{{/is}}">{{name}}</a>
+        {{/if}}
+      </li>
+    {{/each}}
+    </ul>
+
+    <form class="usa-search usa-search-small ">
+      <div role="search">
+        <label class="usa-sr-only" for="basic-search-field-small">Search</label>
+        <input id="basic-search-field-small" type="search" name="search" title="Enter search string...">
+        <button type="submit" title="Search">
+          <span class="usa-sr-only">Search</span>
+        </button>
+      </div>
+    </form>
+  </nav>
+</div>
