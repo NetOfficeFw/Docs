@@ -5,6 +5,15 @@ hero_title: NetOffice Framework
 hero_body: "NetOffice Framework is a set of libraries and tools for building addins, extending and automating Microsoft Office applications.<br><br>NetOffice supports extending and automating Microsoft Office applications: Excel, Word, Outlook, PowerPoint, Access, Project and Visio."
 ---
 
+## Getting Started
+
+Install NetOffice as a NuGet package ([list of all NetOffice packages](https://www.nuget.org/profiles/netoffice))
+into you Visual Studio project and develop an Office solution.
+
+```
+PM> Install-Package NetOfficeFw.Word
+```
+
 ## Features
 
 * Microsoft Office integration without version limitations
@@ -14,7 +23,7 @@ hero_body: "NetOffice Framework is a set of libraries and tools for building add
 * No training if you already know the MS Office object model, use your existing PIA code
 * Reduced and more readable code with automatic management of COM proxies
 * Usable with .NET version 2.0 or higher
-* Easy Addin Development
+* Easy add-in development
 * No deployment hurdles, no registration
 * No dependencies, no Interop Assemblies, no need for VSTO
 * Visual Studio Project Templates and Wizards available
