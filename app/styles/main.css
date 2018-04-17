@@ -8,6 +8,16 @@ body {
   height: 32px;
 }
 
+.usa-navbar {
+  height: 4rem;
+}
+.usa-nav {
+  padding: 1rem 0;
+}
+.usa-nav-primary>li>a {
+  padding-bottom: 0;
+}
+
 .usa-footer-secondary_section {
   background-color: #e1f3f8;
 }
@@ -22,6 +32,9 @@ body {
 
 .usa-hero-callout {
   border-radius: 0.3rem;
+}
+.usa-hero-callout>:first-child {
+  margin: 0 0 1rem;
 }
 
 .usa-search.usa-search-small [type=submit],
@@ -65,6 +78,16 @@ body {
 
 .footer-section-bottom a {
   color: #ffffff;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 
