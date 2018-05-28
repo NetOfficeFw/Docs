@@ -30,6 +30,14 @@ body {
   background-size: cover;
 }
 
+.landing-page.landing-page-notice .usa-hero-callout,
+.landing-page.landing-page-notice .usa-hero-callout-alt,
+.landing-page.landing-page-notice .usa-section-dark p {
+  background: #2b2b2b;
+  color: white;
+}
+
+
 .usa-hero-callout {
   border-radius: 0.3rem;
 }
@@ -90,6 +98,10 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
+blockquote.notice {
+  border-left: 0.5rem solid #cd2026;
+  padding-left: 0.5rem;
+}
 
 @media screen and (min-width: 481px) {
   .usa-hero-callout {

@@ -7,12 +7,19 @@ hero_body: "NetOffice Framework is a set of libraries and tools for building add
 
 ## Getting Started
 
-Install NetOffice as a NuGet package ([list of all NetOffice packages](https://www.nuget.org/profiles/netoffice))
-into you Visual Studio project and develop an Office solution.
+Install NetOffice Framework as a NuGet package ([list of all NetOfficeFw packages](https://www.nuget.org/profiles/netoffice))
+into you Visual Studio project and develop Microsoft Office solution.
 
 ```
 PM> Install-Package NetOfficeFw.Word
 ```
+
+<blockquote class="notice">
+**Notice:** Do not use the rogue release of NetOffice.Core package 1.7.4.4.
+[How to migrate?](migrate-notice)<br>
+<br>
+Official NetOffice libraries use new **NetOfficeFw** prefix and are published by official NuGet account named [netoffice](https://www.nuget.org/profiles/netoffice).
+</blockquote>
 
 ## Features
 
