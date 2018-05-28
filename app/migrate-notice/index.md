@@ -54,6 +54,6 @@ use NuGet Package Manager.
 to prevent issues in the application caused by referencing NetOffice libraries twice and
 with different versions.
 
-<img src="nuget-vs-uninstall.jpg" width="1051" alt="Uninstall NetOffice packages">
+<img src="assets/nuget-vs-uninstall.jpg" width="1051" alt="Uninstall NetOffice packages">
 
-<img src="nuget-vs-install.jpg" width="1048" alt="Install NetOfficeFw packages">
+<img src="assets/nuget-vs-install.jpg" width="1048" alt="Install NetOfficeFw packages">
