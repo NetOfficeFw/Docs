@@ -18,6 +18,11 @@ body {
   padding-bottom: 0;
 }
 
+.nav-link-github-star-button iframe {
+  position: relative;
+  top: 4px;
+}
+
 .usa-footer-secondary_section {
   background-color: #e1f3f8;
 }
