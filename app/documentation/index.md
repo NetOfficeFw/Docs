@@ -11,11 +11,11 @@ in more details.
 
 ### Why NetOffice?
 
-The usual methods for accessing Microsoft Office. NET are the Primary Interop Assemblies and VSTO. Both access methods involve various disadvantages.
+Usual methods for accessing Microsoft Office using .NET are the Primary Interop Assemblies and VSTO. Both access methods involve various disadvantages:
 
-* They are limited to a version, i.e. they only work with one or certain versions of Office
-* They cause problems while transferring or installation on other systems
-* They offer no protection mechanism in the management of COM proxies
+* They only work with one or a certain versions of Microsoft Office
+* They cause problems when transferring or installing on other systems
+* They offer no protection mechanism for management of COM proxies
 
 NetOffice eliminates these disadvantages and remains a 1:1 wrapper that is syntactically and semantically identical to the interop assemblies.
 
