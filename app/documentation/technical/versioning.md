@@ -95,4 +95,4 @@ Following you can see an Overview of the different version attributes.
 |                | VisioApi.dll    |           |                                          |
 |                | OfficeApi.dll   |           |                                          |
 |                | VBIDEApi.dll    |           |                                          |
-|                | NetOffice.dll   |           |                                          |
+|                | NetOffice.dll   |           |                                          ||
