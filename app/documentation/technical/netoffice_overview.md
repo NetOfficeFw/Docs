@@ -1,5 +1,7 @@
 # Technical Documentation
 
+[<< Back](../technical/)
+
 ## NetOffice Namespace Overview
 
 All NetOffice Assemblies are structured into the namespaces which are listed in the following table.

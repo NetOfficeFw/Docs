@@ -1,5 +1,7 @@
 # Technical Documentation
 
+[<< Back](../technical/)
+
 ## Events in NetOffice
 
 NetOffice offers you a completely version-independent event support. In order to
@@ -22,4 +24,4 @@ NetOffice.
 
 ### Related Tutorials
 
-0. [Tutorial03](xref:tutorial03_csharp)
+0. [Tutorial03](../../tutorials/tutorial03_en_cs.html)

@@ -1,5 +1,7 @@
 # Technical Documentation
 
+[<< Back](../technical/)
+
 ## COM Proxy Management
 
 If you have already work with Primary Interop Assemblies by Microsoft, you know
@@ -110,6 +112,6 @@ calling  `application.Dispose();` you free the remaining 2 COM Proxies.
 
 ### Related Tutorials
 
-0. [Tutorial01](xref:tutorial01_csharp)
-0. [Tutorial02](xref:tutorial02_csharp)
-0. [Tutorial03](xref:tutorial03_csharp)
+0. [Tutorial01](../../tutorials/tutorial01_en_cs.html)
+0. [Tutorial02](../../tutorials/tutorial02_en_cs.html)
+0. [Tutorial03](../../tutorials/tutorial03_en_cs.html)

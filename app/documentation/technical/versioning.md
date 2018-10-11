@@ -1,5 +1,7 @@
 # Technical Documentation
 
+[<< Back](../technical/)
+
 ## Version independent programming
 
 Given the fact that NetOffice supports all recent versions of Office, a

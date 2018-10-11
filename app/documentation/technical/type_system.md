@@ -1,5 +1,7 @@
 # Technical Documentation
 
+[<< Back](../technical/)
+
 ## Unknown and variant types
 
 Any office application use the datatype Variant which has its roots in Visual
@@ -30,4 +32,4 @@ else if (!application.selection is COMObject)
 
 ### Related tutorials
 
-0. [Tutorial06](xref:tutorial06_csharp)
+0. [Tutorial06](../../tutorials/tutorial06_en_cs.html)
