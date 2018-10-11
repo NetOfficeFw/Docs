@@ -1,7 +1,11 @@
+---
+title: Technical Documentation
+---
+
 # Technical Documentation
 
 Technical documentation includes short overviews about technology behind NetOffice
-library and redirecst you to relevant turorials.
+library and redirecst you to relevant tutorials.
 
 [NetOffice Tutorials](/tutorials) includes more detailed explanations and sample code.
 
