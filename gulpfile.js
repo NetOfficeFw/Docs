@@ -162,7 +162,7 @@ gulp.task('serve:dist', ['default'], () => {
 gulp.task('deploy', ['default'], () => {
   return gulp.src('dist/**/*')
     .pipe($.ghPages({
-      remoteUrl: 'git@github.com:NetOfficeFw/netofficefw.github.io.git',
+      remoteUrl: 'https://github.com/NetOfficeFw/netofficefw.github.io.git',
       branch: 'master'
     }));
 });

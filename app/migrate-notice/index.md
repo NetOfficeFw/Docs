@@ -1,11 +1,11 @@
 ---
 _body_class: "landing-page landing-page-notice"
 _is_landing_page: true
-hero_title: "Notice: Upgrade to NetOfficeFw packages"
+hero_title: "❗ Use NetOfficeFw packages"
 hero_body: "Official NetOffice libraries are published as NuGet packages with prefix <strong>NetOfficeFw.*</strong>"
 ---
 
-## Why Should I Upgrade?
+## Move Away From Old Packages
 
 We noticed that old NetOffice packages on NuGet server are no longer available
 (NetOffice releases 1.7.3 and older) and a rogue account named *netofficedotnet*
@@ -14,7 +14,7 @@ These packages contain the old NetOffice 1.7.3.0 libraries tough.
 
 The [latest official NetOffice release](https://www.nuget.org/profiles/netoffice) is **1.7.4.3** (as of end of May 2018).
 
-Switching to NetOfficeFw packages you will get the latest NetOffice libraries
+Switching to **NetOfficeFw** packages you will get the latest NetOffice libraries
 and also improved debugging experience as we publish the symbols packages with
 the source code for the **1.7.4.1** and **1.7.4.3** releases.
 
