@@ -27,3 +27,8 @@ jobs:
         gulp default
       env:
         CI: true
+    - name: Create Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: netoffice-documentation-website
+        path: dist
