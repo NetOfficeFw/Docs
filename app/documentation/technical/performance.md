@@ -6,7 +6,7 @@
 
 The following table lists results of three comparative perfomance tests of
 different access methods in .NET to Microsoft Office. All tests have been made on a
-Windows 7 64-bit workstation (Instal i5-6200U @ 2.30GHz, 16GB RAM) with Microsoft Excel 2013 (32-bit).
+Windows 7 64-bit workstation (Intel i5-6200U @ 2.30GHz, 16GB RAM) with Microsoft Excel 2013 (32-bit).
 You can find the source code to all tests in the [NetOffice repository](https://github.com/NetOfficeFw/NetOffice/tree/develop/Tests/Performance%20Tests).
 
 **Test1:** Iterating over 5.000 cells, writing a test value.
