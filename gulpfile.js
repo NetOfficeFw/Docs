@@ -1,9 +1,12 @@
-// generated on 2017-12-27 using generator-webapp 3.0.1
-const gulp = require('gulp');
+// generated on 2020-03-06 using generator-webapp 4.0.0-8
+const { src, dest, watch, series, parallel, lastRun } = require('gulp');
 const gulpLoadPlugins = require('gulp-load-plugins');
-const browserSync = require('browser-sync').create();
+const browserSync = require('browser-sync');
 const del = require('del');
-const runSequence = require('run-sequence');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const { argv } = require('yargs');
+
 const fs = require('fs');
 const assign = require('object-assign');
 const hbsHelpers = require('handlebars-helpers');
@@ -14,47 +17,49 @@ const $ = gulpLoadPlugins({
     'gulp-marked-json': 'markdown'
   }
 });
-const reload = browserSync.reload;
+const server = browserSync.create();
 
-let dev = true;
+const port = argv.port || 9000;
 
-gulp.task('styles', () => {
-  return gulp.src('app/styles/*.css')
-    .pipe($.if(dev, $.sourcemaps.init()))
-    .pipe($.autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}))
-    .pipe($.if(dev, $.sourcemaps.write()))
-    .pipe(gulp.dest('.tmp/styles'))
-    .pipe(reload({stream: true}));
-});
+const isProd = process.env.NODE_ENV === 'production';
+const isDev = !isProd;
 
-gulp.task('scripts', () => {
-  return gulp.src('app/scripts/**/*.js')
+
+function styles() {
+  return src('app/styles/*.css', { sourcemaps: !isProd })
+    .pipe($.postcss([
+      autoprefixer()
+    ]))
+    .pipe(dest('.tmp/styles', { sourcemaps: !isProd }))
+    .pipe(server.reload({stream: true}));
+};
+
+function scripts() {
+  return src('app/scripts/**/*.js', { sourcemaps: !isProd })
     .pipe($.plumber())
-    .pipe($.if(dev, $.sourcemaps.init()))
     .pipe($.babel())
-    .pipe($.if(dev, $.sourcemaps.write('.')))
-    .pipe(gulp.dest('.tmp/scripts'))
-    .pipe(reload({stream: true}));
-});
+    .pipe(dest('.tmp/scripts', { sourcemaps: !isProd ? '.' : false }))
+    .pipe(server.reload({stream: true}));
+};
 
-function lint(files) {
-  return gulp.src(files)
-    .pipe($.eslint({ fix: true }))
-    .pipe(reload({stream: true, once: true}))
+const lintBase = (files, options) => {
+  return src(files)
+    .pipe($.eslint(options))
+    .pipe(server.reload({stream: true, once: true}))
     .pipe($.eslint.format())
-    .pipe($.if(!browserSync.active, $.eslint.failAfterError()));
-}
+    .pipe($.if(!server.active, $.eslint.failAfterError()));
+};
 
-gulp.task('lint', () => {
-  return lint('app/scripts/**/*.js')
-    .pipe(gulp.dest('app/scripts'));
-});
+function lint() {
+  return lintBase('app/scripts/**/*.js', { fix: true })
+    .pipe(dest('app/scripts'));
+};
 
-gulp.task('html', ['styles', 'scripts'], () => {
-  return gulp.src(['app/*.html', '.tmp/**/*.html'])
+function html() {
+  return src(['app/*.html', '.tmp/**/*.html'])
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
-    .pipe($.if(/\.css$/, $.cssnano({safe: true, autoprefixer: false})))
+    .pipe($.if(/\.css$/, $.postcss([cssnano({safe: true, autoprefixer: false})])))
     .pipe($.if(/\.html$/, $.htmlmin({
       collapseWhitespace: false,
       minifyCSS: true,
@@ -65,21 +70,21 @@ gulp.task('html', ['styles', 'scripts'], () => {
       removeScriptTypeAttributes: true,
       removeStyleLinkTypeAttributes: true
     })))
-    .pipe(gulp.dest('dist'));
-});
+    .pipe(dest('dist'));
+};
 
-gulp.task('images', () => {
-  return gulp.src('app/images/**/*')
-    .pipe($.cache($.imagemin()))
-    .pipe(gulp.dest('dist/images'));
-});
+function images() {
+  return src('app/images/**/*', { since: lastRun(images) })
+    .pipe($.imagemin())
+    .pipe(dest('dist/images'));
+};
 
-gulp.task('fonts', () => {
-  return gulp.src(['app/fonts/**/*'])
-    .pipe($.if(dev, gulp.dest('.tmp/fonts'), gulp.dest('dist/fonts')));
-});
+function fonts() {
+  return src('app/fonts/**/*.{eot,svg,ttf,woff,woff2}')
+    .pipe($.if(isDev, dest('.tmp/fonts'), dest('dist/fonts')));
+};
 
-gulp.task('handlebars', function () {
+function handlebars() {
   hbsHelpers({ handlebars: $.hbs.handlebars });
   $.hbs.registerPartial('partials/head', fs.readFileSync('app/partials/head.hbs', 'utf8'));
   $.hbs.registerPartial('partials/footer', fs.readFileSync('app/partials/footer.hbs', 'utf8'));
@@ -87,7 +92,8 @@ gulp.task('handlebars', function () {
   $.hbs.registerPartial('partials/logo', fs.readFileSync('app/partials/logo.hbs', 'utf8'));
 
   var templateData = JSON.parse(fs.readFileSync('app/docfx.json', 'utf8')).build.globalMetadata;
-  return gulp.src(['app/**/*.md'])
+
+  return src(['app/**/*.md'])
       .pipe($.markdown({
         langPrefix: 'hljs lang-',
         highlight: function(code, lang) {
@@ -103,11 +109,11 @@ gulp.task('handlebars', function () {
         data = assign(data, templateData);
         return data;
       }}))
-      .pipe(gulp.dest('.tmp'));
-});
+      .pipe(dest('.tmp'));
+};
 
-gulp.task('extras', () => {
-  return gulp.src([
+function extras() {
+  return src([
     'app/*',
     'app/**/assets/**/*',
     '!app/**/*.hbs',
@@ -115,65 +121,88 @@ gulp.task('extras', () => {
     '!app/*.html'
   ], {
     dot: true
-  }).pipe(gulp.dest('dist'));
-});
+  }).pipe(dest('dist'));
+};
 
-gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
+function clean() {
+  return del(['.tmp', 'dist'])
+};
 
-gulp.task('serve', () => {
-  runSequence(['clean'], ['styles', 'scripts', 'fonts', 'handlebars'], () => {
-    browserSync.init({
-      notify: false,
-      port: 9000,
-      server: {
-        baseDir: ['.tmp', 'app'],
-        routes: {
-          '/node_modules': 'node_modules'
-        }
-      }
-    });
+function measureSize() {
+  return src('dist/**/*')
+    .pipe($.size({title: 'build', gzip: true}));
+};
 
-    gulp.watch([
-      'app/*.html',
-      'app/images/**/*',
-      '.tmp/**/*.html',
-      '.tmp/fonts/**/*'
-    ]).on('change', reload);
+// gulp.task('deploy', ['default'], () => {
+//   return gulp.src('dist/**/*')
+//     .pipe($.ghPages({
+//       remoteUrl: 'https://github.com/NetOfficeFw/netofficefw.github.io.git',
+//       branch: 'master'
+//     }));
+// });
 
-    gulp.watch('app/styles/**/*.css', ['styles']);
-    gulp.watch('app/scripts/**/*.js', ['scripts']);
-    gulp.watch('app/fonts/**/*', ['fonts']);
-    gulp.watch('app/docfx.json', ['handlebars']);
-    gulp.watch('app/**/*.md', ['handlebars']);
-    gulp.watch('app/**/*.hbs', ['handlebars']);
-  });
-});
 
-gulp.task('serve:dist', ['default'], () => {
-  browserSync.init({
+const build = series(
+  clean,
+  handlebars,
+  parallel(
+    lint,
+    series(parallel(styles, scripts), html),
+    images,
+    fonts,
+    extras
+  ),
+  measureSize
+);
+
+function startAppServer() {
+  server.init({
     notify: false,
-    port: 9000,
+    port,
     server: {
-      baseDir: ['dist']
+      baseDir: ['.tmp', 'app'],
+      routes: {
+        '/node_modules': 'node_modules'
+      }
     }
   });
-});
 
-gulp.task('deploy', ['default'], () => {
-  return gulp.src('dist/**/*')
-    .pipe($.ghPages({
-      remoteUrl: 'https://github.com/NetOfficeFw/netofficefw.github.io.git',
-      branch: 'master'
-    }));
-});
+  watch([
+    'app/*.html',
+    'app/images/**/*',
+    '.tmp/**/*.html',
+    '.tmp/fonts/**/*'
+  ]).on('change', server.reload);
 
-gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
-  return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-});
+  watch('app/styles/**/*.css', styles);
+  watch('app/scripts/**/*.js', scripts);
+  watch('app/fonts/**/*', fonts);
 
-gulp.task('default', () => {
-  return new Promise(resolve => {
-    dev = false;
-    runSequence(['clean'], ['handlebars'], 'build', resolve);
+  watch('app/docfx.json', handlebars);
+  watch('app/**/*.md', handlebars);
+  watch('app/**/*.hbs', handlebars);
+}
+
+function startDistServer() {
+  server.init({
+    notify: false,
+    port,
+    server: {
+      baseDir: 'dist',
+      routes: {
+        '/node_modules': 'node_modules'
+      }
+    }
   });
-});
+}
+
+let serve;
+if (isProd) {
+  serve = series(build, startDistServer);
+} else {
+  serve = series(clean, parallel(styles, scripts, fonts, handlebars), startAppServer);
+}
+
+exports.serve = serve;
+exports.build = build;
+exports.default = build;
