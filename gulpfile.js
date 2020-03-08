@@ -133,13 +133,13 @@ function measureSize() {
     .pipe($.size({title: 'build', gzip: true}));
 };
 
-// gulp.task('deploy', ['default'], () => {
-//   return gulp.src('dist/**/*')
-//     .pipe($.ghPages({
-//       remoteUrl: 'https://github.com/NetOfficeFw/netofficefw.github.io.git',
-//       branch: 'master'
-//     }));
-// });
+function deploy() {
+  return src('dist/**/*')
+    .pipe($.ghPages({
+      remoteUrl: 'https://github.com/NetOfficeFw/netofficefw.github.io.git',
+      branch: 'master'
+    }));
+};
 
 
 const build = series(
@@ -205,4 +205,5 @@ if (isProd) {
 
 exports.serve = serve;
 exports.build = build;
+exports.deploy = series(build, deploy);
 exports.default = build;
