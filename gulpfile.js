@@ -26,19 +26,19 @@ const isDev = !isProd;
 
 
 function styles() {
-  return src('app/styles/*.css', { sourcemaps: !isProd })
+  return src('app/styles/*.css', { sourcemaps: isDev })
     .pipe($.postcss([
       autoprefixer()
     ]))
-    .pipe(dest('.tmp/styles', { sourcemaps: !isProd }))
+    .pipe(dest('.tmp/styles', { sourcemaps: isDev }))
     .pipe(server.reload({stream: true}));
 };
 
 function scripts() {
-  return src('app/scripts/**/*.js', { sourcemaps: !isProd })
+  return src('app/scripts/**/*.js', { sourcemaps: isDev })
     .pipe($.plumber())
     .pipe($.babel())
-    .pipe(dest('.tmp/scripts', { sourcemaps: !isProd ? '.' : false }))
+    .pipe(dest('.tmp/scripts', { sourcemaps: isDev ? '.' : false }))
     .pipe(server.reload({stream: true}));
 };
 
