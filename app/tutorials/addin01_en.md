@@ -14,9 +14,12 @@ The create Office application add-in, create a class which extends from the `COM
 provided by the NetOffice library.
 
 ```csharp
+using NetOffice.ExcelApi.Tools;
+
+[ComVisible(true)]
 [ProgId("ExcelAddinSample.Connect")]
 [Guid("CC85F97A-F409-4497-B2F2-A9581D4A2ED2")]
-public class ExcelAddin : NetOffice.ExcelApi.Tools.COMAddin
+public class ExcelAddin : COMAddin
 {
 
 }
@@ -24,7 +27,7 @@ public class ExcelAddin : NetOffice.ExcelApi.Tools.COMAddin
 
 You project can have multiple add-ins targeting different Microsoft Office applications.
 Each add-in class must have its unique **ProgId** and **Guid** values so it can be
-properly identified in COM infrastructure.
+properly identified in COM infrastructure. Each add-in class must be visible to COM.
 
 ### COMAddin Classes
 
@@ -38,5 +41,3 @@ library for an Office application.
 |  MS Excel            |  ExcelApi.dll        |  NetOffice.ExcelApi.Tools.COMAddin  |
 |  MS PowerPoint       |  PowerPointApi.dll   |  NetOffice.PowerPointApi.Tools.COMAddin  |
 |  MS Outlook          |  OutlookApi.dll      |  NetOffice.OutlookApi.Tools.COMAddin  |
-
-
