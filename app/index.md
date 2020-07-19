@@ -20,7 +20,7 @@ hero_body: "NetOffice Framework is a set of libraries and tools for building add
     </div>
     <div class="code-block-body">
       <pre>PM> Install-Package NetOfficeFw.Word
-PM> Install-Package NetOfficeFw.Word -Version 1.7.4.6</pre>
+PM> Install-Package NetOfficeFw.Word -Version 1.7.4.11</pre>
     </div>
   </div>
 
