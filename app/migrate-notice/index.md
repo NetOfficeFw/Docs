@@ -2,26 +2,27 @@
 _body_class: "landing-page landing-page-notice"
 _is_landing_page: true
 hero_title: "❗ Use NetOfficeFw packages"
-hero_body: "Official NetOffice libraries are published as NuGet packages with prefix <strong>NetOfficeFw.*</strong>"
+hero_body: "<img class='reserved-indicator' src='https://www.nuget.org/Content/gallery/img/reserved-indicator.svg' alt='indicator of official NuGet packages' width='24' title='Look for ID prefix indicator'> Official <strong>NetOfficeFw.*</strong> packages are verified and signed."
 ---
 
 ## Move Away From Old Packages
 
 We noticed that old NetOffice packages on NuGet server are no longer available
 (NetOffice releases 1.7.3 and older) and a rogue account named *netofficedotnet*
-published NetOffice libraries under a release 1.7.4.4.
-These packages contain the old NetOffice 1.7.3.0 libraries tough.
+published NetOffice libraries under a release 1.7.4.4 and 1.7.4.11.
+These packages contain the old NetOffice 1.7.3.0 libraries and in case of the latest releases,
+packages are unusable.
 
-The [latest official NetOffice release](https://www.nuget.org/profiles/netoffice) is **1.7.4.3** (as of end of May 2018).
+Our [official NetOffice release](https://www.nuget.org/profiles/netoffice) is **1.7.5** (as of August 2020).
 
-Switching to **NetOfficeFw** packages you will get the latest NetOffice libraries
-and also improved debugging experience as we publish the symbols packages with
-the source code for the **1.7.4.1** and **1.7.4.3** releases.
+By using **NetOfficeFw** packages you will get the latest NetOffice libraries
+and also improved debugging experience as we publish symbol packages with
+the source code for the **1.7.4.x** and **1.7.5** releases.
 
 
 ## Upgrade Existing Projects
 
-To upgrade existing projects which use the old **NetOffice.*** (eg. **NetOffice.Word**, **NetOffice.Excel**, etc.) packages from NuGet,
+To upgrade existing projects which use the old **NetOffice.*** (eg. **NetOffice.Word**, **NetOffice.Excel**, **NetOffice.Outlook** and others) packages from NuGet,
 you must manually uninstall these packages and get the new equivalent versions named **NetOfficeFw.***.
 
 ## Use Package Manager Console to Migrate Packages
