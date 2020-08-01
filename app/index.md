@@ -2,7 +2,7 @@
 _body_class: "landing-page"
 _is_landing_page: true
 hero_title: NetOffice Framework
-hero_body: "NetOffice Framework is a set of libraries and tools for building addins, extending and automating Microsoft Office applications.<br><br>NetOffice supports extending and automating Microsoft Office applications: Excel, Word, Outlook, PowerPoint, Access, Project and Visio."
+hero_body: "NetOffice is a set of libraries for building Microsoft Office Addins and automation of Microsoft Office applications.<br><br>Use NetOffice to extend and automate Microsoft Office applications: Excel, Word, Outlook, PowerPoint, Access, Project and Visio."
 ---
 
 <div class="usa-grid-full usa-section">
@@ -11,8 +11,9 @@ hero_body: "NetOffice Framework is a set of libraries and tools for building add
 
   <h2>Getting Started</h2>
 
-  <p>Install NetOffice Framework as a NuGet package ([list of all NetOfficeFw packages](https://www.nuget.org/profiles/netoffice))
-    into you Visual Studio project and develop Microsoft Office solution.</p>
+  <p>Look for [**NetOfficeFw** packages](https://www.nuget.org/profiles/netoffice) on NuGet published by [netoffice](https://www.nuget.org/profiles/netoffice).</p>
+
+  <p>Install NetOffice Framework as a NuGet package into your Visual Studio project and develop Microsoft Office solution:</p>
     
   <div class="code-block">
     <div class="code-block-header">
@@ -25,10 +26,11 @@ PM> Install-Package NetOfficeFw.Word -Version 1.7.5</pre>
   </div>
 
 <div class="notice">
-    **Notice:** Using NetOffice.Core packages 1.7.4.4?
+    **Notice:** Using old _NetOffice.Core_ packages 1.7.4.4?
     [Learn how to migrate.](migrate-notice)<br>
     <br>
-    Official NetOffice libraries use new **NetOfficeFw** prefix and are published by official NuGet account named [netoffice](https://www.nuget.org/profiles/netoffice).
+    Official NetOffice libraries use new **NetOfficeFw** prefix, are verified and signed.<br>
+    Watch out for invalid packages as they contain incorrect assemblies and your projects will not work.
 </div>
 </div>
 
