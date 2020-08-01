@@ -49,7 +49,7 @@ PM> Install-Package NetOfficeFw.Word -Version 1.7.5</pre>
         <li>Easy add-in development</li>
         <li>No deployment hurdles, no registration</li>
         <li>No dependencies, no Interop Assemblies, no need for VSTO</li>
-        <li>Visual Studio Project Templates and Wizards available</li>
+        <!-- <li>Visual Studio Project Templates and Wizards available</li> -->
     </ul>
 </div>
 </div>
