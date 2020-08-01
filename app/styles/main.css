@@ -58,6 +58,10 @@ body {
   background-image: url(../images/search.svg);
 }
 
+.usa-section {
+  padding-top: 1em;
+  padding-bottom: 0;
+}
 
 .footer-contact-links h4, .footer-contact-links a {
   font-size: 1.3rem;

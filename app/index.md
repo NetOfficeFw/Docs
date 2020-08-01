@@ -6,6 +6,17 @@ hero_body: "NetOffice is a set of libraries for building Microsoft Office Addins
 ---
 
 <div class="usa-grid-full usa-section">
+  <div class="usa-width-one-whole">
+  [![Nuget](https://img.shields.io/nuget/v/NetOfficeFw.Core?color=black&label=NetOfficeFw.Core&logo=microsoft-office&style=flat-square)](https://www.nuget.org/profiles/netoffice)
+  [![NetOfficeFw.Outlook](https://img.shields.io/nuget/v/netofficefw.outlook?color=%230078D4&label=&logo=microsoft-outlook&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Outlook/)
+  [![NetOfficeFw.Word](https://img.shields.io/nuget/v/netofficefw.word?color=%232B579A&label=&logo=microsoft-word&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Word/)
+  [![NetOfficeFw.Excel](https://img.shields.io/nuget/v/netofficefw.excel?color=%23217346&label=&logo=microsoft-excel&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Excel/)
+  [![NetOfficeFw.Powerpoint](https://img.shields.io/nuget/v/netofficefw.powerpoint?color=%23B7472A&label=&logo=microsoft-powerpoint&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Powerpoint/)
+  [![NetOfficeFw.Access](https://img.shields.io/nuget/v/netofficefw.access?color=%23A4373A&label=&logo=microsoft-access&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Access/)
+</div>
+</div>
+
+<div class="usa-grid-full usa-section">
   <div class="usa-width-one-half">
     
 
