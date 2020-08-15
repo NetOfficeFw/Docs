@@ -46,21 +46,22 @@ PM> Install-Package NetOfficeFw.Word -Version 1.7.5</pre>
 </div>
 
 <div class="usa-width-one-half">
-
-
   <h2 id="features">Features</h2>
-    <ul>
-        <li>Microsoft Office integration without version limitations</li>
-        <li>All features of Microsoft Office versions 2010, 2013 and 2016 are included</li>
-        <li>Active support in version independent development</li>
-        <li>Syntactically and semantically identical to the Microsoft Interop Assemblies</li>
-        <li>No training if you already know the MS Office object model</li>
-        <li>More readable code with automatic management of COM proxies</li>
-        <li>Usable with .NET version 4.0 or higher</li>
-        <li>Easy add-in development</li>
-        <li>No deployment hurdles, no registration</li>
-        <li>No dependencies, no Interop Assemblies, no need for VSTO</li>
-        <!-- <li>Visual Studio Project Templates and Wizards available</li> -->
-    </ul>
+  <ul>
+    <li>Microsoft Office integration without version limitations</li>
+    <li>All features of Microsoft Office 2010 up to 2019 and Office 365 are included</li>
+    <li>Active support in version independent development</li>
+    <li>Syntactically and semantically identical to the Microsoft Interop Assemblies</li>
+    <li>No training if you already know the MS Office object model</li>
+    <li>More readable code with automatic management of COM proxies</li>
+    <li>Usable with .NET version 4.0 or higher</li>
+    <li>Easy add-in development</li>
+    <li>No deployment hurdles, no registration</li>
+    <li>No dependencies, no Interop Assemblies, no need for VSTO</li>
+    <!-- <li>Visual Studio Project Templates and Wizards available</li> -->
+  </ul>
+
+  <h2 id="supported-msoffice">Supported Microsoft Office</h2>
+  <p>NetOffice supports Microsoft Office releases 2010, 2013, 2016, 2019 and Office 365.</p>
 </div>
 </div>
