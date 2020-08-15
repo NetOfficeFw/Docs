@@ -54,7 +54,7 @@ PM> Install-Package NetOfficeFw.Word -Version 1.7.6</pre>
     <li>Syntactically and semantically identical to the Microsoft Interop Assemblies</li>
     <li>No training if you already know the MS Office object model</li>
     <li>More readable code with automatic management of COM proxies</li>
-    <li>Usable with .NET version 4.0 or higher</li>
+    <li>Usable with .NET Framework 4.0 or higher</li>
     <li>Easy add-in development</li>
     <li>No deployment hurdles, no registration</li>
     <li>No dependencies, no Interop Assemblies, no need for VSTO</li>
