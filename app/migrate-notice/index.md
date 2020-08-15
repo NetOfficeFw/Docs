@@ -13,7 +13,7 @@ published NetOffice libraries under a release 1.7.4.4 and 1.7.4.11.
 These packages contain the old NetOffice 1.7.3.0 libraries and in case of the latest releases,
 packages are unusable.
 
-Our [official NetOffice release](https://www.nuget.org/profiles/netoffice) is **1.7.5** (as of August 2020).
+Our [official NetOffice release](https://www.nuget.org/profiles/netoffice) is **1.7.6** (as of August 2020).
 
 By using **NetOfficeFw** packages you will get the latest NetOffice libraries
 and also improved debugging experience as we publish symbol packages with
