@@ -112,6 +112,14 @@ function handlebars() {
       .pipe(dest('.tmp'));
 };
 
+function offcat() {
+  return src([
+    'app/office/**/*'
+  ], {
+    dot: true
+  }).pipe(dest('dist/office'));
+};
+
 function extras() {
   return src([
     'app/*',
@@ -150,6 +158,7 @@ const build = series(
     series(parallel(styles, scripts), html),
     images,
     fonts,
+    offcat,
     extras
   ),
   measureSize
