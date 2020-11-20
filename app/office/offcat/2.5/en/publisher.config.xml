@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+	<!--!!! ONLY MODIFY ChangeDescription AND ConfigVersion, DO NOT TOUCH THE REST OR DO IT AT YOUR OWN RISK!!!-->
+	<Configuration ConfigName="Publisher Configuration" ChangeDescription="2.0.1601.21" ConfigVersion="2.0.1601.21" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,publisher.crashes.config.xml" Symptoms="1">
+    <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
+    <!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
+		<Substitution Name="MAJORVERSION"></Substitution>
+		<Substitution Name="INSTALLTYPE"></Substitution>
+		<Substitution Name="APPNAME">Publisher</Substitution>
+    <Substitution Name="DAYS">14</Substitution>
+    <Substitution Name="MAXEVENTS">10</Substitution>
+		<ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+		<!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
+		<ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
+		<ObjectProcessor Name="Directory" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DirectoryObjectProcessor"/>
+		<ObjectProcessor Name="DsGet" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor"/>
+		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
+		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+		<ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
+		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
+    <ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
+		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
+		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
+		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
+	</Configuration>
+	<Object Type="Group" Name="Publisher Scan" Class="Scan Type" GroupingClass="True">
+    <Reference Type="WindowsUpdatesScriptPt1" Name="WindowsUpdatesScriptPt1" File="common.config.xml"></Reference>
+    <!--OFFICE DETAILS-->
+		<Object Type="Group" Name="Install details">
+			<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Publisher" Key6="mspub" Key7="%MAJORVERSION%">
+				<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
+				</Setting>
+        <Object Type="IfThenElse" Key1="'%WOW6432NODE%'=''" Key2="emptyval" Key3="%WOW6432NODE%">
+          <Setting Key1="wowcacheval" Substitution="WOWCACHEVAL" Display="Hide"/>
+          <Object Type="Cache" Name="wowcache" Key1="Add" Key2="wowcache" Key3="%WOWCACHEVAL%">
+          </Object>
+        </Object>
+        <Setting Key1="Bitness" Substitution="APPBITNESS">
+					<Rule Name="bitness" Query="$."></Rule>
+				</Setting>
+				<Setting Key1="FullVersion">
+					<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
+					<Rule Name="nBuild" Query="substring-before(substring-after(string($.),concat($n2DigitVersion,'.0.')),'.')"></Rule>
+					<Rule Name="sFullAppVersion" Query="$.">
+					</Rule>
+          <!--Rule Name="sPublisher16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with Publisher %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of Publisher (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="41ab56eb-c13b-444b-926d-a79c1aff688b" Symptoms="_Alert from OffCAT"></Rule-->
+        </Setting>
+				<Setting Key1="Name">
+					<Rule Name="appName" Query="$."></Rule>
+				</Setting>
+				<Setting Key1="Path"></Setting>
+				<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
+				</Setting>				
+				<Setting Key1="Version">
+					<Rule Name="n4DigitSKUVersion" Query="$."></Rule>
+				</Setting>
+				<Rule Name="nInstallType" Query="'%INSTALLTYPE%'"></Rule>
+				<Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
+				<Setting Key1="Type">
+					<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+          <Rule Name="f2016MSI" Query="$n4DigitSKUVersion='2016' and $.='MSI'"></Rule>
+				</Setting>
+				<!--SKU-->
+				<Object Type="Group" Name="Office SKU">
+					<Object Type="If" Key1="'%MAJORVERSION%'='11'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{8F71499B-7879-41CB-90F9-A64C5719CB6F}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+								<Setting Key1="ProductName" Display="Right"></Setting>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='12'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{0638C49D-BB8B-4CD1-B191-05CE8F325736}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+								<Setting Key1="ProductName" Display="Right"></Setting>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x86'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{CD0D7B29-89E7-49C5-8EE1-5D858EFF2593}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+							</Setting>
+							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+								<Setting Key1="ProductName" Substitution="PN" Display="Right">
+									<Rule Name="SKUName2010" Query="if(contains($.,'Single Image') and $sSingleImageSKU2010!='',$sSingleImageSKU2010,$.)" AlwaysEvaluate="True"></Rule>
+								</Setting>
+								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
+								</Setting>
+								<Object Type="If" Key1="contains('%PN%','Single Image')">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
+										<Setting Key1="ID" Substitution="REGID" Display="Hide">
+										</Setting>
+										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
+											<Setting Key1="ProductName">
+												<Rule Name="sSingleImageSKU2010" Query="$."></Rule>
+											</Setting>
+										</Object>
+									</Object>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x64'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{A716400F-5D5D-45CF-94B4-05B17A98B901}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+							</Setting>
+							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+								<Setting Key1="ProductName" Substitution="PN" Display="Right">
+									<Rule Name="SKUName201064" Query="if(contains($.,'Single Image') and $sSingleImageSKU201064!='',$sSingleImageSKU201064,$.)"></Rule>
+								</Setting>
+								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
+								</Setting>
+								<Object Type="If" Key1="contains('%PN%','Single Image')">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
+										<Setting Key1="ID" Substitution="REGID" Display="Hide">
+										</Setting>
+										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
+											<Setting Key1="ProductName">
+												<Rule Name="sSingleImageSKU201064" Query="$."></Rule>
+											</Setting>
+										</Object>
+									</Object>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{C9C0167D-3FE0-4078-B47E-83272A4B8B04}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+							<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+							<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+								<Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+								<Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+								<Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+									<Setting Key1="" Display="Hide"></Setting>
+								</Object>
+								<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+									<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+										<Setting Key1="ProductVersion" Display="Hide">
+											<Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
+										</Setting>
+									</Object>
+									<Setting Key1="ProductName" Display="Right"></Setting>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{22299AFF-DC4C-45A8-9A8F-651FB6467057}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+							<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+							<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+								<Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+								<Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+								<Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+									<Setting Key1="" Display="Hide"></Setting>
+								</Object>
+								<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+									<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+										<Setting Key1="ProductVersion" Display="Hide">
+											<Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
+										</Setting>
+									</Object>
+									<Setting Key1="ProductName" Display="Right"></Setting>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
+						<Object Type="C2RSKU" Key1="Publisher" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+							<Setting Key1="ProductName" Display="Right"/>
+						</Object>
+            <Object Type="If" Key1="'%MAJORVERSION%'='15'">
+						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active" Key5="OneLevel" Display="Hide">
+							<Setting Key1="__KEYNAME" Substitution="LIC" Display="Hide"></Setting>
+							<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active\%LIC%\x-none" Key5="Subtree" Display="Hide">
+								<Setting Key1="__KEYNAME" Key2="publisher.%APPBITNESS%.x-none.zip" Substitution="C2RAPPFOUND" Display="Hide"></Setting>
+								<Object Type="If" Key1="'%C2RAPPFOUND%'='publisher.%APPBITNESS%.x-none.zip'">
+									<Object Type="Group" Name="ClickToRun License Family=%LIC%" Display="Right">
+										<Setting Key1="" Display="Hide"></Setting>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="number('%MAJORVERSION%')&gt;15">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\ClickToRun\ProductReleaseIDs\Active" Key5="OneLevel" Display="Hide">
+                <Setting Key1="__KEYNAME" Substitution="LIC" Display="Hide"></Setting>
+                <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\ClickToRun\ProductReleaseIDs\Active\%LIC%\x-none" Key5="Subtree" Display="Hide">
+                  <Setting Key1="__KEYNAME" Key2="publisher.%APPBITNESS%.x-none.zip" Substitution="C2RAPPFOUND" Display="Hide"></Setting>
+                  <Object Type="If" Key1="'%C2RAPPFOUND%'='publisher.%APPBITNESS%.x-none.zip'">
+                    <Object Type="Group" Name="ClickToRun License Family=%LIC%" Display="Right">
+                      <Setting Key1="" Display="Hide"></Setting>
+                    </Object>
+									</Object>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='16' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{81DD86EC-5F1C-4DDE-9211-98AF184EAD47}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+              <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+              <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                <Rule Name="SKUV16x86" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                <Rule Name="ReleaseTypeV16x86" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                <Rule Name="fProPlusV16x86" Query="$SKUV16x86='0011'"></Rule>
+                <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+                <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\16.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                    <Setting Key1="ProductVersion" Display="Hide">
+                      <Rule Name="fOfficeProductVersionV16x86" Query="$." AlwaysEvaluate="True"></Rule>
+                    </Setting>
+                  </Object>
+                  <Setting Key1="ProductName" Display="Right">
+                    <Rule Name="SKUNameV16x86" Query="$."></Rule>
+                  </Setting>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='16' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{7ECBF2AA-14AA-4F89-B9A5-C064274CFA83}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+              <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+              <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                <Rule Name="SKUV16x64" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                <Rule Name="ReleaseTypeV16x64" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                <Rule Name="fProPlusV16x64" Query="$SKUV16x64='0011'"></Rule>
+                <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+                <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\16.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                    <Setting Key1="ProductVersion" Display="Hide">
+                      <Rule Name="fOfficeProductVersionV16x64" Query="$." AlwaysEvaluate="True"></Rule>
+                    </Setting>
+                  </Object>
+                  <Setting Key1="ProductName" Display="Right">
+                    <Rule Name="SKUNameV16x64" Query="$."></Rule>
+                  </Setting>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+        </Object>
+				<!--/SKU-->
+				<!--MSO-->
+				<Reference Type="MSO" Name="MSO" File="common.config.xml">
+				</Reference>
+				<!--/MSO-->
+				<!--OART.dll-->
+				<Reference Type="OART" Name="OART" File="common.config.xml">
+				</Reference>
+				<!--/OART.dll-->
+			</Object>
+			<!--INSTALLED UPDATES-->
+			<Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
+				<Object Type="Group" Name="Installed Updates" Class="Office Update" GroupingClass="True" Display="Right" TrackProgress="TrackProgress">
+					<Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml"></Reference>
+				</Object>
+			</Object>
+			<Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
+				<Object Type="Group" Name="ClickToRun Details" GroupingClass="True" Class="Office Update" Display="Right">
+          <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+            <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+            <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml"></Reference>
+          </Object>
+				</Object>
+			</Object>
+			<!--/INSTALLED UPDATES-->
+		</Object>
+		<!--OFFICE DETAILS-->
+		<!--USER DETAILS-->
+		<Object Type="Group" Name="User Details" Display="Right">
+			<Reference Type="UserDetails" Name="UserDetails" File="common.config.xml"></Reference>
+		</Object>
+		<!--/USER DETAILS-->
+		<!--MACHINE DETAILS-->
+		<Object Type="Group" Name="Machine Details">
+			<Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml"></Reference>
+      <Reference Type="ServicesRunning" Name="ServicesRunning" File="common.config.xml"></Reference>
+      <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml"></Reference>
+      <Reference Type="WUDetails" Name="WUDetails" File="common.config.xml"></Reference>
+      <Reference Type="WindowsUpdatesToInstall" Name="WindowsUpdatesToInstall" File="common.config.xml"></Reference>
+    </Object>
+		<!--MACHINE DETAILS-->
+		<!--ADD-INS-->
+		<Object Type="Group" Name="Registered add-ins" Class="Add-ins" GroupingClass="True" TrackProgress="TrackProgress">
+			<!--PDFMaker-->
+			<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Pdfmaker.OfficeAddin\CLSID">
+				<Setting Key1="(Default)" Substitution="PDFMAKERGUID"></Setting>
+				<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Publisher" Key6="mspub" Key7="%MAJORVERSION%" Display="Hide">
+					<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide"></Setting>
+					<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="%WOW6432NODE%\CLSID\%PDFMAKERGUID%\InprocServer32">
+						<Setting Key1="(Default)" Substitution="PDFMAKERPATH"></Setting>
+						<Object Type="File" Key2="%PDFMAKERPATH%">
+							<Setting Key1="Version">
+								<Rule Name="sPDFMakerPublisher" Query="$n2DigitVersion&gt;13 and number(substring($.,1,1))!=1 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version of the PDFMaker add-in installed that is not compatible with Publisher. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="0d8f4036-dcc8-48c4-b6e2-38de2885e811" Symptoms="Crash,Add-ins"></Rule>
+								<Rule Name="sPDFMakerx64" Query="$n2DigitVersion&gt;13 and ((substring($.,1,2)='10' and number(substring($.,4,1))&lt;1) or substring($.,1,1)!='1')  and $bitness='x64'" Error="Warning" Title="Adobe PDFMaker detected on a client with 64-bit Office" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="b168035f-9041-4e6a-b76a-75a4226c0972" Symptoms="Crash,Add-ins"></Rule>
+							</Setting>
+						</Object>
+					</Object>
+				</Object>
+			</Object>
+			<!--/PDFMaker-->
+			<!--HKCU addins-->
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Publisher\Addins" Key5="Subtree" Display="Right">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+				<Rule Name="hkcuPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+					<Setting Key1="CommandLineSafe"></Setting>
+					<Setting Key1="Description"></Setting>
+					<Setting Key1="FriendlyName"></Setting>
+					<Setting Key1="Loadbehavior"></Setting>
+				</Object>
+			</Object>
+			<!--/HKCU addins-->
+			<!--HKLM addins-->
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Publisher\Addins" Key5="Subtree" Display="Right">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+				<Rule Name="hklmPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+					<Setting Key1="CommandLineSafe"></Setting>
+					<Setting Key1="Description"></Setting>
+					<Setting Key1="FriendlyName"></Setting>
+					<Setting Key1="Loadbehavior"></Setting>
+				</Object>
+			</Object>
+			<!--/HKLM addins-->
+			<!--HKLM WOW addins-->
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Publisher\Addins" Key5="Subtree" Display="Right">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+				<Rule Name="hklmWowPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+					<Setting Key1="CommandLineSafe"></Setting>
+					<Setting Key1="Description"></Setting>
+					<Setting Key1="FriendlyName"></Setting>
+					<Setting Key1="Loadbehavior"></Setting>
+				</Object>
+			</Object>
+			<!--/HKLM WOW addins-->
+			<!--RESILIENCY-->
+			<Object Type="Group" Name="Resiliency" Class="Add-ins" Display="Right">
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Publisher\Resiliency" Display="Right">
+					<Setting Key1="__VALUES">
+					</Setting>
+				</Object>
+				<Object Type="Group" Name="HKEY_CURRENT_USER\Software\Microsoft\Office\%MAJORVERSION%.0\Publisher\Resiliency\DisabledItems" Display="Right">
+					<Object Type="Group" Name="Disabled Add-ins" Display="Right">
+						<Object Type="DisabledItems" Key1="Publisher" Key2="%MAJORVERSION%" Display="Right">
+							<Setting Key1="Type" Display="Right">
+							</Setting>
+							<Setting Key1="Module" Display="Right">
+							</Setting>
+							<Setting Key1="FriendlyName" Display="Right">
+							</Setting>
+						</Object>
+					</Object>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Publisher\Resiliency\DoNotDisableAddinList" Display="Right">
+					<Setting Key1="__VALUES">
+					</Setting>
+				</Object>
+				<!--O15 resiliency policy-->
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Publisher\Resiliency" Key4="" Key5="Base" Display="Right">
+					<Setting Key1="RestrictToList">
+					</Setting>
+					<Rule Name="nRestrictToList" Query="if(../Instance/Setting[@Key1='RestrictToList']=true(),../Instance/Setting[@Key1='RestrictToList']/Value,-1)">
+					</Rule>
+					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Publisher\Resiliency\AddinList" Key4="" Key5="Base" Display="Right">
+						<Setting Key1="__VALUES">
+						</Setting>
+					</Object>
+				</Object>
+			</Object>
+			<!--/RESILIENCY-->
+		</Object>
+		<!--/ADD-INS-->
+		<!--REG SETTINGS-->
+		<Object Type="Group" Name="Office Registry Settings" Class="Publisher Settings" GroupingClass="True" TrackProgress="TrackProgress">
+			<Object Type="Group" Name="HKEY_CURRENT_USER" Display="Right">
+				<!--app specific-->
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Publisher" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Publisher" Key4="^((?!File MRU)(?!Place MRU).)*$" Key5="Subtree" Key6="True" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<!--common-->
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+					<Setting Key1="VBAOff">
+						<Rule Name="sHkcuVBAOff" Query="$.=1 and $HklmVBAOff=-1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA functionality is impaired or disabled (HKCU registry data)" Text="The VBAOff value in the HKCU registry hive is set to a value other than 0. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="98f5e393-978d-48f4-8602-f2b3b9bf4fd4" Symptoms="VBA"></Rule>
+					</Setting>
+					<Rule Name="HkcuVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Key4="^((?!Identity)(?!Internet)(?!Logging)(?!OfficeStart)(?!Open Find)(?!Research)(?!Roaming)(?!ServicesManagerCache)(?!UserSidEmailMapping).)*$" Key5="Subtree" Key6="True" Display="Right">
+					<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+						<Setting Key1="__VALUES"></Setting>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="Group" Name="HKEY_LOCAL_MACHINE" Display="Right">
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Publisher" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Publisher" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Publisher" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\%MAJORVERSION%.0\Publisher" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<!--common-->
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+					<Setting Key1="VBAOff">
+						<Rule Name="sHklmVBAOff" Query="$.=1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="Visual Basic for Applications is disabled (HKLM registry data)" Text="The VBAOff value = 1 in the registry under the HKLM hive. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="40c632c2-5780-43f2-a100-3b1b6a33b1cb" Symptoms="VBA"></Rule>
+					</Setting>
+					<Rule Name="HklmVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Key5="Subtree" Display="Right">
+					<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+					</Setting>
+					<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+						<Setting Key1="__VALUES">
+						</Setting>
+					</Object>
+				</Object>
+			</Object>
+		</Object>
+		<!--/REG SETTINGS-->
+		<!--OFFICE POLICIES-->
+		<Object Type="Group" Name="Office Policies" Class="Policies" GroupingClass="True" TrackProgress="TrackProgress">
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0" Key5="Subtree" Display="Right">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+					<Setting Key1="__VALUES"></Setting>
+					<Rule Name="fPolicies" Query="count(../Instance[contains(lower-case(@Name),'publisher')]/Setting)&gt;0"></Rule>
+				</Object>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+				<Setting Key1="__VALUES"></Setting>
+				<Setting Key1="VBAOff">
+					<Rule Name="sHkcuVBAOffPol" Query="$.=1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKCU" Text="The VBAOff value is set to a value other than 0 as a policy under HKCU. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="102b692a-f45e-4932-95ed-76fb8f14074d" Symptoms="VBA"></Rule>
+				</Setting>
+				<Rule Name="HkcuVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+				<Setting Key1="__VALUES"></Setting>
+				<Setting Key1="VBAOff">
+					<Rule Name="sHklmVBAOffPol" Query="$.=1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKLM" Text="The VBAOff value is set to a value other than 0 as a policy under HKLM. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="5ea57e6f-c354-4af4-b0e5-da0d71f0f735" Symptoms="VBA"></Rule>
+				</Setting>
+				<Rule Name="HklmVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
+			</Object>
+		</Object>
+		<!--/OFFICE POLICIES-->
+		<!--EVENTLOGS-->
+		<Object Type="Group" Name="Application Event Logs" Class="Event Logs" GroupingClass="True">
+			<Object Type="Group" Name="Application Event Log Entries for Last Publisher crashes" Class="Application Event Logs" GroupingClass="True" TrackProgress="TrackProgress">
+        <Reference Type="PublisherCrashes" Name="PublisherCrashes" File="publisher.crashes.config.xml">
+        </Reference>
+			</Object>
+		</Object>
+		<!--/EVENTLOGS-->
+		<!--MISCELLANEOUS-->
+		<Object Type="Group" Name="Miscellaneous" GroupingClass="True" Class="Miscellaneous" TrackProgress="TrackProgress">
+      <Reference Type="OffCATVersionInfo" Name="OffCATVersionInfo" File="common.config.xml">
+      </Reference>
+      <Reference Type="GPResult" Name="GPResult" File="common.config.xml">
+      </Reference>
+			<Reference Type="CommonMisc" Name="CommonMisc" File="common.config.xml"></Reference>
+		</Object>
+		<!--/MISCELLANEOUS-->
+	</Object>
+	<!--EXTERNALREFS-->
+	<Rule Name="effectiveSlowBitrate"></Rule>
+	<Rule Name="sWordVersion"></Rule>
+  <Rule Name="sPpCoreVersion"></Rule>
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+  <Rule Name="OUTLOOKVERSION_sOutlookExeVersion"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>gGOEcakyYwa85wmGbp8zq3D7Zik=</DigestValue></Reference></SignedInfo><SignatureValue>
+    ddgbbaO/oXy8Tn/2DRu4w1ZxQYRtig4a83/hiQi5iCl4yzbiGertx8FGLA1rB5c37nO+pnUy
+    7Cv80p5MhT+0oZFdCU96y+2DHaK+CWHbU17LB6DfyGxv/Ld7dlSfYWOMZz1VUbDyKQyjDkG5
+    bdhHxJ4AooB3OdpIq5g5x8U1aZ4Q2QulFKU6fmDwqPukJP5smq6vS/bTxbX9e+13J16S+jnl
+    k+VY3Cql21Lc79Hn5LGUq0OPcwQJFQsJLMIVl9cfcduzhpIlURHCDCMPIsDsEGS5oj6WO4m6
+    xRidwUyyoniFljXOCcsV5fwJ0et9MrLEi7c0esdp81kJXc6zK2DKfw==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

@@ -1,0 +1,1493 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+  <Configuration ConfigName="KMS Configuration" ChangeDescription="2.0.1604.13" ConfigVersion="2.0.1604.13" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}">
+    <Substitution Name="MAJORVERSION"/>
+    <ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+    <ExtFormat Name="Ascii" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ExtFormat" Convert="ConvertBinaryToAscii"/>
+    <ExtFormat Name="Average" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Convert="AverageFormat"/>
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+    <ObjectProcessor Name="Certificate" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CertificateObjectProcessor"/>
+    <ObjectProcessor Name="CertificateDetail" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CertificateDetailObjectProcessor"/>
+    <ObjectProcessor Name="CheckTokenMembership" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CheckTokenMembershipObjectProcessor"/>
+    <ExtFormat Name="CIMDateTime" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ExtFormat" Convert="CIMDateTime"/>
+    <ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
+    <ObjectProcessor Name="CSV" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CSVObjectProcessor"/>
+    <ObjectProcessor Name="Directory" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DirectoryObjectProcessor"/>
+    <ObjectProcessor Name="DNS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DNSObjectProcessor"/>
+    <ObjectProcessor Name="DsGet" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor"/>
+    <ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+    <ExtFormat Name="Enum" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ExtFormat" Convert="ConvertToIntegerString"/>
+    <ObjectProcessor Name="Enumerator" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EnumeratorObjectProcessor"/>
+    <ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
+    <ObjectProcessor Name="EventReport" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EventReportObjectProcessor"/>
+    <IssueProcessor Name="Events" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EventProcessor"/>
+    <ObjectProcessor Name="ExpandGroup" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.ExpandGroupObjectProcessor"/>
+    <ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+    <ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+    <ExtFunction Name="get-formated-attribute" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ObjectProcessor" Function="GetFormattedAttribute" Returns="String" Parameters="String"/>
+    <ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
+    <ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+    <ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
+    <ExtFunction Name="list-average" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="Average" Returns="Number" Parameters="String"/>
+    <ExtFunction Name="list-max" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="ListMax" Returns="Number" Parameters="String"/>
+    <ExtFunction Name="list-median" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="Median" Returns="Number" Parameters="String"/>
+    <ExtFunction Name="list-min" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="ListMin" Returns="Number" Parameters="String"/>
+    <ExtFunction Name="list-percentile" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="ListPercentile" Returns="Number" Parameters="String,Number"/>
+    <ExtFunction Name="list-sigma" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="Sigma" Returns="Number" Parameters="String"/>
+    <ExtFunction Name="localize-path" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="LocalizePath" Returns="String" Parameters="String"/>
+    <ExtFunction Name="longest-starts-with" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="LongestStartsWith" Returns="String" Parameters="String,Any"/>
+    <ObjectProcessor Name="LookupAccount" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.LookupAccountObjectProcessor"/>
+    <ExtFormat Name="LowerCase" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor" Convert="ToLower"/>
+    <ObjectProcessor Name="Lsa" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.LsaObjectProcessor"/>
+    <ExtFormat Name="Max" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Convert="MaxFormat"/>
+    <ExtFormat Name="Median" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Convert="MedianFormat"/>
+    <ObjectProcessor Name="Metabase" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MetabaseObjectProcessor"/>
+    <ExtFormat Name="Min" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Convert="MinFormat"/>
+    <ExtFormat Name="MinNonZero" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Convert="MinNonZeroFormat"/>
+    <ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+    <ExtFormat Name="NinetiethPercentile" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Convert="NinetiethPercentileFormat"/>
+    <ObjectProcessor Name="Pdh" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor"/>
+    <ObjectProcessor Name="PdhCollect" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhCollectObjectProcessor"/>
+    <ObjectProcessor Name="PdhInfo" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhInfoObjectProcessor"/>
+    <ObjectProcessor Name="Perfmon" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PerfmonObjectProcessor"/>
+    <ObjectProcessor Name="Ping" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PingObjectProcessor"/>
+    <ObjectProcessor Name="Port" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PortObjectProcessor"/>
+    <ObjectProcessor Name="Protocol" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.ProtocolObjectProcessor"/>
+    <ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+    <ExtFunction Name="resolve" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ResolveObjectProcessor" Function="Resolve" Returns="String" Parameters="String"/>
+    <ObjectProcessor Name="Resolve" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ResolveObjectProcessor"/>
+    <ExtFunction Name="roundto" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Function="RoundTo" Returns="Number" Parameters="Number,Number"/>
+    <ExtFunction Name="sdget" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.NTSD" Function="SdGet" Returns="Any" Parameters="String,String"/>
+    <ExtFormat Name="Sigma" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.PdhObjectProcessor" Convert="SigmaFormat"/>
+    <ObjectProcessor Name="Sleep" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.SleepObjectProcessor"/>
+    <ObjectProcessor Name="SQL" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.SQLObjectProcessor"/>
+    <ExtFormat Name="Unicode" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ExtFormat" Convert="ConvertBinaryToUnicode"/>
+    <ObjectProcessor Name="Volume" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+    <ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+    <ObjectProcessor Name="WMIInherit" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+    <ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
+    <ExtFormat Name="Hex2" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertIntToHex"/>
+    <!--RESTRICTIONS-->
+    <RestrictionType Name="Option" Display="Option:" Description="Description" Filter="True">
+      <Option Name="dhistorykms" Display="Display KMS client activation history"/>
+      <!--<Option Name="dhistoryacterr" Display="Display MAK/Retail activation failure history" Description="Desc" />-->
+      <Option Name="dstatus" Display="Display license information for installed product keys"/>
+      <Option Name="dstatusall" Display="Display license information for installed licenses"/>
+    </RestrictionType>
+  </Configuration>
+  <Object Type="Group" Name="KMS Client Scan" Class="Scan Type" GroupingClass="True">
+    <Object Type="GetComputerNameEx" Display="Hide">
+      <Setting Key1="ComputerNameNetBIOS" Substitution="MACHINENAME" Display="Hide"/>
+      <Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_OperatingSystem" Display="Hide">
+        <Setting Key1="Version" Substitution="WINVER" Display="Hide"/>
+        <Setting Key1="ProductType" Substitution="WINTYPE" Display="Hide"/>
+        <!--KMS Client Activation History (dhistorykms)-->
+        <Object Type="Group" Name="KMS Client Activation History" LogText="Searching for KMS activation events on local machine" Option="dhistorykms" TrackProgress="TrackProgress">
+          <Object Type="EventLog" Key1="Application" Key2="Office Software Protection Platform Service" Key3="12288" Key5="10" Key7="54">
+            <Setting Key1="Eventid"/>
+            <Setting Key1="TimeGenerated" Display="Hide" Substitution="EVENTTIME"></Setting>
+            <Setting Key1="Message" Substitution="ERRORCODE" SubstitutionFormat="(.*\n)(0x[0-9a-fA-F]{8})(.*)----$2" Display="Hide"/>
+            <Setting Key1="Message" Substitution="ERRORANDHOST" SubstitutionFormat="(.*\n)(0x.*[a-zA-Z])(:{1,1})(.*)----$2" Display="Hide"/>
+            <Object Type="Group" Name="ERROR CODE =%ERRORCODE%" Display="Right">
+              <Rule Name="KMSClientActivationInfo" Query="'%ERRORCODE%'='0x00000000'" P0="'%EVENTTIME%'" P1="'%ERRORANDHOST%'" Title="{0}: Activation successful." Text="{1}" Error="None"></Rule>
+              <Setting Display="Hide"/>
+            </Object>
+            <Object Type="Group" Name="ERROR/HOST =%ERRORANDHOST%" Display="Right">
+              <Setting Display="Hide"/>
+            </Object>
+            <Object Type="Engine" Display="Hide">
+              <Setting Key1="ConfigFileName" Substitution="CONFIG" Display="Hide"></Setting>
+              <Object Type="XML" Key2="%CONFIG%" Key3="/*/Errors/err%ERRORCODE%" Display="Hide">
+                <Setting Key1="child::text()" Substitution="ERRDESC" Display="Hide"></Setting>
+                <Object Type="Group" Name="ERROR DESCRIPTION =%ERRDESC%" Display="Right">
+                  <Rule Name="KMSClientActivationError" Query="'%ERRORCODE%'!='0x00000000'" P0="'%EVENTTIME%'" P1="'%ERRDESC%'" P2="'%ERRORANDHOST%'" Title="{0}: {1}" Text="{2}" Error="Warning"></Rule>
+                  <Setting Display="Hide"/>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Rule Name="noKMSEventFound" Query="count(../Instance/Object/Instance[@Type='EventLog'])=0" Text="No events 12288 found on machine"></Rule>
+        </Object>
+        <!--MAK Activation history (dhistoryacterr)-->
+        <!--<Object Type="Group" Name="Internet Activation history" LogText="Searching for Internet activation failure events on local machine" Option="dhistoryacterr" TrackProgress="TrackProgress">
+					<Object Type="EventLog" Key1="Application" Key3="8200" Key5="10" Key7="14">
+						<Setting Key1="Eventid" />
+						<Setting Key1="Message" Substitution="ERRORCODE" SubstitutionFormat="(.*\n)(0x[0-9a-fA-F]{8})(.*)$2" Display="Hide" />
+						<Setting Key1="Message" Substitution="ERRORANDHOST" SubstitutionFormat="(.*\n)(0x.*[a-zA-Z])(:{1,1})(.*)$2" Display="Hide" />
+						<Object Type="Group" Name="ERROR CODE =%ERRORCODE%" Display="Right">
+							<Setting Display="Hide" />
+						</Object>
+						<Object Type="Group" Name="ERROR/HOST =%ERRORANDHOST%" Display="Right">
+							<Setting Display="Hide" />
+						</Object>
+						<Object Type="Engine" Display="Hide">
+							<Setting Key1="ConfigFileName" Substitution="CONFIG" Display="Hide"></Setting>
+							<Object Type="XML" Key2="%CONFIG%" Key3="/*/Errors/err%ERRORCODE%" Display="Hide">
+								<Setting Key1="child::text()" Substitution="ERRDESC" Display="Hide"></Setting>
+								<Object Type="Group" Name="ERROR DESCRIPTION =%ERRDESC%" Display="Right">
+									<Setting Display="Hide" />
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+					<Rule Name="noMAKActErr" Query="count(../Instance/Object/Instance[@Type='EventLog'])=0" Text="No failure events found on machine"></Rule>
+				</Object>-->
+        <!--License information for installed product keys (dstatus)-->
+        <Object Type="If" Key1="%MAJORVERSION%=14">
+          <Object Type="Group" Name="License information for installed Office 2010 product keys" Option="dstatus" TrackProgress="TrackProgress">
+            <Object Type="WMI" Key1="%MACHINENAME%" Key3="OfficeSoftwareProtectionProduct" Key4="ApplicationId = '59a52881-a989-479d-af46-f275c6370663'" Display="Hide">
+              <Setting Key1="ID" Substitution="ID" Display="Hide"/>
+              <Setting Key1="ApplicationId" Substitution="ApplicationId" Display="Hide"/>
+              <Setting Key1="EvaluationEndDate" Substitution="EvaluationEndDate" Display="Hide"/>
+              <Setting Key1="PartialProductKey" Substitution="PartialProductKey" Display="Hide"/>
+              <Setting Key1="Description" Substitution="Description" Display="Hide"/>
+              <Setting Key1="Name" Substitution="Name" Display="Hide"/>
+              <Setting Key1="LicenseStatus" Substitution="LicenseStatus" Display="Hide"/>
+              <Setting Key1="LicenseStatusReason" Substitution="LicenseStatusReason" Display="Hide" Format="Hex2"/>
+              <Setting Key1="ProductKeyID" Substitution="ProductKeyID" Display="Hide"/>
+              <Setting Key1="GracePeriodRemaining" Substitution="GracePeriodRemaining" Display="Hide"/>
+              <Object Type="If" Key1="'%ProductKeyID%'!=''">
+                <Object Type="Group" Name="%Name%">
+                  <Object Type="Group" Name="SKU ID =%ID%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="Group" Name="License Name =%Name%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="Group" Name="License Description =%Description%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='0'">
+                    <Object Type="Group" Name="License status =UNLICENSED">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='1'">
+                    <Object Type="Group" Name="License status =LICENSED">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='2'">
+                    <Object Type="Group" Name="License status =OOB_GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='3'">
+                    <Object Type="Group" Name="License status =OOT_GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='4'">
+                    <Object Type="Group" Name="License status =NON GENUINE GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='5'">
+                    <Object Type="Group" Name="License status =Notification">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='6'">
+                    <Object Type="Group" Name="License status =EXTENDED GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'=''">
+                    <Object Type="Group" Name="License status =UNKNOWN">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatusReason%'!='0x0'">
+                    <Object Type="Group" Name="LicenseStatusReason =%LicenseStatusReason%">
+                      <Setting Display="Hide"/>
+                    </Object>
+                    <Object Type="Engine" Display="Hide">
+                      <Setting Key1="ConfigFileName" Substitution="CONFIG" Display="Hide"></Setting>
+                      <Object Type="XML" Key2="%CONFIG%" Key3="/*/Errors/err%LicenseStatusReason%" Display="Hide">
+                        <Setting Key1="child::text()" Substitution="ERRDESC" Display="Hide"></Setting>
+                        <Object Type="Group" Name="ERROR DESCRIPTION =%ERRDESC%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                      </Object>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%GracePeriodRemaining%'!=''">
+                    <Rule Name="gracePeriod14" Text="Remaining grace ={0} days ({1} minute(s) before expiring)" P0="floor(number('%GracePeriodRemaining%')div 1440)" P1="%GracePeriodRemaining%"/>
+                  </Object>
+                  <Object Type="If" Key1="'%PartialProductKey%'!=''">
+                    <Object Type="Group" Name="Last 5 characters of installed product key =%PartialProductKey%">
+                      <Setting Display="Hide"></Setting>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+        </Object>
+        <Object Type="If" Key1="%MAJORVERSION%&gt;=15">
+          <Object Type="IfThenElse" Key1="%MAJORVERSION%=15" Key2="2013" Key3="2016">
+            <Setting Key1="SkuVersion" Substitution="SKUVERSION" Display="Hide"/>
+            <Object Type="Group" Name="License information for installed Office %SKUVERSION% product keys" Option="dstatus" TrackProgress="TrackProgress">
+              <Object Type="IfThenElse" Key1="substring('%WINVER%',1,3)='6.1' and ('%WINTYPE%'='1' or '%WINTYPE%'='2' or '%WINTYPE%'='3')" Key2="True" Key3="False" Display="Hide">
+                <Setting Key1="Win7" Substitution="WIN7" Display="Hide"/>
+                <Object Type="If" Key1="'%WIN7%'='True'">
+                  <Object Type="WMI" Key1="%MACHINENAME%" Key3="OfficeSoftwareProtectionProduct" Key4="ApplicationId = '0ff1ce15-a989-479d-af46-f275c6370663' AND Name LIKE 'Office %MAJORVERSION%%'" Display="Hide">
+                    <Setting Key1="ID" Substitution="ID" Display="Hide"/>
+                    <Setting Key1="ApplicationId" Substitution="ApplicationId" Display="Hide"/>
+                    <Setting Key1="EvaluationEndDate" Substitution="EvaluationEndDate" Display="Hide"/>
+                    <Setting Key1="PartialProductKey" Substitution="PartialProductKey" Display="Hide"/>
+                    <Setting Key1="Description" Substitution="Description" Display="Hide"/>
+                    <Setting Key1="Name" Substitution="Name" Display="Hide"/>
+                    <Setting Key1="LicenseStatus" Substitution="LicenseStatus" Display="Hide"/>
+                    <Setting Key1="LicenseStatusReason" Substitution="LicenseStatusReason" Display="Hide" Format="Hex2"/>
+                    <Setting Key1="ProductKeyID" Substitution="ProductKeyID" Display="Hide"/>
+                    <Setting Key1="GracePeriodRemaining" Substitution="GracePeriodRemaining" Display="Hide"/>
+                    <Setting Key1="DiscoveredKeyManagementServiceMachineName" Substitution="DiscoveredKeyManagementServiceMachineName" Display="Hide"/>
+                    <Setting Key1="DiscoveredKeyManagementServiceMachinePort" Substitution="DiscoveredKeyManagementServiceMachinePort" Display="Hide"/>
+                    <Setting Key1="VLActivationInterval" Substitution="VLActivationInterval" Display="Hide"/>
+                    <Setting Key1="VLRenewalInterval" Substitution="VLRenewalInterval" Display="Hide"/>
+                    <Setting Key1="KeyManagementServiceMachine" Substitution="KeyManagementServiceMachine" Display="Hide"/>
+                    <Setting Key1="KeyManagementServicePort" Substitution="KeyManagementServicePort" Display="Hide"/>
+                    <Object Type="If" Key1="'%ProductKeyID%'!=''">
+                      <Object Type="Group" Name="%Name%">
+                        <Object Type="Group" Name="SKU ID =%ID%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="Group" Name="License Name =%Name%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="Group" Name="License Description =%Description%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='0'">
+                          <Object Type="Group" Name="License status =UNLICENSED">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='1'">
+                          <Object Type="Group" Name="License status =LICENSED">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='2'">
+                          <Object Type="Group" Name="License status =OOB_GRACE">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='3'">
+                          <Object Type="Group" Name="License status =OOT_GRACE">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='4'">
+                          <Object Type="Group" Name="License status =NON GENUINE GRACE">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='5'">
+                          <Object Type="Group" Name="License status =Notification">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='6'">
+                          <Object Type="Group" Name="License status =EXTENDED GRACE">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'=''">
+                          <Object Type="Group" Name="License status =UNKNOWN">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatusReason%'!='0x0'">
+                          <Object Type="Group" Name="LicenseStatusReason =%LicenseStatusReason%">
+                            <Setting Display="Hide"/>
+                          </Object>
+                          <Object Type="Engine" Display="Hide">
+                            <Setting Key1="ConfigFileName" Substitution="CONFIG" Display="Hide"></Setting>
+                            <Object Type="XML" Key2="%CONFIG%" Key3="/*/Errors/err%LicenseStatusReason%" Display="Hide">
+                              <Setting Key1="child::text()" Substitution="ERRDESC" Display="Hide"></Setting>
+                              <Object Type="Group" Name="ERROR DESCRIPTION =%ERRDESC%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                            </Object>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%GracePeriodRemaining%'!=''">
+                          <Rule Name="gracePeriod15Win7" Text="Remaining grace ={0} days ({1} minute(s) before expiring)" P0="floor(number('%GracePeriodRemaining%')div 1440)" P1="%GracePeriodRemaining%"/>
+                        </Object>
+                        <Object Type="If" Key1="'%PartialProductKey%'!=''">
+                          <Object Type="Group" Name="Last 5 characters of installed product key =%PartialProductKey%">
+                            <Setting Display="Hide"></Setting>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%PartialProductKey%'!='' and contains('%Description%','KMS')">
+                          <Object Type="If" Key1="'%DiscoveredKeyManagementServiceMachineName%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='0'">
+                            <Object Type="Group" Name="DNS auto-discovery =KMS name not available">
+                              <Setting Display="Hide"/>
+                            </Object>
+                          </Object>
+                          <Object Type="If" Key1="not('%DiscoveredKeyManagementServiceMachineName%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='')">
+                            <Object Type="Group" Name="KMS machine name from DNS =%DiscoveredKeyManagementServiceMachineName%:%DiscoveredKeyManagementServiceMachinePort%">
+                              <Setting Display="Hide"/>
+                            </Object>
+                          </Object>
+                          <Object Type="If" Key1="'%KeyManagementServiceMachine%'!=''">
+                            <Object Type="IfThenElse" Key1="'%KeyManagementServicePort%'='0'" Key2="1688" Key3="%KeyManagementServicePort%">
+                              <Setting Key1="KmsPort" Substitution="KMSPORT" Display="Hide"/>
+                              <Object Type="Group" Name="KMS machine registry override defined: =%KMSPORT%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                            </Object>
+                          </Object>
+                          <Object Type="Group" Name="Activation interval =%VLActivationInterval% minutes">
+                            <Setting Display="Hide"/>
+                          </Object>
+                          <Object Type="Group" Name="Activation renewal =%VLRenewalInterval% minutes">
+                            <Setting Display="Hide"/>
+                          </Object>
+                          <Object Type="Group" Name="KMS host caching enabled =%KeyManagementServiceHostCaching%">
+                            <Setting Display="Hide"/>
+                          </Object>
+                          <Object Type="If" Key1="'%KeyManagementServiceLookupDomain%'!=''">
+                            <Object Type="Group" Name="KMS lookup domain =%KeyManagementServiceLookupDomain%">
+                              <Setting Display="Hide"/>
+                            </Object>
+                          </Object>
+                        </Object>
+                      </Object>
+                    </Object>
+                  </Object>
+                </Object>
+                <Object Type="If" Key1="'%WIN7%'='False'">
+                  <Object Type="WMI" Key1="%MACHINENAME%" Key3="SoftwareLicensingProduct" Key4="ApplicationId = '0ff1ce15-a989-479d-af46-f275c6370663' AND Name LIKE 'Office %MAJORVERSION%%'" Display="Hide">
+                    <Setting Key1="ID" Substitution="ID" Display="Hide"/>
+                    <Setting Key1="ApplicationId" Substitution="ApplicationId" Display="Hide"/>
+                    <Setting Key1="EvaluationEndDate" Substitution="EvaluationEndDate" Display="Hide"/>
+                    <Setting Key1="PartialProductKey" Substitution="PartialProductKey" Display="Hide"/>
+                    <Setting Key1="Description" Substitution="Description" Display="Hide"/>
+                    <Setting Key1="Name" Substitution="Name" Display="Hide"/>
+                    <Setting Key1="LicenseStatus" Substitution="LicenseStatus" Display="Hide"/>
+                    <Setting Key1="LicenseStatusReason" Substitution="LicenseStatusReason" Display="Hide" Format="Hex2"/>
+                    <Setting Key1="ProductKeyID" Substitution="ProductKeyID" Display="Hide"/>
+                    <Setting Key1="GracePeriodRemaining" Substitution="GracePeriodRemaining" Display="Hide"/>
+                    <Setting Key1="KeyManagementServiceLookupDomain" Substitution="KeyManagementServiceLookupDomain" Display="Hide"/>
+                    <Setting Key1="VLActivationTypeEnabled" Substitution="VLActivationTypeEnabled" Display="Hide"/>
+                    <Setting Key1="VLActivationType" Substitution="VLActivationType" Display="Hide"/>
+                    <Setting Key1="ADActivationObjectName" Substitution="ADActivationObjectName" Display="Hide"/>
+                    <Setting Key1="ADActivationObjectDN" Substitution="ADActivationObjectDN" Display="Hide"/>
+                    <Setting Key1="ADActivationCsvlkPid" Substitution="ADActivationCsvlkPid" Display="Hide"/>
+                    <Setting Key1="ADActivationCsvlkSkuId" Substitution="ADActivationCsvlkSkuId" Display="Hide"/>
+                    <Setting Key1="VLActivationTypeEnabled" Substitution="VLActivationTypeEnabled" Display="Hide"/>
+                    <Setting Key1="DiscoveredKeyManagementServiceMachineName" Substitution="DiscoveredKeyManagementServiceMachineName" Display="Hide"/>
+                    <Setting Key1="DiscoveredKeyManagementServiceMachinePort" Substitution="DiscoveredKeyManagementServiceMachinePort" Display="Hide"/>
+                    <Setting Key1="VLActivationInterval" Substitution="VLActivationInterval" Display="Hide"/>
+                    <Setting Key1="VLRenewalInterval" Substitution="VLRenewalInterval" Display="Hide"/>
+                    <Setting Key1="KeyManagementServiceMachine" Substitution="KeyManagementServiceMachine" Display="Hide"/>
+                    <Setting Key1="KeyManagementServicePort" Substitution="KeyManagementServicePort" Display="Hide"/>
+                    <Object Type="If" Key1="'%ProductKeyID%'!=''">
+                      <Object Type="Group" Name="%Name%">
+                        <Object Type="Group" Name="SKU ID =%ID%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="Group" Name="License Name =%Name%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="Group" Name="License Description =%Description%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='0'">
+                          <Object Type="Group" Name="License status =UNLICENSED">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='1'">
+                          <Object Type="Group" Name="License status =LICENSED">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='2'">
+                          <Object Type="Group" Name="License status =OOB_GRACE">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='3'">
+                          <Object Type="Group" Name="License status =OOT_GRACE">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='4'">
+                          <Object Type="Group" Name="License status =NON GENUINE GRACE">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='5'">
+                          <Object Type="Group" Name="License status =Notification">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'='6'">
+                          <Object Type="Group" Name="License status =EXTENDED GRACE">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatus%'=''">
+                          <Object Type="Group" Name="License status =UNKNOWN">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%LicenseStatusReason%'!='0x0'">
+                          <Object Type="Group" Name="LicenseStatusReason =%LicenseStatusReason%">
+                            <Setting Display="Hide"/>
+                          </Object>
+                          <Object Type="Engine" Display="Hide">
+                            <Setting Key1="ConfigFileName" Substitution="CONFIG" Display="Hide"></Setting>
+                            <Object Type="XML" Key2="%CONFIG%" Key3="/*/Errors/err%LicenseStatusReason%" Display="Hide">
+                              <Setting Key1="child::text()" Substitution="ERRDESC" Display="Hide"></Setting>
+                              <Object Type="Group" Name="ERROR DESCRIPTION =%ERRDESC%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                            </Object>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%GracePeriodRemaining%'!=''">
+                          <Rule Name="gracePeriod15Win8" Text="Remaining grace ={0} days ({1} minute(s) before expiring)" P0="floor(number('%GracePeriodRemaining%')div 1440)" P1="%GracePeriodRemaining%"/>
+                        </Object>
+                        <Object Type="If" Key1="'%PartialProductKey%'!=''">
+                          <Object Type="Group" Name="Last 5 characters of installed product key =%PartialProductKey%">
+                            <Setting Display="Hide"></Setting>
+                          </Object>
+                        </Object>
+                        <Object Type="If" Key1="'%PartialProductKey%'!='' and contains('%Description%','KMS')">
+                          <Object Type="If" Key1="'%VLActivationTypeEnabled%'='1'">
+                            <Object Type="Group" Name="Activation Type Configuration =AD">
+                              <Setting Display="Hide"/>
+                            </Object>
+                          </Object>
+                          <Object Type="If" Key1="'%VLActivationTypeEnabled%'='2'">
+                            <Object Type="Group" Name="Activation Type Configuration =KMS">
+                              <Setting Display="Hide"/>
+                            </Object>
+                          </Object>
+                          <Object Type="If" Key1="'%VLActivationTypeEnabled%'='3'">
+                            <Object Type="Group" Name="Activation Type Configuration =Token">
+                              <Setting Display="Hide"/>
+                            </Object>
+                          </Object>
+                          <Object Type="If" Key1="'%VLActivationTypeEnabled%'!='1' and '%VLActivationTypeEnabled%'!='2' and '%VLActivationTypeEnabled%'!='3'">
+                            <Object Type="Group" Name="Activation Type Configuration =All">
+                              <Setting Display="Hide"/>
+                            </Object>
+                          </Object>
+                          <Object Type="If" Key1="'%VLActivationType%'='1'">
+                            <Object Type="Group" Name="Most recent successful activation client information: AD">
+                              <Object Type="Group" Name="ADActivationObjectName =%ADActivationObjectName%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                              <Object Type="Group" Name="ADActivationObjectDN =%ADActivationObjectDN%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                              <Object Type="Group" Name="ADActivationCsvlkPid =%ADActivationCsvlkPid%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                              <Object Type="Group" Name="ADActivationCsvlkSkuId =%ADActivationCsvlkSkuId%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                            </Object>
+                          </Object>
+                          <Object Type="If" Key1="'%VLActivationType%'!='1'">
+                            <Object Type="If" Key1="'%DiscoveredKeyManagementServiceMachineName%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='0'">
+                              <Object Type="Group" Name="DNS auto-discovery =KMS name not available">
+                                <Setting Display="Hide"/>
+                              </Object>
+                            </Object>
+                            <Object Type="If" Key1="not('%DiscoveredKeyManagementServiceMachineName%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='0')">
+                              <Object Type="Group" Name="KMS machine name from DNS =%DiscoveredKeyManagementServiceMachineName%:%DiscoveredKeyManagementServiceMachinePort%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                            </Object>
+                            <Object Type="If" Key1="'%KeyManagementServiceMachine%'!=''">
+                              <Object Type="IfThenElse" Key1="'%KeyManagementServicePort%'='0'" Key2="1688" Key3="%KeyManagementServicePort%">
+                                <Setting Key1="KmsPort" Substitution="KMSPORT" Display="Hide"/>
+                                <Object Type="Group" Name="KMS machine registry override defined: =%KMSPORT%">
+                                  <Setting Display="Hide"/>
+                                </Object>
+                              </Object>
+                            </Object>
+                            <Object Type="Group" Name="Activation interval =%VLActivationInterval% minutes">
+                              <Setting Display="Hide"/>
+                            </Object>
+                            <Object Type="Group" Name="Activation renewal =%VLRenewalInterval% minutes">
+                              <Setting Display="Hide"/>
+                            </Object>
+                            <Object Type="Group" Name="KMS host caching enabled =%KeyManagementServiceHostCaching%">
+                              <Setting Display="Hide"/>
+                            </Object>
+                            <Object Type="If" Key1="'%KeyManagementServiceLookupDomain%'!=''">
+                              <Object Type="Group" Name="KMS lookup domain =%KeyManagementServiceLookupDomain%">
+                                <Setting Display="Hide"/>
+                              </Object>
+                            </Object>
+                          </Object>
+                        </Object>
+                      </Object>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+        </Object>
+
+        <!--License information for installed licenses (dstatusall)-->
+        <Reference Type="dstatusall" Name="dstatusall" File="kms.config.xml"></Reference>
+      </Object>
+    </Object>
+  </Object>
+  <Type Name="dstatusall">
+    <Object Type="If" Key1="%MAJORVERSION%=14">
+      <Object Type="Group" Name="License information for installed Office 2010 licenses" Option="dstatusall" TrackProgress="TrackProgress">
+        <Object Type="WMI" Key1="%MACHINENAME%" Key3="OfficeSoftwareProtectionProduct" Key4="ApplicationId = '59a52881-a989-479d-af46-f275c6370663'" Display="Hide">
+          <Setting Key1="ID" Substitution="ID" Display="Hide"/>
+          <Setting Key1="ApplicationId" Substitution="ApplicationId" Display="Hide"/>
+          <Setting Key1="EvaluationEndDate" Substitution="EvaluationEndDate" Display="Hide"/>
+          <Setting Key1="PartialProductKey" Substitution="PartialProductKey" Display="Hide"/>
+          <Setting Key1="Description" Substitution="Description" Display="Hide"/>
+          <Setting Key1="Name" Substitution="Name" Display="Hide"/>
+          <Setting Key1="LicenseStatus" Substitution="LicenseStatus" Display="Hide"/>
+          <Setting Key1="LicenseStatusReason" Substitution="LicenseStatusReason" Display="Hide" Format="Hex2"/>
+          <Setting Key1="ProductKeyID" Substitution="ProductKeyID" Display="Hide"/>
+          <Setting Key1="GracePeriodRemaining" Substitution="GracePeriodRemaining" Display="Hide"/>
+          <Object Type="Group" Name="%Name%">
+            <Object Type="Group" Name="SKU ID =%ID%">
+              <Setting Display="Hide"/>
+            </Object>
+            <Object Type="Group" Name="License Name =%Name%">
+              <Setting Display="Hide"/>
+            </Object>
+            <Object Type="Group" Name="License Description =%Description%">
+              <Setting Display="Hide"/>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatus%'='0'">
+              <Object Type="Group" Name="License status =UNLICENSED">
+                <Setting Display="Hide"/>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatus%'='1'">
+              <Object Type="Group" Name="License status =LICENSED">
+                <Setting Display="Hide"/>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatus%'='2'">
+              <Object Type="Group" Name="License status =OOB_GRACE">
+                <Setting Display="Hide"/>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatus%'='3'">
+              <Object Type="Group" Name="License status =OOT_GRACE">
+                <Setting Display="Hide"/>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatus%'='4'">
+              <Object Type="Group" Name="License status =NON GENUINE GRACE">
+                <Setting Display="Hide"/>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatus%'='5'">
+              <Object Type="Group" Name="License status =Notification">
+                <Setting Display="Hide"/>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatus%'='6'">
+              <Object Type="Group" Name="License status =EXTENDED GRACE">
+                <Setting Display="Hide"/>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatus%'=''">
+              <Object Type="Group" Name="License status =UNKNOWN">
+                <Setting Display="Hide"/>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%LicenseStatusReason%'!='0x0'">
+              <Object Type="Group" Name="ERROR CODE =%LicenseStatusReason%">
+                <Setting Display="Hide"/>
+              </Object>
+              <Object Type="Engine" Display="Hide">
+                <Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide"/>
+                <Setting Key1="ExecutionCulture" Substitution="CULTURE" Display="Hide"/>
+                <Object Type="XML" Key2="%EXECDIR%\%CULTURE%\km.config.xml" Key3="/*/Errors/err%LicenseStatusReason%" Display="Hide">
+                  <Setting Key1="child::text()" Substitution="ERRDESC" Display="Hide"></Setting>
+                  <Object Type="Group" Name="ERROR DESCRIPTION =%ERRDESC%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%GracePeriodRemaining%'!='' and number('%GracePeriodRemaining%')&gt;0">
+              <Rule Name="gracePeriod14All" Text="Remaining grace ={0} days ({1} minute(s) before expiring)" P0="floor(number('%GracePeriodRemaining%')div 1440)" P1="%GracePeriodRemaining%"/>
+            </Object>
+            <Object Type="If" Key1="'%PartialProductKey%'!=''">
+              <Object Type="Group" Name="Last 5 characters of installed product key =%PartialProductKey%">
+                <Setting Display="Hide"></Setting>
+              </Object>
+            </Object>
+          </Object>
+        </Object>
+      </Object>
+    </Object>
+    <Object Type="If" Key1="%MAJORVERSION%&gt;=15">
+      <Object Type="IfThenElse" Key1="%MAJORVERSION%=15" Key2="2013" Key3="2016">
+        <Setting Key1="SkuVersion" Substitution="SKUVERSION" Display="Hide"/>
+        <Object Type="Group" Name="License information for installed Office %SKUVERSION% licenses" Option="dstatusall" TrackProgress="TrackProgress">
+          <Object Type="IfThenElse" Key1="substring('%WINVER%',1,3)='6.1' and ('%WINTYPE%'='1' or '%WINTYPE%'='2' or '%WINTYPE%'='3')" Key2="True" Key3="False" Display="Hide">
+            <Setting Key1="Win7" Substitution="WIN7" Display="Hide"/>
+            <Object Type="If" Key1="'%WIN7%'='True'">
+              <Object Type="WMI" Key1="%MACHINENAME%" Key3="OfficeSoftwareProtectionProduct" Key4="ApplicationId = '0ff1ce15-a989-479d-af46-f275c6370663' AND Name LIKE 'Office %MAJORVERSION%%'" Display="Hide">
+                <Setting Key1="ID" Substitution="ID" Display="Hide"/>
+                <Setting Key1="ApplicationId" Substitution="ApplicationId" Display="Hide"/>
+                <Setting Key1="EvaluationEndDate" Substitution="EvaluationEndDate" Display="Hide"/>
+                <Setting Key1="PartialProductKey" Substitution="PartialProductKey" Display="Hide"/>
+                <Setting Key1="Description" Substitution="Description" Display="Hide"/>
+                <Setting Key1="Name" Substitution="Name" Display="Hide"/>
+                <Setting Key1="LicenseStatus" Substitution="LicenseStatus" Display="Hide"/>
+                <Setting Key1="LicenseStatusReason" Substitution="LicenseStatusReason" Display="Hide" Format="Hex2"/>
+                <Setting Key1="ProductKeyID" Substitution="ProductKeyID" Display="Hide"/>
+                <Setting Key1="GracePeriodRemaining" Substitution="GracePeriodRemaining" Display="Hide"/>
+                <Setting Key1="DiscoveredKeyManagementServiceMachineName" Substitution="DiscoveredKeyManagementServiceMachineName" Display="Hide"/>
+                <Setting Key1="DiscoveredKeyManagementServiceMachinePort" Substitution="DiscoveredKeyManagementServiceMachinePort" Display="Hide"/>
+                <Setting Key1="VLActivationInterval" Substitution="VLActivationInterval" Display="Hide"/>
+                <Setting Key1="VLRenewalInterval" Substitution="VLRenewalInterval" Display="Hide"/>
+                <Setting Key1="KeyManagementServiceMachine" Substitution="KeyManagementServiceMachine" Display="Hide"/>
+                <Setting Key1="KeyManagementServicePort" Substitution="KeyManagementServicePort" Display="Hide"/>
+                <Object Type="Group" Name="%Name%">
+                  <Object Type="Group" Name="SKU ID =%ID%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="Group" Name="License Name =%Name%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="Group" Name="License Description =%Description%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='0'">
+                    <Object Type="Group" Name="License status =UNLICENSED">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='1'">
+                    <Object Type="Group" Name="License status =LICENSED">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='2'">
+                    <Object Type="Group" Name="License status =OOB_GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='3'">
+                    <Object Type="Group" Name="License status =OOT_GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='4'">
+                    <Object Type="Group" Name="License status =NON GENUINE GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='5'">
+                    <Object Type="Group" Name="License status =Notification">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='6'">
+                    <Object Type="Group" Name="License status =EXTENDED GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'=''">
+                    <Object Type="Group" Name="License status =UNKNOWN">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatusReason%'!='0x0'">
+                    <Object Type="Group" Name="LicenseStatusReason =%LicenseStatusReason%">
+                      <Setting Display="Hide"/>
+                    </Object>
+                    <Object Type="Engine" Display="Hide">
+                      <Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide"/>
+                      <Setting Key1="ExecutionCulture" Substitution="CULTURE" Display="Hide"/>
+                      <Object Type="XML" Key2="%EXECDIR%\%CULTURE%\kms.config.xml" Key3="/*/Errors/err%LicenseStatusReason%" Display="Hide">
+                        <Setting Key1="child::text()" Substitution="ERRDESC" Display="Hide"></Setting>
+                        <Object Type="Group" Name="ERROR DESCRIPTION =%ERRDESC%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                      </Object>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%GracePeriodRemaining%'!=''">
+                    <Rule Name="gracePeriod15Win7All" Text="Remaining grace ={0} days ({1} minute(s) before expiring)" P0="floor(number('%GracePeriodRemaining%')div 1440)" P1="%GracePeriodRemaining%"/>
+                  </Object>
+                  <Object Type="If" Key1="'%PartialProductKey%'!=''">
+                    <Object Type="Group" Name="Last 5 characters of installed product key =%PartialProductKey%">
+                      <Setting Display="Hide"></Setting>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%PartialProductKey%'!='' and contains('%Description%','KMS')">
+                    <Object Type="If" Key1="'%DiscoveredKeyManagementServiceMachineName%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='0'">
+                      <Object Type="Group" Name="DNS auto-discovery =KMS name not available">
+                        <Setting Display="Hide"/>
+                      </Object>
+                    </Object>
+                    <Object Type="If" Key1="not('%DiscoveredKeyManagementServiceMachineName%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='')">
+                      <Object Type="Group" Name="KMS machine name from DNS =%DiscoveredKeyManagementServiceMachineName%:%DiscoveredKeyManagementServiceMachinePort%">
+                        <Setting Display="Hide"/>
+                      </Object>
+                    </Object>
+                    <Object Type="If" Key1="'%KeyManagementServiceMachine%'!=''">
+                      <Object Type="IfThenElse" Key1="'%KeyManagementServicePort%'='0'" Key2="1688" Key3="%KeyManagementServicePort%">
+                        <Setting Key1="KmsPort" Substitution="KMSPORT" Display="Hide"/>
+                        <Object Type="Group" Name="KMS machine registry override defined: =%KMSPORT%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                      </Object>
+                    </Object>
+                    <Object Type="Group" Name="Activation interval =%VLActivationInterval% minutes">
+                      <Setting Display="Hide"/>
+                    </Object>
+                    <Object Type="Group" Name="Activation renewal =%VLRenewalInterval% minutes">
+                      <Setting Display="Hide"/>
+                    </Object>
+                    <Object Type="Group" Name="KMS host caching enabled =%KeyManagementServiceHostCaching%">
+                      <Setting Display="Hide"/>
+                    </Object>
+                    <Object Type="If" Key1="'%KeyManagementServiceLookupDomain%'!=''">
+                      <Object Type="Group" Name="KMS lookup domain =%KeyManagementServiceLookupDomain%">
+                        <Setting Display="Hide"/>
+                      </Object>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="'%WIN7%'='False'">
+              <Object Type="WMI" Key1="%MACHINENAME%" Key3="SoftwareLicensingProduct" Key4="ApplicationId = '0ff1ce15-a989-479d-af46-f275c6370663' AND Name LIKE 'Office %MAJORVERSION%%'" Display="Hide">
+                <Setting Key1="ID" Substitution="ID" Display="Hide"/>
+                <Setting Key1="ApplicationId" Substitution="ApplicationId" Display="Hide"/>
+                <Setting Key1="EvaluationEndDate" Substitution="EvaluationEndDate" Display="Hide"/>
+                <Setting Key1="PartialProductKey" Substitution="PartialProductKey" Display="Hide"/>
+                <Setting Key1="Description" Substitution="Description" Display="Hide"/>
+                <Setting Key1="Name" Substitution="Name" Display="Hide"/>
+                <Setting Key1="LicenseStatus" Substitution="LicenseStatus" Display="Hide"/>
+                <Setting Key1="LicenseStatusReason" Substitution="LicenseStatusReason" Display="Hide" Format="Hex2"/>
+                <Setting Key1="ProductKeyID" Substitution="ProductKeyID" Display="Hide"/>
+                <Setting Key1="GracePeriodRemaining" Substitution="GracePeriodRemaining" Display="Hide"/>
+                <Setting Key1="KeyManagementServiceLookupDomain" Substitution="KeyManagementServiceLookupDomain" Display="Hide"/>
+                <Setting Key1="VLActivationTypeEnabled" Substitution="VLActivationTypeEnabled" Display="Hide"/>
+                <Setting Key1="VLActivationType" Substitution="VLActivationType" Display="Hide"/>
+                <Setting Key1="ADActivationObjectName" Substitution="ADActivationObjectName" Display="Hide"/>
+                <Setting Key1="ADActivationObjectDN" Substitution="ADActivationObjectDN" Display="Hide"/>
+                <Setting Key1="ADActivationCsvlkPid" Substitution="ADActivationCsvlkPid" Display="Hide"/>
+                <Setting Key1="ADActivationCsvlkSkuId" Substitution="ADActivationCsvlkSkuId" Display="Hide"/>
+                <Setting Key1="VLActivationTypeEnabled" Substitution="VLActivationTypeEnabled" Display="Hide"/>
+                <Setting Key1="DiscoveredKeyManagementServiceMachineName" Substitution="DiscoveredKeyManagementServiceMachineName" Display="Hide"/>
+                <Setting Key1="DiscoveredKeyManagementServiceMachinePort" Substitution="DiscoveredKeyManagementServiceMachinePort" Display="Hide"/>
+                <Setting Key1="VLActivationInterval" Substitution="VLActivationInterval" Display="Hide"/>
+                <Setting Key1="VLRenewalInterval" Substitution="VLRenewalInterval" Display="Hide"/>
+                <Setting Key1="KeyManagementServiceMachine" Substitution="KeyManagementServiceMachine" Display="Hide"/>
+                <Setting Key1="KeyManagementServicePort" Substitution="KeyManagementServicePort" Display="Hide"/>
+                <Object Type="Group" Name="%Name%">
+                  <Object Type="Group" Name="SKU ID =%ID%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="Group" Name="License Name =%Name%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="Group" Name="License Description =%Description%">
+                    <Setting Display="Hide"/>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='0'">
+                    <Object Type="Group" Name="License status =UNLICENSED">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='1'">
+                    <Object Type="Group" Name="License status =LICENSED">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='2'">
+                    <Object Type="Group" Name="License status =OOB_GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='3'">
+                    <Object Type="Group" Name="License status =OOT_GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='4'">
+                    <Object Type="Group" Name="License status =NON GENUINE GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='5'">
+                    <Object Type="Group" Name="License status =Notification">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'='6'">
+                    <Object Type="Group" Name="License status =EXTENDED GRACE">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatus%'=''">
+                    <Object Type="Group" Name="License status =UNKNOWN">
+                      <Setting Display="Hide"/>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%LicenseStatusReason%'!='0x0'">
+                    <Object Type="Group" Name="ERROR CODE =%LicenseStatusReason%">
+                      <Setting Display="Hide"/>
+                    </Object>
+                    <Object Type="Engine" Display="Hide">
+                      <Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide"/>
+                      <Setting Key1="ExecutionCulture" Substitution="CULTURE" Display="Hide"/>
+                      <Object Type="XML" Key2="%EXECDIR%\%CULTURE%\kms.config.xml" Key3="/*/Errors/err%LicenseStatusReason%" Display="Hide">
+                        <Setting Key1="child::text()" Substitution="ERRDESC" Display="Hide"></Setting>
+                        <Object Type="Group" Name="ERROR DESCRIPTION =%ERRDESC%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                      </Object>
+                    </Object>
+                  </Object>
+                  <Object Type="If" Key1="'%GracePeriodRemaining%'!='' and number('%GracePeriodRemaining%')&gt;0">
+                    <Rule Name="gracePeriod15Win8All" Query="number('%GracePeriodRemaining%')&gt;0" Text="Remaining grace ={0} days ({1} minute(s) before expiring)" P0="floor(number('%GracePeriodRemaining%')div 1440)" P1="%GracePeriodRemaining%"/>
+                  </Object>
+                  <Object Type="If" Key1="'%PartialProductKey%'!='' and contains('%Description%','KMS')">
+                    <Object Type="If" Key1="'%VLActivationTypeEnabled%'='1'">
+                      <Object Type="Group" Name="Activation Type Configuration =AD">
+                        <Setting Display="Hide"/>
+                      </Object>
+                    </Object>
+                    <Object Type="If" Key1="'%VLActivationTypeEnabled%'='2'">
+                      <Object Type="Group" Name="Activation Type Configuration =KMS">
+                        <Setting Display="Hide"/>
+                      </Object>
+                    </Object>
+                    <Object Type="If" Key1="'%VLActivationTypeEnabled%'='3'">
+                      <Object Type="Group" Name="Activation Type Configuration =Token">
+                        <Setting Display="Hide"/>
+                      </Object>
+                    </Object>
+                    <Object Type="If" Key1="'%VLActivationTypeEnabled%'=''">
+                      <Object Type="Group" Name="Activation Type Configuration =All">
+                        <Setting Display="Hide"/>
+                      </Object>
+                    </Object>
+                    <Object Type="If" Key1="'%VLActivationType%'='1'">
+                      <Object Type="Group" Name="Most recent successful activation client information: AD">
+                        <Object Type="Group" Name="ADActivationObjectName =%ADActivationObjectName%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="Group" Name="ADActivationObjectDN =%ADActivationObjectDN%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="Group" Name="ADActivationCsvlkPid =%ADActivationCsvlkPid%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                        <Object Type="Group" Name="ADActivationCsvlkSkuId =%ADActivationCsvlkSkuId%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                      </Object>
+                    </Object>
+                    <Object Type="If" Key1="'%VLActivationType%'!='1'">
+                      <Object Type="If" Key1="'%DiscoveredKeyManagementServiceMachineName%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='0'">
+                        <Object Type="Group" Name="DNS auto-discovery =KMS name not available">
+                          <Setting Display="Hide"/>
+                        </Object>
+                      </Object>
+                      <Object Type="If" Key1="not('%DiscoveredKeyManagementServiceMachineName%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='' or '%DiscoveredKeyManagementServiceMachinePort%'='0')">
+                        <Object Type="Group" Name="KMS machine name from DNS =%DiscoveredKeyManagementServiceMachineName%:%DiscoveredKeyManagementServiceMachinePort%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                      </Object>
+                      <Object Type="If" Key1="'%KeyManagementServiceMachine%'!=''">
+                        <Object Type="IfThenElse" Key1="'%KeyManagementServicePort%'='0'" Key2="1688" Key3="%KeyManagementServicePort%">
+                          <Setting Key1="KmsPort" Substitution="KMSPORT" Display="Hide"/>
+                          <Object Type="Group" Name="KMS machine registry override defined: =%KMSPORT%">
+                            <Setting Display="Hide"/>
+                          </Object>
+                        </Object>
+                      </Object>
+                      <Object Type="Group" Name="Activation interval =%VLActivationInterval% minutes">
+                        <Setting Display="Hide"/>
+                      </Object>
+                      <Object Type="Group" Name="Activation renewal =%VLRenewalInterval% minutes">
+                        <Setting Display="Hide"/>
+                      </Object>
+                      <Object Type="Group" Name="KMS host caching enabled =%KeyManagementServiceHostCaching%">
+                        <Setting Display="Hide"/>
+                      </Object>
+                      <Object Type="If" Key1="'%KeyManagementServiceLookupDomain%'!=''">
+                        <Object Type="Group" Name="KMS lookup domain =%KeyManagementServiceLookupDomain%">
+                          <Setting Display="Hide"/>
+                        </Object>
+                      </Object>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+        </Object>
+      </Object>
+    </Object>
+  </Type>
+  <Errors>
+    <err0xC004B001 GUID="391079">The activation server determined that the license is invalid.</err0xC004B001>
+    <err0xC004B002 GUID="391079">The activation server determined that the license is invalid.</err0xC004B002>
+    <err0xC004B003 GUID="391079">The activation server determined that the license is invalid.</err0xC004B003>
+    <err0xC004B004 GUID="391079">The activation server determined that the license is invalid.</err0xC004B004>
+    <err0xC004B005 GUID="391079">The activation server determined that the license is invalid.</err0xC004B005>
+    <err0xC004B006 GUID="391079">The activation server determined that the license is invalid.</err0xC004B006>
+    <err0xC004B007 GUID="">The activation server reported that the computer could not connect to the activation server.</err0xC004B007>
+    <err0xC004B008 GUID="">The activation server determined that the product could not be activated.</err0xC004B008>
+    <err0xC004B009 GUID="391079">The activation server determined that the license is invalid.</err0xC004B009>
+    <err0xC004B010 GUID="">The activation server determined that required business token entry cannot be found.</err0xC004B010>
+    <err0xC004B011 GUID="">The activation server determined that your computer clock time is not correct. You must correct your clock before you can activate.</err0xC004B011>
+    <err0xC004B100 GUID="">The activation server determined that the product could not be activated.</err0xC004B100>
+    <err0xC004C001 GUID="">The activation server determined the specified product key is invalid.</err0xC004C001>
+    <err0xC004C002 GUID="">The activation server determined there is a problem with the specified product key.</err0xC004C002>
+    <err0xC004C003 GUID="390960">The activation server determined the specified product key has been blocked.</err0xC004C003>
+    <err0xC004C004 GUID="">The activation server determined the specified product key is invalid. </err0xC004C004>
+    <err0xC004C005 GUID="">The activation server determined the license is invalid.</err0xC004C005>
+    <err0xC004C006 GUID="">The activation server determined the license is invalid.</err0xC004C006>
+    <err0xC004C007 GUID="">The activation server determined the specified product key is invalid.</err0xC004C007>
+    <err0xC004C008 GUID="">The activation server reported that the product key has exceeded its unlock limit.</err0xC004C008>
+    <err0xC004C009 GUID="">The activation server determined the license is invalid.</err0xC004C009>
+    <err0xC004C00A GUID="391079">The activation server determined the license is invalid.</err0xC004C00A>
+    <err0xC004C00B GUID="391079">The activation server determined the license is invalid.</err0xC004C00B>
+    <err0xC004C00C GUID="">The activation server experienced an error.</err0xC004C00C>
+    <err0xC004C00D GUID="391079">The activation server determined the product key is not valid.</err0xC004C00D>
+    <err0xC004C00E GUID="">The activation server determined the specified product key is invalid.</err0xC004C00E>
+    <err0xC004C00F GUID="">The activation server determined the specified product key is invalid.</err0xC004C00F>
+    <err0xC004C010 GUID="">The activation server determined the specified product key is invalid.</err0xC004C010>
+    <err0xC004C011 GUID="391079">The activation server determined the license is invalid.</err0xC004C011>
+    <err0xC004C012 GUID="">The activation server experienced a network error.</err0xC004C012>
+    <err0xC004C013 GUID="">The activation server experienced an error.</err0xC004C013>
+    <err0xC004C014 GUID="">The activation server experienced an error.</err0xC004C014>
+    <err0xC004C020 GUID="">The activation server reported that the Multiple Activation Key has exceeded its limit.</err0xC004C020>
+    <err0xC004C021 GUID="">The activation server reported that the Multiple Activation Key extension limit has been exceeded.</err0xC004C021>
+    <err0xC004C022 GUID="">The activation server reported that the re-issuance limit was not found. </err0xC004C022>
+    <err0xC004C023 GUID="">The activation server reported that the override request was not found. </err0xC004C023>
+    <err0xC004C016 GUID="">The activation server reported that the specified product key cannot be used for online activation.</err0xC004C016>
+    <err0xC004C017 GUID="">The activation server determined the specified product key has been blocked for this geographic location.</err0xC004C017>
+    <err0xC004C015 GUID="">The activation server experienced an error.</err0xC004C015>
+    <err0xC004C050 GUID="">The activation server experienced a general error.</err0xC004C050>
+    <err0xC004C030 GUID="">The activation server reported that time based activation attempted before start date.</err0xC004C030>
+    <err0xC004C031 GUID="">The activation server reported that time based activation attempted after end date.</err0xC004C031>
+    <err0xC004C032 GUID="">The activation server reported that new time based activation not available.</err0xC004C032>
+    <err0xC004C033 GUID="">The activation server reported that the time based product key is not configured for activation.</err0xC004C033>
+    <err0xC004C04F GUID="">The activation server reported that no business rules available to activate specified product key.</err0xC004C04F>
+    <err0xC004C051 GUID="">The activation server determined the license is invalid.</err0xC004C051>
+    <err0xC004C052 GUID="">The activation server determined there is a problem with the specified product key.</err0xC004C052>
+    <err0xC004C060 GUID="">The activation server determined the specified product key has been blocked.</err0xC004C060>
+    <err0xC004C3FF GUID="">The activation server determined the VGA service response is not available in the expected format.</err0xC004C3FF>
+    <err0xC004C700 GUID="">The activation server reported that business rule cound not find required input.</err0xC004C700>
+    <err0xC004C750 GUID="">The activation server reported that NULL value specified for business property name and Id.</err0xC004C750>
+    <err0xC004C751 GUID="">The activation server reported that property name specifies unknown property.</err0xC004C751>
+    <err0xC004C752 GUID="">The activation server reported that property Id specifies unknown property.</err0xC004C752>
+    <err0xC004C755 GUID="">The activation server reported that it failed to update product key binding.</err0xC004C755>
+    <err0xC004C756 GUID="">The activation server reported that it failed to insert product key binding.</err0xC004C756>
+    <err0xC004C757 GUID="">The activation server reported that it failed to delete product key binding.</err0xC004C757>
+    <err0xC004C758 GUID="">The activation server reported that it failed to process input XML for product key bindings.</err0xC004C758>
+    <err0xC004C75A GUID="">The activation server reported that it failed to insert product key property.</err0xC004C75A>
+    <err0xC004C75B GUID="">The activation server reported that it failed to update product key property.</err0xC004C75B>
+    <err0xC004C75C GUID="">The activation server reported that it failed to delete product key property.</err0xC004C75C>
+    <err0xC004C764 GUID="">The activation server reported that the product key type is unknown.</err0xC004C764>
+    <err0xC004C770 GUID="">The activation server reported that the product key type is being used by another user.</err0xC004C770>
+    <err0xC004C780 GUID="">The activation server reported that it failed to insert product key record.</err0xC004C780>
+    <err0xC004C781 GUID="">The activation server reported that it failed to update product key record.</err0xC004C781>
+    <err0xC004C291 GUID="">Genuine Validation determined the license state is invalid.</err0xC004C291>
+    <err0xC004C292 GUID="">Genuine Validation determined the license state is invalid.</err0xC004C292>
+    <err0xC004C2F6 GUID="">Genuine Validation determined the validation input template identifier is invalid.</err0xC004C2F6>
+    <err0xC004C2FA GUID="">Genuine Validation determined the validation input data blob is invalid.</err0xC004C2FA>
+    <err0xC004C327 GUID="">Genuine Validation determined the validation input data blob parameter is invalid.</err0xC004C327>
+    <err0xC004C328 GUID="">Genuine Validation determined the client token data is invalid.</err0xC004C328>
+    <err0xC004C329 GUID="">Genuine Validation determined the offline data blob is invalid.</err0xC004C329>
+    <err0xC004C32A GUID="">Genuine Validation determined the offline data blob parameter is invalid.</err0xC004C32A>
+    <err0xC004C32B GUID="">Genuine Validation determined the validation template identifier is invalid for this version of the Windows operating system.</err0xC004C32B>
+    <err0xC004C32C GUID="">Genuine Validation determined the offline genuine blob is revoked.</err0xC004C32C>
+    <err0xC004C32D GUID="">Genuine Validation determined the offline genuine blob is not found.</err0xC004C32D>
+    <err0xC004C401 GUID="">Genuine Validation determined the product key is invalid for this version of the Windows operating system.</err0xC004C401>
+    <err0xC004C4A1 GUID="">Genuine Validation determined the file hash is invalid.</err0xC004C4A1>
+    <err0xC004C4A2 GUID="">Genuine Validation determined the product key has been blocked.</err0xC004C4A2>
+    <err0xC004C4A4 GUID="">Genuine Validation determined the product key type is invalid.</err0xC004C4A4>
+    <err0xC004C4A5 GUID="">Genuine Validation determined the product key is invalid.</err0xC004C4A5>
+    <err0xC004C4A7 GUID="">Genuine Validation determined the OEM or Volume binding data is invalid.</err0xC004C4A7>
+    <err0xC004C4A8 GUID="">Genuine Validation determined the license state is invalid.</err0xC004C4A8>
+    <err0xC004C4A9 GUID="">Genuine Validation determined the specified product key has been blocked for this geographic location.</err0xC004C4A9>
+    <err0xC004C4AB GUID="">Genuine Validation detected Windows licensing exploits.</err0xC004C4AB>
+    <err0xC004C4AC GUID="">Genuine Validation determined the token activation data is invalid.</err0xC004C4AC>
+    <err0xC004C4AD GUID="">Genuine Validation detected tampered Windows binaries.</err0xC004C4AD>
+    <err0xC004C4AE GUID="">Genuine Validation detected tampered Windows binaries.</err0xC004C4AE>
+    <err0xC004C4AF GUID="">Genuine Validation determined the active directory activation data is invalid.</err0xC004C4AF>
+    <err0xC004C4B0 GUID="">Genuine Validation detected Windows licensing exploits.</err0xC004C4B0>
+    <err0xC004C4B1 GUID="">Genuine Validation detected Windows licensing exploits.</err0xC004C4B1>
+    <err0xC004C600 GUID="">Genuine Validation determined your copy of Windows is not genuine.</err0xC004C600>
+    <err0xC004C531 GUID="">Genuine Validation detected Windows licensing exploits.</err0xC004C531>
+    <err0xC004C532 GUID="">Genuine Validation determined the license state is in notification due to expired grace.</err0xC004C532>
+    <err0xC004C533 GUID="">Genuine Validation determined the license state is in notification.</err0xC004C533>
+    <err0xC004E001 GUID="">The Software Licensing Service determined that the specified context is invalid.</err0xC004E001>
+    <err0xC004E002 GUID="">The Software Licensing Service reported that the license store contains inconsistent data.</err0xC004E002>
+    <err0xC004E003 GUID="">The Software Licensing Service reported that license evaluation failed.</err0xC004E003>
+    <err0xC004E004 GUID="">The Software Licensing Service reported that the license has not been evaluated.</err0xC004E004>
+    <err0xC004E005 GUID="">The Software Licensing Service reported that the license is not activated.</err0xC004E005>
+    <err0xC004E006 GUID="">The Software Licensing Service reported that the license contains invalid data.</err0xC004E006>
+    <err0xC004E007 GUID="">The Software Licensing Service reported that the license store does not contain the requested license.</err0xC004E007>
+    <err0xC004E008 GUID="">The Software Licensing Service reported that the license property is invalid.</err0xC004E008>
+    <err0xC004E009 GUID="">The Software Licensing Service reported that the license store is not initialized.</err0xC004E009>
+    <err0xC004E00A GUID="">The Software Licensing Service reported that the license store is already initialized.</err0xC004E00A>
+    <err0xC004E00B GUID="">The Software Licensing Service reported that the license property is invalid.</err0xC004E00B>
+    <err0xC004E00C GUID="">The Software Licensing Service reported that the license could not be opened or created.</err0xC004E00C>
+    <err0xC004E00D GUID="">The Software Licensing Service reported that the license could not be written.</err0xC004E00D>
+    <err0xC004E00E GUID="">The Software Licensing Service reported that the license store could not read the license file.</err0xC004E00E>
+    <err0xC004E00F GUID="">The Software Licensing Service reported that the license property is corrupted.</err0xC004E00F>
+    <err0xC004E010 GUID="">The Software Licensing Service reported that the license property is missing.</err0xC004E010>
+    <err0xC004E011 GUID="">The Software Licensing Service reported that the license store contains an invalid license file.</err0xC004E011>
+    <err0xC004E012 GUID="">The Software Licensing Service reported that the license store failed to start synchronization properly.</err0xC004E012>
+    <err0xC004E013 GUID="">The Software Licensing Service reported that the license store failed to synchronize properly.</err0xC004E013>
+    <err0xC004E014 GUID="">The Software Licensing Service reported that the license property is invalid.</err0xC004E014>
+    <err0xC004E015 GUID="">The Software Licensing Service reported that license consumption failed.</err0xC004E015>
+    <err0xC004E016 GUID="">The Software Licensing Service reported that the product key is invalid.</err0xC004E016>
+    <err0xC004E017 GUID="">The Software Licensing Service reported that the product key is invalid.</err0xC004E017>
+    <err0xC004E018 GUID="">The Software Licensing Service reported that the product key is invalid.</err0xC004E018>
+    <err0xC004E019 GUID="">The Software Licensing Service determined that validation of the specified product key failed.</err0xC004E019>
+    <err0xC004E01A GUID="">The Software Licensing Service reported that invalid add-on information was found. </err0xC004E01A>
+    <err0xC004E01B GUID="">The Software Licensing Service reported that not all hardware information could be collected. </err0xC004E01B>
+    <err0xC004E01C GUID="">This evaluation product key is no longer valid.</err0xC004E01C>
+    <err0xC004E01D GUID="">The new product key cannot be used on this installation of Windows. Type a different product key. (CD-AB)</err0xC004E01D>
+    <err0xC004E01E GUID="">The new product key cannot be used on this installation of Windows. Type a different product key. (AB-AB)</err0xC004E01E>
+    <err0xC004E020 GUID="">The Software Licensing Service reported that there is a mismatched between a policy value and information stored in the OtherInfo section.</err0xC004E020>
+    <err0xC004E021 GUID="">The Software Licensing Service reported that the Genuine information contained in the license is not consistent.</err0xC004E021>
+    <err0xC004E022 GUID="">The Software Licensing Service reported that the secure store id value in license does not match with the current value.</err0xC004E022>
+    <err0xC004E023 GUID="">The Software Licensing Service reported that the notification rules appear to be invalid.</err0xC004E023>
+    <err0xC004E024 GUID="">The Software Licensing Service reported that the reported machine data appears to be invalid.</err0xC004E024>
+    <err0xC004E025 GUID="">The Software Licensing Service reported that the data hash does not correspond to the data. </err0xC004E025>
+    <err0x8004E101 GUID="">The Software Licensing Service reported that the Token Store file version is invalid. </err0x8004E101>
+    <err0x8004E102 GUID="">The Software Licensing Service reported that the Token Store contains an invalid descriptor table. </err0x8004E102>
+    <err0x8004E103 GUID="">The Software Licensing Service reported that the Token Store contains a token with an invalid header/footer. </err0x8004E103>
+    <err0x8004E104 GUID="">The Software Licensing Service reported that a Token Store token has an invalid name. </err0x8004E104>
+    <err0x8004E105 GUID="">The Software Licensing Service reported that a Token Store token has an invalid extension. </err0x8004E105>
+    <err0x8004E106 GUID="">The Software Licensing Service reported that the Token Store contains a duplicate token. </err0x8004E106>
+    <err0x8004E107 GUID="">The Software Licensing Service reported that a token in the Token Store has a size mismatch. </err0x8004E107>
+    <err0x8004E108 GUID="">The Software Licensing Service reported that a token in the Token Store contains an invalid hash. </err0x8004E108>
+    <err0x8004E109 GUID="">The Software Licensing Service reported that the Token Store was unable to read a token. </err0x8004E109>
+    <err0x8004E10A GUID="">The Software Licensing Service reported that the Token Store was unable to write a token. </err0x8004E10A>
+    <err0x8004E10B GUID="">The Software Licensing Service reported that the Token Store attempted an invalid file operation. </err0x8004E10B>
+    <err0x8004E10C GUID="">The Software Licensing Service reported that there is no active transaction. </err0x8004E10C>
+    <err0x8004E10D GUID="">The Software Licensing Service reported that the Token Store file header is invalid. </err0x8004E10D>
+    <err0x8004E10E GUID="">The Software Licensing Service reported that a Token Store token descriptor is invalid. </err0x8004E10E>
+    <err0xC004F001 GUID="391079">The Software Licensing Service reported an internal error.</err0xC004F001>
+    <err0xC004F002 GUID="">The Software Licensing Service reported that rights consumption failed.</err0xC004F002>
+    <err0xC004F003 GUID="391079">The Software Licensing Service reported that the required license could not be found.</err0xC004F003>
+    <err0xC004F004 GUID="">The Software Licensing Service reported that the product key does not match the range defined in the license.</err0xC004F004>
+    <err0xC004F005 GUID="">The Software Licensing Service reported that the product key does not match the product key for the license.</err0xC004F005>
+    <err0xC004F006 GUID="391079">The Software Licensing Service reported that the signature file for the license is not available.</err0xC004F006>
+    <err0xC004F007 GUID="391079">The Software Licensing Service reported that the license could not be found.</err0xC004F007>
+    <err0xC004F008 GUID="391079">The Software Licensing Service reported that the license could not be found.</err0xC004F008>
+    <err0xC004F009 GUID="">The Software Licensing Service reported that the grace period expired.</err0xC004F009>
+    <err0xC004F00A GUID="">The Software Licensing Service reported that the application ID does not match the application ID for the license.</err0xC004F00A>
+    <err0xC004F00B GUID="391079">The Software Licensing Service reported that the product identification data is not available.</err0xC004F00B>
+    <err0x4004F00C GUID="">The Software Licensing Service reported that the application is running within the valid grace period.</err0x4004F00C>
+    <err0x4004F00D GUID="">The Software Licensing Service reported that the application is running within the valid out of tolerance grace period.</err0x4004F00D>
+    <err0xC004F00E GUID="">The Software Licensing Service determined that the license could not be used by the current version of the security processor component.</err0xC004F00E>
+    <err0xC004F00F GUID="391080">The Software Licensing Service reported that the hardware ID binding is beyond the level of tolerance.</err0xC004F00F>
+    <err0xC004F010 GUID="391079">The Software Licensing Service reported that the product key is invalid.</err0xC004F010>
+    <err0xC004F011 GUID="391079">The Software Licensing Service reported that the license file is not installed.</err0xC004F011>
+    <err0xC004F012 GUID="">The Software Licensing Service reported that the call has failed because the value for the input key was not found.</err0xC004F012>
+    <err0xC004F013 GUID="">The Software Licensing Service determined that there is no permission to run the software.</err0xC004F013>
+    <err0xC004F014 GUID="390954">The Software Licensing Service reported that the product key is not available.</err0xC004F014>
+    <err0xC004F015 GUID="391079">The Software Licensing Service reported that the license is not installed.</err0xC004F015>
+    <err0xC004F016 GUID="391079">The Software Licensing Service determined that the request is not supported.</err0xC004F016>
+    <err0xC004F017 GUID="391079">The Software Licensing Service reported that the license is not installed.</err0xC004F017>
+    <err0xC004F018 GUID="391079">The Software Licensing Service reported that the license does not contain valid location data for the activation server.</err0xC004F018>
+    <err0xC004F019 GUID="391079">The Software Licensing Service determined that the requested event ID is invalid.</err0xC004F019>
+    <err0xC004F01A GUID="391079">The Software Licensing Service determined that the requested event is not registered with the service.</err0xC004F01A>
+    <err0xC004F01B GUID="">The Software Licensing Service reported that the event ID is already registered.</err0xC004F01B>
+    <err0xC004F01C GUID="391079">The Software Licensing Service reported that the license is not installed.</err0xC004F01C>
+    <err0xC004F01D GUID="391079">The Software Licensing Service reported that the verification of the license failed.</err0xC004F01D>
+    <err0xC004F01E GUID="391079">The Software Licensing Service determined that the input data type does not match the data type in the license.</err0xC004F01E>
+    <err0xC004F01F GUID="391079">The Software Licensing Service determined that the license is invalid.</err0xC004F01F>
+    <err0xC004F020 GUID="391079">The Software Licensing Service determined that the license package is invalid.</err0xC004F020>
+    <err0xC004F021 GUID="">The Software Licensing Service reported that the validity period of the license has expired.</err0xC004F021>
+    <err0xC004F022 GUID="391079">The Software Licensing Service reported that the license authorization failed.</err0xC004F022>
+    <err0xC004F023 GUID="391079">The Software Licensing Service reported that the license is invalid.</err0xC004F023>
+    <err0xC004F024 GUID="">The Software Licensing Service reported that the license is invalid.</err0xC004F024>
+    <err0xC004F025 GUID="">The Software Licensing Service reported that the action requires administrator privilege.</err0xC004F025>
+    <err0xC004F026 GUID="">The Software Licensing Service reported that the required data is not found.</err0xC004F026>
+    <err0xC004F027 GUID="391079">The Software Licensing Service reported that the license is tampered.</err0xC004F027>
+    <err0xC004F028 GUID="391079">The Software Licensing Service reported that the policy cache is invalid.</err0xC004F028>
+    <err0xC004F029 GUID="">The Software Licensing Service cannot be started in the current OS mode.</err0xC004F029>
+    <err0xC004F02A GUID="">The Software Licensing Service reported that the license is invalid.</err0xC004F02A>
+    <err0xC004F02C GUID="391080">The Software Licensing Service reported that the format for the offline activation data is incorrect.</err0xC004F02C>
+    <err0xC004F02D GUID="">The Software Licensing Service determined that the version of the offline Confirmation ID (CID) is incorrect.</err0xC004F02D>
+    <err0xC004F02E GUID="">The Software Licensing Service determined that the version of the offline Confirmation ID (CID) is not supported.</err0xC004F02E>
+    <err0xC004F02F GUID="">The Software Licensing Service reported that the length of the offline Confirmation ID (CID) is incorrect.</err0xC004F02F>
+    <err0xC004F030 GUID="">The Software Licensing Service determined that the Installation ID (IID) or the Confirmation ID (CID) could not been saved.</err0xC004F030>
+    <err0xC004F031 GUID="">The Installation ID (IID) and the Confirmation ID (CID) do not match. Please confirm the IID and reacquire a new CID if necessary.</err0xC004F031>
+    <err0xC004F032 GUID="391079">The Software Licensing Service determined that the binding data is invalid.</err0xC004F032>
+    <err0xC004F033 GUID="">The Software Licensing Service reported that the product key is not allowed to be installed. Please see the eventlog for details.</err0xC004F033>
+    <err0xC004F034 GUID="391079">The Software Licensing Service reported that the license could not be found or was invalid.</err0xC004F034>
+    <err0xC004F035 GUID="391080">The Software Licensing Service reported that the computer could not be activated with a Volume license product key. Volume-licensed systems require upgrading from a qualifying operating system. Please contact your system administrator or use a different type of key.</err0xC004F035>
+    <err0xC004F038 GUID="390955">The Software Licensing Service reported that the product could not be activated. The count reported by your Key Management Service (KMS) is insufficient. Please contact your system administrator.</err0xC004F038>
+    <err0xC004F039 GUID="390957">The Software Licensing Service reported that the product could not be activated.  The Key Management Service (KMS) is not enabled.</err0xC004F039>
+    <err0x4004F040 GUID="390961">The Software Licensing Service reported that the product was activated but the owner should verify the Product Use Rights.</err0x4004F040>
+    <err0xC004F041 GUID="390958">The Software Licensing Service determined that the Key Management Service (KMS) is not activated. KMS needs to be activated. Please contact system administrator.</err0xC004F041>
+    <err0xC004F042 GUID="390959">The Software Licensing Service determined that the specified Key Management Service (KMS) cannot be used.</err0xC004F042>
+    <err0xC004F047 GUID="">The Software Licensing Service reported that the proxy policy has not been updated.</err0xC004F047>
+    <err0xC004F04D GUID="">The Software Licensing Service determined that the Installation ID (IID) or the Confirmation ID (CID) is invalid.</err0xC004F04D>
+    <err0xC004F04F GUID="391079">The Software Licensing Service reported that license management information was not found in the licenses.</err0xC004F04F>
+    <err0xC004F050 GUID="391080">The Software Licensing Service reported that the product key is invalid.</err0xC004F050>
+    <err0xC004F051 GUID="391080">The Software Licensing Service reported that the product key is blocked.</err0xC004F051>
+    <err0xC004F052 GUID="391079">The Software Licensing Service reported that the licenses contain duplicated properties. </err0xC004F052>
+    <err0xC004F053 GUID="">The Software Licensing Service determined that the license is invalid. The license contains an override policy that is not configured properly.</err0xC004F053>
+    <err0xC004F054 GUID="391079">The Software Licensing Service reported that license management information has duplicated data. </err0xC004F054>
+    <err0xC004F055 GUID="">The Software Licensing Service reported that the base SKU is not available.</err0xC004F055>
+    <err0xC004F056 GUID="">The Software Licensing Service reported that the product could not be activated using the Key Management Service (KMS).</err0xC004F056>
+    <err0xC004F057 GUID="">The Software Licensing Service reported that the computer BIOS is missing a required license.</err0xC004F057>
+    <err0xC004F058 GUID="">The Software Licensing Service reported that the computer BIOS is missing a required license.</err0xC004F058>
+    <err0xC004F059 GUID="">The Software Licensing Service reported that a license in the computer BIOS is invalid.</err0xC004F059>
+    <err0xC004F060 GUID="391079">The Software Licensing Service determined that the version of the license package is invalid.</err0xC004F060>
+    <err0xC004F061 GUID="">The Software Licensing Service determined that this specified product key can only be used for upgrading, not for clean installations.</err0xC004F061>
+    <err0xC004F062 GUID="391079">The Software Licensing Service reported that a required license could not be found.</err0xC004F062>
+    <err0xC004F063 GUID="">The Software Licensing Service reported that the computer is missing a required OEM license.</err0xC004F063>
+    <err0xC004F064 GUID="">The Software Licensing Service reported that the non-genuine grace period expired.</err0xC004F064>
+    <err0x4004F065 GUID="391080">The Software Licensing Service reported that the application is running within the valid non-genuine grace period.</err0x4004F065>
+    <err0xC004F066 GUID="">The Software Licensing Service reported that the genuine information property can not be set before dependent property been set.</err0xC004F066>
+    <err0xC004F067 GUID="">The Software Licensing Service reported that the non-genuine grace period expired (type 2).</err0xC004F067>
+    <err0x4004F068 GUID="">The Software Licensing Service reported that the application is running within the valid non-genuine grace period (type 2).</err0x4004F068>
+    <err0xC004F069 GUID="">The Software Licensing Service reported that the product SKU is not found.</err0xC004F069>
+    <err0xC004F06A GUID="">The Software Licensing Service reported that the requested operation is not allowed.</err0xC004F06A>
+    <err0xC004F06B GUID="">The Software Licensing Service determined that it is running in a virtual machine. The Key Management Service (KMS) is not supported in this mode.</err0xC004F06B>
+    <err0xC004F06C GUID="391080">The Software Licensing Service reported that the product could not be activated. The Key Management Service (KMS) determined that the request timestamp is invalid.</err0xC004F06C>
+    <err0xC004F071 GUID="391079">The Software Licensing Service reported that the plug-in manifest file is incorrect.</err0xC004F071>
+    <err0xC004F072 GUID="391079">The Software Licensing Service reported that the license policies for fast query could not be found.</err0xC004F072>
+    <err0xC004F073 GUID="391079">The Software Licensing Service reported that the license policies for fast query have not been loaded.</err0xC004F073>
+    <err0xC004F074 GUID="390946">The Software Licensing Service reported that the product could not be activated.No Key Management Service (KMS) could be contacted.
+Please click 'Show KMS activation' below and choose 'Display KMS client activation history' for additional information.</err0xC004F074>
+    <err0xC004F075 GUID="391079">The Software Licensing Service reported that the operation cannot be completed because the service is stopping.</err0xC004F075>
+    <err0xC004F076 GUID="391079">The Software Licensing Service reported that the requested plug-in cannot be found.</err0xC004F076>
+    <err0xC004F077 GUID="391079">The Software Licensing Service determined incompatible version of authentication data.</err0xC004F077>
+    <err0xC004F078 GUID="391079">The Software Licensing Service reported that the key is mismatched.</err0xC004F078>
+    <err0xC004F079 GUID="">The Software Licensing Service reported that the authentication data is not set.</err0xC004F079>
+    <err0xC004F07A GUID="391079">The Software Licensing Service reported that the verification could not be done.</err0xC004F07A>
+    <err0xC004F07B GUID="">The requested operation is unavailable while the Software Licensing Service is running.</err0xC004F07B>
+    <err0xC004F07C GUID="">The Software Licensing Service determined that the version of the computer BIOS is invalid.</err0xC004F07C>
+    <err0xC004F07D GUID="">The Software Licensing Service reported that the product key cannot be used for this type of activation.</err0xC004F07D>
+    <err0xC004F07E GUID="">The Installation ID (IID) and the Confirmation ID (CID) do not match the product key.</err0xC004F07E>
+    <err0xC004F07F GUID="">The Installation ID (IID) and the Confirmation ID (CID) are not bound to the current environment.</err0xC004F07F>
+    <err0xC004F080 GUID="">The Software Licensing Service reported that the license is not bound to the current environment.</err0xC004F080>
+    <err0xC004F081 GUID="">The Software Licensing Service reported that the Active Directory Activation Object could not be found or was invalid.</err0xC004F081>
+    <err0xC004F082 GUID="">The Software Licensing Service reported that the name specified for the Active Directory Activation Object is too long.</err0xC004F082>
+    <err0xC004F200 GUID="">The Software Licensing Service reported that current state is not genuine.</err0xC004F200>
+    <err0xC004F210 GUID="">The Software Licensing Service reported that the license edition does match the computer edition.</err0xC004F210>
+    <err0xC004F301 GUID="">The Software Licensing Service reported that the product could not be activated. The token-based activation challenge has expired.</err0xC004F301>
+    <err0xC004F302 GUID="">The Software Licensing Service reported that Silent Activation failed. The Software Licensing Service reported that there are no certificates found in the system that could activate the product without user interaction.</err0xC004F302>
+    <err0xC004F303 GUID="">The Software Licensing Service reported that the certificate chain could not be built or failed validation.</err0xC004F303>
+    <err0xC004F304 GUID="">The Software Licensing Service reported that required license could not be found.</err0xC004F304>
+    <err0xC004F305 GUID="">The Software Licensing Service reported that there are no certificates found in the system that could activate the product.</err0xC004F305>
+    <err0xC004F306 GUID="">The Software Licensing Service reported that this software edition does not support token-based activation.</err0xC004F306>
+    <err0xC004F307 GUID="">The Software Licensing Service reported that the product could not be activated. Activation data is invalid.</err0xC004F307>
+    <err0xC004F308 GUID="">The Software Licensing Service reported that the product could not be activated. Activation data is tampered.</err0xC004F308>
+    <err0xC004F309 GUID="">The Software Licensing Service reported that the product could not be activated. Activation challenge and response do not match.</err0xC004F309>
+    <err0xC004F30A GUID="">The Software Licensing Service reported that the product could not be activated. The certificate does not match the conditions in the license.</err0xC004F30A>
+    <err0xC004F30B GUID="">The Software Licensing Service reported that the inserted smartcard could not be used to activate the product.</err0xC004F30B>
+    <err0xC004F30C GUID="">The Software Licensing Service reported that the token-based activation license content is invalid.</err0xC004F30C>
+    <err0xC004F30D GUID="">The Software Licensing Service reported that the product could not be activated. The thumbprint is invalid.</err0xC004F30D>
+    <err0xC004F30E GUID="">The Software Licensing Service reported that the product could not be activated. The thumbprint does not match any certificate.</err0xC004F30E>
+    <err0xC004F30F GUID="">The Software Licensing Service reported that the product could not be activated. The certificate does not match the criteria specified in the issuance license.</err0xC004F30F>
+    <err0xC004F310 GUID="">The Software Licensing Service reported that the product could not be activated. The certificate does not match the trust point identifier (TPID) specified in the issuance license.</err0xC004F310>
+    <err0xC004F311 GUID="">The Software Licensing Service reported that the product could not be activated. A soft token cannot be used for activation.</err0xC004F311>
+    <err0xC004F312 GUID="">The Software Licensing Service reported that the product could not be activated. The certificate cannot be used because its private key is exportable.</err0xC004F312>
+    <err0xC004F313 GUID="">The Software Licensing Service reported that the CNG encryption library could not be loaded.  The current certificate may not be available on this version of Windows.</err0xC004F313>
+    <err0xC004FC03 GUID="">A networking problem has occurred while activating your copy of Windows.</err0xC004FC03>
+    <err0x4004FC04 GUID="">The Software Licensing Service reported that the application is running within the timebased validity period.</err0x4004FC04>
+    <err0x4004FC05 GUID="">The Software Licensing Service reported that the application has a perpetual grace period.</err0x4004FC05>
+    <err0x4004FC06 GUID="">The Software Licensing Service reported that the application is running within the valid extended grace period.</err0x4004FC06>
+    <err0xC004FC07 GUID="">The Software Licensing Service reported that the validity period expired.</err0xC004FC07>
+    <err0xC004FE00 GUID="">The Software Licensing Service reported that activation is required to recover from tampering of SL Service trusted store.</err0xC004FE00>
+    <err0xC004D101 GUID="">The security processor reported an initialization error.</err0xC004D101>
+    <err0x8004D102 GUID="">The security processor reported that the machine time is inconsistent with the trusted time.</err0x8004D102>
+    <err0xC004D103 GUID="">The security processor reported that an error has occurred.</err0xC004D103>
+    <err0xC004D104 GUID="">The security processor reported that invalid data was used.</err0xC004D104>
+    <err0xC004D105 GUID="">The security processor reported that the value already exists.</err0xC004D105>
+    <err0xC004D107 GUID="">The security processor reported that an insufficient buffer was used.</err0xC004D107>
+    <err0xC004D108 GUID="">The security processor reported that invalid data was used.</err0xC004D108>
+    <err0xC004D109 GUID="">The security processor reported that an invalid call was made.</err0xC004D109>
+    <err0xC004D10A GUID="">The security processor reported a version mismatch error.</err0xC004D10A>
+    <err0x8004D10B GUID="">The security processor cannot operate while a debugger is attached.</err0x8004D10B>
+    <err0xC004D301 GUID="">The security processor reported that the trusted data store was tampered.</err0xC004D301>
+    <err0xC004D302 GUID="">The security processor reported that the trusted data store was rearmed.</err0xC004D302>
+    <err0xC004D303 GUID="">The security processor reported that the trusted store has been recreated.</err0xC004D303>
+    <err0xC004D304 GUID="">The security processor reported that entry key was not found in the trusted data store.</err0xC004D304>
+    <err0xC004D305 GUID="">The security processor reported that the entry key already exists in the trusted data store.</err0xC004D305>
+    <err0xC004D306 GUID="">The security processor reported that the entry key is too big to fit in the trusted data store.</err0xC004D306>
+    <err0xC004D307 GUID="">The security processor reported that the maximum allowed number of re-arms has been exceeded.  You must re-install Office before trying to re-arm again.</err0xC004D307>
+    <err0xC004D308 GUID="">The security processor has reported that entry data size is too big to fit in the trusted data store.</err0xC004D308>
+    <err0xC004D309 GUID="">The security processor has reported that the machine has gone out of hardware tolerance.</err0xC004D309>
+    <err0xC004D30A GUID="">The security processor has reported that the secure timer already exists.</err0xC004D30A>
+    <err0xC004D30B GUID="">The security processor has reported that the secure timer was not found.</err0xC004D30B>
+    <err0xC004D30C GUID="">The security processor has reported that the secure timer has expired.</err0xC004D30C>
+    <err0xC004D30D GUID="">The security processor has reported that the secure timer name is too long.</err0xC004D30D>
+    <err0xC004D30E GUID="">The security processor reported that the trusted data store is full.</err0xC004D30E>
+    <err0xC004D401 GUID="">The security processor reported a system file mismatch error.</err0xC004D401>
+    <err0xC004D402 GUID="">The security processor reported a system file mismatch error.</err0xC004D402>
+    <err0xC004D501 GUID="">The security processor reported an error with the kernel data.</err0xC004D501>
+    <err0x8007267C GUID="">No DNS servers configured for local system.</err0x8007267C>
+    <err0xC0020017 GUID="">The RPC server is unavailable.</err0xC0020017>
+    <err0x80070005 GUID="390949">Access denied.</err0x80070005>
+    <err0x8007233B GUID="390951">DNS name does not exist.</err0x8007233B>
+    <err0x80070422 GUID="390943">The service cannot be started, either because it is disabled or because it has no enabled devices associated with it</err0x80070422>
+    <err0x80070426 GUID="390944">The service has not been started.</err0x80070426>
+    <err0x80070001 GUID="390947">An unspecified error has occurred. Your request cannot be processed at this time. Please try again later.</err0x80070001>
+    <err0x8007000D GUID="390950">An unspecified error has occurred. Your request cannot be processed at this time. Please try again later.</err0x8007000D>
+    <err0x8007232B GUID="390951">DNS name does not exist.</err0x8007232B>
+    <err0x8007251D GUID="390953">No records found for given DNS query.</err0x8007251D>
+    <err0x80072AF9 GUID="">No such host is known</err0x80072AF9>
+  </Errors>
+  <GVLKS>
+    <!--<GVLK MajorMinorVersion="14.0" Name="Office Professional Plus 2010" ProductKey="VYBBJ-TRJPB-QFQRF-QFT4D-H3GVB"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Office Standard 2010" ProductKey="V7QKV-4XVVR-XYV4D-F7DFM-8R6BM"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Access 2010" ProductKey="V7Y44-9T38C-R2VJK-666HK-T7DDX"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Excel 2010" ProductKey="H62QG-HXVKF-PP4HP-66KMR-CW9BM"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="SharePoint Workspace 2010" ProductKey="QYYW6-QP4CB-MBV6G-HYMCJ-4T3J4"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="InfoPath 2010" ProductKey="K96W8-67RPQ-62T9Y-J8FQJ-BT37T"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="OneNote 2010" ProductKey="Q4Y4M-RHWJM-PY37F-MTKWH-D3XHX"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Outlook 2010" ProductKey="7YDC2-CWM8M-RRTJC-8MDVC-X3DWQ"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="PowerPoint 2010" ProductKey="RC8FX-88JRY-3PF7C-X8P67-P4VTT"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Project Professional 2010" ProductKey="YGX6F-PGV49-PGW3J-9BTGG-VHKC6"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Project Standard 2010" ProductKey="4HP3K-88W3F-W2K3D-6677X-F9PGB"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Publisher 2010" ProductKey="BFK7F-9MYHM-V68C7-DRQ66-83YTP"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Word 2010" ProductKey="HVHB3-C6FV7-KQX9W-YQG79-CRY7T"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Visio Premium 2010" ProductKey="D9DWC-HPYVV-JGF4P-BTWQB-WX8BJ"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Visio Professional 2010" ProductKey="7MCW8-VRQVK-G677T-PDJCM-Q8TCP"></GVLK>
+		<GVLK MajorMinorVersion="14.0" Name="Visio Standard 2010" ProductKey="767HD-QGMWX-8QTDB-9G3R2-KHFGJ"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Office 2013 Professional Plus" ProductKey="YC7DK-G2NP3-2QQC3-J6H88-GVGXT"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Office 2013 Standard" ProductKey="KBKQT-2NMXY-JJWGP-M62JB-92CD4"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Project 2013 Professional" ProductKey="FN8TT-7WMH6-2D4X9-M337T-2342K"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Project 2013 Standard" ProductKey="6NTH3-CW976-3G3Y2-JK3TX-8QHTT"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Visio 2013 Professional" ProductKey="C2FG9-N6J68-H8BTJ-BW3QX-RM3B3"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Visio 2013 Standard" ProductKey="J484Y-4NKBF-W2HMG-DBMJC-PGWR7"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Access 2013" ProductKey="NG2JY-H4JBT-HQXYP-78QH9-4JM2D"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Excel 2013" ProductKey="VGPNG-Y7HQW-9RHP7-TKPV3-BG7GB"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="InfoPath 2013" ProductKey="DKT8B-N7VXH-D963P-Q4PHY-F8894"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Lync 2013" ProductKey="2MG3G-3BNTT-3MFW9-KDQW3-TCK7R"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="OneNote 2013" ProductKey="TGN6P-8MMBC-37P2F-XHXXK-P34VW"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Outlook 2013" ProductKey="QPN8Q-BJBTJ-334K3-93TGY-2PMBT"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="PowerPoint 2013" ProductKey="4NT99-8RJFH-Q2VDH-KYG2C-4RD4F"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Publisher 2013" ProductKey="PN2WF-29XG2-T9HJ7-JQPJR-FCXK4"></GVLK>
+		<GVLK MajorMinorVersion="15.0" Name="Word 2013" ProductKey="6Q7VD-NX8JD-WJ2VH-88V73-4GBJ7"></GVLK>-->
+    <Article MajorMinorVersion="14.0" URL="http://technet.microsoft.com/en-us/library/ee624355(v=office.14).aspx#section2_3"></Article>
+    <Article MajorMinorVersion="15.0" URL="http://technet.microsoft.com/en-us/library/ee624355(v=office.15).aspx#OtherIssues"></Article>
+    <Article MajorMinorVersion="16.0" URL="https://technet.microsoft.com/EN-US/library/ee624355(v=office.16).aspx#KMSActivationIssues"></Article>
+  </GVLKS>
+  <OSPPREARMS>
+    <OSPPREARM MajorMinorVersion="14.0" x86GUID="{3F7DD0FD-8308-40C7-8985-0F322E3E7551}" x64GUID="{0852D8F9-C32F-4E8C-9D95-BA151E137887}"></OSPPREARM>
+    <OSPPREARM MajorMinorVersion="15.0" x86GUID="{3F7DD0FD-8308-40C7-8985-0F322E3E7551}" x64GUID="{0852D8F9-C32F-4E8C-9D95-BA151E137887}"></OSPPREARM>
+    <OSPPREARM MajorMinorVersion="16.0" x86GUID="{83A90ED8-8C9D-41E9-9F37-2163B45115C4}" x64GUID="{F18D61E8-2934-4045-9533-87F16D4E3A69}"></OSPPREARM>
+  </OSPPREARMS>
+  <KMSHOSTS>
+    <KMSHOST MajorMinorVersion="14.0" ActivationID="bfe7a195-4f8f-4f0b-a622-cf13c7d16864"></KMSHOST>
+    <KMSHOST MajorMinorVersion="15.0" ActivationID="2E28138A-847F-42BC-9752-61B03FFF33CD"></KMSHOST>
+    <KMSHOST MajorMinorVersion="16.0" ActivationID="98EBFE73-2084-4C97-932C-C0CD1643BEA7"></KMSHOST>
+  </KMSHOSTS>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>1E5Ltt94IKADX/BvfoESHSPwPds=</DigestValue></Reference></SignedInfo><SignatureValue>
+    iK8NNFGGe6shTwVVHI5pVHepY7/VXSQGFAmbzIZDaDs8igOqgG69Vfo5s++Dlp9cAlbwWclB
+    nQae5X1AhtW/1nEshO43NDxxpz8Iafv2BcR/NANnmajq3sfgs9r9GguOwaKlXrrFCXYQH0R4
+    mi400cQ3DeVlmLMZX7Z3jyvrrZITflu2iFRt+njVsbx16vJ6TGNpngUkwmxnx2OH43oTFSrX
+    QQw9WbilnMHcPoNaJSuX+EQVUuMHF9VjOmF+EwIY2z9+CuNu/tckGb+8OSsqEXNW3BXckM7j
+    aK+iHRkxEoVTnQwpodUKXxhP1BtfcBeTGPaE2SQvaeP6yKMOqgIMGw==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFmTCCA4GgAwIBAgIQea0WoUqgpa1Mc1j0BxMuZTANBgkqhkiG9w0BAQUFADBfMRMwEQYK
+          CZImiZPyLGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRN
+          aWNyb3NvZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDEwNTA5MjMxOTIyWhcN
+          MjEwNTA5MjMyODEzWjBfMRMwEQYKCZImiZPyLGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJ
+          bWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3Jp
+          dHkwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDzXfqAZ9Rap6kMLJAg0DUIPHWE
+          zbcHiZyJ2t7Ow2D6kWhanpRxKRh2fMLgyCV2lA5Y+gQ0Nubfr/eAuulYCyuT5Z0F43cikfc0
+          ZDwikR1e4QmQvBT+/HVYGeF5tweSo66IWQjYnwfKA1j8aCltMtfSqMtL/OELSDJP5uu4rU/k
+          XG8TlJnbldV126gat5SRtHdb9UgMj2p5fRRwBH1tr5D12nDYR7e/my9s5wW34RFgrHmRFHzF
+          1qbk4X7Vw37lktI8ALU2gt554W3ztW74nzPJy1J9c5g224uha6KVl5uj3sJNJv8GlmclBsjn
+          rOTuEjOVMZnINQhONMp5U9W1vmMyWUA2wKVOBE0921sHM+RYv+8/U2TYQlk1V/0PRXwkBE2e
+          1jh0EZcikM5oRHSSb9VLb7CG48c2QqDQ/MHAWvmjYbkwR3GWChawkcBCle8Qfyhq4yofseTN
+          Az93cQTHIPxJDx1FiKTXy36IrY4t7EXbxFEEySr87IaemhGXW97OU4jm4rf9rJXCKEDb7wSQ
+          34EzOdmyRaUjhwalVYkxuwYtYA5BGH0fLrWXyxHrFdUkpZTvFRSJ/Utz+jJb/NEzAPlZYnAH
+          Muouq0Ate8rdIWcbMJmPFqojqEHRsG4RmzbE3kB0nOFYZcFgHnpbOMiPuwQmfNQWQOW2a2yq
+          hv0Av87BNQIDAQABo1EwTzALBgNVHQ8EBAMCAcYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4E
+          FgQUDqyCYEBWJ5flJRP8KuEKU5VZ5KQwEAYJKwYBBAGCNxUBBAMCAQAwDQYJKoZIhvcNAQEF
+          BQADggIBAMURTQM6YN1dUhF3j7K7NsiyBb+0t6jYIJ1cEwO2HCL6BhM1tshj1JpHbyZX0lXx
+          BLEmX9apUGigvNK4bszD6azfGc14rFl0rGY0NsQbPmw4TDMOMBINoyb+UVMA/69aToQNDx/k
+          bQUuToVLjWwzb1TSZKu/UK99ejmgN+1jAw/8EwbOFjbUVDuVG1FiOuVNF9QFOZKaJ6hbqr3s
+          u77jIIlgcWxWs6UT0G0OI36VA+1oPfLYY7hrTbboMLXhypRL96KqXZkwsj2nwlFsKCABJCcr
+          SwC3nRFrcL6yEIK8DJto0I07JIeqmShynTNfWZC99d6TnjpiWjQ54ohVHbkGsMGJay3XacMZ
+          EjaE0Mmg2v8vaXiy5Xra69cMwPe9Yxe4ORM4ojZbe/KFVmodZGLBOOKqv1FmopT1EpxmIhBr
+          8rcwki3yKfA9OxRDaKLxnCk3y844ICVtfGfzfiQSJAMIgUfspZ6X9RjXz7vV73aW7/3O21ad
+          laBC+ZdY4dcxItNfWeY+biIA6kOEtiXb2fMIVmjAZGsdfOy2k6JiV24u2OdYj8QxSSbd3ik1
+          h/UwcXBbFDxpvYkSfesuo/7Yf56CWlIKK8FDK9kwiJ/IEPuJjeahhXUzfmye23MTZGJppS99
+          ypZtn/gETTCSPW4hFCHJPeDD/YprnUr90aGdmUN3P7Da
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0AYJKoZIhvcNAQcCoIIGwTCCBr0CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQCIrw00UYZ7qyFPBVUcjmlUd6ljv9VdJAYUCZvMhkNoOzyKA6qAbr1V+jmz74OWn1wCVvBZ
+yUGdBp7lfUCG1b/WcSyE7jc0PHGnPwhp+/YFxH80A2eZqOrex+Cz2v0aC47BoqVeusUJdhAfRHia
+LjTRxDcN5WWYsxlftnePK+utkhN+W7aIVG36eNWxvHXq8npMY2meBSTCbGfHY4fjehMVKtdBDD1Z
+uKWcwdw+g1olK5f4RBVS4wcX1WM6YX4TAhjbP34K427+1yQZv7w5KyoRc1bcFdyQzuNor6IdGTES
+hVOdDCmh1QpfGE/UG19wF5MY9oTZJC9p4/rIow6qAgwboIIDeaGCA3UwggJdAgEBMIHjoYG5pIG2
+MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
+MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
+Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAVVOJIetMkgprira+lJqMuHewz+yggcIwgb+k
+gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
+MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
+Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/o4wIhgPMjAxNjA4MDExNjU5
+NThaGA8yMDE2MDgwMjE2NTk1OFowczA5BgorBgEEAYRZCgQBMSswKTAKAgUA20n+jgIBADAGAgEA
+AgECMAcCAQACAhg+MAoCBQDbS1AOAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkKAwGg
+CjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADW8Wc1X7wC6a6anLPjY
+Z2LaN5A9sqH61c4KUXHRWQ3NmrcTAt5MRePI0Rf9rcgxQdA/DPFaeCoOLMvfTtc1njNwsDsbcjp8
+p37u2Rr/E0WNFRoraruy1H8HEHx3Tev0SNGOKot7vdrkByf8qTKKOtA4EpEnH9SEuHYhDBN7SfW4
+qcWVmL5KhJDtvtQDqfPzMa7fL7ybRLblnfVnJD/dIz973Q0gS2aFre7EyRAkKlJVOy2m4J1kDXAG
+Z7GfdnVjTB0PDzILYM2HrdlGs0c6CsKLqUnB4H7oEQTVDXGJhjj02Nozcq4uEucHns5H3JS1puGO
+AwoOxcxZQYGdexa7AqUxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9u
+MSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACvU0d3bBvxowIAAAAAAK8w
+CQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE2
+MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFDhdX08chh5xm29pxjHvFMKmvaPqMA0GCSqGSIb3
+DQEBBQUABIIBAAq2eCFSZAfCzTT/AXlngJ5a/xDXIsoBlhbcGawwQiznf+yVx/0bAZ1UeaphMSTn
+YZKnD/VDUqWJqsi/wreDvty+XHtZGB4kNUeE7z6BH9rLyrFfvQRrB+CHz689EfyZrwMoKsvkSWH/
+7IzCHa2LbqeZf7IYdhuK/gXHkBQxNVqaQwQmJ1w1rln1qnZ0atT1cWAiFPtWk12pFHjm/aqE7nIi
+rCJZdDmMonXNawYxx1/L+pjEK2US9hos9kqka6kW1yrdo4X2lOgtLd3AeQdOSUxVBfVk7/ga73BG
+3kbwoNW8e+KvkLdY2YPX3lMrKp/pilmYbQvJC1s+y2X9tY6twIs=</CounterSignature></Object></Signature></ObjectCollector>

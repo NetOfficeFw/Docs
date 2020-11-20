@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+	<Configuration ConfigName="OneNote Crashes" ChangeDescription="2.0.1605.23" ConfigVersion="2.0.1605.23" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
+		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
+		<Substitution Name="MAJORVERSION"></Substitution>
+		<Substitution Name="INSTALLTYPE"></Substitution>
+		<Substitution Name="APPNAME">OneNote</Substitution>
+    <Substitution Name="DAYS"></Substitution>
+    <Substitution Name="MAXEVENTS"></Substitution>
+		<ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+		<!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+		<ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
+		<ObjectProcessor Name="Directory" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DirectoryObjectProcessor"/>
+		<ObjectProcessor Name="DsGet" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor"/>
+		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
+		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+		<ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
+		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
+		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
+		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
+		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
+		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
+	</Configuration>
+
+	<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="OneNote" Key6="onenote" Key7="%MAJORVERSION%">
+		<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
+		</Setting>
+		<Setting Key1="Bitness" Substitution="APPBITNESS">
+			<Rule Name="bitness" Query="$."></Rule>
+		</Setting>
+    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Add" Key2="WOW6432NODECACHE" Key3="%WOW6432NODE%">
+    </Object>
+    <Object Type="Cache" Name="AppBitnessCache" Key1="Add" Key2="APPBITNESSCACHE" Key3="%APPBITNESS%">
+    </Object>
+		<Setting Key1="FullVersion">
+			<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
+			<Rule Name="sFullAppVersion" Query="$.">
+			</Rule>
+		</Setting>
+		<Setting Key1="Name">
+			<Rule Name="appName" Query="$."></Rule>
+		</Setting>
+		<Setting Key1="Path">          
+		</Setting>
+		<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
+		</Setting>
+		<Setting Key1="Version">
+			<Rule Name="n4DigitSKUVersion" Query="$.">
+			</Rule>          
+		</Setting>
+		<Setting Key1="Type">
+			<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+      <Rule Name="nInstallType" Query="$."></Rule>
+		</Setting>
+	</Object>
+  <Object Type="Cache" Name="AppBitnessCache" Key1="Dump" Key2="APPBITNESSCACHE" Display="Hide">
+    <Setting Key1="Val" Substitution="APPBITNESS" Display="Hide"></Setting>
+    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Dump" Key2="WOW6432NODECACHE" Display="Hide">
+      <Setting Key1="Val" Substitution="WOW6432NODE" Display="Hide">
+      </Setting>
+      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{DACE5A15-C57C-44DE-9AFF-89B4412485AF}">
+          <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+          <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+          <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+            <Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+            <Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+            <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
+              <Setting Key1="" Display="Hide"></Setting>
+            </Object>
+            <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                <Setting Key1="ProductVersion" Display="Hide">
+                  <Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
+                </Setting>
+              </Object>
+              <Setting Key1="ProductName" Display="Hide"></Setting>
+            </Object>
+          </Object>
+        </Object>
+      </Object>
+      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{74F233A9-A17A-477C-905F-853F5FCDAD40}">
+          <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+          <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+          <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+            <Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+            <Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+            <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
+              <Setting Key1="" Display="Hide"></Setting>
+            </Object>
+            <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                <Setting Key1="ProductVersion" Display="Hide">
+                  <Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
+                </Setting>
+              </Object>
+              <Setting Key1="ProductName" Display="Hide"></Setting>
+            </Object>
+          </Object>
+        </Object>
+      </Object>
+    </Object>
+  </Object>
+  
+  <Type Name="OneNoteCrashes">
+
+		<!--EVENTLOGS-->
+
+		<Object Type="EventLog" Key1="Application" Key3="1000" Key4="onenote.exe" Key5="%MAXEVENTS%" Key7="%DAYS%" Key8="10000">
+			<Setting Key1="__ALL"></Setting>
+			<Setting Key1="Faulting Application Name" Display="Right"></Setting>
+			<Setting Key1="Faulting Application Version" Display="Right">
+				<Rule Name="nFaultingAppVersion" Query="$."></Rule>
+			</Setting>
+			<Setting Key1="Faulting Application Timestamp" Display="Right">
+				<Rule Name="faultAppTimeStamp" Query="$."></Rule>
+			</Setting>
+			<Setting Key1="Faulting Module Name" Display="Right">
+				<Rule Name="faultModuleName" Query="$."></Rule>
+			</Setting>
+			<Setting Key1="Faulting Module Version" Display="Right">
+				<Rule Name="nFaultingModuleVersion" Query="$."></Rule>
+			</Setting>
+			<Setting Key1="Faulting Module Timestamp" Display="Right">
+				<Rule Name="faultModuleTimestamp" Query="$."></Rule>
+			</Setting>
+			<Setting Key1="Exception code" Display="Right"></Setting>
+			<Setting Key1="Fault offset" Display="Right">
+				<Rule Name="faultOffset" Query="$."></Rule>
+			</Setting>
+      <Setting Key1="Timegenerated" Display="Hide">
+        <Rule Name="TimeOfCrash" Query="$."/>
+      </Setting>
+			<Setting Key1="Message" Display="Right">
+        <Rule Name="sCrashMessage" Query="$."></Rule>
+				<Rule Name="crashLookup" Query="true()" Title="Event 1000" Text="{8}" Error="Error" Internal="True" P0="if($bitness='x86','Crash32','Crash64')" P1="'onenote.exe'" P2="$nFaultingAppVersion" P3="$faultAppTimeStamp" P4="$faultModuleName" P5="$nFaultingModuleVersion" P6="$faultModuleTimestamp" P7="$faultOffset" P8="$sCrashMessage" P9="$TimeOfCrash" Symptoms="Crash event lookup"></Rule>
+			</Setting>
+
+      <Rule Name="n3459258MsoCrashOneNote00003ABC" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4631.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00003abc')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3459258MsoCrashOneNote0000329C" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='0.0.0.0')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0000329c')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="s3459258MsoCrashOneNoteX86" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x86' and ($n3459258MsoCrashOneNote00003ABC&gt;0 or $n3459258MsoCrashOneNote0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashOneNote00003ABC + $n3459258MsoCrashOneNote0000329C" Title="Known crashing issue when OneNote stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when OneNote stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506810" SSID="8370eeee-0484-45bd-8bcc-a970b8aa47b5" Symptoms="Crash"></Rule>
+      <Rule Name="n3459258MsoCrashOneNote00000000013F766E" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4631.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000013f766e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3459258MsoCrashOneNote00000000013EB86E" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='0.0.0.0')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000013eb86e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="s3459258MsoCrashOneNoteX64" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x64' and ($n3459258MsoCrashOneNote00000000013F766E&gt;0 or $n3459258MsoCrashOneNote00000000013EB86E&gt;0)" Error="Error" P0="$n3459258MsoCrashOneNote00000000013F766E + $n3459258MsoCrashOneNote00000000013EB86E" Title="Known crashing issue when OneNote stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when OneNote stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506821" SSID="77168246-6c01-40c1-958d-feb472a085d3" Symptoms="Crash"></Rule>
+      <Rule Name="s3459258MsoCrashOneNoteC2R" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='ClickToRun' and $n2DigitVersion=15 and ($n3459258MsoCrashOneNote00003ABC&gt;0 or $n3459258MsoCrashOneNote0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashOneNote00003ABC + $n3459258MsoCrashOneNote0000329C" Title="Known crashing issue when OneNote stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when OneNote stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506872" SSID="fe67f307-8de7-46bb-a504-8156652746eb" Symptoms="Crash"></Rule>
+
+		</Object>
+    
+  </Type>
+
+  <Reference Type="OneNoteCrashes" Name="OneNoteCrashes" File="onenote.crashes.config.xml">
+  </Reference>
+	<Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml">
+	</Reference>
+	<Reference Type="MSO" Name="MSO" File="common.config.xml">
+	</Reference>
+	<Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+	</Reference>		
+				
+	<!--EXTERNALREFS-->
+	<Rule Name="effectiveSlowBitrate"></Rule>
+  <Rule Name="sPpCoreVersion"></Rule>
+	<Rule Name="sWordVersion"></Rule>
+  <Rule Name="fPolicies"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>siI72xPr1oKwN1AOxHtZt/3PVmw=</DigestValue></Reference></SignedInfo><SignatureValue>
+    SOFbnEaUZTl2leA4i2tCZE1iVpgS9L8czVj7E93fARXw+3sIbDbnTg9SDPHWpXwgE6E0fxHH
+    GlNNtyF1fw9VFQlXoiNhE5V1ycZvobOhUT+ilzNtN8CSL8a3QWAg17zlnjITjUQ1xAAVEKed
+    umBQFQdfRNBZvU6a+eSWRJyUt/zvVkL+CZvU7rwLkFql5WOsRD+mQCWu4K3ClUqXNsCVjP8f
+    R2leulj3A9XrkV4SKINldf4NgtxOrgBFR7LFKhCylFfarRs3Ga8Blc032OkpIFA1WFUy5fST
+    li0m2bOGnbsPSvfjwFFP3VpAGb+wGOxyyMSwgwpVEtyKWYssA2XRuQ==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAALFpr8Q3a5GTXgAAAAAAsTANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI3WhcNMTcwODAzMTcxMzI3WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAuB5CzdlupvWjSYQ/N2yCah7oUs5NBYH0s2RuWHAJXNOZEnRFmuBP
+BLSJhWsrspK9GahJ3FZuQEcq2+uBGpjBnZIWXVEzunBgIoUiL313gYGGe8u+/u1nbv0dZNzwijaA
+M2itgpwKvPBHv3Gqq8cFWzVRHTgO31lV4IA28ZhueAocWFNvLV9RkrXBpMwtvbwLqyA/ednmK4+E
+BfsgLbuGcUFS/wyAq7+ZhqUDq+LzHhFLl55V7iApITvmU6kNzZPtvY3QZVPmcq6K3IjwpV4bkr72
+9y+ndWZmfgvqlUvV78hV6zusR6zHiy/NJQH2w8LaPW1YIUZImWJ/jFAUqG7Q5QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFAGGI3nEkNLTKbg8V2lFYretn114MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAD3G
+M+JdCkrA5KQO5uQdsjwIqCLoJ/kTICat57wPtZA5nbP3NW05sObKPJtA18zQIXzaCWhXVLQ+S+D2
+L/zWJ1cMvHTM+BUxsdOOo+DwDNSFSjG6/0srv7YXigPkkN5jnHdxDmTWBd/TJaGzL+88Sa3uOayC
+xMi0VJB9DbARKRjs0vMxeIsffF7ZEFtWxmeH5CLPmuy5CJiVqo2EJw7qm/QOIX3pXbSAjwighcP5
+RN4li8n3F37B3nhUm05qNF9rIo1Hf7sWWHdwHvT6KHMl0MV/Np80Y2ofnGBNwxphl95bQE8C295+
+QbrEWxAYaQaqMbBgG8FS0uXOqRSYgaRSkpk=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+	<Configuration ConfigName="Outlook Autodiscover" ChangeDescription="2.0.1603.27" ConfigVersion="2.0.1603.27" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml" Symptoms="1">
+    <Substitution Name="MAJORVERSION"></Substitution>
+    <Substitution Name="INSTALLTYPE"></Substitution>
+    <Substitution Name="APPNAME">Outlook</Substitution>
+    <Substitution Name="DAYS"></Substitution>
+    <Substitution Name="MAXEVENTS"></Substitution>
+    <Substitution Name="SUBAPPSENSEINSTALLED" Localize="true">You also have AppSense installed which has been known to add the Boot key into the registry.</Substitution>
+    <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
+		<ConfigPreprocessor Name="0 OutlookGlobalSubstitutionConfigPreprocessor Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.OutlookGlobalSubstitutionConfigPreprocessor"/>
+		<ConfigPreprocessor Name="1 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
+		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+		<ObjectProcessor Name="Outlook" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OutlookObjectProcessor"/>
+		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+    <ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+    <ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
+		<RestrictionType Name="Task">
+			<Option Name="Offline Scan" Text="RestrictionText" Title="RestrictionTitle" Filter="True"/>
+		</RestrictionType>
+	</Configuration>
+  <Type Name="OutlookAutodiscoverRegistry">
+	  <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover">
+      <Setting Key1="ExcludeHttpRedirect">
+        <Rule Name="sExcludeHttpRedirectOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected) and $OutlookAutodiscoverPolicy_fExcludeHttpRedirectPolOfflineScan=-1" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeHttpRedirect' registry value" Text="ExcludeHttpRedirect ={0} in the registry. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="0543a016-f067-4740-a8fc-2aaee71b7fa0" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeHttpsAutodiscoverDomain">
+        <Rule Name="sExcludeHttpsAutodiscoverDomainOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected) and $OutlookAutodiscoverPolicy_fExcludeHttpsAutodiscoverDomainPolOfflineScan=-1" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeHttpsAutodiscoverDomain' registry value" Text="ExcludeHttpsAutodiscoverDomain ={0} in the registry. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="b2a92861-f889-43fb-8e2f-881bcb70e84a" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeHttpsRootDomain">
+        <Rule Name="sExcludeHttpsRootDomainOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected) and $OutlookAutodiscoverPolicy_fExcludeHttpsRootDomainPolOfflineScan=-1" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeHttpsRootDomain' registry value" Text="ExcludeHttpsRootDomain ={0} in the registry. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="40bcd0fd-b9f5-43e9-9f01-74fb82acd723" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeScpLookup">
+        <Rule Name="sExcludeScpLookupOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected) and $OutlookAutodiscoverPolicy_fExcludeScpLookupPolOfflineScan=-1" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeScpLookup' registry value" Text="ExcludeScpLookup ={0} in the registry. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="c42d5f92-80e3-4213-957a-863925cd5f26" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeSrvLookup">
+        <Rule Name="sExcludeSrvLookupOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected) and $OutlookAutodiscoverPolicy_fExcludeSrvLookupPolOfflineScan=-1" P0="$." Error="None" Title="The unused 'ExcludeSrvLookup' registry value was detected" Text="ExcludeSrvLookup ={0} in the registry. The 'ExcludeSrvLookup' value is never used by Outlook.&#xA;&#xA;Click the 'Click here ...' link for details on this setting" GUID="267364" SSID="86d56825-92fc-47f9-be1e-6e2706c9de18" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Informational"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeSrvRecord">
+        <Rule Name="sExcludeSrvRecordOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected) and $OutlookAutodiscoverPolicy_fExcludeSrvRecordPolOfflineScan=-1" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeSrvRecord' registry value" Text="ExcludeSrvRecord ={0} in the registry. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="e5bf1bb0-d488-4f91-88ed-7c7afaf11769" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+      </Setting>
+      <Setting Key1="PreferLocalXML">
+        <Rule Name="sPreferLocalXMLOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected) and $OutlookAutodiscoverPolicy_fPreferLocalXMLPolOfflineScan=-1" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'PreferLocalXML' registry value" Text="PreferLocalXML={0} in the registry. Check with your administrator to make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="e2bd0d82-7ce2-47ca-8511-37017248d3f0" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+        <Rule Name="sPreferLocalXMLOfflineScanCloud" Query="$.=1 and $CloudMbxRegistry_fCloudMbxDetected and $OutlookAutodiscoverPolicy_fPreferLocalXMLPolOfflineScan=-1" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'PreferLocalXML' registry value" Text="PreferLocalXML={0} in the registry. This configuration may cause problems with Office 365 mailboxes. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="3aecc326-1e4f-42cd-ba47-4de9719bb8f7" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="5000" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+
+      </Setting>
+      <Setting Key1="ExcludeLastKnownGoodUrl">
+        <Rule Name="sExcludeLastKnownGoodUrlOfflineScan" Query="$n2DigitVersion&gt;=15 and $.=1 and not($CloudMbxRegistry_fCloudMbxDetected) and $OutlookAutodiscoverPolicy_fExcludeLastKnownGoodUrlPolOfflineScan=-1" Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeLastKnownGoodUrl' registry value" Text="The ExcludeLastKnownGoodUrl value is set to 1 in the registry. This configuration may impact the time it takes for Outlook to retrieve Autodiscover information from your Exchange server.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="f1c5076c-6160-4d51-8f18-791519ac4a55" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"/>
+      </Setting>
+      <Rule Name="fExcludeLastKnownGoodUrlOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']=true(),../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']/Value,-1)"/>
+    </Object>
+    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover\Boot">
+      <Setting Key1="__VALUES"></Setting>
+      <Rule Name="sBootKeyOfflineScan" Query="count(../Instance)&gt;0" Error="Error" P0="if($ServicesRunning_fAppSenseServiceFound,'&#xA;&#xA;%SUBAPPSENSEINSTALLED%',false())" P0s="if($ServicesRunning_fAppSenseServiceFound,'$SUBAPPSENSEINSTALLED$',false())" P2="'%MAJORVERSION%'" Title="Autodiscover and Outlook features (free/busy, OAB, and MailTips) may not function" Text="The 'Boot' key was found in the registry under HKCU\Software\Microsoft\Office\{2}.0\Outlook\AutoDiscover\. This configuration can cause the failure of Autodiscover and Outlook features such as free/busy, OAB, and MailTips that use Autodiscover. {0}&#xA;&#xA;Click the 'Click here ...' link for steps to remove this registry key." GUID="510881" SSID="d89ba398-6408-4979-88ba-4083db169977" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="5000" Symptoms="Autodiscover,Exchange connection,Free Busy,MailTips,Offline Address Book (OAB),Outlook profile"></Rule>
+    </Object>
+    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover\RedirectServers">
+      <Setting Key1="__VALUES"></Setting>
+      <Rule Name="sNonDefaultRedirectServersOfflineScan" Query="count(../Instance/Setting[(@Key1!='autodiscover.hotmail.com' and @Key1!='autodiscover-s.outlook.com')])&gt;0" Error="Warning" P2="'%MAJORVERSION%'" Title="Possible problems due to non-default values specified under \RedirectServers" Text="Non-default server entries found under the 'HKCU\Software\Microsoft\Office\{2}.0\Outlook\AutoDiscover\RedirectServers' key.&#xA;&#xA;Please check with your administrator to make sure this is a desired configuration." GUID="620115" SSID="5f098891-0092-47b6-b3da-88599a1aaca2" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="10000" Symptoms="Autodiscover"></Rule>
+    </Object>
+  </Type>
+  <Type Name="OutlookAutodiscoverPolicy">
+	  <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover">
+      <Setting Key1="ExcludeHttpRedirect">
+        <Rule Name="sExcludeHttpRedirectPolOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected)" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeHttpRedirect' group policy value" Text="ExcludeHttpRedirect ={0} in the registry as a policy setting. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="09896b6e-5941-4f3e-9aef-14f6e50fbfad" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeHttpsAutodiscoverDomain">
+        <Rule Name="sExcludeHttpsAutodiscoverDomainPolOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected)" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeHttpsAutodiscoverDomain' group policy value" Text="ExcludeHttpsAutodiscoverDomain ={0} in the registry as a policy setting. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="3ddcbf08-fadf-47a8-89c1-850f33a8e076" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeHttpsRootDomain">
+        <Rule Name="sExcludeHttpsRootDomainPolOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected)" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeHttpsRootDomain' group policy value" Text="ExcludeHttpsRootDomain ={0} in the registry as a policy setting. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="61bfcecb-4265-4bf2-825e-6d1572ba56b8" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeScpLookup">
+        <Rule Name="sExcludeScpLookupPolOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected)" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeScpLookup' group policy value" Text="ExcludeScpLookup ={0} in the registry as a policy setting. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="f565038b-a13b-4f21-b26e-ed918f66d436" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeSrvLookup">
+        <Rule Name="sExcludeSrvLookupPolOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected)" P0="$." Error="None" Title="The unused 'ExcludeSrvLookup' group policy value was detected" Text="ExcludeSrvLookup ={0} as a group policy setting. The 'ExcludeSrvLookup' value is never used by Outlook.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="1f79083a-99f0-47f3-b736-dddad5b5cd40" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Informational"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeSrvRecord">
+        <Rule Name="sExcludeSrvRecordPolOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected)" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeSrvRecord' group policy value" Text="ExcludeSrvRecord ={0} in the registry as a policy setting. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="a8084e8c-23b2-485a-8ed2-a1e1f0863597" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+      </Setting>
+      <Setting Key1="PreferLocalXML">
+        <Rule Name="sPreferLocalXMLPolicyOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected)" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'PreferLocalXML' group policy value" Text="PreferLocalXML={0} in the registry as a policy setting. Check with your administrator to make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="ec6236fb-893c-4599-83fa-2d3eed3a48bc" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <Rule Name="sPreferLocalXMLPolicyOfflineScanCloud" Query="$.=1 and $CloudMbxRegistry_fCloudMbxDetected" P0="$." Error="Warning" Title="Possible mailbox connection issues due to the 'PreferLocalXML' group policy value" Text="PreferLocalXML={0} in the registry as a policy setting. This configuration may cause problems with Office 365 mailboxes. Please make sure this is a desired configuration for Autodiscover.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="26f04d78-e3fb-408c-b3b7-05d4ddb09266" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="5000" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeLastKnownGoodUrl">
+        <Rule Name="sExcludeLastKnownGoodUrlPolOfflineScan" Query="$.=1 and not($CloudMbxRegistry_fCloudMbxDetected)" Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeLastKnownGoodUrl' group policy value" Text="The ExcludeLastKnownGoodUrl value is set to 1 in the \Policies section of the registry. This configuration may impact the time it takes for Outlook to retrieve Autodiscover information from your Exchange server.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="b5cafce2-022d-441f-a9fc-0ea3b1b14916" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"/>
+      </Setting>
+      <Rule Name="fExcludeHttpRedirectPolOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeHttpRedirect']=true(),../Instance/Setting[@Key1='ExcludeHttpRedirect']/Value,-1)"/>
+      <Rule Name="fExcludeHttpsAutodiscoverDomainPolOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeHttpsAutodiscoverDomain']=true(),../Instance/Setting[@Key1='ExcludeHttpsAutodiscoverDomain']/Value,-1)"/>
+      <Rule Name="fExcludeHttpsRootDomainPolOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeHttpsRootDomain']=true(),../Instance/Setting[@Key1='ExcludeHttpsRootDomain']/Value,-1)"/>
+      <Rule Name="fExcludeScpLookupPolOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeScpLookup']=true(),../Instance/Setting[@Key1='ExcludeScpLookup']/Value,-1)"/>
+      <Rule Name="fExcludeSrvLookupPolOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeSrvLookup']=true(),../Instance/Setting[@Key1='ExcludeSrvLookup']/Value,-1)"/>
+      <Rule Name="fExcludeSrvRecordPolOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeSrvRecord']=true(),../Instance/Setting[@Key1='ExcludeSrvRecord']/Value,-1)"/>
+      <Rule Name="fPreferLocalXMLPolOfflineScan" Query="if(../Instance/Setting[@Key1='PreferLocalXML']=true(),../Instance/Setting[@Key1='PreferLocalXML']/Value,-1)"/>
+      <Rule Name="fExcludeLastKnownGoodUrlPolOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']=true(),../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']/Value,-1)"/>
+    </Object>
+    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover\RedirectServers">
+      <Setting Key1="__VALUES"></Setting>
+      <Rule Name="sNonDefaultRedirectServersPolOfflineScan" Query="count(../Instance/Setting[(@Key1!='autodiscover.hotmail.com' and @Key1!='autodiscover-s.outlook.com')])&gt;0" Error="Warning" P2="'%MAJORVERSION%'" Title="Possible problems due to non-default group policy values specified under \RedirectServers" Text="Non-default server entries found under the 'HKCU\Software\Policies\Microsoft\Office\{2}.0\Outlook\AutoDiscover\RedirectServers' key.&#xA;&#xA;Please check with your administrator to make sure this is a desired configuration." GUID="620115" SSID="c101fed8-9b6c-4c65-a685-871dca2f8934" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="10000" Symptoms="Autodiscover"></Rule>
+    </Object>
+  </Type>
+
+  <Type Name="OutlookAutodiscoverRegistryFull">
+  	<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover" Key4="" Key5="Base">
+      <Setting Key1="ExcludeHttpRedirect">
+        <Rule Name="sExcludeHttpRedirect" Query="$.=1 and not($sExSrvNameCloud) and $OutlookAutodiscoverPolicyFull_fExcludeHttpRedirectPol=-1" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeHttpRedirect' registry value" Text="ExcludeHttpRedirect ={0} in the registry. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="35a9c776-9a12-4683-9879-63dbd816d382" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeHttpRedirectO365" Query="$.=1 and $sExSrvNameCloud and $OutlookAutodiscoverPolicyFull_fExcludeHttpRedirectPol=-1" Error="Error" Title="Possible problems due to the 'ExcludeHttpRedirect' registry value" Text="The 'ExcludeHttpRedirect' value was found in the registry. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="d0c66d97-8a44-4f06-a2f4-f12a884bd33b" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="ExcludeHttpsAutodiscoverDomain">
+        <Rule Name="sExcludeHttpsAutodiscoverDomain" Query="$.=1 and not($sExSrvNameCloud) and $OutlookAutodiscoverPolicyFull_fExcludeHttpsAutodiscoverDomainPol=-1" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeHttpsAutodiscoverDomain' registry value" Text="ExcludeHttpsAutodiscoverDomain ={0} in the registry. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="9d3e69df-7d6d-454a-b9ed-8b6c77333cc3" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeHttpsAutodiscoverDomainO365" Query="$.=1 and $sExSrvNameCloud and $OutlookAutodiscoverPolicyFull_fExcludeHttpsAutodiscoverDomainPol=-1" Error="Error" Title="Possible problems due to the 'ExcludeHttpsAutodiscoverDomain' registry value" Text="The 'ExcludeHttpsAutodiscoverDomain' value was found in the registry. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="f5af91bf-f8fb-46cd-83b3-cb2fd108efba" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="ExcludeHttpsRootDomain">
+        <Rule Name="sExcludeHttpsRootDomain" Query="$.=1 and not($sExSrvNameCloud) and $OutlookAutodiscoverPolicyFull_fExcludeHttpsRootDomainPol=-1" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeHttpsRootDomain' registry value" Text="ExcludeHttpsRootDomain ={0} in the registry. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="734c6cf0-5425-4fda-9962-00e2af60584b" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeHttpsRootDomainO365" Query="$.=1 and $sExSrvNameCloud and $OutlookAutodiscoverPolicyFull_fExcludeHttpsRootDomainPol=-1" Error="Error" Title="Possible problems due to the 'ExcludeHttpsRootDomain' registry value" Text="The 'ExcludeHttpsRootDomain' value was found in the registry. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="9c5f3547-eff2-4a15-9eeb-cbf0fc43b61f" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="ExcludeScpLookup">
+        <Rule Name="sExcludeScpLookup" Query="$.=1 and not($sExSrvNameCloud) and $OutlookAutodiscoverPolicyFull_fExcludeScpLookupPol=-1" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeScpLookup' registry value" Text="ExcludeScpLookup ={0} in the registry. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="2d8e11a2-608b-4265-b4e8-03b5ce1157fa" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeScpLookupO365" Query="$.=1 and $sExSrvNameCloud and $OutlookAutodiscoverPolicyFull_fExcludeScpLookupPol=-1" Error="Error" Title="Possible problems due to the 'ExcludeScpLookup' registry value" Text="The 'ExcludeScpLookup' value was found in the registry. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="2397b4ec-7feb-4d15-a3b8-b83d656917c3" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="ExcludeSrvLookup">
+        <Rule Name="sExcludeSrvLookup" Query="$.=1 and $OutlookAutodiscoverPolicyFull_fExcludeSrvLookupPol=-1" P0="$." Error="None" Title="The 'ExcludeSrvLookup' value was found in the registry" Text="ExcludeSrvLookup ={0} in the registry. However, the 'ExcludeSrvLookup' value is never used by Outlook." GUID="267364" SSID="898d1700-c39d-4569-9d1a-fadcfe3b465a" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeSrvRecord">
+        <Rule Name="sExcludeSrvRecord" Query="$.=1 and not($sExSrvNameCloud) and $OutlookAutodiscoverPolicyFull_fExcludeSrvRecordPol=-1" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeSrvRecord' registry value" Text="ExcludeSrvRecord ={0} in the registry. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="f0f8f82b-919d-430b-b71a-7707dafbb0c5" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeSrvRecordO365" Query="$.=1 and $sExSrvNameCloud and $OutlookAutodiscoverPolicyFull_fExcludeSrvRecordPol=-1" Error="Error" Title="Possible problems due to the 'ExcludeSrvRecord' registry value" Text="The 'ExcludeSrvRecord' value was found in the registry. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="2bd24057-dc85-458e-991f-1ec72816beb6" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="PreferLocalXML">
+        <Rule Name="sPreferLocalXML" Query="$.=1 and not($sExSrvNameCloud) and $OutlookAutodiscoverPolicyFull_fPreferLocalXMLPol=-1" P0="$." Error="Warning" Title="Possible problems due to the 'PreferLocalXML' registry value" Text="PreferLocalXML={0} in the registry. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="6746e574-463f-455a-94d6-29397aef53aa" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <Rule Name="sPreferLocalXMLO365" Query="$.=1 and $sExSrvNameCloud and $OutlookAutodiscoverPolicyFull_fPreferLocalXMLPol=-1" Error="Error" Title="Possible problems due to the 'PreferLocalXML' registry value" Text="The 'PreferLocalXML' value was found in the registry. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="9bf0017d-6b5b-432a-91ef-8f3326306f07" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="5000" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeLastKnownGoodUrl">
+        <Rule Name="sExcludeLastKnownGoodUrl" Query="$.=1 and not($sExSrvNameCloud) and $OutlookAutodiscoverPolicyFull_fExcludeLastKnownGoodUrlPol=-1" Error="Warning" Title="Possible problems due to the 'ExcludeLastKnownGoodUrl' registry value" Text="The 'ExcludeLastKnownGoodUrl' value is set to 1 in the registry. This configuration may impact the time it takes for Outlook to retrieve Autodiscover information from your Exchange server." GUID="267364" SSID="06d73114-4409-400c-b6ad-418abc260bb6" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"/>
+      </Setting>
+      <Rule Name="fExcludeLastKnownGoodUrl" Query="if(../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']=true(),../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']/Value,-1)"/>
+    </Object>
+    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover\Boot">
+      <Setting Key1="__VALUES"></Setting>
+      <Rule Name="sBootKeyFullScan" Query="count(../Instance)&gt;0" Error="Error" P0="if($ServicesRunning_fAppSenseServiceFound,'&#xA;&#xA;%SUBAPPSENSEINSTALLED%',false())" P0s="if($ServicesRunning_fAppSenseServiceFound,'$SUBAPPSENSEINSTALLED$',false())" P2="'%MAJORVERSION%'" Title="Autodiscover, free/busy, OAB, and MailTips fail due to bad registry data" Text="The 'Boot' key was found in the registry under HKCU\Software\Microsoft\Office\{2}.0\Outlook\AutoDiscover\. This configuration can cause the failure of Autodiscover and Outlook features such as free/busy, OAB, and MailTips that use Autodiscover. {0}" GUID="510881" SSID="2a25ad6d-1be5-475b-a47b-8545cb725247" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="5000" Symptoms="Autodiscover,Exchange connection,Free Busy,MailTips,Offline Address Book (OAB),Outlook profile"></Rule>
+    </Object>
+    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover\RedirectServers">
+      <Setting Key1="__VALUES"></Setting>
+      <Rule Name="sNonDefaultRedirectServers" Query="count(../Instance/Setting[(@Key1!='autodiscover.hotmail.com' and @Key1!='autodiscover-s.outlook.com')])&gt;0" Error="Warning" P2="'%MAJORVERSION%'" Title="Possible problems due to non-default values specified under \RedirectServers" Text="Non-default server entries found under the 'HKCU\Software\Microsoft\Office\{2}.0\Outlook\AutoDiscover\RedirectServers' key.&#xA;&#xA;Please check with your administrator to make sure this is a desired configuration." GUID="620115" SSID="5aae5761-8bf7-4388-885f-c4c6a6e283b7" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="10000" Symptoms="Autodiscover"></Rule>
+    </Object>
+  </Type>
+
+  <Type Name="OutlookAutodiscoverPolicyFull">
+  	<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover" Key4="" Key5="Base">
+      <Setting Key1="ExcludeHttpRedirect">
+        <Rule Name="sExcludeHttpRedirectPol" Query="$.=1 and not($sExSrvNameCloud)" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeHttpRedirect' group policy setting" Text="ExcludeHttpRedirect ={0} in the registry as a group policy setting. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="728a5cdb-cef4-436f-b959-341b613a404b" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeHttpRedirectPolO365" Query="$.=1 and $sExSrvNameCloud" Error="Error" Title="Possible problems due to the 'ExcludeHttpRedirect' group policy setting" Text="The 'ExcludeHttpRedirect' value was found in the registry under the \Policies key. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="13ed84c2-29cf-4960-b533-7fb73dd376b3" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="ExcludeHttpsAutodiscoverDomain">
+        <Rule Name="sExcludeHttpsAutodiscoverDomainPol" Query="$.=1 and not($sExSrvNameCloud)" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeHttpsAutodiscoverDomain' group policy setting" Text="ExcludeHttpsAutodiscoverDomain ={0} in the registry as a group policy setting. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="d4296a16-36ce-4934-8ea1-3c00cd9dfb3b" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeHttpsAutodiscoverDomainPolO365" Query="$.=1 and $sExSrvNameCloud" Error="Error" Title="Possible problems due to the 'ExcludeHttpsAutodiscoverDomain' group policy setting" Text="The 'ExcludeHttpsAutodiscoverDomain' value was found in the registry under the \Policies key. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="cb9aa5f4-73d1-404f-a0ad-f4d01095fb27" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="ExcludeHttpsRootDomain">
+        <Rule Name="sExcludeHttpsRootDomainPol" Query="$.=1 and not($sExSrvNameCloud)" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeHttpsRootDomain' group policy setting" Text="ExcludeHttpsRootDomain ={0} in the registry as a group policy setting. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="0ef59ab2-8e81-4e8c-ab24-604029bd2563" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeHttpsRootDomainPolO365" Query="$.=1 and $sExSrvNameCloud" Error="Error" Title="Possible problems due to the 'ExcludeHttpsRootDomain' group policy setting" Text="The 'ExcludeHttpsRootDomain' value was found in the registry under the \Policies key. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="10ac265d-a7bd-4da5-b5cb-62353e94146c" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="ExcludeScpLookup">
+        <Rule Name="sExcludeScpLookupPol" Query="$.=1 and not($sExSrvNameCloud)" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeScpLookup' group policy setting" Text="ExcludeScpLookup ={0} in the registry as a group policy setting. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="1a921905-a6ed-43dc-81cb-af4f4842a908" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeScpLookupPolO365" Query="$.=1 and $sExSrvNameCloud" Error="Error" Title="Possible problems due to the 'ExcludeScpLookup' group policy setting" Text="The 'ExcludeScpLookup' value was found in the registry under the \Policies key. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="3f7aa3b0-fef5-4cf0-abdb-41757a01e137" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="ExcludeSrvLookup">
+        <Rule Name="sExcludeSrvLookupPol" Query="$.=1" P0="$." Error="None" Title="The 'ExcludeSrvLookup' value was found as a group policy setting" Text="ExcludeSrvLookup ={0} in the registry as a policy setting. However, the 'ExcludeSrvLookup' value is never used by Outlook." GUID="267364" SSID="f58137d9-27dd-458c-a4b1-e55099bfcb50" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeSrvRecord">
+        <Rule Name="sExcludeSrvRecordPol" Query="$.=1 and not($sExSrvNameCloud)" P0="$." Error="Warning" Title="Possible problems due to the 'ExcludeSrvRecord' group policy setting" Text="ExcludeSrvRecord ={0} in the registry as a group policy setting. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="1825733f-35ed-4d52-ada6-4eac5f988096" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <!--Rule Name="sExcludeSrvRecordPolO365" Query="$.=1 and $sExSrvNameCloud" Error="Error" Title="Possible problems due to the 'ExcludeSrvRecord' group policy setting" Text="The 'ExcludeSrvRecord' value was found in the registry under the \Policies key. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="cb997a54-e4f4-4c3d-9310-dc15663f30a8" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule-->
+      </Setting>
+      <Setting Key1="PreferLocalXML">
+        <Rule Name="sPreferLocalXMLPol" Query="$.=1 and not($sExSrvNameCloud)" P0="$." Error="Warning" Title="Possible problems due to the 'PreferLocalXML' group policy setting" Text="PreferLocalXML={0} in the registry as a group policy setting. Please make sure this is a desired configuration for Autodiscover as it can cause unexpected mailbox connection problems." GUID="267364" SSID="fba3dde6-285e-4d41-9983-1177ba5b5a36" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"></Rule>
+        <Rule Name="sPreferLocalXMLPolO365" Query="$.=1 and $sExSrvNameCloud" Error="Error" Title="Possible problems due to the 'PreferLocalXML' group policy setting" Text="The 'PreferLocalXML' value was found in the registry under the \Policies key. This value is used by Autodiscover, and it can cause problems when your mailbox is on Office 365. Please check with your administrator to make sure this is a desired configuration." GUID="267364" SSID="c5f0266a-01ab-4ae9-82d1-bb5dc6c3b61d" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="5000" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"></Rule>
+      </Setting>
+      <Setting Key1="ExcludeLastKnownGoodUrl">
+        <Rule Name="sExcludeLastKnownGoodUrlPol" Query="$.=1 and not($sExSrvNameCloud) and $n2DigitVersion&gt;=15" Error="Warning" Title="Possible problems due to the 'ExcludeLastKnownGoodUrl' group policy setting" Text="The ExcludeLastKnownGoodUrl value is set to 1 in the \Policies section of the registry. This configuration may impact the time it takes for Outlook to retrieve Autodiscover information from your Exchange server." GUID="267364" SSID="0fa71722-b90b-43cb-b728-6ad53f11ca51" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Outlook profile,Startup,Autodiscover"/>
+      </Setting>
+      <Rule Name="fExcludeHttpRedirectPol" Query="if(../Instance/Setting[@Key1='ExcludeHttpRedirect']=true(),../Instance/Setting[@Key1='ExcludeHttpRedirect']/Value,-1)"/>
+      <Rule Name="fExcludeHttpsAutodiscoverDomainPol" Query="if(../Instance/Setting[@Key1='ExcludeHttpsAutodiscoverDomain']=true(),../Instance/Setting[@Key1='ExcludeHttpsAutodiscoverDomain']/Value,-1)"/>
+      <Rule Name="fExcludeHttpsRootDomainPol" Query="if(../Instance/Setting[@Key1='ExcludeHttpsRootDomain']=true(),../Instance/Setting[@Key1='ExcludeHttpsRootDomain']/Value,-1)"/>
+      <Rule Name="fExcludeScpLookupPol" Query="if(../Instance/Setting[@Key1='ExcludeScpLookup']=true(),../Instance/Setting[@Key1='ExcludeScpLookup']/Value,-1)"/>
+      <Rule Name="fExcludeSrvLookupPol" Query="if(../Instance/Setting[@Key1='ExcludeSrvLookup']=true(),../Instance/Setting[@Key1='ExcludeSrvLookup']/Value,-1)"/>
+      <Rule Name="fExcludeSrvRecordPol" Query="if(../Instance/Setting[@Key1='ExcludeSrvRecord']=true(),../Instance/Setting[@Key1='ExcludeSrvRecord']/Value,-1)"/>
+      <Rule Name="fPreferLocalXMLPol" Query="if(../Instance/Setting[@Key1='PreferLocalXML']=true(),../Instance/Setting[@Key1='PreferLocalXML']/Value,-1)"/>
+      <Rule Name="fExcludeLastKnownGoodUrlPol" Query="if(../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']=true(),../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']/Value,-1)"/>
+    </Object>
+    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover\RedirectServers">
+      <Setting Key1="__VALUES"></Setting>
+      <Rule Name="sNonDefaultRedirectServersPol" Query="count(../Instance/Setting[(@Key1!='autodiscover.hotmail.com' and @Key1!='autodiscover-s.outlook.com')])&gt;0" Error="Warning" P2="'%MAJORVERSION%'" Title="Possible problems due to non-default group policy values specified under \RedirectServers" Text="Non-default server entries found under the 'HKCU\Software\Policies\Microsoft\Office\{2}.0\Outlook\AutoDiscover\RedirectServers' key.&#xA;&#xA;Please check with your administrator to make sure this is a desired configuration." GUID="620115" SSID="bc8db266-89f1-42ba-84e8-a6392f5250dd" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Weight="10000" Symptoms="Autodiscover"></Rule>
+    </Object>
+  </Type>
+
+  <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Outlook" Key6="outlook" Key7="%MAJORVERSION%" Display="Hide">
+    <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
+    </Setting>
+    <Setting Key1="Bitness" Substitution="APPBITNESS" Display="Hide">
+      <Rule Name="bitness" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="FullVersion" Display="Hide">
+      <Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
+      <Rule Name="sFullAppVersion" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="Name" Display="Hide">
+      <Rule Name="appName" Query="$.">
+      </Rule>
+    </Setting>
+    <Setting Key1="Version" Substitution="APPVERSION" Display="Hide">
+      <Rule Name="n4DigitSKUVersion" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="Type" Substitution="INSTALLTYPE" Display="Hide">
+      <Rule Name="nInstallType" Query="$."></Rule>
+      <Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+    </Setting>
+    <Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Right">
+    </Setting>
+  
+    <Reference Type="OutlookAutodiscoverRegistry" Name="OutlookAutodiscoverRegistry" File="outlook.autodiscover.config.xml">
+    </Reference>
+    <Reference Type="OutlookAutodiscoverPolicy" Name="OutlookAutodiscoverPolicy" File="outlook.autodiscover.config.xml">
+    </Reference>
+    <!--Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml">
+    </Reference-->
+    <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml">
+    </Reference>
+    <Reference Type="MSO" Name="MSO" File="common.config.xml">
+    </Reference>
+    <Reference Type="OfficeSKU" Name="OfficeSKU" File="outlook.config.xml">
+    </Reference>
+    <Object Type="Outlook">
+      <Setting Key1="DefaultProfile" Substitution="DEFPROF" Display="Hide"/>
+        <Reference Type="CloudMbxRegistry" Name="CloudMbxRegistry" File="outlook.config.xml">
+        </Reference>
+      </Object>
+    <Reference Type="ServicesRunning" Name="ServicesRunning" File="common.config.xml">
+    </Reference>
+  </Object>
+  
+  <!--EXTERNALREFS-->
+	<Rule Name="sPpCoreVersion"></Rule>
+  <Rule Name="sWordVersion"></Rule>
+  <Rule Name="fPolicies"></Rule>
+  <Rule Name="effectiveSlowBitrate"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>nDKe0gSrGNxmsjGBkgJUvKf9dJE=</DigestValue></Reference></SignedInfo><SignatureValue>
+    QzaSHV3ujoXsMRpIrAxPFKv7rxTw9aqa0yAiePERmtc3750nxRLyWNJdHIEGgaNqA/I5zy3b
+    I1qUu49U8qtK2+elKd0lCWRn9owRsc2mfaumpZ94NAK3riAsz0V/MJgfA7MfEl2IJh67Rg+c
+    iqjrINPLv7LLd33m9nRrdAuZ0Ld8IBMqEOJzlttpuJ4q0RxZVYTiEUZqeb8GRZaOmR0PXAQa
+    vinmBoxwtpoLICkcvFY+I1hu3gt2kg+gZV+qO014v8tVNw+tbXahgiB0fsVym/9MHsc4S+67
+    amBuSK/r3H/UbPitkJKLQP+to3zUwwTZC6hnReVXcuE3xCZ2bZSewg==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

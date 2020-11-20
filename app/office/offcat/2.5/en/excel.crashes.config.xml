@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+	<!--!!! ONLY MODIFY ChangeDescription AND ConfigVersion, DO NOT TOUCH THE REST OR DO IT AT YOUR OWN RISK!!!-->
+	<Configuration ConfigName="Excel Crashes" ChangeDescription="2.0.1606.13" ConfigVersion="2.0.1606.13" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
+		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
+		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
+		<Substitution Name="MAJORVERSION"/>
+		<Substitution Name="INSTALLTYPE"/>
+    <Substitution Name="DAYS"></Substitution>
+		<Substitution Name="APPNAME">Excel</Substitution>
+    <Substitution Name="MAXEVENTS"></Substitution>
+		<ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+		<!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
+		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+		<ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
+		<ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
+		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
+		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
+	</Configuration>
+
+	<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Excel" Key6="excel" Key7="%MAJORVERSION%" Display="Hide">
+		<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide"></Setting>
+		<Setting Key1="Bitness" Substitution="APPBITNESS" Display="Hide">
+			<Rule Name="bitness" Query="$."></Rule>
+		</Setting>
+    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Add" Key2="WOW6432NODECACHE" Key3="%WOW6432NODE%">
+    </Object>
+    <Object Type="Cache" Name="AppBitnessCache" Key1="Add" Key2="APPBITNESSCACHE" Key3="%APPBITNESS%">
+    </Object>
+		<Setting Key1="FullVersion" Display="Hide">
+			<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
+			<Rule Name="sFullAppVersion" Query="$."></Rule>
+		</Setting>
+		<Setting Key1="Name" Display="Hide">
+			<Rule Name="appName" Query="$."></Rule>
+		</Setting>
+		<Setting Key1="Version" Display="Hide">
+			<Rule Name="n4DigitSKUVersion" Query="$.">
+			</Rule>
+		</Setting>
+		<Setting Key1="Type" Display="Hide">
+			<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+      <Rule Name="nInstallType" Query="$."></Rule>
+		</Setting>
+    <Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
+    </Setting>
+    <Object Type="Cache" Name="InstallPathCACHE" Key1="Add" Key2="INSTALLPATHCACHE" Key3="%INSTALLPATH%">
+    </Object>
+  </Object>
+  <Object Type="Cache" Name="AppBitnessCache" Key1="Dump" Key2="APPBITNESSCACHE" Display="Hide">
+    <Setting Key1="Val" Substitution="APPBITNESS" Display="Hide"></Setting>
+    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Dump" Key2="WOW6432NODECACHE" Display="Hide">
+      <Setting Key1="Val" Substitution="WOW6432NODE" Display="Hide">
+      </Setting>
+      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{107E1A9A-03AE-4F2B-ACF7-0CC519E60E7B}">
+
+          <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+          <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+          <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+            <Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+            <Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+            <Rule Name="fProPlus" Query="$SKU2013='0011'"></Rule>
+            <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
+              <Setting Key1="" Display="Hide"></Setting>
+            </Object>
+            <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                <Setting Key1="ProductVersion" Display="Hide">
+                  <Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
+                </Setting>
+              </Object>
+              <Setting Key1="ProductName" Display="Hide">
+                <Rule Name="SKUName2013" Query="$."></Rule>
+              </Setting>
+            </Object>
+          </Object>
+        </Object>
+      </Object>
+      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{58A9998B-6103-436F-85A1-52720802CA0A}">
+          <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+          <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+          <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+            <Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+            <Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+            <Rule Name="fProPlus64" Query="$SKU201364='0011'"></Rule>
+            <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
+              <Setting Key1="" Display="Hide"></Setting>
+            </Object>
+            <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+            <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                <Setting Key1="ProductVersion" Display="Hide">
+                  <Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
+                </Setting>
+              </Object>
+              <Setting Key1="ProductName" Display="Hide">
+                <Rule Name="SKUName201364" Query="$."></Rule>
+              </Setting>
+            </Object>
+          </Object>
+        </Object>
+      </Object>
+    </Object>
+  </Object>
+  
+  
+  <Type Name="ExcelCrashes">
+
+	<!--EVENTLOGS-->
+
+		<Object Type="EventLog" Key1="Application" Key3="1000" Key4="excel.exe" Key5="%MAXEVENTS%" Key7="%DAYS%" Key8="10000">
+      <Rule Name="nCrashCount" Query="count(../Instance)">
+      </Rule>
+      <Setting Key1="__ALL">
+      </Setting>
+      <Setting Key1="Faulting Application Name" Display="Right"></Setting>
+      <Setting Key1="Faulting Application Version" Display="Right">
+        <Rule Name="nFaultingAppVersion" Query="$."></Rule>
+      </Setting>
+      <Setting Key1="Faulting Application Timestamp" Display="Right">
+        <Rule Name="faultAppTimeStamp" Query="$."></Rule>
+      </Setting>
+      <Setting Key1="Faulting Module Name" Display="Right">
+        <Rule Name="faultModuleName" Query="$."></Rule>
+        <!--Rule Name="sFaultOsfDllAndAvast" Query="$n2DigitVersion=15 and '%INSTALLTYPE%'='ClickToRun' and $MachineDetails_fAvastServiceFound&gt;0 and starts-with($nFaultingAppVersion,'15.') and starts-with(lower-case($.),'osf')" Error="Error" Title="Excel 2013 crashing issue with Osf.dll found" Text="A crashing issue in Excel.exe that was caused by Osf.dll was found in the application event log (last 14 days). You also appear to have Avast antivirus software installed. Please click the 'Click here ...' link for additional details." GUID="330912" SSID="31268ae8-3204-40f1-8523-a6eebf4c29e0" Symptoms="Crash" /-->
+        <!--Rule Name="sFaultOsfDllNoAvast" Query="$n2DigitVersion=15 and '%INSTALLTYPE%'='ClickToRun'and $MachineDetails_fAvastServiceFound=0 and starts-with($nFaultingAppVersion,'15.') and starts-with(lower-case($.),'osf')" Error="Error" Title="Excel 2013 crashing issue with Osf.dll found" Text="A crashing issue in Excel.exe that was caused by Osf.dll was found in the application event log (last 14 days). Please click the 'Click here ...' link for details." GUID="330912" SSID="86057b1a-e22c-4d75-8ba2-0e7c44ee92b5" Symptoms="Crash" /-->
+      </Setting>
+      <Setting Key1="Faulting Module Version" Display="Right">
+        <Rule Name="nFaultingModuleVersion" Query="$."></Rule>
+      </Setting>
+      <Setting Key1="Faulting Module Timestamp" Display="Right">
+        <Rule Name="faultModuleTimestamp" Query="$."></Rule>
+      </Setting>
+      <Rule Name="sExcelCrashFound1415" Query="($n2DigitVersion=14 or $n2DigitVersion=15) and $nCrashCount!=0" Error="None" Title="One or more crashing events for Excel found in the Application Event log" Text="&#xA;At least one crashing event for Excel was found in the Application Event log. To possibly address this issue, we recommend you check your scan results for known crashing issues and resolve any that are found. If Excel continues to crash:&#xA;&#xA;1. Make sure Excel is up-to-date (check your OffCAT report).&#xA;2. Try disabling COM add-ins&#xA;&#xA;Click the 'Tell me more...' link for additional troubleshooting techniques." GUID="389763" SSID="547b6ec1-704e-4216-8b46-444d4e8aac31" Symptoms="Crash,Event Log"></Rule>
+      <Setting Key1="Exception code" Display="Right"></Setting>
+      <Setting Key1="Fault offset" Display="Right">
+        <Rule Name="faultOffset" Query="$."></Rule>
+      </Setting>
+      <Setting Key1="Timegenerated" Display="Hide">
+        <Rule Name="TimeOfCrash" Query="$."/>
+      </Setting>
+      <Setting Key1="Message" Display="Hide">
+        <Rule Name="sCrashMessage" Query="$."></Rule>
+        <Rule Name="crashLookup" Query="true()" Title="Event 1000 ({9})" Text="{8}" Error="Error" Internal="True" P0="if($bitness='x86','Crash32','Crash64')" P1="'excel.exe'" P2="$nFaultingAppVersion" P3="$faultAppTimeStamp" P4="$faultModuleName" P5="$nFaultingModuleVersion" P6="$faultModuleTimestamp" P7="$faultOffset" P8="$sCrashMessage" P9="$TimeOfCrash" Symptoms="Crash event lookup"></Rule>
+      </Setting>
+
+      <Rule Name="n_646934188Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4505.1510')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0008e2ec')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s_646934188Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_646934188Crash&gt;0" Error="Error" P0="$n_646934188Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392656" SSID="22f146f6-960e-48fb-80af-12a7e8fbed1c" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_646934188CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_646934188Crash&gt;0" Error="Error" P0="$n_646934188Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392653" SSID="71068693-01b7-4dea-92d7-10cbae136913" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_1084081009Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='6.2.9200.16420')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00061252')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='ntdll.dll')]])"></Rule>
+      <Rule Name="s_1084081009Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_1084081009Crash&gt;0" Error="Error" P0="$n_1084081009Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392660" SSID="24ae1a55-cd4d-4aa2-80a3-02c985d8db1b" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_1084081009CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_1084081009Crash&gt;0" Error="Error" P0="$n_1084081009Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392661" SSID="3d2c1fe8-c9eb-40f6-a20c-1b3953c5119f" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_1035823753Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4454.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00075252')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s_1035823753Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_1035823753Crash&gt;0" Error="Error" P0="$n_1035823753Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392663" SSID="1b1fec9c-6925-4bb7-a836-633cee45fb52" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_1035823753CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_1035823753Crash&gt;0" Error="Error" P0="$n_1035823753Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392671" SSID="7c865116-7627-419a-b8d6-f5125eebccd3" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_1088215910Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4420.1017')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0037fda5')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='oart.dll')]])"></Rule>
+      <Rule Name="s_1088215910Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_1088215910Crash&gt;0" Error="Error" P0="$n_1088215910Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392669" SSID="7938d52f-bd0f-4bd2-9c6d-ac9071b60cdf" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_1088215910CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_1088215910Crash&gt;0" Error="Error" P0="$n_1088215910Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392672" SSID="4e0d73c7-6f3f-44b9-8889-cce6f45d9943" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_648393628Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4505.1510')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00073c3e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s_648393628Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_648393628Crash&gt;0" Error="Error" P0="$n_648393628Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392668" SSID="4160a493-4d0c-40a9-b699-b16873a32e2a" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_648393628CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_648393628Crash&gt;0" Error="Error" P0="$n_648393628Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392673" SSID="322c7ac1-c2bb-4e56-9fe5-4f8e58c404a5" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_830590971Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4481.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00b8bb5a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s_830590971Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_830590971Crash&gt;0" Error="Error" P0="$n_830590971Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392667" SSID="2988ef6f-43a5-477b-91d2-174e41e2c4c2" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_830590971CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_830590971Crash&gt;0" Error="Error" P0="$n_830590971Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392674" SSID="0229129d-6714-4d51-87e9-444279472edc" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_830680677Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='6.2.9200.16451')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00014b32')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='kernelbase.dll')]])"></Rule>
+      <Rule Name="s_830680677Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_830680677Crash&gt;0" Error="Error" P0="$n_830680677Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392666" SSID="e531081c-56a6-4632-a052-24cbb642e6f4" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_830680677CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_830680677Crash&gt;0" Error="Error" P0="$n_830680677Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392676" SSID="41c315de-33ad-47e8-949d-f83beefff09b" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_1068549943Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4420.1017')] and Setting[@Key1='Fault offset' and (lower-case(Value)='006f5f41')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s_1068549943Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_1068549943Crash&gt;0" Error="Error" P0="$n_1068549943Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392665" SSID="fe5332cc-369f-48e2-9530-b1525e3f638f" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_1068549943CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n_1068549943Crash&gt;0" Error="Error" P0="$n_1068549943Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392677" SSID="d5d5468f-6072-4b84-8c21-98e32f29b0d5" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n79484219Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4420.1017')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000dba07')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s79484219Crash" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n79484219Crash&gt;0" Error="Error" P0="$n79484219Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392664" SSID="1849da91-a569-40a0-b719-f0e27b6bcb35" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s79484219CrashC2R" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and $n79484219Crash&gt;0" Error="Error" P0="$n79484219Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to download the latest update." GUID="392678" SSID="41dd8393-0bab-49fe-b26a-341be2a763c8" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_596136856Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4517.1004')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0004f20e')] and Setting[@Key1='Faulting Module Name' and contains(lower-case(Value),'excel.exe')]])"></Rule>
+      <Rule Name="s_596136856Crash" Query="($OfficeUpdates_sExcel2013CrashDiagCU or $OfficeUpdates_sExcel2013CrashDiagCU64) and $nInstallType='MSI' and $n2DigitVersion=15 and $n_596136856Crash&gt;0" Error="Error" P0="$n_596136856Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} time(s). This issue is fixed in a later version of Excel. Please click the 'Click here...' link to see information on installing the latest Excel update for MSI installations of Office 2013." GUID="397643" SSID="740aad0b-fe56-4073-8395-dbfe5e4c2f53" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="s_596136856CrashC2R" Query="$nInstallType='ClickToRun' and $C2R_Updates_sLatestC2RVersionNotInstalled15=true() and $n2DigitVersion=15 and $n_596136856Crash&gt;0" Error="Error" P0="$n_596136856Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} time(s). This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to see information on installing the latest Click-to-run update." GUID="397643" SSID="a05c3023-c097-4e8e-907a-8e9549ece577" Symptoms="Crash,Event Log"></Rule>
+
+      <Rule Name="n_530200926Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4517.1506')] and Setting[@Key1='Fault offset' and (lower-case(Value)='002990e3')] and Setting[@Key1='Faulting Module Name' and contains(lower-case(Value),'excel.exe')]])"></Rule>
+      <Rule Name="s_530200926Crash" Query="($OfficeUpdates_sExcel2013CrashDiagCU or $OfficeUpdates_sExcel2013CrashDiagCU64) and $nInstallType='MSI' and $n2DigitVersion=15 and $n_530200926Crash&gt;0" Error="Error" P0="$n_530200926Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue (when printing) was detected in your application event log {0} time(s). This issue is fixed in a later version of Excel. Please click the 'Click here...' link to see information on installing the April 8, 2014 Excel update for MSI installations of Office 2013." GUID="397655" SSID="44d13e99-4a27-4716-9668-710db8f0b33a" Symptoms="Crash,Event Log,Printing"></Rule>
+      <Rule Name="s_530200926CrashC2R" Query="$nInstallType='ClickToRun' and $C2R_Updates_sLatestC2RVersionNotInstalled15=true() and $n2DigitVersion=15 and $n_530200926Crash&gt;0" Error="Error" P0="$n_530200926Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue (when printing) was detected in your application event log {0} time(s). This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to see information on installing the latest Click-to-run update." GUID="397657" SSID="fa9737cb-407d-403b-a27c-9f32edda809b" Symptoms="Crash,Event Log,Printing"></Rule>
+
+      <Rule Name="n_410992791Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00298d51')] and Setting[@Key1='Faulting Module Name' and contains(lower-case(Value),'excel.exe')]])"></Rule>
+      <Rule Name="s_410992791Crash" Query="($OfficeUpdates_sExcel2013CrashDiagCU or $OfficeUpdates_sExcel2013CrashDiagCU64) and $nInstallType='MSI' and $n2DigitVersion=15 and $n_410992791Crash&gt;0" Error="Error" P0="$n_410992791Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue (when printing) was detected in your application event log {0} time(s). This issue is fixed in a later version of Excel. Please click the 'Click here...' link to see information on installing the April 8, 2014 Excel update for MSI installations of Office 2013." GUID="397655" SSID="bbf01e3a-98ba-43ef-9023-4b4156012b3b" Symptoms="Crash,Event Log,Printing"></Rule>
+      <Rule Name="s_410992791CrashC2R" Query="$nInstallType='ClickToRun' and $C2R_Updates_sLatestC2RVersionNotInstalled15=true() and $n2DigitVersion=15 and $n_410992791Crash&gt;0" Error="Error" P0="$n_410992791Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue (when printing) was detected in your application event log {0} time(s). This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to see information on installing the latest Click-to-run update." GUID="397657" SSID="e56cb715-6e5f-458e-9309-d38512d94c28" Symptoms="Crash,Event Log,Printing"></Rule>
+
+      <Rule Name="n73026686752Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4551.1510')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00298d01')] and Setting[@Key1='Faulting Module Name' and contains(lower-case(Value),'excel.exe')]])"></Rule>
+      <Rule Name="s73026686752Crash" Query="($OfficeUpdates_sExcel2013CrashDiagCU or $OfficeUpdates_sExcel2013CrashDiagCU64) and $nInstallType='MSI' and $n2DigitVersion=15 and $n73026686752Crash&gt;0" Error="Error" P0="$n73026686752Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue (when printing) was detected in your application event log {0} time(s). This issue is fixed in a later version of Excel. Please click the 'Click here...' link to see information on installing the April 8, 2014 Excel update for MSI installations of Office 2013." GUID="397655" SSID="a3273a88-789c-43d5-9d77-dbe5c3d616d2" Symptoms="Crash,Event Log,Printing"></Rule>
+      <Rule Name="s73026686752CrashC2R" Query="$nInstallType='ClickToRun' and $C2R_Updates_sLatestC2RVersionNotInstalled15=true() and $n2DigitVersion=15 and $n73026686752Crash&gt;0" Error="Error" P0="$n73026686752Crash" Title="A known crashing issue was detected in the application event log" Text="A known crashing issue (when printing) was detected in your application event log {0} time(s). This issue is fixed in a recent update for Excel. Please click the 'Click here...' link to see information on installing the latest Click-to-run update." GUID="397657" SSID="409a544a-9882-4179-b793-d170daf24cd2" Symptoms="Crash,Event Log,Printing"></Rule>
+
+      <Rule Name="nKB2968204CrashMod45171004" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4517.1004')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0005f9b4')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="nKB2968204CrashMod45351507" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0005f95c')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="nKB2968204CrashMod45691504" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4569.1504')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0006045c')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="nKB2968204CrashMod46051000" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0005fc4c')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sKB2968204CrashOffCAT2916" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and ($nKB2968204CrashMod45171004&gt;0 or $nKB2968204CrashMod45351507&gt;0 or $nKB2968204CrashMod45691504&gt;0 or $nKB2968204CrashMod46051000&gt;0)" Error="Error" P0="($nKB2968204CrashMod45171004 + $nKB2968204CrashMod45351507 + $nKB2968204CrashMod45691504 + $nKB2968204CrashMod46051000)" Title="Known crashing issue when Excel stops responding or crashes (KB 2968204)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2968204) has been detected {0} times. Please click the 'Click here...' link to see the most recent details on this issue." GUID="401280" SSID="b10b5c9d-14ee-4dab-a8eb-46acff3ffd0f" Symptoms="Crash"></Rule>
+      <Rule Name="sKB2968204CrashC2ROffCAT2916" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and ($nKB2968204CrashMod45171004&gt;0 or $nKB2968204CrashMod45351507&gt;0 or $nKB2968204CrashMod45691504&gt;0 or $nKB2968204CrashMod46051000&gt;0)" Error="Error" P0="($nKB2968204CrashMod45171004 + $nKB2968204CrashMod45351507 + $nKB2968204CrashMod45691504 + $nKB2968204CrashMod46051000)" Title="Known crashing issue when Excel stops responding or crashes (KB 2968204)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2968204) has been detected {0} times. Please click the 'Click here...' link to see information on installing the latest Click-to-run update." GUID="401280" SSID="f58a1ddc-9aa6-4235-b997-1092043aee79" Symptoms="Crash"></Rule>
+
+      <Rule Name="nKB2968204CrashMod44201017" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4420.1017')] and Setting[@Key1='Fault offset' and (lower-case(Value)='003cbd72')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="nKB2968204CrashMod45511510" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4551.1510')] and Setting[@Key1='Fault offset' and (lower-case(Value)='003bffca')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sKB2968204CrashOffCAT2924" Query="$nInstallType='MSI' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and ($nKB2968204CrashMod44201017&gt;0 or $nKB2968204CrashMod45511510&gt;0)" Error="Error" P0="($nKB2968204CrashMod44201017 + $nKB2968204CrashMod45511510)" Title="Known crashing issue when Excel stops responding or crashes (KB 2968204)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2968204) has been detected {0} times. Please click the 'Click here...' link to see the most recent details on this issue." GUID="397700" SSID="9e89198d-35f5-41c1-855c-b9a3f9a9a016" Symptoms="Crash"></Rule>
+      <Rule Name="sKB2968204CrashC2ROffCAT2924" Query="$nInstallType='ClickToRun' and $MSO_fC2R2013SP1UpdateInstalled != true() and $n2DigitVersion=15 and ($nKB2968204CrashMod44201017&gt;0 or $nKB2968204CrashMod45511510&gt;0)" Error="Error" P0="($nKB2968204CrashMod44201017 + $nKB2968204CrashMod45511510)" Title="Known crashing issue when Excel stops responding or crashes (KB 2968204)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2968204) has been detected {0} times. Please click the 'Click here...' link to see information on installing the latest Click-to-run update." GUID="397700" SSID="e17ca996-1ff3-44a6-aeb4-38bed80312b5" Symptoms="Crash"></Rule>
+
+      <Rule Name="n73316874003Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4623.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00016033')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='osf.dll')]])"></Rule>
+      <Rule Name="n85934631402Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4609.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000006d89')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='osf.dll')]])"></Rule>
+      <Rule Name="n73192596180Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4603.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00015f8d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='osf.dll')]])"></Rule>
+      <Rule Name="n73108889742Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4569.1504')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00015c8b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='osf.dll')]])"></Rule>
+      <Rule Name="s3424702OsfCrashExcel" Query="$n2DigitVersion=15 and ($n73316874003Crash&gt;0 or $n85934631402Crash&gt;0 or $n73192596180Crash&gt;0 or $n73108889742Crash&gt;0)" Error="Error" P0="$n73316874003Crash + $n85934631402Crash + $n73192596180Crash + $n73108889742Crash" Title="Known crashing issue when you exit Excel with the Insert tab active on the Ribbon" Text="The issue where Excel crashes when you exit the program with the Insert tab active has been detected {0} times. Please click the 'Click here...' link to see the most recent details on this issue." GUID="403546" SSID="878cec4c-d7f7-405c-91c9-d474d72b94a2" Symptoms="Crash"></Rule>
+
+      <Rule Name="nKB2981214CrashMod45171004" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4517.1004')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000218ae')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="nKB2981214CrashMod45351507" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000218ae')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="nKB2981214CrashMod45691504" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4569.1504')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000219c5')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sKB1981214CrashOffCAT2913" Query="$nInstallType='MSI' and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4623.1000')&lt;0 and ($nKB2981214CrashMod45171004&gt;0 or $nKB2981214CrashMod45351507&gt;0 or $nKB2981214CrashMod45691504&gt;0)" Error="Error" P0="($nKB2981214CrashMod45171004 + $nKB2981214CrashMod45351507 + $nKB2981214CrashMod45691504)" Title="Known crashing issue when Excel stops responding or crashes while repositioning an Excel sheet tab (KB 2981214)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2981214) has been detected {0} times. Please click the 'Click here...' link to see the most recent details on this issue." GUID="403586" SSID="31e1cd5c-f976-4725-97a9-75691fd59088" Symptoms="Crash"></Rule>
+      <Rule Name="sKB1981214CrashOffCAT2913C2R" Query="$nInstallType='ClickToRun' and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4623.1000')&lt;0 and ($nKB2981214CrashMod45171004&gt;0 or $nKB2981214CrashMod45351507&gt;0 or $nKB2981214CrashMod45691504&gt;0)" Error="Error" P0="($nKB2981214CrashMod45171004 + $nKB2981214CrashMod45351507 + $nKB2981214CrashMod45691504)" Title="Known crashing issue when Excel stops responding or crashes while repositioning an Excel sheet tab (KB 2981214)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2981214) has been detected {0} times. Please click the 'Click here...' link to see information on installing the latest Click-to-run update." GUID="403586" SSID="d7de10e7-0b3e-4916-8c4c-1e739ca53fc4" Symptoms="Crash"></Rule>
+
+      <Rule Name="n595986405Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4517.1004')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00a83e00')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n73105922666Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4569.1504')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00a8febf')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n73192507906Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00a8fd81')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n409367080Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00a86cad')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n340988391Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4551.1003')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00a86d07')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s3390549CrashExcel" Query="$nInstallType='MSI' and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4623.1000')&lt;0 and ($n595986405Crash&gt;0 or $n73105922666Crash&gt;0 or $n73192507906Crash&gt;0 or $n409367080Crash&gt;0 or $n340988391Crash&gt;0)" Error="Error" P0="($n595986405Crash + $n73105922666Crash + $n73192507906Crash + $n409367080Crash + $n340988391Crash)" Title="Known crashing issue when Excel stops responding or crashes while editing between workbooks (KB 2981959)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2981959) has been detected {0} times. Please click the 'Click here...' link to see the most recent details on this issue." GUID="403762" SSID="3c4ac7d1-c279-45d3-b73a-9bdc554f933d" Symptoms="Crash"></Rule>
+      <Rule Name="s3390549CrashExcelC2R" Query="$nInstallType='ClickToRun' and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4623.1000')&lt;0 and ($n595986405Crash&gt;0 or $n73105922666Crash&gt;0 or $n73192507906Crash&gt;0 or $n409367080Crash&gt;0 or $n340988391Crash&gt;0)" Error="Error" P0="($n595986405Crash + $n73105922666Crash + $n73192507906Crash + $n409367080Crash + $n340988391Crash)" Title="Known crashing issue when Excel stops responding or crashes while editing between workbooks (KB 2981959)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2981959) has been detected {0} times. Please click the 'Click here...' link to see information on installing the latest Click-to-run update." GUID="403762" SSID="9b74b9ec-a66a-4f6d-8913-9aec13fef052" Symptoms="Crash"></Rule>
+
+      <Rule Name="nCrashIgd10umd32Excel" Query="count(../Instance[Setting[@Key1='Faulting Module Name' and (lower-case(Value)='igd10umd32.dll')]])"></Rule>
+      <Rule Name="sCrashIgd10umd32Excel" Query="$n2DigitVersion=15 and $nCrashIgd10umd32Excel&gt;0" Error="Error" P0="$nCrashIgd10umd32Excel" Title="Excel crashing issue with Igd10mud32.dll found" Text="A crashing issue in Excel.exe that was caused by Igd10umd32.dll was found {0} times in the application event log. This problem has been known to be caused by an outdated Intel graphics accelerator driver.&#xA;&#xA;Please click the 'Click here ...' link for details." GUID="397847" SSID="e40e2613-4e32-47a4-91e3-d228f1200f73" Symptoms="Crash,Error message,Event Log"></Rule>
+
+      <Rule Name="n898042Crash_1041532676" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='14.0.6126.5003')] and Setting[@Key1='Fault offset' and (lower-case(Value)='005c2d5f')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n898042Crash_411032608" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='14.0.7109.5000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0033445b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s898042Crash" Query="$n2DigitVersion=14 and versioncompare($sFullAppVersion,'14.0.7116.5000')&lt;0 and ($n898042Crash_1041532676&gt;0 or $n898042Crash_411032608&gt;0)" Error="Error" P0="$n898042Crash_1041532676 + $n898042Crash_411032608" Title="Known crashing issue when performing copy/cut/paste in Excel" Text="A crashing issue that occurs when you perform copy/cut/paste operations in Excel has been detected {0} times. To fix this crash, please click the 'Click here...' link to and then install the update listed in the article." GUID="488559" SSID="d7cfad42-076c-4b6b-b7fc-3bffc2262f7e" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3433886Crash73192869257" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4603.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000548c9')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash_393154795" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='001f8155')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash_409233356" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00054151')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash_411115757" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00054172')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash73193002048" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4603.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000548ea')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash73192406218" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000542d1')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash73192884246" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000542f2')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s3433886CrashX86" Query="$n2DigitVersion=15 and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4631.1000')&lt;0 and ($n3433886Crash73192869257&gt;0 or $n3433886Crash_393154795&gt;0 or $n3433886Crash_409233356&gt;0 or $n3433886Crash_411115757&gt;0 or $n3433886Crash73193002048&gt;0 or $n3433886Crash73192406218&gt;0 or $n3433886Crash73192884246&gt;0)" Error="Error" P0="$n3433886Crash73192869257 + $n3433886Crash_393154795 + $n3433886Crash_409233356 + $n3433886Crash_411115757 +  $n3433886Crash73193002048 +  $n3433886Crash73192406218 + $n3433886Crash73192884246" Title="Known crashing issue in Excel when you rename a worksheet using an invalid name" Text="A crashing issue that occurs when you try to rename a worksheet in Excel with an invalid name has been detected {0} times. To fix this crash, please click the 'Click here...' link to and then install the 32-bit version update listed in the article." GUID="506566" SSID="c81da0d1-51dd-4b20-948b-5d14bd3daa78" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3433886Crash134489370" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000a4588')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash134489407" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4535.1507')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000a45a9')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash85919492883" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4603.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000a48a8')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3433886Crash85919416937" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000a4958')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s3433886CrashX64" Query="$n2DigitVersion=15 and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4631.1000')&lt;0 and ($n3433886Crash134489370&gt;0 or $n3433886Crash134489407&gt;0 or $n3433886Crash85919492883&gt;0 or $n3433886Crash85919416937&gt;0)" Error="Error" P0="$n3433886Crash134489370 + $n3433886Crash134489407 + $n3433886Crash85919492883 + $n3433886Crash85919416937" Title="Known crashing issue in Excel when you rename a worksheet using an invalid name" Text="A crashing issue that occurs when you try to rename a worksheet in Excel with an invalid name has been detected {0} times. To fix this crash, please click the 'Click here...' link to and then install the 64-bit version update listed in the article." GUID="506567" SSID="4061604e-d885-447b-9f9e-ead85727b549" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3425962Crash73032100399" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4569.1504')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00075d0b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3425962Crash73192574366" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0007551b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3425962Crash73192833432" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4603.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00075d2d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s3425962CrashX86" Query="$n2DigitVersion=15 and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4631.1000')&lt;0 and ($n3425962Crash73032100399&gt;0 or $n3425962Crash73192574366&gt;0 or $n3425962Crash73192833432&gt;0)" Error="Error" P0="$n3425962Crash73032100399 + $n3425962Crash73192574366 + $n3425962Crash73192833432" Title="Known crashing issue in Excel that occurs when you preview a worksheet, use Page Layout, switch sheets, or copy/paste" Text="A crashing issue that occurs when you preview a workshoot in Windows Explorer, switch to/from page layout or between worksheets and chart sheets, or copy/paste between worksheets has been detected {0} times. To fix this crash, please click the 'Click here...' link to and then install the 32-bit version update listed in the article." GUID="506572" SSID="1ec03735-6944-42cc-a42c-b620e6a27bb2" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3425962Crash85919448041" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000f331d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3425962Crash85919393512" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4603.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000f329d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3425962Crash85910332425" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4569.1504')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000f300d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s3425962CrashX64" Query="$n2DigitVersion=15 and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4631.1000')&lt;0 and ($n3425962Crash85919448041&gt;0 or $n3425962Crash85919393512&gt;0 or $n3425962Crash85910332425&gt;0)" Error="Error" P0="$n3425962Crash85919448041 + $n3425962Crash85919393512 + $n3425962Crash85910332425" Title="Known crashing issue in Excel that occurs when you preview a worksheet, use Page Layout, switch sheets, or copy/paste" Text="A crashing issue that occurs when you preview a workshoot in Windows Explorer, switch to/from page layout or between worksheets and chart sheets, or copy/paste between worksheets has been detected {0} times. To fix this crash, please click the 'Click here...' link to and then install the 64-bit version update listed in the article." GUID="506573" SSID="1159b467-715b-416f-a4d1-31109697304f" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3425501Crash73077146202" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='0.0.0.0')] and Setting[@Key1='Fault offset' and (lower-case(Value)='013172de')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3425501Crash73196382044" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0023f3d7')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3425501Crash73192161885" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='01323dee')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="s3425501CrashX86" Query="$n2DigitVersion=15 and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4623.1000')&lt;0 and ($n3425501Crash73077146202&gt;0 or $n3425501Crash73196382044&gt;0 or $n3425501Crash73192161885&gt;0)" Error="Error" P0="$n3425501Crash73077146202 + $n3425501Crash73196382044 + $n3425501Crash73192161885" Title="Known crashing issue in Excel that occurs when you are working with discontiguous cells in a worksheet" Text="A crashing issue that occurs when you are working with discontiguous cells in a worksheet has been detected {0} times. To fix this crash, please click the 'Click here...' link and then install the 32-bit version update listed in the article." GUID="506574" SSID="3d73e6ad-0656-492f-9f9d-ece63b838675" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3425501Crash85906446568" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='0.0.0.0')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000012494c4')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3425501Crash85919534232" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4605.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0000000001258f34')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="s3425501CrashX64" Query="$n2DigitVersion=15 and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4623.1000')&lt;0 and ($n3425501Crash85906446568&gt;0 or $n3425501Crash85919534232&gt;0)" Error="Error" P0="$n3425501Crash85906446568 + $n3425501Crash85919534232" Title="Known crashing issue in Excel that occurs when you are working with discontiguous cells in a worksheet" Text="A crashing issue that occurs when you are working with discontiguous cells in a worksheet has been detected {0} times. To fix this crash, please click the 'Click here...' link to and then install the 64-bit version update listed in the article." GUID="506578" SSID="2be74e39-cc72-47af-b7ec-b7999cd5c497" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3459258MsoCrashExcel00003ABC" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4631.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00003abc')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3459258MsoCrashExcel0000329C" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='0.0.0.0')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0000329c')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="s3459258MsoCrashExcelX86" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x86' and ($n3459258MsoCrashExcel00003ABC&gt;0 or $n3459258MsoCrashExcel0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashExcel00003ABC + $n3459258MsoCrashExcel0000329C" Title="Known crashing issue when Excel stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506812" SSID="1ea9ae49-8a3c-4aa7-aef5-ac14ada7f91d" Symptoms="Crash"></Rule>
+      <Rule Name="n3459258MsoCrashExcel00000000013F766E" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4631.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000013f766e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3459258MsoCrashExcel00000000013EB86E" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='0.0.0.0')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000013eb86e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="s3459258MsoCrashExcelX64" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x64' and ($n3459258MsoCrashExcel00000000013F766E&gt;0 or $n3459258MsoCrashExcel00000000013EB86E&gt;0)" Error="Error" P0="$n3459258MsoCrashExcel00000000013F766E + $n3459258MsoCrashExcel00000000013EB86E" Title="Known crashing issue when Excel stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506820" SSID="9f403e1b-d0f5-4618-92da-64677427b300" Symptoms="Crash"></Rule>
+      <Rule Name="s3459258MsoCrashExcelC2R" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='ClickToRun' and $n2DigitVersion=15 and ($n3459258MsoCrashExcel00003ABC&gt;0 or $n3459258MsoCrashExcel0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashExcel00003ABC + $n3459258MsoCrashExcel0000329C" Title="Known crashing issue when Excel stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Excel stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506860" SSID="2d9d8555-33cc-43a4-8db3-9eef9b83be7a" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3346277Crash_1044325069" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4454.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000330b5')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exel')]])"></Rule>
+      <Rule Name="n3346277Crash73316960454" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4623.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00033233')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3346277Crash73375506424" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4631.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00033404')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="s3346277CrashExcel" Query="$n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4641.1000')&lt;0 and ($n3346277Crash_1044325069&gt;0 or $n3346277Crash73316960454&gt;0 or $n3346277Crash73375506424&gt;0)" Error="Error" P0="$n3346277Crash_1044325069 + $n3346277Crash73316960454 + $n3346277Crash73375506424" Title="Known crash in Excel detected" Text="A known crash in Excel has been detected {0} time(s). To resolve this issue, please click the 'Click here...' link and install the update listed in the article." GUID="403765" SSID="e1360f47-9263-4803-86f8-526b89957ce5" Symptoms="Crash"></Rule>
+      <Rule Name="s3346277CrashExcelC2R" Query="$n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4641.1000')&lt;0 and ($n3346277Crash_1044325069&gt;0 or $n3346277Crash73316960454&gt;0 or $n3346277Crash73375506424&gt;0)" Error="Error" P0="$n3346277Crash_1044325069 + $n3346277Crash73316960454 + $n3346277Crash73375506424" Title="Known crash in Excel detected" Text="A known crash in Excel has been detected {0} time(s). To resolve this issue, please click the 'Click here...' link and install the Click-to-Run update version listed in the article." GUID="403765" SSID="5a268ac1-02bf-4165-a0a7-eca6333ab943" Symptoms="Crash"></Rule>
+      
+      <Rule Name="nNtdllCrash000000000003096B" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='000000000003096b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='ntdll.dll')]])"></Rule>
+      <Rule Name="sExcelCrashNtdll3497111" Query="$n2DigitVersion=15 and $bitness='x64' and versioncompare($OART_sOartDllVersion,'15.0.4711.1000')&lt;0 and $nNtdllCrash000000000003096B&gt;0" Error="Error" P0="$nNtdllCrash000000000003096B" Title="Known crashing issue in Excel that occurs when you are working with an XY scatter chart" Text="A crashing issue that occurs when you are working with an XY scatter chart has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533740" PATCH="533741" SSID="260b7ae2-5de0-4174-b5f1-66973ee89c26" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3494156Crash73902534762" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0001f207')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3494156Crash73650685862" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0001f13f')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3494156X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3494156Crash73902534762&gt;0 or $n3494156Crash73650685862&gt;0)" Error="Error" P0="$n3494156Crash73902534762 + $n3494156Crash73650685862" Title="Known crashing issue in Excel that occurs when you change items in a form control" Text="A crashing issue that occurs when you change items in a form control has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="09b68d66-c950-4d83-bc02-0a54f2d5283e" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3494156C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3494156Crash73902534762&gt;0 or $n3494156Crash73650685862&gt;0)" Error="Error" P0="$n3494156Crash73902534762 + $n3494156Crash73650685862" Title="Known crashing issue in Excel that occurs when you change items in a form control" Text="A crashing issue that occurs when you change items in a form control has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="a319b825-38bd-414d-b37b-24635a57776f" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3494156Crash86027139074" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000d74cd')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3494156Crash85966596603" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000d73ad')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3494156X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3494156Crash86027139074&gt;0 or $n3494156Crash85966596603&gt;0)" Error="Error" P0="$n3494156Crash86027139074 + $n3494156Crash85966596603" Title="Known crashing issue in Excel that occurs when you change items in a form control" Text="A crashing issue that occurs when you change items in a form control has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="6f9849dd-78b9-43a0-bd64-df39c18c8b89" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3501271Crash73927828227" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00135250')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3501271Crash73652647448" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0012bac8')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3501271Crash73719594954" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0012892f')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3501271X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3501271Crash73927828227&gt;0 or $n3501271Crash73652647448&gt;0 or $n3501271Crash73719594954&gt;0)" Error="Error" P0="$n3501271Crash73927828227 + $n3501271Crash73652647448 + $n3501271Crash73719594954" Title="Known crashing issue in Excel that occurs when accessing the general options in the Save As dialog box" Text="A crashing issue that occurs when you access the general options in the Save As dialog box has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="71b33977-744f-47b6-ba31-1c2d5b26ec87" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3501271C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3501271Crash73927828227&gt;0 or $n3501271Crash73652647448&gt;0 or $n3501271Crash73719594954&gt;0)" Error="Error" P0="$n3501271Crash73927828227 + $n3501271Crash73652647448 + $n3501271Crash73719594954" Title="Known crashing issue in Excel that occurs when accessing the general options in the Save As dialog box" Text="A crashing issue that occurs when you access the general options in the Save As dialog box has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="39f7a263-d3b9-4b19-b386-d1fc908e1b75" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3501271Crash86027318221" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001dba10')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3501271X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and $n3501271Crash86027318221&gt;0" Error="Error" P0="$n3501271Crash86027318221" Title="Known crashing issue in Excel that occurs when accessing the general options in the Save As dialog box" Text="A crashing issue that occurs when you access the general options in the Save As dialog box has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="c75a8eb2-e518-40d6-9313-394094c23a83" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3502388Crash73866240995" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0063bf8d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3502388Crash73896996926" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0064eabd')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3502388X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3502388Crash73866240995&gt;0 or $n3502388Crash73896996926&gt;0)" Error="Error" P0="$n3502388Crash73866240995 + $n3502388Crash73896996926" Title="Known crashing issue in Excel that may occur when you paste copied cells" Text="A crashing issue that may occur when you paste copied cells has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="81e88074-a805-46e7-9c61-f38280a86a5b" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3502388C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3502388Crash73866240995&gt;0 or $n3502388Crash73896996926&gt;0)" Error="Error" P0="$n3502388Crash73866240995 + $n3502388Crash73896996926" Title="Known crashing issue in Excel that may occur when you paste copied cells" Text="A crashing issue that may occur when you paste copied cells has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="a2152777-577d-4c13-a264-4d0b56b9f489" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3502388Crash86015210867" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000007a6576')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3502388Crash86015177422" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='000000000024a043')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3502388Crash86027035965" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000007a8c86')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3502388X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3502388Crash86015210867&gt;0 or $n3502388Crash86015177422&gt;0 or $n3502388Crash86027035965&gt;0)" Error="Error" P0="$n3502388Crash86015210867 + $n3502388Crash86015177422 + $n3502388Crash86027035965" Title="Known crashing issue in Excel that may occur when you paste copied cells" Text="A crashing issue that may occur when you paste copied cells has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="3e549879-231b-499b-9525-77998625444a" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3500934Crash73676355001" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0004ff6a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3500934Crash73902112666" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0004fd55')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3500934Crash73929232068" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='001f2387')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3500934Crash73928821718" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0004fd3d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3500934X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3500934Crash73676355001&gt;0 or $n3500934Crash73902112666&gt;0 or $n3500934Crash73929232068&gt;0 or $n3500934Crash73928821718&gt;0)" Error="Error" P0="$n3502388Crash73866240995 + $n3500934Crash73902112666 + $n3500934Crash73929232068 + $n3500934Crash73928821718" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="d372643d-e0d9-49d5-8df4-4cbf38b144f1" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3500934C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3500934Crash73676355001&gt;0 or $n3500934Crash73902112666&gt;0 or $n3500934Crash73929232068&gt;0 or $n3500934Crash73928821718&gt;0)" Error="Error" P0="$n3502388Crash73866240995 + $n3500934Crash73902112666 + $n3500934Crash73929232068 + $n3500934Crash73928821718" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="2e6b8d9e-3217-4101-bd70-4163973c0389" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3500934Crash86027613856" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000b541b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3500934Crash85983124643" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000b520b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3500934X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3500934Crash86027613856&gt;0 or $n3500934Crash85983124643&gt;0)" Error="Error" P0="$n3500934Crash86027613856 + $n3500934Crash85983124643" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="b93f70e1-1cbc-462d-8481-515911c067a2" Symptoms="Crash"></Rule>
+      
+      <Rule Name="n3480507Crash73897779108" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0071fc1b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3480507Crash73719278389" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0071ba2f')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3480507Crash73866437859" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0070fde3')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3480507X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3480507Crash73897779108&gt;0 or $n3480507Crash73719278389&gt;0 or $n3480507Crash73866437859&gt;0)" Error="Error" P0="$n3480507Crash73897779108 + $n3480507Crash73719278389 + $n3480507Crash73866437859" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="fed8cd97-7e48-41a3-8f39-f29846480c42" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3480507C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3480507Crash73897779108&gt;0 or $n3480507Crash73719278389&gt;0 or $n3480507Crash73866437859&gt;0)" Error="Error" P0="$n3480507Crash73897779108 + $n3480507Crash73719278389 + $n3480507Crash73866437859" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="378c4d7d-8017-42bd-95b7-2d64fd95fc67" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3480507Crash86027543096" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000008c83b1')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3480507Crash86012880569" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000008c7e29')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3480507Crash85990318177" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000008c8049')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3480507X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3480507Crash86027543096&gt;0 or $n3480507Crash86012880569&gt;0 or $n3480507Crash85990318177&gt;0)" Error="Error" P0="$n3480507Crash86027543096 + $n3480507Crash86012880569 + $n3480507Crash85990318177" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="0f28e77e-0da8-4d11-bab9-37c895f02ac9" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3445272Crash73719538940" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00ec23ce')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3445272Crash73719342572" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00ec2344')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3445272Crash73866432628" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00ec0fc6')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3445272Crash73866209570" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00ec0f3c')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3445272Crash73924819170" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00ec321f')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3445272Crash73927667931" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00ec3195')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3445272X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3445272Crash73719538940&gt;0 or $n3445272Crash73719342572&gt;0 or $n3445272Crash73866432628&gt;0 or $n3445272Crash73866209570&gt;0 or $n3445272Crash73924819170&gt;0 or $n3445272Crash73927667931&gt;0)" Error="Error" P0="$n3445272Crash73719538940 + $n3445272Crash73719342572 + $n3445272Crash73866432628 + $n3445272Crash73866209570 + $n3445272Crash73924819170 + $n3445272Crash73927667931" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="c6f47e36-63c9-4e18-84c9-5b86aea3102b" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3445272C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3445272Crash73719538940&gt;0 or $n3445272Crash73719342572&gt;0 or $n3445272Crash73866432628&gt;0 or $n3445272Crash73866209570&gt;0 or $n3445272Crash73924819170&gt;0 or $n3445272Crash73927667931&gt;0)" Error="Error" P0="$n3445272Crash73719538940 + $n3445272Crash73719342572 + $n3445272Crash73866432628 + $n3445272Crash73866209570 + $n3445272Crash73924819170 + $n3445272Crash73927667931" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="2617e6cd-1db4-4823-8046-2c6604cc0d6c" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3445272Crash86015250197" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000012a9da3')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3445272Crash85990381213" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000012a9ec7')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3445272Crash86027110765" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000012aa9a7')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3445272Crash86027247730" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000012aa92d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3445272X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3445272Crash86015250197&gt;0 or $n3445272Crash85990381213&gt;0 or $n3445272Crash86027110765&gt;0 or $n3445272Crash86027247730&gt;0)" Error="Error" P0="$n3445272Crash86015250197 + $n3445272Crash85990381213 + $n3445272Crash86027110765 + $n3445272Crash86027247730" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="7d16b6d3-40ce-4a14-90e9-b98265ce2599" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3500547Crash73719267444" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00027136')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3500547Crash73927354790" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0002713d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3500547Crash73866432535" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00027175')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3500547X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3500547Crash73719267444&gt;0 or $n3500547Crash73927354790&gt;0 or $n3500547Crash73866432535&gt;0)" Error="Error" P0="$n3500547Crash73719267444 + $n3500547Crash73927354790 + $n3500547Crash73866432535" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="7f18401a-5def-4af1-9265-a37c424ec014" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3500547C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3500547Crash73719267444&gt;0 or $n3500547Crash73927354790&gt;0 or $n3500547Crash73866432535&gt;0)" Error="Error" P0="$n3500547Crash73719267444 + $n3500547Crash73927354790 + $n3500547Crash73866432535" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="64db7257-0f87-4cd9-8c6c-88f0ce987d1c" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3500547Crash85990368455" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000db65b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3500547Crash86015238700" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000db75b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3500547Crash86027143439" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000db83b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3500547X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3500547Crash85990368455&gt;0 or $n3500547Crash86015238700&gt;0 or $n3500547Crash86027143439&gt;0)" Error="Error" P0="$n3500547Crash85990368455 + $n3500547Crash86015238700 + $n3500547Crash86027143439" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="30fedab6-6851-4790-a14b-64d5dbcdffb8" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3500522Crash73896558919" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='011aee88')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3500522Crash73866878837" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='011b0e34')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3500522Crash73879330224" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0117046d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="n3500522Crash73707906936" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='011b1687')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
+      <Rule Name="sExcelCrash3500522X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3500522Crash73896558919&gt;0 or $n3500522Crash73866878837&gt;0 or $n3500522Crash73879330224&gt;0 or $n3500522Crash73707906936&gt;0)" Error="Error" P0="$n3500522Crash73896558919 + $n3500522Crash73866878837 + $n3500522Crash73879330224 + $n3500522Crash73707906936" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="acafd38f-3f2e-4523-a46c-6539d02339b9" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3500522C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3500522Crash73896558919&gt;0 or $n3500522Crash73866878837&gt;0 or $n3500522Crash73879330224&gt;0 or $n3500522Crash73707906936&gt;0)" Error="Error" P0="$n3500522Crash73896558919 + $n3500522Crash73866878837 + $n3500522Crash73879330224 + $n3500522Crash73707906936" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="35a211a8-d285-4ffb-a8cf-2ef01d98f30e" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3456508Crash73866272793" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='003c9955')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3456508Crash73927260369" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='003d630c')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3456508Crash73927511331" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00d61dd7')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3456508X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3456508Crash73866272793&gt;0 or $n3456508Crash73927260369&gt;0 or $n3456508Crash73927511331&gt;0)" Error="Error" P0="$n3456508Crash73866272793 + $n3456508Crash73927260369 + $n3456508Crash73927511331" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="46bb512e-7357-4b6b-bad9-9bac623d2511" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3456508C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3456508Crash73866272793&gt;0 or $n3456508Crash73927260369&gt;0 or $n3456508Crash73927511331&gt;0)" Error="Error" P0="$n3456508Crash73866272793 + $n3456508Crash73927260369 + $n3456508Crash73927511331" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="c205ef63-c8cd-4a32-b295-b2a9d853436b" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3456508Crash86015218083" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000b21eb')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3456508Crash86027169003" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000b23ab')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3456508X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3456508Crash86015218083&gt;0 or $n3456508Crash86027169003&gt;0)" Error="Error" P0="$n3456508Crash86015218083 + $n3456508Crash86027169003 + " Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="75777552-1000-4ac8-b089-94b0864cb92f" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3456511Crash73866345592" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='006f372d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3456511Crash73866463726" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00075127')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3456511Crash73721245050" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='006e8d55')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3456511X86" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x86' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3456511Crash73866345592&gt;0 or $n3456511Crash73866463726&gt;0 or $n3456511Crash73721245050&gt;0)" Error="Error" P0="$n3456511Crash73866345592 + $n3456511Crash73866463726 + $n3456511Crash73721245050" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 32-bit (x86) version of this update." GUID="533904" PATCH="533906" SSID="baef243a-b3b2-4861-818e-e48c1cefb62a" Symptoms="Crash"></Rule>
+      <Rule Name="sExcelCrash3456511C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3456511Crash73866345592&gt;0 or $n3456511Crash73866463726&gt;0 or $n3456511Crash73721245050&gt;0)" Error="Error" P0="$n3456511Crash73866345592 + $n3456511Crash73866463726 + $n3456511Crash73721245050" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;To resolve this issue, please click the 'Click here...' link and install the latest Click-to-Run update version listed in the article." GUID="507548" SSID="0b16ca29-70b8-45e7-9f25-82d19dd82e20" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3456511Crash86015229107" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000008a3442')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3456511Crash86015193165" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000ff1cb')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3456511Crash86027087484" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000ff24b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3456511Crash86028386488" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000008a39d2')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3456511X64" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $bitness='x64' and versioncompare($sFullAppVersion,'15.0.4711.1000')&lt;0 and ($n3456511Crash86015229107&gt;0 or $n3456511Crash86015193165&gt;0 or $n3456511Crash86027087484&gt;0 or $n3456511Crash86028386488&gt;0)" Error="Error" P0="$n3456511Crash86015229107 + $n3456511Crash86015193165 + $n3456511Crash86027087484 + $n3456511Crash86028386488" Title="Known crashing issue in Excel that is resolved by the update in KB 2965275" Text="A crashing issue that is resolved by the update in KB 2965275 has been detected {0} times.&#xA;&#xA;Please click the 'Click here ...' link for details on this update. Or, click the 'Download the update ...' link to access the 64-bit (x64) version of this update." GUID="533904" PATCH="533907" SSID="dbb9156f-e042-4d5e-b3a1-9db4b3bd2495" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3350271Crash73108257971" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0001eeaf')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3350271Crash73902534762" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0001f207')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3350271Crash73866213333" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0001f22f')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3350271Crash86015194113" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000d735d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3350271Crash86027139074" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000d74cd')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3350271Crash86056492720" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000d75ed')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n3350271Crash86078706716" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000000d738d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcelCrash3350271" Query="$n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4727.1000')&lt;0 and ($n3350271Crash73108257971&gt;0 or $n3350271Crash73866213333&gt;0 or $n3350271Crash73902534762&gt;0 or $n3350271Crash86015194113&gt;0 or $n3350271Crash86027139074&gt;0 or $n3350271Crash86056492720&gt;0 or $n3350271Crash86078706716&gt;0)" Error="Error" P0="if($bitness='x86',$n3350271Crash73108257971 + $n3350271Crash73866213333 + $n3350271Crash73902534762,$n3350271Crash86015194113 + $n3350271Crash86027139074 + $n3350271Crash86056492720 + $n3350271Crash86078706716)" P1="if($bitness='x86',615882,615883)" Title="Known crash when using fill-down in Excel has been detected" Text="The Excel crashing issue that is documented in KB article 3066381 has been detected {0} time(s).&#xA;&#xA;Please click the 'Click here ...' link for details on this issue. Or, click the 'Download the update ...' link to access the update for this issue." GUID="613562" PATCH="{1}" SSID="a58be92c-24b9-46ff-a3c0-5872d70bd94e" Symptoms="Crash"></Rule>
+
+      <Rule Name="nKernelbaseDllCrash000000000002a1c8" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='000000000002a1c8')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='kernelbase.dll')]])"></Rule>
+      <Rule Name="sExcel14Win10KernelBaseCrash" Query="$n2DigitVersion=14 and $bitness='x64' and $nKernelbaseDllCrash000000000002a1c8&gt;0" P0="$nKernelbaseDllCrash000000000002a1c8" Error="Error" Title="Known Excel crash on Windows 10 was detected" Text="A Excel crashing issue that occurs when you have either PowerPivot or the Data Mining add-ins loaded and you are using Windows 10 has been detected {0} time(s).&#xA;&#xA;Please click the 'Click here ...' link for details and a workaround to this issue." GUID="620387" SSID="f0c0d202-d85f-4d0f-b68a-012a7618f59d" Symptoms="Crash"></Rule>
+
+      <Rule Name="n3205078Crash000023c2" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='000023c2')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='msvcr100.dll')]])"></Rule>
+      <Rule Name="sExcel15Crash3205078MSI" Query="$nInstallType='MSI' and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4753.1000')&lt;0 and $n3205078Crash000023c2&gt;0" Error="Error" P0="$n3205078Crash000023c2" Title="Known crashing issue in Excel detected" Text="A crashing issue that is fixed in the September 8, 2015 update (and any subsequent Excel updates) has been detected {0} time(s).&#xA;&#xA;Please click the 'Click here ...' link for details on the issue. Or, click the 'Download the update ...' link to access the very latest update for Excel." P1="if($bitness='x86','624614','624616')" GUID="624613" PATCH="{1}" SSID="916723b1-5217-42c3-91d0-04a8a2718306" Symptoms="Crash"></Rule>
+      <Rule Name="sExcel15Crash3205078C2R" Query="$nInstallType='ClickToRun' and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4753.1000')&lt;0 and $n3205078Crash000023c2&gt;0" Error="Error" P0="$n3205078Crash000023c2" Title="Known crashing issue in Excel detected" Text="A crashing issue that is fixed in the September 8, 2015 update (and any subsequent Excel updates) has been detected {0} time(s).&#xA;&#xA;To resolve this problem, click the 'Click here ...' link and then update Office using the steps in the 'Get the latest version of Office' section of the article." GUID="624617" SSID="49a1d5e9-380b-49f3-a170-bd3a70d3bb4a" Symptoms="Crash"></Rule>
+
+      <Rule Name="n2699625Crash107614280438" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00a76471')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n2699625Crash107648563814" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00a764a5')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="n2699625Crash120332688412" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000cef0fd')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='excel.exe')]])"></Rule>
+      <Rule Name="sExcel16Crash2699625MSI" Query="$nInstallType='MSI' and $n2DigitVersion=16 and versioncompare($sFullAppVersion,'16.0.4339.1000')&lt;0 and ($n2699625Crash107614280438&gt;0 or $n2699625Crash107648563814&gt;0 or $n2699625Crash120332688412&gt;0)" Error="Error" P0="$n2699625Crash107614280438 + $n2699625Crash107648563814 + $n2699625Crash120332688412" Title="Known crashing issue in Excel detected" Text="A crashing issue that is fixed in the February 9, 2016 update (and any subsequent Excel updates) has been detected {0} time(s).&#xA;&#xA;Please click the 'Click here ...' link for details on the issue and then install the {1} update listed in the article." P1="if($bitness='x86','32-bit','64-bit')" GUID="722884" SSID="8297a1f6-81d7-4c42-85f2-15556d755e98" Symptoms="Crash"></Rule>
+      
+      <Rule Name="n2264340Crash00000000002125e6" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000002125e6')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00183a4d" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00183a4d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001eca5a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001eca5a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00183891" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00183891')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001efa8e" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001efa8e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0015a2d6" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0015a2d6')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec8f2" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec8f2')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash001591c2" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='001591c2')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0000000000208e9a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000208e9a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001efa6a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001efa6a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001f9d36" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001f9d36')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0000000000208d1e" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000208d1e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0000000000208fd6" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000208fd6')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ebe0a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ebe0a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ebbfa" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ebbfa')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00158118" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00158118')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00188357" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00188357')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0018873f" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0018873f')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0015903d" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0015903d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0015892b" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0015892b')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec53a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec53a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec0ba" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec0ba')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec502" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec502')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec8ea" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec8ea')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000002008a2" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000002008a2')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00176b33" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00176b33')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001f9652" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001f9652')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="sExcel16Crash2264340" Query="$n2DigitVersion=16 and ($n2264340Crash00000000002125e6&gt;0 or $n2264340Crash00183a4d&gt;0 or $n2264340Crash00000000001eca5a&gt;0 or $n2264340Crash00183891&gt;0 or $n2264340Crash00000000001efa8e&gt;0 or $n2264340Crash0015a2d6&gt;0 or $n2264340Crash00000000001ec8f2&gt;0 or $n2264340Crash001591c2&gt;0 or $n2264340Crash0000000000208e9a&gt;0 or $n2264340Crash00000000001efa6a&gt;0 or $n2264340Crash00000000001f9d36&gt;0 or $n2264340Crash0000000000208d1e&gt;0 or $n2264340Crash0000000000208fd6&gt;0 or $n2264340Crash00000000001ebe0a&gt;0 or $n2264340Crash00000000001ebbfa&gt;0 or $n2264340Crash00158118&gt;0 or $n2264340Crash00188357&gt;0 or $n2264340Crash0018873f&gt;0 or $n2264340Crash0015903d&gt;0 or $n2264340Crash0015892b&gt;0 or $n2264340Crash00000000001ec53a&gt;0 or $n2264340Crash00000000001ec0ba&gt;0 or $n2264340Crash00000000001ec502&gt;0 or $n2264340Crash00000000001ec8ea&gt;0 or $n2264340Crash00000000002008a2&gt;0 or $n2264340Crash00176b33&gt;0 or $n2264340Crash00000000001f9652&gt;0)" Error="Error" P0="$n2264340Crash00000000002125e6 + $n2264340Crash00183a4d + $n2264340Crash00000000001eca5a + $n2264340Crash00183891 + $n2264340Crash00000000001efa8e + $n2264340Crash0015a2d6 + $n2264340Crash00000000001ec8f2 + $n2264340Crash001591c2 + $n2264340Crash0000000000208e9a + $n2264340Crash00000000001efa6a + $n2264340Crash00000000001f9d36 + $n2264340Crash0000000000208d1e + $n2264340Crash0000000000208fd6 + $n2264340Crash00000000001ebe0a + $n2264340Crash00000000001ebbfa + $n2264340Crash00158118 + $n2264340Crash00188357 + $n2264340Crash0018873f + $n2264340Crash0015903d + $n2264340Crash0015892b + $n2264340Crash00000000001ec53a + $n2264340Crash00000000001ec0ba + $n2264340Crash00000000001ec502 + $n2264340Crash00000000001ec8ea + $n2264340Crash00000000002008a2 + $n2264340Crash00176b33 + $n2264340Crash00000000001f9652" Title="Known crashing issue in Excel" Text="A crashing issue that occurs in Excel has been detected {0} time(s).&#xA;&#xA;Please click the 'Click here...' link for details on this issue." GUID="787610" SSID="7c14caf4-bd3e-47e1-9b77-6ebd3d2f1558" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Symptoms="Crash"/>
+
+      <Rule Name="n3115099Crash0041962a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0041962a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0000000000558a92" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000558a92')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0041f3bb" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0041f3bb')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0000000000558c2a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000558c2a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash004201f6" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='004201f6')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0041faa3" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0041faa3')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash000000000055776a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='000000000055776a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0041cea7" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0041cea7')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0041f8a7" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0041f8a7')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0041f7b7" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0041f7b7')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash004279fb" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='004279fb')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash000000000055873a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='000000000055873a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0000000000544d7a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000544d7a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash004195ba" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='004195ba')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="n3115099Crash0000000000562a82" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000562a82')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='chart.dll')]])"/>
+      <Rule Name="sExcel16Crash3115099MSI" Query="$n2DigitVersion=16 and $nInstallType='MSI' and versioncompare($CHART_sChartDllVersion,'16.0.4390.1000')&lt;0 and ($n3115099Crash0041962a&gt;0 or $n3115099Crash0000000000558a92&gt;0 or $n3115099Crash0041f3bb&gt;0 or $n3115099Crash0000000000558c2a&gt;0 or $n3115099Crash004201f6&gt;0 or $n3115099Crash0041faa3&gt;0 or $n3115099Crash000000000055776a&gt;0 or $n3115099Crash0041cea7&gt;0 or $n3115099Crash0041f8a7&gt;0 or $n3115099Crash0041f7b7&gt;0 or $n3115099Crash004279fb&gt;0 or $n3115099Crash000000000055873a&gt;0 or $n3115099Crash0000000000544d7a&gt;0 or $n3115099Crash004195ba&gt;0 or $n3115099Crash0000000000562a82&gt;0)" Error="Error" P0="$n3115099Crash0041962a + $n3115099Crash0000000000558a92 + $n3115099Crash0041f3bb + $n3115099Crash0000000000558c2a + $n3115099Crash004201f6 + $n3115099Crash0041faa3 + $n3115099Crash000000000055776a + $n3115099Crash0041cea7 + $n3115099Crash0041f8a7 + $n3115099Crash0041f7b7 + $n3115099Crash004279fb + $n3115099Crash000000000055873a + $n3115099Crash0000000000544d7a + $n3115099Crash004195ba + $n3115099Crash0000000000562a82" P1="if($bitness='x86','32-bit (x86)','64-bit (x64)')" Title="Known crashing issue in Excel" Text="A crashing issue that occurs in Excel has been detected {0} time(s).&#xA;&#xA;Please make sure you have the {1} update from KB 3115099 installed to resolve this issue." GUID="626704" SSID="03995afb-043d-4a06-bb94-b08e0243ab38" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Symptoms="Crash"/>
+      
+      <Reference Type="CommonCrashes" Name="CommonCrashes" File="common.config.xml"></Reference>
+
+    </Object>
+
+    <Object Type="EventLog" Key1="Application" Key2="emet" Key3="2" Key4="excel.exe" Key7="14" Key8="10000">
+      <Setting Key1="Message"></Setting>
+      <Rule Name="nEmetEvent2CountExcel" Query="count(../Instance)"></Rule>
+      <Rule Name="sEmetMitigationExcel" Query="$nEmetEvent2CountExcel&gt;0" Error="Error" P0="$nEmetEvent2CountExcel" P1="'%APPNAME%'" Title="{1} was closed by the Enhanced Mitigation Experience Toolkit (EMET)" Text="The Application Event log indicates the Enhanced Mitigation Experience Toolkit forced {1} to close {0} times in the last 14 days.&#xA;&#xA;Please click the 'Click here ...' link for details on this type of event." GUID="623505" SSID="aac1683d-f0a1-4ea4-a430-a22e2ef9a8ee" Symptoms="Crash"></Rule>
+    </Object>
+
+    <Reference Type="NonOfficeAppCrashes" Name="NonOfficeAppCrashes" File="common.config.xml"></Reference>
+
+    <Reference Type="DisplayLinkUMD" Name="DisplayLinkUMD" File="common.config.xml"></Reference>
+
+  <!--/EVENTLOGS-->
+
+  </Type>
+
+  <Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml" Display="Hide">
+  </Reference>
+  <Reference Type="MSO" Name="MSO" File="common.config.xml">
+  </Reference>
+  <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+  </Reference>
+  <Reference Type="ExcelCrashes" Name="ExcelCrashes" File="excel.crashes.config.xml">
+  </Reference>
+  <Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml">
+  </Reference>
+  <Object Type="Cache" Name="InstallPathCACHE" Key1="Dump" Key2="INSTALLPATHCACHE" Display="Hide">
+    <Setting Key1="Val" Substitution="INSTALLPATH" Display="Hide"></Setting>
+    <Reference Type="OART" Name="OART" File="common.config.xml">
+    </Reference>
+    <Reference Type="CHART" Name="CHART" File="common.config.xml">
+    </Reference>
+  </Object>
+  <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml">
+  </Reference>
+
+  <!--EXTERNALREFS-->
+
+  <Rule Name="effectiveSlowBitrate"></Rule>
+  <Rule Name="fPolicies"></Rule>
+  <Rule Name="sPpCoreVersion"></Rule>
+  <Rule Name="sWordVersion"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+  <Rule Name="f2016MSI"></Rule>
+
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>QM+dXo9nVXys5pqfxzlVWHhk1lI=</DigestValue></Reference></SignedInfo><SignatureValue>
+    E2xgKh+BVksuxDxvZAa+B4KkvfA7qxLXQO+sODqOYTUte7soXIyKhlniVTWGCRRwQOIfC7QJ
+    nsmsopQXbLrrwtMRHQOBwp3KQRgVUvY8V75G+hDY9auEuqOINqiqfFE/pEOe8dv1oQXv7eXG
+    kvE2/tW1EtbI+zv6i8QPqONt5I+fBf2iM2i1vkAwcsFyvZDvM+6iTz7TBbVZFrOKvG8X+kxD
+    ZuoUOJ3LztFFpWVHsNkzZA8S7mhR9vy8uSBxBIUyeyHVFDhFe/Fj3O+s2D6R0GyECBHjvGXH
+    w8+KE4/crl0RFMaWPaqQjuz0MmEgX1Am0Z/8pRDheBtuCeMxmyF2RQ==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFmTCCA4GgAwIBAgIQea0WoUqgpa1Mc1j0BxMuZTANBgkqhkiG9w0BAQUFADBfMRMwEQYK
+          CZImiZPyLGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRN
+          aWNyb3NvZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDEwNTA5MjMxOTIyWhcN
+          MjEwNTA5MjMyODEzWjBfMRMwEQYKCZImiZPyLGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJ
+          bWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3Jp
+          dHkwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDzXfqAZ9Rap6kMLJAg0DUIPHWE
+          zbcHiZyJ2t7Ow2D6kWhanpRxKRh2fMLgyCV2lA5Y+gQ0Nubfr/eAuulYCyuT5Z0F43cikfc0
+          ZDwikR1e4QmQvBT+/HVYGeF5tweSo66IWQjYnwfKA1j8aCltMtfSqMtL/OELSDJP5uu4rU/k
+          XG8TlJnbldV126gat5SRtHdb9UgMj2p5fRRwBH1tr5D12nDYR7e/my9s5wW34RFgrHmRFHzF
+          1qbk4X7Vw37lktI8ALU2gt554W3ztW74nzPJy1J9c5g224uha6KVl5uj3sJNJv8GlmclBsjn
+          rOTuEjOVMZnINQhONMp5U9W1vmMyWUA2wKVOBE0921sHM+RYv+8/U2TYQlk1V/0PRXwkBE2e
+          1jh0EZcikM5oRHSSb9VLb7CG48c2QqDQ/MHAWvmjYbkwR3GWChawkcBCle8Qfyhq4yofseTN
+          Az93cQTHIPxJDx1FiKTXy36IrY4t7EXbxFEEySr87IaemhGXW97OU4jm4rf9rJXCKEDb7wSQ
+          34EzOdmyRaUjhwalVYkxuwYtYA5BGH0fLrWXyxHrFdUkpZTvFRSJ/Utz+jJb/NEzAPlZYnAH
+          Muouq0Ate8rdIWcbMJmPFqojqEHRsG4RmzbE3kB0nOFYZcFgHnpbOMiPuwQmfNQWQOW2a2yq
+          hv0Av87BNQIDAQABo1EwTzALBgNVHQ8EBAMCAcYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4E
+          FgQUDqyCYEBWJ5flJRP8KuEKU5VZ5KQwEAYJKwYBBAGCNxUBBAMCAQAwDQYJKoZIhvcNAQEF
+          BQADggIBAMURTQM6YN1dUhF3j7K7NsiyBb+0t6jYIJ1cEwO2HCL6BhM1tshj1JpHbyZX0lXx
+          BLEmX9apUGigvNK4bszD6azfGc14rFl0rGY0NsQbPmw4TDMOMBINoyb+UVMA/69aToQNDx/k
+          bQUuToVLjWwzb1TSZKu/UK99ejmgN+1jAw/8EwbOFjbUVDuVG1FiOuVNF9QFOZKaJ6hbqr3s
+          u77jIIlgcWxWs6UT0G0OI36VA+1oPfLYY7hrTbboMLXhypRL96KqXZkwsj2nwlFsKCABJCcr
+          SwC3nRFrcL6yEIK8DJto0I07JIeqmShynTNfWZC99d6TnjpiWjQ54ohVHbkGsMGJay3XacMZ
+          EjaE0Mmg2v8vaXiy5Xra69cMwPe9Yxe4ORM4ojZbe/KFVmodZGLBOOKqv1FmopT1EpxmIhBr
+          8rcwki3yKfA9OxRDaKLxnCk3y844ICVtfGfzfiQSJAMIgUfspZ6X9RjXz7vV73aW7/3O21ad
+          laBC+ZdY4dcxItNfWeY+biIA6kOEtiXb2fMIVmjAZGsdfOy2k6JiV24u2OdYj8QxSSbd3ik1
+          h/UwcXBbFDxpvYkSfesuo/7Yf56CWlIKK8FDK9kwiJ/IEPuJjeahhXUzfmye23MTZGJppS99
+          ypZtn/gETTCSPW4hFCHJPeDD/YprnUr90aGdmUN3P7Da
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0AYJKoZIhvcNAQcCoIIGwTCCBr0CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQATbGAqH4FWSy7EPG9kBr4HgqS98DurEtdA76w4Oo5hNS17uyhcjIqGWeJVNYYJFHBA4h8L
+tAmeyayilBdsuuvC0xEdA4HCncpBGBVS9jxXvkb6ENj1q4S6o4g2qKp8UT+kQ57x2/WhBe/t5caS
+8Tb+1bUS1sj7O/qLxA+o423kj58F/aIzaLW+QDBywXK9kO8z7qJPPtMFtVkWs4q8bxf6TENm6hQ4
+ncvO0UWlZUew2TNkDxLuaFH2/Ly5IHEEhTJ7IdUUOEV78WPc76zYPpHQbIQIEeO8ZcfDz4oTj9yu
+XREUxpY9qpCO7PQyYSBfUCbRn/ylEOF4G24J4zGbIXZFoIIDeaGCA3UwggJdAgEBMIHjoYG5pIG2
+MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
+MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
+Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAVVOJIetMkgprira+lJqMuHewz+yggcIwgb+k
+gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
+MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
+Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/o4wIhgPMjAxNjA4MDExNjU5
+NThaGA8yMDE2MDgwMjE2NTk1OFowczA5BgorBgEEAYRZCgQBMSswKTAKAgUA20n+jgIBADAGAgEA
+AgECMAcCAQACAhg+MAoCBQDbS1AOAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkKAwGg
+CjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADW8Wc1X7wC6a6anLPjY
+Z2LaN5A9sqH61c4KUXHRWQ3NmrcTAt5MRePI0Rf9rcgxQdA/DPFaeCoOLMvfTtc1njNwsDsbcjp8
+p37u2Rr/E0WNFRoraruy1H8HEHx3Tev0SNGOKot7vdrkByf8qTKKOtA4EpEnH9SEuHYhDBN7SfW4
+qcWVmL5KhJDtvtQDqfPzMa7fL7ybRLblnfVnJD/dIz973Q0gS2aFre7EyRAkKlJVOy2m4J1kDXAG
+Z7GfdnVjTB0PDzILYM2HrdlGs0c6CsKLqUnB4H7oEQTVDXGJhjj02Nozcq4uEucHns5H3JS1puGO
+AwoOxcxZQYGdexa7AqUxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9u
+MSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACvU0d3bBvxowIAAAAAAK8w
+CQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE2
+MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFOKOhZETfZr2PcVelBlfD2y/ouiJMA0GCSqGSIb3
+DQEBBQUABIIBAIlNkO+/MJD2mzRkVZrm7wOBB1Ou8P9a6vjyXwWYZdAickdBuJ5hTmc84AP2Id6u
+DmZmflVtvPw1gJWUQumGneSbFlqzsSCSMOs4ZvA503JwPqCmNshsL3Dlyht9pk9pgqI9dH5knGmP
+pps9EVSmnDLrEA7n9WicFzSYavIDisxNcsc4+3Qs3ms7A0YyDZLaVPmLEQSA3edHj4DjH4ocw8li
+4c7JbrXEd3u0n+zKvrZ9yAk0lP/FM+Q/HTz26+HvoU1goT52U7/aIxUckpL4XQg60I5fJa6HOJ3Y
+leAEAqQRaJNXxx9W6vmD3GodImHFl/5o2mMjDS8pZQnQ6cG89tE=</CounterSignature></Object></Signature></ObjectCollector>

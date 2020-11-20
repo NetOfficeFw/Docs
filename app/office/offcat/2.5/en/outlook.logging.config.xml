@@ -1,0 +1,972 @@
+<?xml version="1.0" encoding="utf-8"?><OutlookLogging>
+  <Configuration ConfigName="Real-time Logging" ConfigVersion="2.0.1605.20" ChangeDescription="2.0.1605.20" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" Symptoms="1">
+    <Substitution Name="MAJORVERSION"/>
+    <Substitution Name="CSVFILENAME"/>
+    <Substitution Name="ETLFILENAME"/>
+    <Substitution Name="APPNAME"/>
+    <Substitution Name="SCENARIOID"/>
+    <ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+    <ObjectProcessor Name="CSV" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CSVObjectProcessor"/>
+    <ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+    <ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+    <ObjectProcessor Name="OFFX" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OffXFileObjectProcessor"/>
+    <ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+    <ObjectProcessor Name="ZipPackage" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.ZipPackageObjectProcessor"/>
+  </Configuration>
+  <Object Type="Group" Name="Real-Time logging data" LogText="Collecting Real-time logging data" TrackProgress="TrackProgress">
+    <Setting Display="Hide"></Setting>
+    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\OffCAT" Key4="" Key5="Base" Display="Hide">
+      <Setting Key1="DataDirectory" Display="Hide">
+        <Rule Name="sOffcatDataDirectory" Query="$."></Rule>
+      </Setting>
+    </Object>
+    <Object Type="CSV" Key2="%CSVFILENAME%" Key4="True" Key5=";" Display="Hide">
+      <!--keeping it simple for now, if we want scenario specific rules, the Scenario name (or Id) is passed
+        as a global substitution. if needed in the future we could use restrictions-->
+      <Setting Key1="TimeStamp" Substitution="TIMESTAMP" Display="Hide"/>
+      <Setting Key1="Message" Substitution="MESSAGE" Display="Hide"/>
+      <Object Type="Group" Name="%TIMESTAMP%: %MESSAGE%">
+        <Setting Display="Hide"/>
+      </Object>
+    </Object>
+    <Object Type="OFFX" Key1="%CSVFILENAME%" Key2="RTL" Key3="text/plain" Key4="ADD" Key5="True"/>
+    <Rule Name="sCsvFileName" Query="substring('%CSVFILENAME%',string-length($sOffcatDataDirectory)+2)"></Rule>    
+    <!--should we prevent that if the file's too big or can we just rely on MaxFileSize set on the scenarios-->
+    <Object Type="OFFX" Key1="%ETLFILENAME%" Key2="RTL" Key3="application/etl" Key4="ADD" Key5="True"/>
+    <Rule Name="sEtlFileName" Query="substring('%ETLFILENAME%',string-length($sOffcatDataDirectory)+2)"></Rule>
+    <!--scenario specific collection-->
+    <Object Type="If" Key1="%SCENARIOID%=10">
+      <Object Type="ZipPackage" Key1="%LOCALAPPDATA%\Microsoft\Office\16.0\Wef" Key2="Subtree" Display="Hide">
+        <Object Type="OFFX" Key1="%TEMP%\Wef.zip" Key2="Agave" Key3="application/offcat" Key4="ADD" Key5="True"/>
+        <Rule Name="fWefZipFileAdded" Query="count(../Instance)&gt;0"></Rule>
+      </Object>
+    </Object>
+    <Rule Name="rtlfiles" Error="None" Query="true()" Title="Log files are available in this scan" P0="$sCsvFileName" P1="$sEtlFileName" P2="if($fWefZipFileAdded,' - Wef.zip','')" Text="Log files are available in this scan. Click the 'Configuration Details' tile and then select the 'Collected Log Files' tab to view the files collected during this scan.&#xA;&#xA; - {0}&#xA; - {1}&#xA;{2}" Symptoms="!_Log files created"></Rule>
+  </Object>
+  <Scenario Name="Message stuck in the outbox" Version="15.0" ScenarioId="0" Applications="Outlook">
+    <Provider Name="CssTraceEventParser">
+      <Keyword Name="CssOutbox" KeywordId="8" Level="Customer">
+        <Event Name="CssOutboxEvtSendMessage" Level="Customer" Flag="None" Message="A message is being sent from Outlook"></Event>
+        <Event Name="CssOutboxEvtRopSM" Level="Customer" Flag="None" Message="Outlook has asked Exchange to accept submission of the message"></Event>
+        <Event Name="CssOutboxEvtRopTS" Level="Customer" Flag="None" Message="Outlook has asked Exchange to deliver the message"></Event>
+        <Event Name="CssOutboxEvtOutboxSubject" Level="Customer" Flag="None" Message="Subject: {0}"></Event>
+        <Event Name="CssOutboxEvtMTSISuccess" Level="Customer" Flag="Info" Message="The message has been successfully moved to the Sent Items Folder"></Event>
+        <Event Name="CssOutboxEvtOutboxNDR" Level="Customer" Flag="Warning" Message="Outlook is generating a non-delivery report for the message. The reason is: {0}">
+          <Payload Name="Reason">
+            <PayloadValue Value="0" Text="Outlook did not have enough information to determine a specific reason"></PayloadValue>
+            <PayloadValue Value="1" Text="None of your mail accounts could deliver mail with this type of email address"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgTotal" Level="Customer" Flag="Info" Message="Total count of potential messages to send = {0}">
+          <Payload Name="Count"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgFinal" Level="Customer" Flag="Info" Message="Final count of potential messages to send = {0}">
+          <Payload Name="Count"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtAddMsgToTableRowAdded" Level="Customer" Flag="Info" Message="One message has been added to the outgoing messages table"></Event>
+        <Event Name="CssOutboxEvtOutboxOPMLog" Level="Customer" Flag="Info" Message="{0}">
+          <Payload Name="OPMLogData"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtPSPStart" Level="Customer" Flag="None" Message="Post-submission processing has started"></Event>
+        <Event Name="CssOutboxEvtPSPStart" Level="Customer" Flag="None" Message="Post-submission processing has ended. Result = {0}">
+          <Payload Name="Result">
+            <PayloadValue Value="0" Text="Success"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtMTSICopy" Level="Customer" Flag="None" Message="Ready to move to Sent Items Folder"></Event>
+        <Event Name="CssOutboxEvtMTSIDelete" Level="Customer" Flag="Info" Message="Outlook is deleting the sent item based on user settings"></Event>
+        <Event Name="CssOutboxEvtMTSISuccess" Level="Customer" Flag="Info" Message="The message was successfully moved to Sent Items"></Event>
+        <Event Name="CssOutboxEvtMTSIEnd" Level="Customer" Flag="Info" Message="The attempt to move the message to Sent Items resulted in: {0}">
+          <Payload Name="Result">
+            <PayloadValue Value="0" Text="Success"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgSkipDef" Level="Customer" Flag="Warning" Message="Not sending because deferred delivery time is set for this message"></Event>
+        <Event Name="CssOutboxEvtOutMsgSkipStore" Level="Customer" Flag="None" Message="Skipping a store while collecting messages to send because {0}">
+          <Payload Name="Reason">
+            <PayloadValue Value="This_is_an_archive_store" Text="this is an archive store."></PayloadValue>
+            <PayloadValue Value="This_is_a_delegate_store_and_Delegatesentitemstyle_is_not_in_use_" Text="this is a shared mailbox store."></PayloadValue>
+            <PayloadValue Value="This_is_a_public_folder_store" Text="this is a public folder store."></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgSkipSub" Level="Customer" Flag="Warning" Message="Skipping message because it is not in submitted state"></Event>
+
+        <Event Name="CssOutboxEvtPSMSI" Level="Customer" Flag="Info" Message="'Send immediately when connected' preference is {0}">
+          <Payload Name="Setting">
+            <PayloadValue Value="False" Text="unchecked (or the profile is in online mode)."></PayloadValue>
+            <PayloadValue Value="True" Text="checked."></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtSAPMStart" Level="Customer" Flag="None" Message="Starting sending of all pending messages"></Event>
+        <Event Name="CssOutboxEvtSAPMEnd" Level="Customer" Flag="Info" Message="Finished sending of all pending messages. Result = {0}">
+          <Payload Name="Result">
+            <PayloadValue Value="0" Text="Success"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgProcessingStore" Level="Customer" Flag="None" Message="Getting list of messages to send for store '{0}'">
+          <Payload Name="EntryID_Store"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgProcessAccount" Level="Customer" Flag="None" Message="Getting list of messages to send for '{0}'">
+          <Payload Name="AcctId"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtMSGSMStart" Level="Customer" Flag="None" Message="CssOutboxEvtMSGSMStart{0}"></Event>
+        <Event Name="CssOutboxEvtMSGSMEnd" Level="Customer" Flag="None" Message="CssOutboxEvtMSGSMEnd{0}"></Event>
+        <!--<Event Name="CssOutboxEvtSyncSentItems" Level="Customer" Flag="Info" Message="Synchronisation engine is working on Sent Items"></Event>-->
+        <!--<Event Name="CssOutboxEvtSILog" Level="Customer" Flag="" Message=""></Event>-->
+        <!--<Event Name="CssOutboxEvtCallPSP" Level="Customer" Flag="None" Message="Performing post-submission processing"></Event>-->
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Message stuck in the outbox" Version="16.0" ScenarioId="1" Applications="Outlook">
+    <Provider Name="CssTraceEventParser">
+      <Keyword Name="CssOutbox" KeywordId="8" Level="Customer">
+        <Event Name="CssOutboxEvtSendMessage" Level="Customer" Flag="None" Message="A message is being sent from Outlook"></Event>
+        <Event Name="CssOutboxEvtRopSM" Level="Customer" Flag="None" Message="Outlook has asked Exchange to accept submission of the message"></Event>
+        <Event Name="CssOutboxEvtRopTS" Level="Customer" Flag="None" Message="Outlook has asked Exchange to deliver the message"></Event>
+        <Event Name="CssOutboxEvtOutboxSubject" Level="Customer" Flag="None" Message="Subject: {0}"></Event>
+        <Event Name="CssOutboxEvtMTSISuccess" Level="Customer" Flag="Info" Message="The message has been successfully moved to the Sent Items Folder"></Event>
+        <Event Name="CssOutboxEvtOutboxNDR" Level="Customer" Flag="Warning" Message="Outlook is generating a non-delivery report for the message. The reason is: {0}">
+          <Payload Name="Reason">
+            <PayloadValue Value="0" Text="Outlook did not have enough information to determine a specific reason"></PayloadValue>
+            <PayloadValue Value="1" Text="None of your mail accounts could deliver mail with this type of email address"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgTotal" Level="Customer" Flag="Info" Message="Total count of potential messages to send = {0}">
+          <Payload Name="Count"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgFinal" Level="Customer" Flag="Info" Message="Final count of potential messages to send = {0}">
+          <Payload Name="Count"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtAddMsgToTableRowAdded" Level="Customer" Flag="Info" Message="One message has been added to the outgoing messages table"></Event>
+        <Event Name="CssOutboxEvtOutboxOPMLog" Level="Customer" Flag="Info" Message="{0}">
+          <Payload Name="OPMLogData"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtPSPStart" Level="Customer" Flag="None" Message="Post-submission processing has started"></Event>
+        <Event Name="CssOutboxEvtPSPStart" Level="Customer" Flag="None" Message="Post-submission processing has ended. Result = {0}">
+          <Payload Name="Result">
+            <PayloadValue Value="0" Text="Success"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtMTSICopy" Level="Customer" Flag="None" Message="Ready to move to Sent Items Folder"></Event>
+        <Event Name="CssOutboxEvtMTSIDelete" Level="Customer" Flag="Info" Message="Outlook is deleting the sent item based on user settings"></Event>
+        <Event Name="CssOutboxEvtMTSISuccess" Level="Customer" Flag="Info" Message="The message was successfully moved to Sent Items"></Event>
+        <Event Name="CssOutboxEvtMTSIEnd" Level="Customer" Flag="Info" Message="The attempt to move the message to Sent Items resulted in: {0}">
+          <Payload Name="Result">
+            <PayloadValue Value="0" Text="Success"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgSkipDef" Level="Customer" Flag="Warning" Message="Not sending because deferred delivery time is set for this message"></Event>
+        <Event Name="CssOutboxEvtOutMsgSkipStore" Level="Customer" Flag="None" Message="Skipping a store while collecting messages to send because {0}">
+          <Payload Name="Reason">
+            <PayloadValue Value="This_is_an_archive_store" Text="this is an archive store."></PayloadValue>
+            <PayloadValue Value="This_is_a_delegate_store_and_Delegatesentitemstyle_is_not_in_use_" Text="this is a shared mailbox store."></PayloadValue>
+            <PayloadValue Value="This_is_a_public_folder_store" Text="this is a public folder store."></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgSkipSub" Level="Customer" Flag="Warning" Message="Skipping message because it is not in submitted state"></Event>
+
+        <Event Name="CssOutboxEvtPSMSI" Level="Customer" Flag="Info" Message="'Send immediately when connected' preference is {0}">
+          <Payload Name="Setting">
+            <PayloadValue Value="False" Text="unchecked (or the profile is in online mode)."></PayloadValue>
+            <PayloadValue Value="True" Text="checked."></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtSAPMStart" Level="Customer" Flag="None" Message="Starting sending of all pending messages"></Event>
+        <Event Name="CssOutboxEvtSAPMEnd" Level="Customer" Flag="Info" Message="Finished sending of all pending messages. Result = {0}">
+          <Payload Name="Result">
+            <PayloadValue Value="0" Text="Success"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgProcessingStore" Level="Customer" Flag="None" Message="Getting list of messages to send for store '{0}'">
+          <Payload Name="EntryID_Store"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtOutMsgProcessAccount" Level="Customer" Flag="None" Message="Getting list of messages to send for '{0}'">
+          <Payload Name="AcctId"></Payload>
+        </Event>
+        <Event Name="CssOutboxEvtMSGSMStart" Level="Customer" Flag="None" Message="CssOutboxEvtMSGSMStart{0}"></Event>
+        <Event Name="CssOutboxEvtMSGSMEnd" Level="Customer" Flag="None" Message="CssOutboxEvtMSGSMEnd{0}"></Event>
+        <!--<Event Name="CssOutboxEvtSyncSentItems" Level="Customer" Flag="Info" Message="Synchronisation engine is working on Sent Items"></Event>-->
+        <!--<Event Name="CssOutboxEvtSILog" Level="Customer" Flag="" Message=""></Event>-->
+        <!--<Event Name="CssOutboxEvtCallPSP" Level="Customer" Flag="None" Message="Performing post-submission processing"></Event>-->
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Junk Mail Decision Process" Version="14.0" ScenarioId="2" Applications="Outlook">
+    <Provider Name="OutlookTraceEventParser">
+      <Keyword Name="Css" KeywordId="134217728" Level="Customer">
+        <Event Name="CssEvtJunkAction" Level="Customer" Flag="None" Message="{0}">
+          <Payload Name="JunkAction">
+            <PayloadValue Value="Outlook_will_process_this_message_as_a_junk_message" Text="Outlook processed this message as a junk message."></PayloadValue>
+            <PayloadValue Value="Outlook_will_stamp_the_phishing_property_only" Text="Outlook processed this message as a phishing message"></PayloadValue>
+            <PayloadValue Value="Outlook_will_stamp_the_spoofing_property_only" Text="Outlook processed this message as a spoofing message"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssEvtJunkData" Level="Customer" Flag="None" Message="Threshold: {0}, SCL: {1}, PCL: {2}"></Event>
+        <Event Name="CSSEvtJunkDecision" Level="Customer" Flag="Error" Message="{1} {0}">
+          <Payload Name="DecisonTest">
+            <!--no typo, the typo is in timberlib-->
+            <PayloadValue Value="Header_item" Text="The message is a header-only item, and not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="SCL_negative_1_during_download" Text="The message is already trusted (Spam Confidence Level = -1)."></PayloadValue>
+            <!--The message is for a delegate store a public folder or has not been downloaded.-->
+            <PayloadValue Value="Misc_valid_scenario_tests" Text=""></PayloadValue>
+            <PayloadValue Value="DisableAntiSpam_value" Text="The Junk mail Filter is disabled by policy."></PayloadValue>
+            <PayloadValue Value="Folder_test_part_1" Text="An error occurred while trying to open the default junk mail folder."></PayloadValue>
+            <PayloadValue Value="Folder_test_part_2" Text="An error occurred while trying to open the default junk mail folder."></PayloadValue>
+            <PayloadValue Value="Excluded_folders" Text="Messages in deleted items, drafts, outbox, sent items, sync issues subfolders are not scanned."></PayloadValue>
+            <PayloadValue Value="Favorites_folder" Text="Messages in public folder favorites are not scanned."></PayloadValue>
+            <PayloadValue Value="Shortcuts_folder" Text="Messages in public folder shortcuts favorites are not scanned."></PayloadValue>
+            <PayloadValue Value="Spam_settings_retrieval" Text="The junk mail options could not be retrieved."></PayloadValue>
+            <PayloadValue Value="Container_test_part_1" Text="An error occurred opening the containing folder of the message."></PayloadValue>
+            <PayloadValue Value="Container_test_part_2" Text="Messages of this type are not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Message_properties_retrieval" Text="An error occurred while retrieving basic properties from the message that are required for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Scan_type_calculation" Text="Unknown scan type."></PayloadValue>
+            <PayloadValue Value="Property_bag_retrieval" Text="An error occurred while retrieving extended properties from the message that are required for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Phishing_only_or_junk_folder" Text="Outlook is scanning the message for phishing status only or the message is already in the junk mail folder."></PayloadValue>
+            <PayloadValue Value="Trusted_Sender" Text="The sender is trusted."></PayloadValue>
+            <PayloadValue Value="Out_of_Memory" Text="An unexpected memory error prevented the scanning process from completing successfully."></PayloadValue>
+            <PayloadValue Value="Trusted_recipient" Text="The recipient is trusted."></PayloadValue>
+            <PayloadValue Value="Junk_sender" Text="The sender is blocked."></PayloadValue>
+            <PayloadValue Value="Trusted_domain" Text="The domain is trusted."></PayloadValue>
+            <PayloadValue Value="Misc_domain_and_settings" Text="Either the sender's domain is blocked, the encoding used in this message is blocked, or the sender's address suffix is blocked."></PayloadValue>
+            <PayloadValue Value="Threshold_none" Text="The level of junk mail protection is set to 'No Automatic Filtering'."></PayloadValue>
+            <PayloadValue Value="Threshold_trusted_only" Text="the level of junk mail protection is set to 'Safe Lists Only'."></PayloadValue>
+            <PayloadValue Value="Filter_decision" Text="The message was sent to the junk mail filter, and the filter returned this decision on whether the message should be considered junk."></PayloadValue>
+            <PayloadValue Value="Associated__Hidden__Message" Text="This is a system message, not visible to the user, and is not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Disabled_by_store" Text="This mail store doesn't support junk mail filtering."></PayloadValue>
+            <PayloadValue Value="Message_not_in_IPM_Tree" Text="The message is not in a folder that is eligible for junk mail scanning."></PayloadValue>
+          </Payload>
+          <Payload Name="DecisionMade">
+            <PayloadValue Value="Message_NOT_marked_as_Junk" Text="The message is NOT marked as junk." Flag="Info"></PayloadValue>
+            <PayloadValue Value="Message_marked_as_Junk" Text="The message *IS* marked as junk." Flag="Warning"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssEvtJunkProcess" Level="Customer" Flag="None" Message="{0}">
+          <Payload Name="Step">
+            <PayloadValue Value="Junk_mail_scanning_has_started_for_a_message" Text="Junk mail scanning has started for a message"></PayloadValue>
+            <PayloadValue Value="Junk_mail_scanning_has_ended_for_a_message" Text="Junk mail scanning has ended for a message"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssEvtJunkSubjectA" Level="Customer" Flag="None" Message="Subject: {0}"></Event>
+        <Event Name="CssEvtJunkSubjectW" Level="Customer" Flag="None" Message="Subject: {0}"></Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Junk Mail Decision Process" Version="15.0" ScenarioId="3" Applications="Outlook">
+    <Provider Name="CssTraceEventParser">
+      <Keyword Name="CssJunkmail" KeywordId="4" Level="Customer">
+        <Event Name="CssEvtJunkAction" Level="Customer" Flag="None" Message="{0}">
+          <Payload Name="JunkAction">
+            <PayloadValue Value="Outlook_will_process_this_message_as_a_junk_message" Text="Outlook processed this message as a junk message"></PayloadValue>
+            <PayloadValue Value="Outlook_will_stamp_the_phishing_property_only" Text="Outlook processed this message as a phishing message"></PayloadValue>
+            <PayloadValue Value="Outlook_will_stamp_the_spoofing_property_only" Text="Outlook processed this message as a spoofing message"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssEvtJunkData" Level="Customer" Flag="None" Message="Threshold: {0}, SCL: {1}, PCL: {2}">
+          <Payload Name="Threshold"></Payload>
+          <Payload Name="SCL"></Payload>
+          <Payload Name="PCL"></Payload>
+        </Event>
+        <Event Name="CSSEvtJunkDecision" Level="Customer" Message="{1} {0}">
+          <Payload Name="DecisonTest">
+            <!--no typo, the typo is in timberlib-->
+            <PayloadValue Value="Header_item" Text="The message is a header-only item, and not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="SCL_negative_1_during_download" Text="The message is already trusted (Spam Confidence Level = -1)."></PayloadValue>
+            <!--The message is for a delegate store a public folder or has not been downloaded.-->
+            <PayloadValue Value="Misc_valid_scenario_tests" Text=""></PayloadValue>
+            <PayloadValue Value="DisableAntiSpam_value" Text="The Junk mail Filter is disabled by policy."></PayloadValue>
+            <PayloadValue Value="Folder_test_part_1" Text="An error occurred while trying to open the default junk mail folder."></PayloadValue>
+            <PayloadValue Value="Folder_test_part_2" Text="An error occurred while trying to open the default junk mail folder."></PayloadValue>
+            <PayloadValue Value="Excluded_folders" Text="Messages in deleted items, drafts, outbox, sent items, sync issues subfolders are not scanned."></PayloadValue>
+            <PayloadValue Value="Favorites_folder" Text="Messages in public folder favorites are not scanned."></PayloadValue>
+            <PayloadValue Value="Shortcuts_folder" Text="Messages in public folder shortcuts favorites are not scanned."></PayloadValue>
+            <PayloadValue Value="Spam_settings_retrieval" Text="The junk mail options could not be retrieved."></PayloadValue>
+            <PayloadValue Value="Container_test_part_1" Text="An error occurred opening the containing folder of the message."></PayloadValue>
+            <PayloadValue Value="Container_test_part_2" Text="Messages of this type are not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Message_properties_retrieval" Text="An error occurred while retrieving basic properties from the message that are required for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Scan_type_calculation" Text="Unknown scan type."></PayloadValue>
+            <PayloadValue Value="Property_bag_retrieval" Text="An error occurred while retrieving extended properties from the message that are required for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Phishing_only_or_junk_folder" Text="Outlook is scanning the message for phishing status only or the message is already in the junk mail folder."></PayloadValue>
+            <PayloadValue Value="Trusted_Sender" Text="The sender is trusted."></PayloadValue>
+            <PayloadValue Value="Out_of_Memory" Text="An unexpected memory error prevented the scanning process from completing successfully."></PayloadValue>
+            <PayloadValue Value="Trusted_recipient" Text="The recipient is trusted."></PayloadValue>
+            <PayloadValue Value="Junk_sender" Text="The sender is blocked."></PayloadValue>
+            <PayloadValue Value="Trusted_domain" Text="The domain is trusted."></PayloadValue>
+            <PayloadValue Value="Misc_domain_and_settings" Text="Either the sender's domain is blocked, the encoding used in this message is blocked, or the sender's address suffix is blocked."></PayloadValue>
+            <PayloadValue Value="Threshold_none" Text="The level of junk mail protection is set to 'No Automatic Filtering'."></PayloadValue>
+            <PayloadValue Value="Threshold_trusted_only" Text="the level of junk mail protection is set to 'Safe Lists Only'."></PayloadValue>
+            <PayloadValue Value="Filter_decision" Text="The message was sent to the junk mail filter, and the filter returned this decision on whether the message should be considered junk."></PayloadValue>
+            <PayloadValue Value="Associated__Hidden__Message" Text="This is a system message, not visible to the user, and is not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Disabled_by_store" Text="This mail store doesn't support junk mail filtering."></PayloadValue>
+            <PayloadValue Value="Message_not_in_IPM_Tree" Text="The message is not in a folder that is eligible for junk mail scanning."></PayloadValue>
+          </Payload>
+          <Payload Name="DecisionMade">
+            <PayloadValue Value="Message_NOT_marked_as_Junk" Text="The message is NOT marked as junk." Flag="Info"></PayloadValue>
+            <PayloadValue Value="Message_marked_as_Junk" Text="The message *IS* marked as junk." Flag="Warning"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssEvtJunkProcess" Level="Customer" Flag="None" Message="{0}">
+          <Payload Name="Step">
+            <PayloadValue Value="Junk_mail_scanning_has_started_for_a_message" Text="Junk mail scanning has started for a message"></PayloadValue>
+            <PayloadValue Value="Junk_mail_scanning_has_ended_for_a_message" Text="Junk mail scanning has ended for a message"></PayloadValue>
+          </Payload>
+          <Payload Name="InFlags"></Payload>
+          <Payload Name="HiddenFlag"></Payload>
+        </Event>
+        <Event Name="CssEvtJunkSubjectA" Level="Customer" Flag="None" Message="Subject: {0}"></Event>
+        <Event Name="CssEvtJunkSubjectW" Level="Customer" Flag="None" Message="Subject: {0}"></Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Junk Mail Decision Process" Version="16.0" ScenarioId="4" Applications="Outlook">
+    <Provider Name="CssTraceEventParser">
+      <Keyword Name="CssJunkmail" KeywordId="4" Level="Customer">
+        <Event Name="CssEvtJunkAction" Level="Customer" Flag="None" Message="{0}">
+          <Payload Name="JunkAction">
+            <PayloadValue Value="Outlook_will_process_this_message_as_a_junk_message" Text="Outlook processed this message as a junk message"></PayloadValue>
+            <PayloadValue Value="Outlook_will_stamp_the_phishing_property_only" Text="Outlook processed this message as a phishing message"></PayloadValue>
+            <PayloadValue Value="Outlook_will_stamp_the_spoofing_property_only" Text="Outlook processed this message as a spoofing message"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssEvtJunkData" Level="Customer" Flag="None" Message="Threshold: {0}, SCL: {1}, PCL: {2}">
+          <Payload Name="Threshold"></Payload>
+          <Payload Name="SCL"></Payload>
+          <Payload Name="PCL"></Payload>
+        </Event>
+        <Event Name="CSSEvtJunkDecision" Level="Customer" Message="{1} {0}">
+          <Payload Name="DecisonTest">
+            <!--no typo, the typo is in timberlib-->
+            <PayloadValue Value="Header_item" Text="The message is a header-only item, and not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="SCL_negative_1_during_download" Text="The message is already trusted (Spam Confidence Level = -1)."></PayloadValue>
+            <!--The message is for a delegate store a public folder or has not been downloaded.-->
+            <PayloadValue Value="Misc_valid_scenario_tests" Text=""></PayloadValue>
+            <PayloadValue Value="DisableAntiSpam_value" Text="The Junk mail Filter is disabled by policy."></PayloadValue>
+            <PayloadValue Value="Folder_test_part_1" Text="An error occurred while trying to open the default junk mail folder."></PayloadValue>
+            <PayloadValue Value="Folder_test_part_2" Text="An error occurred while trying to open the default junk mail folder."></PayloadValue>
+            <PayloadValue Value="Excluded_folders" Text="Messages in deleted items, drafts, outbox, sent items, sync issues subfolders are not scanned."></PayloadValue>
+            <PayloadValue Value="Favorites_folder" Text="Messages in public folder favorites are not scanned."></PayloadValue>
+            <PayloadValue Value="Shortcuts_folder" Text="Messages in public folder shortcuts favorites are not scanned."></PayloadValue>
+            <PayloadValue Value="Spam_settings_retrieval" Text="The junk mail options could not be retrieved."></PayloadValue>
+            <PayloadValue Value="Container_test_part_1" Text="An error occurred opening the containing folder of the message."></PayloadValue>
+            <PayloadValue Value="Container_test_part_2" Text="Messages of this type are not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Message_properties_retrieval" Text="An error occurred while retrieving basic properties from the message that are required for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Scan_type_calculation" Text="Unknown scan type."></PayloadValue>
+            <PayloadValue Value="Property_bag_retrieval" Text="An error occurred while retrieving extended properties from the message that are required for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Phishing_only_or_junk_folder" Text="Outlook is scanning the message for phishing status only or the message is already in the junk mail folder."></PayloadValue>
+            <PayloadValue Value="Trusted_Sender" Text="The sender is trusted."></PayloadValue>
+            <PayloadValue Value="Out_of_Memory" Text="An unexpected memory error prevented the scanning process from completing successfully."></PayloadValue>
+            <PayloadValue Value="Trusted_recipient" Text="The recipient is trusted."></PayloadValue>
+            <PayloadValue Value="Junk_sender" Text="The sender is blocked."></PayloadValue>
+            <PayloadValue Value="Trusted_domain" Text="The domain is trusted."></PayloadValue>
+            <PayloadValue Value="Misc_domain_and_settings" Text="Either the sender's domain is blocked, the encoding used in this message is blocked, or the sender's address suffix is blocked."></PayloadValue>
+            <PayloadValue Value="Threshold_none" Text="The level of junk mail protection is set to 'No Automatic Filtering'."></PayloadValue>
+            <PayloadValue Value="Threshold_trusted_only" Text="the level of junk mail protection is set to 'Safe Lists Only'."></PayloadValue>
+            <PayloadValue Value="Filter_decision" Text="The message was sent to the junk mail filter, and the filter returned this decision on whether the message should be considered junk."></PayloadValue>
+            <PayloadValue Value="Associated__Hidden__Message" Text="This is a system message, not visible to the user, and is not eligible for junk mail scanning."></PayloadValue>
+            <PayloadValue Value="Disabled_by_store" Text="This mail store doesn't support junk mail filtering."></PayloadValue>
+            <PayloadValue Value="Message_not_in_IPM_Tree" Text="The message is not in a folder that is eligible for junk mail scanning."></PayloadValue>
+          </Payload>
+          <Payload Name="DecisionMade">
+            <PayloadValue Value="Message_NOT_marked_as_Junk" Text="The message is NOT marked as junk." Flag="Info"></PayloadValue>
+            <PayloadValue Value="Message_marked_as_Junk" Text="The message *IS* marked as junk." Flag="Warning"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="CssEvtJunkProcess" Level="Customer" Flag="None" Message="{0}">
+          <Payload Name="Step">
+            <PayloadValue Value="Junk_mail_scanning_has_started_for_a_message" Text="Junk mail scanning has started for a message"></PayloadValue>
+            <PayloadValue Value="Junk_mail_scanning_has_ended_for_a_message" Text="Junk mail scanning has ended for a message"></PayloadValue>
+          </Payload>
+          <Payload Name="InFlags">
+            <!--possible flags
+            KEEP_OPEN_READONLY	0x00000001 
+            KEEP_OPEN_READWRITE	0x00000002 
+            FORCE_SAVE		0x00000004 
+            MAPI_DEFERRED_ERRORS	0x00000008
+            DONT_ASSIGN_VERSIONS	0x00000010
+            DONT_ASSIGN_CHANGENUM	0x00000020
+            AUTO_SAVE		0x00000040
+            SPAMFILTER_ONSAVE	0x00000080
+            POP_FULL_SAVE		0x00000100
+            IMAP_NEW_SAVE		0x00000200
+            HIDE_MESSAGE		0x00000400
+            ITEMPROC_FORCE		0x00000800
+            NON_EMS_XP_SAVE		0x00001000
+            OTON_SAVE		0x00010000
+            SAVE_COMMIT		0x00020000
+            REPLICATOR_SAVE		0x00040000
+            -->
+          </Payload>
+          <Payload Name="HiddenFlag"></Payload><!--true means itemProc-->
+        </Event>
+        <Event Name="CssEvtJunkSubjectA" Level="Customer" Flag="None" Message="Subject: {0}"></Event>
+        <Event Name="CssEvtJunkSubjectW" Level="Customer" Flag="None" Message="Subject: {0}"></Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Offline Address Book Download" Version="14.0" ScenarioId="5" Applications="Outlook">
+    <Provider Name="OutlookTraceEventParser">
+      <Keyword Name="OAB" KeywordId="268435456" Level="Customer">
+        <Event Name="EvtOABDownloadState" Level="Customer" Flag="None" Message="Download state = {0}">
+          <Payload Name="State">
+            <PayloadValue Value="Queued" Text="Queued"></PayloadValue>
+            <PayloadValue Value="Connecting" Text="Connecting"></PayloadValue>
+            <PayloadValue Value="Transferring" Text="Transferring"></PayloadValue>
+            <PayloadValue Value="Suspended" Text="Suspended"></PayloadValue>
+            <PayloadValue Value="Error" Text="Error"></PayloadValue>
+            <PayloadValue Value="TransientError" Text="TransientError"></PayloadValue>
+            <PayloadValue Value="Transferred" Text="Transferred"></PayloadValue>
+            <PayloadValue Value="Acknowledged" Text="Acknowledged"></PayloadValue>
+            <PayloadValue Value="Cancelled" Text="Cancelled"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="OabOabEvtAsyncLastDownloadTime" Level="Customer" Flag="None" Message="Offline Address Book last asynchronous download time = {0}">
+          <Payload Name="FileTime"></Payload>
+        </Event>
+        <Event Name="OabOabEvtAsyncOabDownload" Level="Customer" Flag="None" Message="Starting asynchronous Offline Address Book download"></Event>
+        <Event Name="OabOabEvtBeginDownloadDiffOab" Level="Customer" Flag="None" Message="Starting differential Offline Address Book download"></Event>
+        <Event Name="OabOabEvtBeginDownloadFilesUsingBITS" Level="Customer" Flag="None" Message="Starting Offline Address Book download using Background Intelligent Transfer Service">
+          <Payload Name="JobDescription"></Payload>
+          <Payload Name="BaseURL"></Payload>
+          <Payload Name="FullDownload"></Payload>
+          <Payload Name="NumberOfFilesToDownload"></Payload>
+          <Payload Name="FileName"></Payload>
+        </Event>
+        <Event Name="OabOabEvtBeginDownloadFullOab" Level="Customer" Flag="None" Message="Starting full Offline Address Book download"></Event>
+        <Event Name="OabOabEvtBeginDownloadOabXML" Level="Customer" Flag="None" Message="Downloading Offline Address Book XML to local path '{0}'">
+          <Payload Name="LocalXMLFile"></Payload>
+        </Event>
+        <Event Name="OabOabEvtDecompressAddrFileV4" Level="Customer" Flag="None" Message="Decompressing Offline Address Book file '{0}'">
+          <Payload Name="File"></Payload>
+        </Event>
+        <Event Name="OabOabEvtDownloadBegin" Level="Customer" Flag="None" Message="Starting Offline Address Book download"></Event>
+        <Event Name="OabOabEvtDownloadEnd" Level="Customer" Flag="None" Message="Finished Offline Address Book download"></Event>
+        <Event Name="OabOabEvtDownloadLimitCheck" Level="Customer" Flag="None" Message="Checking Offline Address Book ({0}) download limit. Now is {1}, last attempt was {2}, previous attempt was {3}, max attempts is {4}">
+          <Payload Name="Type">
+            <PayloadValue Value="Undecided" Text="Unknown"></PayloadValue>
+            <PayloadValue Value="Full" Text="Full"></PayloadValue>
+            <PayloadValue Value="Incremental" Text="Incremental"></PayloadValue>
+          </Payload>
+          <Payload Name="Now"></Payload>
+          <Payload Name="LastAttempt"></Payload>
+          <Payload Name="PreviousAttempts"></Payload>
+          <Payload Name="MaxAttempts"></Payload>
+        </Event>
+        <Event Name="OabOabEvtDumpOALData" Level="Customer" Flag="None" Message="List of files to download using HTTP (obtained from OAB.XML). BaseUrl: {0}, OabGuid: {1}, OabDN: {2}, OabName: {3}">
+          <Payload Name="BaseUrl"></Payload>
+          <Payload Name="OabGuid"></Payload>
+          <Payload Name="OabDN"></Payload>
+          <Payload Name="OabName"></Payload>
+        </Event>
+        <Event Name="OabOabEvtEndDownloadFilesUsingBITS" Level="Customer" Flag="None" Message="Files successfully downloaded via Background Intelligent Transfer Service"></Event>
+        <Event Name="OabOabEvtLastModifiedTime" Level="Customer" Flag="None" Message="Offline Address Book last modified time">
+          <Payload Name="FileTime"></Payload>
+        </Event>
+        <Event Name="OabOabEvtRenameFile" Level="Customer" Flag="None" Message="Renaming Offline Address Book file">
+          <Payload Name="Old"></Payload>
+          <Payload Name="New"></Payload>
+        </Event>
+        <Event Name="OabOabEvtScheduleSync" Level="Customer" Flag="None" Message="Scheduling the Offline Address Book download"></Event>
+        <Event Name="OabOabEvtTaskResult" Level="Customer" Flag="None" Message="Offline Address Book Synchronisation Result = {1}">
+          <Payload Name="FunctionName"></Payload>
+          <Payload Name="Result"></Payload>
+        </Event>
+        <Event Name="OabOabEvtTriggerFulDownload" Level="Customer" Flag="None" Message="Offline Address Book full download. Reason = {0}">
+          <Payload Name="Reason">
+            <PayloadValue Value="Missing_one_or_more_OAB_files" Text="You do not have any Offline Address Book files on your computer, or the Offline Address Book files could not be opened for some other reason"></PayloadValue>
+            <PayloadValue Value="Manual" Text="You forced a full Offline Address Book file download manually"></PayloadValue>
+            <PayloadValue Value="NoClientName" Text="The name of the Offline Address Book could not be obtained on the client. This behavior occurs when you create a new profile."></PayloadValue>
+            <PayloadValue Value="NoClientGuid" Text="The GUID of the Offline Address Book could not be obtained on the client. "></PayloadValue>
+            <PayloadValue Value="NoServerName" Text="The name of the Offline Address Book was missing from the server. In this case, a full Offline Address Book download is not expected to start or succeed, but it is logged anyway. "></PayloadValue>
+            <PayloadValue Value="NoServerGuid" Text="The GUID of the Offline Address Book was missing from the server. In this case, the full Offline Address Book file download is not expected to start or succeed, but it is logged anyway."></PayloadValue>
+            <PayloadValue Value="DifferentName" Text="The server's Offline Address Book name and the client's Offline Address Book name are different. "></PayloadValue>
+            <PayloadValue Value="DifferentGuid" Text="The server's GUID and the client's GUID are different. This behavior can occur if the server had to regenerate a whole new Offline Address Book with the same name and then discarded the old set. Or, the client was moved between different forests."></PayloadValue>
+            <PayloadValue Value="OutOfSequence" Text="The client's sequence number is bigger than the server."></PayloadValue>
+            <PayloadValue Value="NoDetails" Text="You want detailed information in the Offline Address Book, but there is no (u)details.oab file on your client. This behavior may occur if you manually force a download of the Offline Address Book, and then you click to clear the Download changes since last Send/Receive check box."></PayloadValue>
+            <PayloadValue Value="ServerMissingIncr" Text="At least one update file was missing from the server."></PayloadValue>
+            <PayloadValue Value="TooManyChanges" Text="The sum total of the update files to download may not be greater than 1/8 (v3) or 1/2 (v4) of the full Offline Address Book files."></PayloadValue>
+            <PayloadValue Value="PolicyAllowed" Text="You have the 'Allow SRS Full OAB Download' registry key set to 1, and your Send/Receive setting was set to always do a full download."></PayloadValue>
+            <PayloadValue Value="LocalNotSupported" Text="You do not have the locale of the Offline Address Book installed on your system, and you did a manual full Offline Address Book download. Typically, Outlook updates the address book either once a month, when a conditions hits for such users, or when you download manually. Outlook uses these three methods to update the address book to avoid a condition that would cause a full download every day."></PayloadValue>
+            <PayloadValue Value="DiffFail" Text="Applying the update file to the .oab file failed for some reason."></PayloadValue>
+            <PayloadValue Value="DiffFailV4" Text="Applying the update file to the .oab file failed for some reason."></PayloadValue>
+            <!--<PayloadValue Value="Version" Text=""></PayloadValue>
+            <PayloadValue Value="CopyABFiles" Text=""></PayloadValue>-->
+          </Payload>
+        </Event>
+        <Event Name="OabOabEvtXMLPath" Level="Customer" Flag="None" Message="Path to where we got the OAB.XML">
+          <Payload Name="URL"></Payload>
+        </Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Offline Address Book Download" Version="15.0" ScenarioId="6" Applications="Outlook">
+    <Provider Name="EmsmdbTraceEventParser" UnVersioned="True">
+      <Keyword Name="OAB" KeywordId="2" Level="Customer">
+        <Event Name="EmsmdbOabEvtAsyncDownload" Level="Customer" Flag="None" Message="Start asynchronous Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtAsyncLastDownloadTime" Level="Customer" Flag="None" Message="Offline Address Book was last downloaded on {0} (local time)">
+          <Payload Name="FileTime"></Payload>
+        </Event>
+        <!--<Event Name="EmsmdbOabEvtAttemptedToAuthenticateBITSJobWithBITSAuthenticator" Level="Customer" Flag="None" Message="Account instance: {0}. Return code: {1}">
+          <Payload Name="AccountInstance"></Payload>
+          <Payload Name="HRESULT"></Payload>
+        </Event>-->
+        <Event Name="EmsmdbOabEvtBeginDownloadDiffOab" Level="Customer" Flag="None" Message="Starting differential Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtBeginDownloadFilesUsingBITS" Level="Customer" Flag="None" Message="Starting Offline Address Book download with Background Intelligent Transfer Service. Job description: {0}, URL: {1}, Manual download: {2}, NumberOfFilesToDownload: {3}, FileName: {4}">
+          <Payload Name="JobDescription"></Payload>
+          <Payload Name="BaseURL"></Payload>
+          <Payload Name="ManualDownload"></Payload>
+          <Payload Name="NumberOfFilesToDownload"></Payload>
+          <Payload Name="FileName"></Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtBeginDownloadFullOab" Level="Customer" Flag="None" Message="Starting full Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtBeginDownloadOabXML" Level="Customer" Flag="None" Message="Downloading OAB.XML to local path: {0}">
+          <Payload Name="LocalXMLFile"></Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtDecompressAddrFileV4" Level="Customer" Flag="None" Message="Decompressing Offline Address Book file. File: {0}">
+          <Payload Name="File"></Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtDownloadBegin" Level="Customer" Flag="None" Message="Starting Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtDownloadEnd" Level="Customer" Flag="None" Message="Finished Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtDownloadLimitCheck" Level="Customer" Flag="None" Message="Offline Address Book download limit check. Type: {0}, Now: {1}, Last Attempt: {2}, Previous Attempts: {3}, Max Attempts: {4}">
+          <Payload Name="Type">
+            <PayloadValue Value="Undecided" Text="Unknown"></PayloadValue>
+            <PayloadValue Value="Full" Text="Full"></PayloadValue>
+            <PayloadValue Value="Incremental" Text="Incremental"></PayloadValue>
+          </Payload>
+          <Payload Name="Now"></Payload>
+          <Payload Name="LastAttempt"></Payload>
+          <Payload Name="PreviousAttempts"></Payload>
+          <Payload Name="MaxAttempts"></Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtDumpOALData" Level="Customer" Flag="None" Message="List of files to download using HTTP (obtained from OAB.XML). BaseUrl: {0}, OabGuid: {1}, OabDN: {2}, OabName: {3}">
+        </Event>
+        <Event Name="EmsmdbOabEvtEndDownloadFilesUsingBITS" Level="Customer" Flag="None" Message="Files successfully downloaded via Background Intelligent Transfer Service"></Event>
+        <Event Name="EmsmdbOabEvtLastModifiedTime" Level="Customer" Flag="None" Message="Offline Address Book was last modified on {0}">
+        </Event>
+        <Event Name="EmsmdbOabEvtOabXMLPath" Level="Customer" Flag="None" Message="OAB.XML downloaded from '{0}'"></Event>
+        <Event Name="EmsmdbOabEvtRenameFile" Level="Customer" Flag="None" Message="Renaming Offline Address Book file '{0}' to '{1}'">
+        </Event>
+        <Event Name="EmsmdbOabEvtScheduleSync" Level="Customer" Flag="None" Message="Scheduling the Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtTaskResult" Level="Customer" Flag="None" Message="Task '{0}' resulted in {1}">
+          <Payload Name="FunctionName">
+            <PayloadValue Value="HrScheduleOABSync" Text="Scheduling the Offline Address Book download"></PayloadValue>
+            <PayloadValue Value="DownloadFilesUsingBITS" Text="Offline Address Book Download using Background Intelligent Transfer Service"></PayloadValue>
+            <PayloadValue Value="HrMoveDecompOneAddrFileV4" Text="Move and Decompress one Offline Address Book v4 file"></PayloadValue>
+            <PayloadValue Value="DownloadOABInfoEx" Text="More info"></PayloadValue>
+            <PayloadValue Value="DownloadDiffOAB" Text="Download incremental Offline Address Book"></PayloadValue>
+          </Payload>
+          <Payload Name="Result">
+            <PayloadValue Value="0" Text="Success"></PayloadValue>
+            <PayloadValue Value="-2147221229" Text="The user cancelled the operation"></PayloadValue>
+            <PayloadValue Value="-2147467260" Text="Not needed" Exclude="True">
+              <!--aborted really-->
+            </PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtTriggerFulDownload" Level="Customer" Flag="None" Message="Full Offline Address Book download reason: {0}">
+          <Payload Name="Reason">
+            <PayloadValue Value="Missing_one_or_more_OAB_files" Text="You do not have any Offline Address Book files on your computer, or the Offline Address Book files could not be opened for some other reason"></PayloadValue>
+            <PayloadValue Value="Manual" Text="You forced a full .oab file download manually"></PayloadValue>
+            <PayloadValue Value="NoClientName" Text="The name of the Offline Address Book could not be obtained on the client. This behavior occurs when you create a new profile."></PayloadValue>
+            <PayloadValue Value="NoClientGuid" Text="The GUID of the Offline Address Book could not be obtained on the client. "></PayloadValue>
+            <PayloadValue Value="NoServerName" Text="The name of the Offline Address Book was missing from the server. In this case, a full .oab file download is not expected to start or succeed, but it is logged anyway. "></PayloadValue>
+            <PayloadValue Value="NoServerGuid" Text="The GUID of the Offline Address Book was missing from the server. In this case, the full .oab file download is not expected to start or succeed, but it is logged anyway."></PayloadValue>
+            <PayloadValue Value="DifferentName" Text="The server's Offline Address Book name and the client's Offline Address Book name are different. "></PayloadValue>
+            <PayloadValue Value="DifferentGuid" Text="The server's GUID and the client's GUID are different. This behavior can occur if the server had to regenerate a whole new Offline Address Book with the same name and then discarded the old set. Or, the client was moved between different forests."></PayloadValue>
+            <PayloadValue Value="OutOfSequence" Text="The client's sequence number is bigger than the server."></PayloadValue>
+            <PayloadValue Value="NoDetails" Text="You want detailed information in the Offline Address Book, but there is no detailed .oab file on your client. This behavior may occur if you manually force a download of the Offline Address Book, and then you click to clear the Download changes since last Send/Receive check box."></PayloadValue>
+            <PayloadValue Value="ServerMissingIncr" Text="At least one update file was missing from the server."></PayloadValue>
+            <PayloadValue Value="TooManyChanges" Text="The sum total of the update files to download may not be greater than 1/8 (v3) or 1/2 (v4) of the full .oab file."></PayloadValue>
+            <PayloadValue Value="PolicyAllowed" Text="You have the 'Allow SRS Full OAB Download' registry key set to 1, and your Send/Receive setting was set to always do a full download."></PayloadValue>
+            <PayloadValue Value="LocalNotSupported" Text="You do not have the locale of the Offline Address Book installed on your system, and you did a manual full .oab file download. Typically, Outlook updates the address book either once a month, when a conditions hits for such users, or when you download manually. Outlook uses these three methods to update the address book to avoid a condition that would cause a full download every day."></PayloadValue>
+            <PayloadValue Value="DiffFail" Text="Applying the update file to the .oab file failed for some reason."></PayloadValue>
+            <PayloadValue Value="DiffFailV4" Text="Applying the update file to the .oab file failed for some reason."></PayloadValue>
+            <!--<PayloadValue Value="Version" Text=""></PayloadValue>
+            <PayloadValue Value="CopyABFiles" Text=""></PayloadValue>-->
+          </Payload>
+        </Event>
+        <Event Name="AccountOABInfo" Level="Customer" Flag="None" Message="Offline Address Book information: Exchange Id = {0}, GUID = {1}, Size = {2}, Last Updated = {3} (UTC)">
+          <Payload Name="Exchange Id"></Payload>
+          <Payload Name="OAB GUID"></Payload>
+          <Payload Name="OAB Size"></Payload>
+          <Payload Name="Last Updated"></Payload>
+        </Event>
+        <Event Name="DownloadStarted" Level="Customer" Flag="None" Message="Download started ({0})">
+          <Payload Name="Type">
+            <PayloadValue Value="3489660929" Text="undecided" Exclude="True"></PayloadValue>
+            <PayloadValue Value="3489660930" Text="full"></PayloadValue>
+            <PayloadValue Value="3489660931" Text="incremental"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="DownloadLimitCheck" Level="Customer" Flag="None" Message="Checking the Offline Address Book {0} download limit values. Now: {1}), Last Attempt {2}, Previous Attempts{3}, Max Attempts {4}.">
+          <Payload Name="Type">
+            <PayloadValue Value="3489660929" Text="undecided" Exclude="True"></PayloadValue>
+            <PayloadValue Value="3489660930" Text="full"></PayloadValue>
+            <PayloadValue Value="3489660931" Text="incremental"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="DownloadCancelled" Level="Customer" Flag="None" Message="Download cancelled ({0})">
+          <Payload Name="Type">
+            <PayloadValue Value="3489660929" Text="undecided" Exclude="True"></PayloadValue>
+            <PayloadValue Value="3489660930" Text="full"></PayloadValue>
+            <PayloadValue Value="3489660931" Text="incremental"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="DownloadFinished" Level="Customer" Flag="None" Message="Download finished ({0})">
+          <Payload Name="Type">
+            <PayloadValue Value="3489660929" Text="undecided" Exclude="True"></PayloadValue>
+            <PayloadValue Value="3489660930" Text="full"></PayloadValue>
+            <PayloadValue Value="3489660931" Text="incremental"></PayloadValue>
+          </Payload>
+        </Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Offline Address Book Download" Version="16.0" ScenarioId="7" Applications="Outlook">
+    <Provider Name="EmsmdbTraceEventParser" UnVersioned="True">
+      <Keyword Name="OAB" KeywordId="2" Level="Customer">
+        <Event Name="EmsmdbOabEvtAsyncDownload" Level="Customer" Flag="None" Message="Start asynchronous Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtAsyncLastDownloadTime" Level="Customer" Flag="None" Message="Offline Address Book was last downloaded on {0} (local time)">
+          <Payload Name="FileTime"></Payload>
+        </Event>
+        <!--<Event Name="EmsmdbOabEvtAttemptedToAuthenticateBITSJobWithBITSAuthenticator" Level="Customer" Flag="None" Message="Account instance: {0}. Return code: {1}">
+          <Payload Name="AccountInstance"></Payload>
+          <Payload Name="HRESULT"></Payload>
+        </Event>-->
+        <Event Name="EmsmdbOabEvtBeginDownloadDiffOab" Level="Customer" Flag="None" Message="Starting differential Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtBeginDownloadFilesUsingBITS" Level="Customer" Flag="None" Message="Starting Offline Address Book download with Background Intelligent Transfer Service. Job description: {0}, URL: {1}, Manual download: {2}, NumberOfFilesToDownload: {3}, FileName: {4}">
+          <Payload Name="JobDescription"></Payload>
+          <Payload Name="BaseURL"></Payload>
+          <Payload Name="ManualDownload"></Payload>
+          <Payload Name="NumberOfFilesToDownload"></Payload>
+          <Payload Name="FileName"></Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtBeginDownloadFullOab" Level="Customer" Flag="None" Message="Starting full Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtBeginDownloadOabXML" Level="Customer" Flag="None" Message="Downloading OAB.XML to local path: {0}">
+          <Payload Name="LocalXMLFile"></Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtDecompressAddrFileV4" Level="Customer" Flag="None" Message="Decompressing Offline Address Book file. File: {0}">
+          <Payload Name="File"></Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtDownloadBegin" Level="Customer" Flag="None" Message="Starting Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtDownloadEnd" Level="Customer" Flag="None" Message="Finished Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtDownloadLimitCheck" Level="Customer" Flag="None" Message="Offline Address Book download limit check. Type: {0}, Now: {1}, Last Attempt: {2}, Previous Attempts: {3}, Max Attempts: {4}">
+          <Payload Name="Type">
+            <PayloadValue Value="Undecided" Text="Unknown"></PayloadValue>
+            <PayloadValue Value="Full" Text="Full"></PayloadValue>
+            <PayloadValue Value="Incremental" Text="Incremental"></PayloadValue>
+          </Payload>
+          <Payload Name="Now"></Payload>
+          <Payload Name="LastAttempt"></Payload>
+          <Payload Name="PreviousAttempts"></Payload>
+          <Payload Name="MaxAttempts"></Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtDumpOALData" Level="Customer" Flag="None" Message="List of files to download using HTTP (obtained from OAB.XML). BaseUrl: {0}, OabGuid: {1}, OabDN: {2}, OabName: {3}">
+        </Event>
+        <Event Name="EmsmdbOabEvtEndDownloadFilesUsingBITS" Level="Customer" Flag="None" Message="Files successfully downloaded via Background Intelligent Transfer Service"></Event>
+        <Event Name="EmsmdbOabEvtLastModifiedTime" Level="Customer" Flag="None" Message="Offline Address Book was last modified on {0}">
+        </Event>
+        <Event Name="EmsmdbOabEvtOabXMLPath" Level="Customer" Flag="None" Message="OAB.XML downloaded from '{0}'"></Event>
+        <Event Name="EmsmdbOabEvtRenameFile" Level="Customer" Flag="None" Message="Renaming Offline Address Book file '{0}' to '{1}'">
+        </Event>
+        <Event Name="EmsmdbOabEvtScheduleSync" Level="Customer" Flag="None" Message="Scheduling the Offline Address Book download"></Event>
+        <Event Name="EmsmdbOabEvtTaskResult" Level="Customer" Flag="None" Message="Task '{0}' resulted in {1}">
+          <Payload Name="FunctionName">
+            <PayloadValue Value="HrScheduleOABSync" Text="Scheduling the Offline Address Book download"></PayloadValue>
+            <PayloadValue Value="DownloadFilesUsingBITS" Text="Offline Address Book Download using Background Intelligent Transfer Service"></PayloadValue>
+            <PayloadValue Value="HrMoveDecompOneAddrFileV4" Text="Move and Decompress one Offline Address Book v4 file"></PayloadValue>
+            <PayloadValue Value="DownloadOABInfoEx" Text="More info"></PayloadValue>
+            <PayloadValue Value="DownloadDiffOAB" Text="Download incremental Offline Address Book"></PayloadValue>
+          </Payload>
+          <Payload Name="Result">
+            <PayloadValue Value="0" Text="Success"></PayloadValue>
+            <PayloadValue Value="-2147221229" Text="The user cancelled the operation"></PayloadValue>
+            <PayloadValue Value="-2147467260" Text="Not needed" Exclude="True">
+              <!--aborted really-->
+            </PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="EmsmdbOabEvtTriggerFulDownload" Level="Customer" Flag="None" Message="Full Offline Address Book download reason: {0}">
+          <Payload Name="Reason">
+            <PayloadValue Value="Missing_one_or_more_OAB_files" Text="You do not have any Offline Address Book files on your computer, or the Offline Address Book files could not be opened for some other reason"></PayloadValue>
+            <PayloadValue Value="Manual" Text="You forced a full .oab file download manually"></PayloadValue>
+            <PayloadValue Value="NoClientName" Text="The name of the Offline Address Book could not be obtained on the client. This behavior occurs when you create a new profile."></PayloadValue>
+            <PayloadValue Value="NoClientGuid" Text="The GUID of the Offline Address Book could not be obtained on the client. "></PayloadValue>
+            <PayloadValue Value="NoServerName" Text="The name of the Offline Address Book was missing from the server. In this case, a full .oab file download is not expected to start or succeed, but it is logged anyway. "></PayloadValue>
+            <PayloadValue Value="NoServerGuid" Text="The GUID of the Offline Address Book was missing from the server. In this case, the full .oab file download is not expected to start or succeed, but it is logged anyway."></PayloadValue>
+            <PayloadValue Value="DifferentName" Text="The server's Offline Address Book name and the client's Offline Address Book name are different. "></PayloadValue>
+            <PayloadValue Value="DifferentGuid" Text="The server's GUID and the client's GUID are different. This behavior can occur if the server had to regenerate a whole new Offline Address Book with the same name and then discarded the old set. Or, the client was moved between different forests."></PayloadValue>
+            <PayloadValue Value="OutOfSequence" Text="The client's sequence number is bigger than the server."></PayloadValue>
+            <PayloadValue Value="NoDetails" Text="You want detailed information in the Offline Address Book, but there is no detailed .oab file on your client. This behavior may occur if you manually force a download of the Offline Address Book, and then you click to clear the Download changes since last Send/Receive check box."></PayloadValue>
+            <PayloadValue Value="ServerMissingIncr" Text="At least one update file was missing from the server."></PayloadValue>
+            <PayloadValue Value="TooManyChanges" Text="The sum total of the update files to download may not be greater than 1/8 (v3) or 1/2 (v4) of the full .oab file."></PayloadValue>
+            <PayloadValue Value="PolicyAllowed" Text="You have the 'Allow SRS Full OAB Download' registry key set to 1, and your Send/Receive setting was set to always do a full download."></PayloadValue>
+            <PayloadValue Value="LocalNotSupported" Text="You do not have the locale of the Offline Address Book installed on your system, and you did a manual full .oab file download. Typically, Outlook updates the address book either once a month, when a conditions hits for such users, or when you download manually. Outlook uses these three methods to update the address book to avoid a condition that would cause a full download every day."></PayloadValue>
+            <PayloadValue Value="DiffFail" Text="Applying the update file to the .oab file failed for some reason."></PayloadValue>
+            <PayloadValue Value="DiffFailV4" Text="Applying the update file to the .oab file failed for some reason."></PayloadValue>
+            <!--<PayloadValue Value="Version" Text=""></PayloadValue>
+            <PayloadValue Value="CopyABFiles" Text=""></PayloadValue>-->
+          </Payload>
+        </Event>
+        <Event Name="AccountOABInfo" Level="Customer" Flag="None" Message="Offline Address Book information: Exchange Id = {0}, GUID = {1}, Size = {2}, Last Updated = {3} (UTC)">
+          <Payload Name="Exchange Id"></Payload>
+          <Payload Name="OAB GUID"></Payload>
+          <Payload Name="OAB Size"></Payload>
+          <Payload Name="Last Updated"></Payload>
+        </Event>
+        <Event Name="DownloadStarted" Level="Customer" Flag="None" Message="Download started ({0})">
+          <Payload Name="Type">
+            <PayloadValue Value="3489660929" Text="undecided" Exclude="True"></PayloadValue>
+            <PayloadValue Value="3489660930" Text="full"></PayloadValue>
+            <PayloadValue Value="3489660931" Text="incremental"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="DownloadLimitCheck" Level="Customer" Flag="None" Message="Checking the Offline Address Book {0} download limit values. Now: {1}), Last Attempt {2}, Previous Attempts{3}, Max Attempts {4}.">
+          <Payload Name="Type">
+            <PayloadValue Value="3489660929" Text="undecided" Exclude="True"></PayloadValue>
+            <PayloadValue Value="3489660930" Text="full"></PayloadValue>
+            <PayloadValue Value="3489660931" Text="incremental"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="DownloadCancelled" Level="Customer" Flag="None" Message="Download cancelled ({0})">
+          <Payload Name="Type">
+            <PayloadValue Value="3489660929" Text="undecided" Exclude="True"></PayloadValue>
+            <PayloadValue Value="3489660930" Text="full"></PayloadValue>
+            <PayloadValue Value="3489660931" Text="incremental"></PayloadValue>
+          </Payload>
+        </Event>
+        <Event Name="DownloadFinished" Level="Customer" Flag="None" Message="Download finished ({0})">
+          <Payload Name="Type">
+            <PayloadValue Value="3489660929" Text="undecided" Exclude="True"></PayloadValue>
+            <PayloadValue Value="3489660930" Text="full"></PayloadValue>
+            <PayloadValue Value="3489660931" Text="incremental"></PayloadValue>
+          </Payload>
+        </Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Synchronization Issues" Version="15.0" ScenarioId="8" Applications="Outlook">
+    <Provider Name="CssTraceEventParser">
+      <Keyword Name="CssOutbox" KeywordId="8" Level="Customer">
+        <Event Name="CssOutboxEvtSILog" Level="Customer" Flag="None" Message="{0}">
+          <Payload Name="Line">
+            <PayloadValue Value="'" Exclude="True"></PayloadValue>
+          </Payload>
+        </Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Synchronization Issues" Version="16.0" ScenarioId="9" Applications="Outlook">
+    <Provider Name="CssTraceEventParser">
+      <Keyword Name="CssOutbox" KeywordId="8" Level="Customer">
+        <Event Name="CssOutboxEvtSILog" Level="Customer" Flag="None" Message="{0}">
+          <Payload Name="Line">
+            <PayloadValue Value="'" Exclude="True"></PayloadValue>
+          </Payload>
+        </Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <Scenario Name="Office Add-in Issues" Version="16.0" ScenarioId="10" Applications="Outlook;Word;Excel;PowerPoint" MaxFileSize="5">
+    <Provider Name="O16.O16_OfficeLoggingLibletTraceEventParser" Level="Informational">
+      <Keyword Name="LoggingScope" KeywordId="0">
+        <Event Name="LoggingLibletInfo" Level="Exclude" Flag="Info" Message="{0}">
+        </Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <!--<Scenario Name="Mail App test" Version="Universal" ScenarioId="11" Applications="Mail" MaxFileSize="5">
+    <Provider Name="HxCommGlobalTraceEventParser" Unversionned="True" Level="VerboseAll">
+      <Keyword Name="Performance" KeywordId="2">
+        <Event Name="ScenarioStart" Level="Verbose" Flag="Info" Message="{0}"/>
+        <Event Name="ScenarioStop" Level="Verbose" Flag="Info" Message="{0}"/>
+      </Keyword>
+    </Provider>
+  </Scenario>-->
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>s7lky3ennjpvao4nrTQB5AFkmtU=</DigestValue></Reference></SignedInfo><SignatureValue>
+    OdXtxKlfhQlySohhjhlZIN00tFRt1TbYIjO9f0ugbjSweSKwmzXm9d+e/WlthseYOhPu8Uvg
+    Eu72TW4YrGhrdUUL/3qJqcM9N3joilebtuObDtOrSoYCsFy1v03Ua6xya4Te1S1K5r7oOa1x
+    ZgQJTzPwUoIXChniA9V605n1HHE06Qd0ssNVJoXybT14DYDcC0WEDksSZQwG58tqhElwEqON
+    j046yYfRBNehmQiQ8cI16evulv+/Fj1W19hci3QqwAO+qWZQ5sfaXx/QRDhCco8LTpMRC/Cx
+    aGEyc5Ybtx7cvOF6OBWgIggXgMrJNXeq87h73gLlq4z4lajC0pUt7Q==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAALFpr8Q3a5GTXgAAAAAAsTANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI3WhcNMTcwODAzMTcxMzI3WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAuB5CzdlupvWjSYQ/N2yCah7oUs5NBYH0s2RuWHAJXNOZEnRFmuBP
+BLSJhWsrspK9GahJ3FZuQEcq2+uBGpjBnZIWXVEzunBgIoUiL313gYGGe8u+/u1nbv0dZNzwijaA
+M2itgpwKvPBHv3Gqq8cFWzVRHTgO31lV4IA28ZhueAocWFNvLV9RkrXBpMwtvbwLqyA/ednmK4+E
+BfsgLbuGcUFS/wyAq7+ZhqUDq+LzHhFLl55V7iApITvmU6kNzZPtvY3QZVPmcq6K3IjwpV4bkr72
+9y+ndWZmfgvqlUvV78hV6zusR6zHiy/NJQH2w8LaPW1YIUZImWJ/jFAUqG7Q5QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFAGGI3nEkNLTKbg8V2lFYretn114MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAD3G
+M+JdCkrA5KQO5uQdsjwIqCLoJ/kTICat57wPtZA5nbP3NW05sObKPJtA18zQIXzaCWhXVLQ+S+D2
+L/zWJ1cMvHTM+BUxsdOOo+DwDNSFSjG6/0srv7YXigPkkN5jnHdxDmTWBd/TJaGzL+88Sa3uOayC
+xMi0VJB9DbARKRjs0vMxeIsffF7ZEFtWxmeH5CLPmuy5CJiVqo2EJw7qm/QOIX3pXbSAjwighcP5
+RN4li8n3F37B3nhUm05qNF9rIo1Hf7sWWHdwHvT6KHMl0MV/Np80Y2ofnGBNwxphl95bQE8C295+
+QbrEWxAYaQaqMbBgG8FS0uXOqRSYgaRSkpk=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></OutlookLogging>

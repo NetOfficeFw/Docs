@@ -1,0 +1,929 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+	<Configuration ConfigName="Word Configuration" ChangeDescription="2.0.1604.18" ConfigVersion="2.0.1604.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,word.crashes.config.xml" Symptoms="1">
+		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
+		<!--!!! GLOBAL SUBSTITUTIONS SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
+		<Substitution Name="MAJORVERSION"></Substitution>
+		<Substitution Name="INSTALLTYPE"></Substitution>
+		<Substitution Name="APPNAME">Word</Substitution>
+    <Substitution Name="DAYS">14</Substitution>
+    <Substitution Name="MAXEVENTS">10</Substitution>
+		<ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+		<!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
+		<ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
+		<ObjectProcessor Name="Directory" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DirectoryObjectProcessor"/>
+		<ObjectProcessor Name="DsGet" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor"/>
+		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+		<ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
+		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
+    <ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
+		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
+		<ObjectProcessor Name="DriveInfo" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DriveInfoObjectProcessor"/>
+		<ObjectProcessor Name="Accounts" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.AccountsObjectProcessor"/>
+		<ObjectProcessor Name="Addins" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.AddinsObjectProcessor"/>
+		<ObjectProcessor Name="AdditionalRenEntryIDsEx" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.AdditionalRenEntryIDsEx"/>
+		<ObjectProcessor Name="AddressLists" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.AddressListsObjectProcessor"/>
+		<ObjectProcessor Name="AddressEntries" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.AddressEntriesObjectProcessor"/>
+		<ObjectProcessor Name="CalCheckLog" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CalCheckLogObjectProcessor"/>
+		<ObjectProcessor Name="Delegates" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DelegatesObjectProcessor"/>
+		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
+		<ObjectProcessor Name="EVR" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EnvironmentVariableResolver"/>
+		<ObjectProcessor Name="Folder" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FolderObjectProcessor"/>
+		<ObjectProcessor Name="FolderPermission" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FolderPermission"/>
+		<ObjectProcessor Name="Folders" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FoldersObjectProcessor"/>
+		<ObjectProcessor Name="JunkEmailRule" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.JunkEmailRule"/>
+		<ObjectProcessor Name="Message" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MessageObjectProcessor"/>
+		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+		<ObjectProcessor Name="Namespace" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NamespaceObjectProcessor"/>
+		<ObjectProcessor Name="Outlook" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OutlookObjectProcessor"/>
+		<ObjectProcessor Name="OutlookRule" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OutlookRuleObjectProcessor"/>
+		<ObjectProcessor Name="ProfileSection" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.ProfileSectionObjectProcessor"/>
+		<ObjectProcessor Name="Store" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.StoreObjectProcessor"/>
+		<ObjectProcessor Name="Stores" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.StoresObjectProcessor"/>
+		<ObjectProcessor Name="Table" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.TableObjectProcessor"/>
+		<ObjectProcessor Name="View" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.ViewObjectProcessor"/>
+		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
+		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+    <ExtFormat Name="DsFlags" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor" Convert="ConvertReturnFlags"/>
+		<ExtFormat Name="Unicode" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ExtFormat" Convert="ConvertBinaryToUnicode"/>
+		<ExtFormat Name="Ascii" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ExtFormat" Convert="ConvertBinaryToAscii"/>
+		<ExtFormat Name="Int" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertBinaryToInt"/>
+		<ExtFormat Name="Hex" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertBinaryToHex"/>
+		<ExtFormat Name="Hex2" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertIntToHex"/>
+		<ExtFormat Name="HexInt" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertBinaryToHexInt"/>
+		<ExtFormat Name="HexStrToIntStr" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertHexStringToIntString"/>
+		<ExtFormat Name="DateTime" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertBinaryToDateTime"/>
+		<ExtFormat Name="String2" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertBinaryStringToString"/>
+		<ExtFormat Name="RTimeToDate" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ConvertRTimeToDateTime"/>
+		<ExtFormat Name="CNFromDN" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ExtractCNFromDN"/>
+		<ExtFormat Name="UndotVersion" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="UndotVersion"/>
+		<ExtFormat Name="ExtractSNFromEid" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ExtractServerShortnameFromStoreEID"/>
+		<ExtFormat Name="ExtractMailboxDNFromEid" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Outlook_Common" Convert="ExtractMailboxDNFromStoreEID"/>
+		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
+	</Configuration>
+
+	<Object Type="Group" Name="Word Scan" Class="Scan Type" GroupingClass="True">
+    <Object Type="Cache" Name="APPNAMECACHE" Key1="Add" Key2="APPNAMECACHE" Key3="%APPNAME%"/>
+    <Reference Type="WindowsUpdatesScriptPt1" Name="WindowsUpdatesScriptPt1" File="common.config.xml"></Reference>
+    <!--OFFICE DETAILS-->
+		<Object Type="Group" Name="Install details">
+			<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Word" Key6="winword" Key7="%MAJORVERSION%">
+				<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide"></Setting>
+        <Object Type="IfThenElse" Key1="'%WOW6432NODE%'=''" Key2="emptyval" Key3="%WOW6432NODE%">
+          <Setting Key1="wowcacheval" Substitution="WOWCACHEVAL" Display="Hide"/>
+          <Object Type="Cache" Name="wowcache" Key1="Add" Key2="wowcache" Key3="%WOWCACHEVAL%">
+          </Object>
+        </Object>
+        <Setting Key1="Bitness" Substitution="APPBITNESS">
+					<Rule Name="bitness" Query="$."></Rule>
+				</Setting>
+				<Setting Key1="FullVersion">
+					<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
+					<Rule Name="nBuild" Query="substring-before(substring-after(string($.),concat($n2DigitVersion,'.0.')),'.')"></Rule>
+					<Rule Name="sFullAppVersion" Query="$."></Rule>
+          <Rule Name="sWordPR" Query="number(substring($.,11,1))=3" Error="Error" P0="$sFullAppVersion" Title="The build number for winword.exe indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for winword.exe '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available update for Microsoft Word listed in the article." GUID="518087" SSID="6257ddd9-dcce-49c4-9506-fa1f22ca2d2a" Symptoms="Configuration (unsupported or problematic)"></Rule>
+          <!--Rule Name="sWord16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with Word %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of Word (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="d4040f05-94ba-41cd-9ed6-ecbb3f9f18b6" Symptoms="_Alert from OffCAT"></Rule-->
+        </Setting>
+				<Setting Key1="Name">
+					<Rule Name="appName" Query="$."></Rule>
+				</Setting>
+				<Setting Key1="Path"></Setting>
+				<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide"></Setting>
+        <Object Type="Cache" Name="InstallPathCACHE" Key1="Add" Key2="INSTALLPATHCACHE" Key3="%INSTALLPATH%"/>
+				<Setting Key1="Version">
+					<Rule Name="n4DigitSKUVersion" Query="$."></Rule>
+				</Setting>
+				<Rule Name="nInstallType" Query="'%INSTALLTYPE%'"></Rule>
+				<Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
+					<Setting Key1="Type">
+					<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+          <Rule Name="f2016MSI" Query="$n4DigitSKUVersion='2016' and $.='MSI'"></Rule>
+				</Setting>
+				<!--SKU-->
+				<Object Type="Group" Name="Office SKU">
+					<Object Type="If" Key1="'%MAJORVERSION%'='11'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{1EBDE4BC-9A51-4630-B541-2561FA45CCC5}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+								<Setting Key1="ProductName" Display="Right"></Setting>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='12'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{0638C49D-BB8B-4CD1-B191-051E8F325736}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+								<Rule Name="SKU2007" Query="substring(string($.),11,4)"></Rule>
+								<Rule Name="ReleaseType2007" Query="substring(string($.),3,1)"></Rule>
+								<Rule Name="sNoIRMWord2007" Query="$n2DigitVersion=12 and not($SKU2007='0011' or $SKU2007='001B' or $SKU2007='002E' or $SKU2007='0030') and not($SKU2007='')" P0="$SKUName2007" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275709" SSID="3aefe730-2ec6-43d8-9ab9-1fffdae22ca5" Symptoms="Information Rights Management"></Rule>
+							</Setting>
+							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+								<Setting Key1="ProductName" Display="Right">
+									<Rule Name="SKUName2007" Query="$."></Rule>
+								</Setting>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x86'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{019C826E-445A-4649-A5B0-0BF08FCC4EEE}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+								<Rule Name="SKU2010" Query="substring(string($.),11,4)"></Rule>
+								<Rule Name="ReleaseType2010" Query="substring(string($.),3,1)"></Rule>
+								<Rule Name="sNoIRMWord2010" Query="$n2DigitVersion=14 and not($SKU2010='0011' or $SKU2010='001B') and not($SKU2010='')" P0="$SKUName2010" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275719" SSID="46a0459a-6aa5-44b0-8bf1-8e53a9e9c7c0" Symptoms="Information Rights Management"></Rule>
+							</Setting>
+							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+								<Setting Key1="ProductName" Substitution="PN" Display="Right">
+									<Rule Name="SKUName2010" Query="if(contains($.,'Single Image') and $sSingleImageSKU2010!='',$sSingleImageSKU2010,$.)" AlwaysEvaluate="True"></Rule>
+								</Setting>
+								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide"></Setting>
+								<Object Type="If" Key1="contains('%PN%','Single Image')">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
+										<Setting Key1="ID" Substitution="REGID" Display="Hide"></Setting>
+										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
+											<Setting Key1="ProductName">
+												<Rule Name="sSingleImageSKU2010" Query="$."></Rule>
+											</Setting>
+										</Object>
+									</Object>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x64'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{C0AC079D-A84B-4CBD-8DBA-F1BB44146899}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+								<Rule Name="SKU201064" Query="substring(string($.),11,4)"></Rule>
+								<Rule Name="ReleaseType201064" Query="substring(string($.),3,1)"></Rule>
+								<Rule Name="sNoIRMWord201064" Query="$n2DigitVersion=14 and not($SKU201064='0011' or $SKU201064='001B') and not($SKU201064='')" P0="$SKUName201064" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275719" SSID="dc9008ac-2119-4a07-a56f-2c9e90681a09" Symptoms="Information Rights Management"></Rule>
+							</Setting>
+							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+								<Setting Key1="ProductName" Substitution="PN" Display="Right">
+									<Rule Name="SKUName201064" Query="if(contains($.,'Single Image') and $sSingleImageSKU201064!='',$sSingleImageSKU201064,$.)"></Rule>
+								</Setting>
+								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide"></Setting>
+								<Object Type="If" Key1="contains('%PN%','Single Image')">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
+										<Setting Key1="ID" Substitution="REGID" Display="Hide"></Setting>
+										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
+											<Setting Key1="ProductName">
+												<Rule Name="sSingleImageSKU201064" Query="$."></Rule>
+											</Setting>
+										</Object>
+									</Object>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{09D07EFC-505F-4D9C-BFD5-ACE3217F6654}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+							<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+							<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+								<Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+								<Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+								<Rule Name="sNoIRMWord2013" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU2013='0011' and ($ReleaseType2013='1' or $ReleaseType2013='0')) or $SKU2013='001B')" P0="$SKUName2013" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="94371509-7f63-45dd-aace-6b76d9e4eeef" Symptoms="Information Rights Management"></Rule>
+								<Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+									<Setting Key1="" Display="Hide"></Setting>
+								</Object>
+								<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+									<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+										<Setting Key1="ProductVersion" Display="Hide">
+											<Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
+										</Setting>
+									</Object>
+									<Setting Key1="ProductName" Display="Right">
+										<Rule Name="SKUName2013" Query="$."></Rule>
+									</Setting>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{6FF09BDF-B087-4E23-A9B9-272DBFD64099}">
+							<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+							<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+							<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+								<Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+								<Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+								<Rule Name="sNoIRMWord201364" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU201364='0011' and ($ReleaseType201364='1' or $ReleaseType201364='0')) or $SKU201364='001B')" P0="$SKUName201364" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="9f754d3c-d270-438f-bb12-e500cfdedbbd" Symptoms="Information Rights Management"></Rule>
+								<Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+									<Setting Key1="" Display="Hide"></Setting>
+								</Object>
+								<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+									<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+										<Setting Key1="ProductVersion" Display="Hide">
+											<Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
+										</Setting>
+									</Object>
+									<Setting Key1="ProductName" Display="Right">
+										<Rule Name="SKUName201364" Query="$."></Rule>
+									</Setting>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+          <Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
+						<Object Type="C2RSKU" Key1="Word" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+							<Setting Key1="ProductName">
+                <Rule Name="SKUNameC2R" Query="$."></Rule>
+							</Setting>
+						</Object>
+            <Object Type="If" Key1="'%MAJORVERSION%'='15'">
+						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active" Key5="OneLevel" Display="Hide">
+							<Setting Key1="__KEYNAME" Substitution="LIC" Display="Hide"></Setting>
+							<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active\%LIC%\x-none" Key5="Subtree" Display="Hide">
+								<Setting Key1="__KEYNAME" Key2="word.%APPBITNESS%.x-none.zip" Substitution="C2RAPPFOUND" Display="Hide"></Setting>
+								<Object Type="If" Key1="'%C2RAPPFOUND%'='word.%APPBITNESS%.x-none.zip'">
+									<Object Type="Group" Name="ClickToRun License Family=%LIC%" Display="Right">
+										<Setting Key1="" Display="Hide"></Setting>
+                      <Rule Name="sC2RLicense2013" Query="'%LIC%'"></Rule>
+                      <Rule Name="sNoIRMC2RWord2013" Query="not(contains($sC2RLicense2013,'ProPlus') or contains($sC2RLicense2013,'Word'))" Error="Warning" P0="$SKUNameC2R" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." GUID="302311" SSID="6b2e3c89-1df5-4229-b854-5cb96766acf8" Symptoms="Information Rights Management"></Rule>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="number('%MAJORVERSION%')&gt;15">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\ClickToRun\ProductReleaseIDs\Active" Key5="OneLevel" Display="Hide">
+                <Setting Key1="__KEYNAME" Substitution="LIC" Display="Hide"></Setting>
+                <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\ClickToRun\ProductReleaseIDs\Active\%LIC%\x-none" Key5="Subtree" Display="Hide">
+                  <Setting Key1="__KEYNAME" Key2="word.%APPBITNESS%.x-none.zip" Substitution="C2RAPPFOUND" Display="Hide"></Setting>
+                  <Object Type="If" Key1="'%C2RAPPFOUND%'='word.%APPBITNESS%.x-none.zip'">
+                    <Object Type="Group" Name="ClickToRun License Family=%LIC%" Display="Right">
+                      <Setting Key1="" Display="Hide"></Setting>
+                      <!--<Rule Name="sC2RLicense2013" Query="'%LIC%'"></Rule>
+                      <Rule Name="sNoIRMC2RWord2013" Query="not(contains($sC2RLicense2013,'ProPlus') or contains($sC2RLicense2013,'Word'))" Error="Warning" P0="$SKUNameC2R" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." GUID="302311" SSID="6b2e3c89-1df5-4229-b854-5cb96766acf8" Symptoms="Information Rights Management"></Rule>-->
+                    </Object>
+									</Object>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='16' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{30CAC893-3CA4-494C-A5E9-A99141352216}">
+                <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+                <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+                <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                  <Rule Name="SKUV16x86" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                  <Rule Name="ReleaseTypeV16x86" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                  <!--Rule Name="sNoIRMWordV16x86" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=16 and not(($SKUV16x86='0011' and ($ReleaseTypeV16x86='1' or $ReleaseTypeV16x86='0')) or $SKUV16x86='0016')" P0="$SKUNameV16x86" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="" SSID="" Symptoms="Information Rights Management"></Rule-->
+                  <Rule Name="fProPlusV16x86" Query="$SKUV16x86='0011'"></Rule>
+                  <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                    <Setting Key1="" Display="Hide"></Setting>
+                  </Object>
+                  <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\16.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                      <Setting Key1="ProductVersion" Display="Hide">
+                        <Rule Name="fOfficeProductVersionV16x86" Query="$." AlwaysEvaluate="True"></Rule>
+                      </Setting>
+                    </Object>
+                    <Setting Key1="ProductName" Display="Right">
+                      <Rule Name="SKUNameV16x86" Query="$."></Rule>
+                    </Setting>
+                  </Object>
+                </Object>
+              </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='16' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{DC5CCACD-A7AC-4FD3-9F70-9454B5DE5161}">
+                <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+                <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+                <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                  <Rule Name="SKUV16x64" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                  <Rule Name="ReleaseTypeV16x64" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                  <!--Rule Name="sNoIRMWordV16x64" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=16 and not(($SKUV16x64='0011' and ($ReleaseTypeV16x64='1' or $ReleaseTypeV16x64='0')) or $SKUV16x64='0016')" P0="$SKUNameV16x64" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="" SSID="" Symptoms="Information Rights Management"></Rule-->
+                  <Rule Name="fProPlusV16x64" Query="$SKUV16x64='0011'"></Rule>
+                  <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                    <Setting Key1="" Display="Hide"></Setting>
+                  </Object>
+                  <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\16.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                      <Setting Key1="ProductVersion" Display="Hide">
+                        <Rule Name="fOfficeProductVersionV16x64" Query="$." AlwaysEvaluate="True"></Rule>
+                      </Setting>
+                    </Object>
+                    <Setting Key1="ProductName" Display="Right">
+                      <Rule Name="SKUNameV16x64" Query="$."></Rule>
+                    </Setting>
+                  </Object>
+                </Object>
+              </Object>
+          </Object>
+        </Object>
+				<!--/SKU-->
+				<!--MSO-->
+				<Reference Type="MSO" Name="MSO" File="common.config.xml">
+        </Reference>
+				<!--/MSO-->
+        <!--ADALCSIDLL-->
+        <Reference Type="ADALCSIDLL" Name="ADALCSIDLL" File="common.config.xml">
+        </Reference>
+        <!--/ADALCSI-->
+        <!--MSMapi32-->
+        <Reference Type="MSMAPI32" Name="MSMAPI32" File="common.config.xml">
+        </Reference>
+        <!--/MSMapi32-->
+				<!--OART.dll-->
+				<Reference Type="OART" Name="OART" File="common.config.xml">
+        </Reference>
+				<!--/OART.dll-->
+        <!--Outlook.exe-->
+        <Reference Type="OUTLOOKVERSION" Name="OUTLOOKVERSION" File="common.config.xml">
+        </Reference>
+        <!--/Outlook.exe-->
+			</Object>
+			<!--INSTALLED UPDATES-->
+			<Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
+				<Object Type="Group" Name="Installed Updates" Class="Office Update" GroupingClass="True" Display="Right" TrackProgress="TrackProgress" LogText="Collecting Installed Updates">
+					<Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml"/>
+				</Object>
+			</Object>
+			<Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
+				<Object Type="Group" Name="ClickToRun Details" GroupingClass="True" Class="Office Update" Display="Right">
+          <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+            <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+            <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml"></Reference>
+          </Object>
+				</Object>
+			</Object>
+			<!--/INSTALLED UPDATES-->
+      <!--ADAL updates-->
+      <Object Type="If" Key1="number('%MAJORVERSION%')=15">
+        <Object Type="Group" Name="Office 2013 Modern Authentication support for Office 365">
+          <Object Type="Group" Name="Prerequisites" Display="Right">
+            <Object Type="Group" Name="%APPNAME%" Display="Right">
+              <Object Type="Group" Name="Hidden">
+                <Rule Name="fKB2956163Installed" Query="versioncompare($sFullAppVersion,'15.0.4701.1001')" P0="if($fKB2956163Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2956163','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090"></Rule>
+              </Object>
+            </Object>
+            <Object Type="Cache" Name="InstallPathCACHE" Key1="Dump" Key2="INSTALLPATHCACHE" Display="Hide">
+              <Setting Key1="Val" Substitution="INSTALLPATH" Display="Hide"></Setting>
+            <Reference Type="ADAL" Name="ADAL" File="common.config.xml">
+            </Reference>
+            </Object>
+            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($fKB2956163Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P2="if($fKB2956163Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" P4="'%APPNAME%'" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;{4} 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="29489831-654f-4da3-9322-e2f3fe29e8db" Symptoms="Modern Authentication for Office 365"></Rule>
+          </Object>
+        </Object>
+      </Object>
+      <!--/ADAL updates-->
+		</Object>
+		<!--OFFICE DETAILS-->
+		<!--USER DETAILS-->
+		<Object Type="Group" Name="User Details" Display="Right">
+			<Reference Type="UserDetails" Name="UserDetails" File="common.config.xml"></Reference>
+		</Object>
+		<!--/USER DETAILS-->
+		<!--MACHINE DETAILS-->
+		<Object Type="Group" Name="Machine Details">
+			<Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml"></Reference>
+      <Reference Type="ServicesRunning" Name="ServicesRunning" File="common.config.xml"></Reference>
+      <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml"></Reference>
+      <Reference Type="WUDetails" Name="WUDetails" File="common.config.xml"></Reference>
+      <Reference Type="WindowsUpdatesToInstall" Name="WindowsUpdatesToInstall" File="common.config.xml"></Reference>
+    </Object>
+		<!--MACHINE DETAILS-->
+		<!--ADD-INS-->
+		<Object Type="Group" Name="Registered add-ins" Class="Add-ins" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Registered add-ins">
+			<!--PDFMaker-->
+			<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Pdfmaker.OfficeAddin\CLSID">
+				<Setting Key1="(Default)" Substitution="PDFMAKERGUID"></Setting>                
+				<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Word" Key6="winword" Key7="%MAJORVERSION%" Display="Hide">
+					<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide"></Setting>
+					<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="%WOW6432NODE%\CLSID\%PDFMAKERGUID%\InprocServer32">
+						<Setting Key1="(Default)" Substitution="PDFMAKERPATH"></Setting>
+						<Object Type="File" Key2="%PDFMAKERPATH%">
+							<Setting Key1="Version">
+                <Rule Name="sPDFMakerWord14" Query="$n2DigitVersion=14 and versioncompare($.,'10.0.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with Word. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="486fb2a4-558b-4028-920b-83ea82c30c2e" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerWord14x64" Query="$n2DigitVersion=14 and $bitness='x64' and versioncompare($.,'10.1.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have ({0}) is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="fd1d2d6c-ec19-4d42-a129-0c4b7ae6e902" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerWord15" Query="$n2DigitVersion=15 and versioncompare($.,'11.0.1.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with Word. Please update the add-in to version 11.0.1 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="dc29c397-3a3b-4efc-bfcb-6fe07952dd68" Symptoms="Crash,Add-ins"></Rule>
+							</Setting>
+						</Object>
+					</Object>
+				</Object>
+			</Object>
+			<!--/PDFMaker-->
+			<!--HKCU addins-->
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Word\Addins" Key5="Subtree" Display="Right">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
+				<Rule Name="hkcuPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+					<Setting Key1="CommandLineSafe"></Setting>
+					<Setting Key1="Description"></Setting>
+					<Setting Key1="FriendlyName"></Setting>
+					<Setting Key1="Loadbehavior">
+						<Rule Name="sPowerWordAddinFoundWD13" Query="'%KP%'='Software\Microsoft\Office\Word\Addins\PWOffice2007.WordAddin.1' and $n2DigitVersion&gt;14 and $.&gt;0" Error="Warning" Title="PowerWord add-in is installed and has been known to crash Word 2013" Text="You have the PowerWord add-in installed and it has been found to crash Word 2013 on some computers." GUID="279954" SSID="ad30f3fe-6a12-4243-baf7-64da89272a28" Symptoms="Crash,Add-ins"></Rule>
+					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayHKCU" Query="true()" P0="if($sHKCUAddInLoadTimeFromRegistry&gt;=0,concat($sHKCUAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
+				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKCUAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
+			</Object>
+			</Object>
+			<!--/HKCU addins-->
+			<!--HKLM addins-->
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Word\Addins" Key5="Subtree" Display="Right">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
+				<Rule Name="hklmPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+					<Setting Key1="CommandLineSafe"></Setting>
+					<Setting Key1="Description"></Setting>
+					<Setting Key1="FriendlyName"></Setting>
+					<Setting Key1="Loadbehavior">
+					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayHKLM" Query="true()" P0="if($sHKLMAddInLoadTimeFromRegistry&gt;=0,concat($sHKLMAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
+				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKLMAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
+			</Object>
+			</Object>
+			<!--/HKLM addins-->
+			<!--HKLM WOW addins-->
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Word\Addins" Key5="Subtree" Display="Right">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
+				<Rule Name="hklmWowPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+					<Setting Key1="CommandLineSafe"></Setting>
+					<Setting Key1="Description"></Setting>
+					<Setting Key1="FriendlyName"></Setting>
+					<Setting Key1="Loadbehavior">
+					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayWow" Query="true()" P0="if($sHKLMWowAddInLoadTimeFromRegistry&gt;=0,concat($sHKLMWowAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
+				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKLMWowAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
+			</Object>
+			</Object>
+			<!--/HKLM WOW addins-->
+      <!--HKLM C2R addins-->
+      <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+        <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+        <Reference Type="C2RAddins" Name="C2RAddins" File="common.config.xml"></Reference>
+      </Object>
+      <!--HKLM C2R addins-->
+			<!--RESILIENCY-->
+			<Object Type="Group" Name="Resiliency" Class="Add-ins" Display="Right">
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\Resiliency" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Group" Name="HKEY_CURRENT_USER\Software\Microsoft\Office\%MAJORVERSION%.0\Word\Resiliency\DisabledItems" Display="Right">
+					<Object Type="Group" Name="Disabled Add-ins" Display="Right">
+						<Object Type="DisabledItems" Key1="Word" Key2="%MAJORVERSION%" Display="Right">
+							<Setting Key1="Type" Display="Right"></Setting>
+							<Setting Key1="Module" Display="Right"></Setting>
+							<Setting Key1="FriendlyName" Display="Right"></Setting>
+						</Object>
+						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="Add-ins have been automatically disabled because of performance or stability issues" Text="Word add-ins have been disabled due to performance or stability issues. To see the list of disabled add-ins, click the Configuration Details tile (above) and then search for 'Disabled Add-ins' using the Find feature." GUID="272802" SSID="d0a693c0-b372-4589-a2d9-9deb6b59fec1" Symptoms="Add-ins"></Rule>
+					</Object>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\Resiliency\DoNotDisableAddinList" Display="Right">
+          <Setting Key1="__VALUES" Key2="^((?!OffCATv2_Addin.Connect).)*$"></Setting>
+          <Rule Name="nReEnabledAddins" Query="count(../Instance/Setting)"></Rule>
+          <Rule Name="sUserReenabledAddins" Query="$nReEnabledAddins&gt;0 and $nRestrictToList&lt;1" Error="Warning" P0="$nReEnabledAddins" Title="Problematic add-in(s) re-enabled by the user" Text="{0} add-in(s) disabled by Word because of performance or stability issues was/were re-enabled by the user. To see the list of disabled add-ins that were re-enabled by the user, click the Configuration Details tile (above) and then search for 'DoNotDisableAddinList' using the Find feature." GUID="272802" SSID="6dc0a269-3253-4a35-8e41-25851e8693ef" Symptoms="Slowness,Error message,Add-ins"></Rule>
+        </Object>
+				<!--O15 and above resiliency policy-->
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Word\Resiliency" Key4="" Key5="Base" Display="Right">
+					<Setting Key1="RestrictToList"></Setting>
+					<Rule Name="nRestrictToList" Query="if(../Instance/Setting[@Key1='RestrictToList']=true(),../Instance/Setting[@Key1='RestrictToList']/Value,-1)"></Rule>
+					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Word\Resiliency\AddinList" Key4="" Key5="Base" Display="Right">
+						<Setting Key1="__VALUES"></Setting>
+					</Object>
+				</Object>
+			</Object>
+			<!--/RESILIENCY-->
+			<!--SDPRules-->
+			<!--/SDPRules-->      
+		</Object>
+		<!--/ADD-INS-->
+		<!--Problem Addins-->
+		<Object Type="Group" Name="Add-ins with known problems" GroupingClass="True" Class="ProblemAddins" TrackProgress="TrackProgress">
+      <Object Type="Cache" Name="APPNAMECACHE" Key1="Dump" Key2="APPNAMECACHE" Display="Hide">
+        <Setting Key1="AppNameVal" Substitution="APPNAME" Display="Hide"></Setting>
+        <Reference Type="CommonProbAddins" Name="CommonProbAddins" File="common.config.xml"></Reference>
+      </Object>
+		<!--FineReader-->
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Word\Addins\Sprint.WordIntegration.9" Display="Hide">
+				<Setting Key1="LoadBehavior" Display="Hide"></Setting>
+				<Rule Name="fFineReader9WD" Query="(../Instance/Setting[@Key1='LoadBehavior'])=true()"></Rule>
+				<Rule Name="sFineReader9DetectedWD" Query="$MSO_fC2R2013SP1UpdateInstalled!=true() and $fFineReader9WD" Error="Warning" Title="FineReader 9.0 add-in detected in the registry" Text="The FineReader add-in is installed. Older versions have been known to cause Word to crash. Update or disable the FineReader add-in if you are experiencing crashes in Word." GUID="273809" SSID="a9fa4e1f-8716-430c-bebd-231a1c630876" Symptoms="Crash,Error message,Add-ins"></Rule>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Word\Addins\FRComAddInMSWORD10.FRComAddInMSWORD.1" Display="Hide">
+				<Setting Key1="LoadBehavior" Display="Hide"></Setting>
+				<Rule Name="fFineReader10WD" Query="(../Instance/Setting[@Key1='LoadBehavior'])=true()"></Rule>
+				<Rule Name="sFineReader10DetectedWD" Query="$MSO_fC2R2013SP1UpdateInstalled!=true() and $fFineReader10WD" Error="Warning" Title="FineReader 10.0 add-in detected in the registry" Text="The FineReader add-in is installed. Older versions have been known to cause Word to crash. Update or disable the FineReader add-in if you are experiencing crashes in Word." GUID="273809" SSID="68675ebc-6d92-4f37-8930-e947f33a075f" Symptoms="Crash,Error message,Add-ins"></Rule>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Word\Addins\FRComAddInMSWORD11.FRComAddInMSWORD.1" Display="Hide">
+				<Setting Key1="LoadBehavior" Display="Hide"></Setting>
+				<Rule Name="fFineReader11WD" Query="(../Instance/Setting[@Key1='LoadBehavior'])=true()"></Rule>
+				<Rule Name="sFineReader11DetectedWD" Query="$MSO_fC2R2013SP1UpdateInstalled!=true() and $fFineReader11WD" Error="Warning" Title="FineReader 11.0 add-in detected in the registry" Text="The FineReader add-in is installed. Older versions have been known to cause Word to crash. Update or disable the FineReader add-in if you are experiencing crashes in Word." GUID="273809" SSID="91d35354-7b94-45ff-8b2a-432c32acc9c6" Symptoms="Crash,Error message,Add-ins"></Rule>
+			</Object>
+
+			<!--Rule Name="sFineReaderDetectedWD" Query="$fFineReader9WD or $fFineReader10WD or $fFineReader11WD or $fFineReader9WowWD or $fFineReader10WowWD or $fFineReader11WowWD" Error="Warning" Title="FineReader add-in detected in Word" Text="The FineReader add-in is installed. Older versions have been known to cause Word to crash. Update or disable the FineReader add-in if you are experiencing crashes in Word." GUID="273809" SSID="94f0d15f-fc92-49d9-9f9e-a896297d669d"></Rule-->
+			<!--<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Outlook\Addins" Key5="Subtree" Display="right">
+							<Setting Key1="__VALUES"></Setting>
+						</Object>-->
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Word\Addins\Sprint.WordIntegration.9" Display="Hide">
+				<Setting Key1="LoadBehavior" Display="Hide"></Setting>
+				<Rule Name="fFineReader9WowWD" Query="(../Instance/Setting[@Key1='LoadBehavior'])=true()"></Rule>
+				<Rule Name="sFineReader9DetectedWDWow" Query="$MSO_fC2R2013SP1UpdateInstalled!=true() and $fFineReader9WowWD" Error="Warning" Title="FineReader 9.0 add-in detected under the \Wow6432Node registry key" Text="The FineReader add-in is installed. Older versions have been known to cause Word to crash. Update or disable the FineReader add-in if you are experiencing crashes in Word." GUID="273809" SSID="0e2b2780-f7e6-4b21-9da6-5db88de75b76" Symptoms="Crash,Error message,Add-ins"></Rule>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Word\Addins\FRComAddInMSWORD10.FRComAddInMSWORD.1" Display="Hide">
+				<Setting Key1="LoadBehavior" Display="Hide"></Setting>
+				<Rule Name="fFineReader10WowWD" Query="(../Instance/Setting[@Key1='LoadBehavior'])=true()"></Rule>
+				<Rule Name="sFineReader10DetectedWDWow" Query="$MSO_fC2R2013SP1UpdateInstalled!=true() and $fFineReader10WowWD" Error="Warning" Title="FineReader 10.0 add-in detected under the \Wow6432Node registry key" Text="The FineReader add-in is installed. Older versions have been known to cause Word to crash. Update or disable the FineReader add-in if you are experiencing crashes in Word." GUID="273809" SSID="49ccda54-378e-49e1-a1dd-df27a59dc700" Symptoms="Crash,Error message,Add-ins"></Rule>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Word\Addins\FRComAddInMSWORD11.FRComAddInMSWORD.1" Display="Hide">
+				<Setting Key1="LoadBehavior" Display="Hide"></Setting>
+				<Rule Name="fFineReader11WowWD" Query="(../Instance/Setting[@Key1='LoadBehavior'])=true()"></Rule>
+				<Rule Name="sFineReader11DetectedWDWow" Query="$MSO_fC2R2013SP1UpdateInstalled!=true() and $fFineReader11WowWD" Error="Warning" Title="FineReader 11.0 add-in detected under the \Wow6432Node registry key" Text="The FineReader add-in is installed. Older versions have been known to cause Word to crash. Update or disable the FineReader add-in if you are experiencing crashes in Word." GUID="273809" SSID="476e10d0-d394-4031-b4dd-98cf6a53cc3b" Symptoms="Crash,Error message,Add-ins"></Rule>
+			</Object>
+			<!--/FineReader-->
+		</Object>
+		<!--/PROBLEM ADDINS-->
+
+			<!--REG SETTINGS-->
+		<Object Type="Group" Name="Office Registry Settings" Class="Word Settings" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Office Registry Settings">
+			<Object Type="Group" Name="HKEY_CURRENT_USER" Display="Right">
+				<!--app specific-->
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Word" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word" Key4="^((?!File MRU)(?!Place MRU)(?!Reading Locations).)*$" Key5="Subtree" Key6="True" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+					<Setting Key1="Latin">
+						<Rule Name="sLatinFontSettingBlankWD" Query="string-length($.)=0" P0="../../@Name" Error="Warning" Title="Text in email messages may display as unreadable characters" Text="The text in email messages you receive may contain characters that are unreadable. This problem occurs when the 'Latin' string value under {0} is blank. Click the 'Click here ...' link for details." GUID="325399" SSID="e1646afe-c684-4abd-b2c2-2a079b701a9c" Symptoms="Email message display,Email send/receive"/>
+					</Setting>
+					<Setting Key1="DisableRobustifiedUNC">
+						<Rule Name="sDisableRobustifiedUNC" Query="$.=1" Error="Warning" Title="DisableRobustifiedUNC=1" Text="This registry value is only intended for troubleshooting purpose and is not supported in production environment." GUID="" SSID="000b795b-9490-457f-9db0-ba5a8461633c" Symptoms="Configuration (unsupported or problematic)"/>
+					</Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\Security\FileValidation" Display="Right">
+					<Setting Key1="Enable">
+						<Rule Name="sOfficeFileValidation" Query="$.=1 and $n2DigitVersion&lt;15" Error="None" Text="The Office File Validation (OFV) is installed on the computer and configured to load" Title="The Office File Validation (OFV) is installed on the computer. Because the add-in is configured to process files when they are opened, these files may open more slowly than when the OFV add-in is not installed." SSID="efe9b458-5d57-4e2e-ae83-4742d8bc3521" Symptoms="Informational"></Rule>
+					</Setting>
+				</Object>
+				<!--common-->
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+					<Setting Key1="VBAOff">
+						<Rule Name="sHkcuVBAOff" Query="$.=1 and $HklmVBAOff=-1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA functionality is impaired or disabled (HKCU registry data)" Text="The VBAOff value in the HKCU registry hive is set to a value other than 0. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="4b17edd1-2a3f-42be-acfd-abf460a0f310" Symptoms="VBA"></Rule>
+					</Setting>
+					<Rule Name="HkcuVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Key4="^((?!Identity)(?!Internet)(?!Logging)(?!OfficeStart)(?!Open Find)(?!Research)(?!Roaming)(?!ServicesManagerCache)(?!UserSidEmailMapping).)*$" Key5="Subtree" Key6="True" Display="Right">
+					<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+						<Setting Key1="__VALUES"></Setting>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="Group" Name="HKEY_LOCAL_MACHINE" Display="Right">
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Word" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Word" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\%MAJORVERSION%.0\Word" Key5="Subtree" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+				</Object>
+				<!--common-->
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+					<Setting Key1="__VALUES"></Setting>
+					<Setting Key1="VBAOff">
+						<Rule Name="sHklmVBAOff" Query="$.=1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="Visual Basic for Applications is disabled (HKLM registry data)" Text="The VBAOff value = 1 in the registry under the HKLM hive. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="a7e01c21-78d8-4a10-b3d6-cbae9ffe2187" Symptoms="VBA"></Rule>
+					</Setting>
+					<Rule Name="HklmVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
+				</Object>
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Key5="Subtree" Display="Right">
+					<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+					</Setting>
+					<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+						<Setting Key1="__VALUES">
+						</Setting>
+					</Object>
+				</Object>
+			</Object>
+		</Object>
+		<!--/REG SETTINGS-->
+		<!--OFFICE POLICIES-->
+		<Object Type="Group" Name="Office Policies" Class="Policies" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Office Policies">
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0" Key4="^(?i:(?!Assist)(?!VPRSU).)*$" Key5="Subtree" Display="Right">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+					<Setting Key1="__VALUES"></Setting>
+					<Rule Name="fPolicies" Query="count(../Instance[contains(lower-case(@Name),'word')]/Setting)&gt;0"></Rule>
+					<Setting Key1="TerminalServerSpellingStart">
+						<Rule Name="sTermServSpellStartTooHigh" Query="$.&gt;=10000 and $MachineDetails_fTermServer" Error="Warning" Title="Possible performance issues due to TerminalServerSpellingStart policy" Text="Outlook may experience peformance problems or cause high CPU because the TerminalServerSpellingStart policy value for Word is set too high. The default value is 5000 (decimal). Please consider lowering the value specified for the policy." GUID="328570" SSID="7955e686-7ce2-40b3-8b26-2ac0a0d04794"></Rule>
+					</Setting>
+			  </Object>
+		  </Object>
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+				<Setting Key1="__VALUES"></Setting>				
+				<Setting Key1="VBAOff">
+					<Rule Name="sHkcuVBAOffPol" Query="$.=1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKCU" Text="The VBAOff value is set to a value other than 0 as a policy under HKCU. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="7e2b210a-d7b9-483c-8868-c29c347a6c8a" Symptoms="VBA"></Rule>
+				</Setting>
+				<Rule Name="HkcuVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
+			</Object>
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Word\Options\Assist">
+        <Setting Key1="__VALUES"/>
+        <Setting Key1="KeyExists">
+          <Rule Name="sWordOptionsAssistFound" Query="$.='True'" Error="Warning" Title="Outlook preview of Word documents is impaired due to Policy under HKCU" Text="The registry contains the following subkey: HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\15.0\Word\Options\Assist. When the registry contains this subkey, Outlook cannot preview a Word document. Click the 'Click here ...' link for details." GUID="511320" SSID="b9b6875d-93ba-48cf-af32-1122c6b6dbfd" Symptoms="Email attachments,Error message"></Rule>
+        </Setting>
+        <Rule Name="sKB2899568FreezeAssistMsi" Query="$n2DigitVersion=15 and $nInstallType='MSI' and versioncompare($sFullAppVersion,'15.0.4667.1000')&lt;0 and count(../Instance/Setting[@Key1!='KeyExists']/Value)&gt;0" Error="Warning" P0="if($bitness='x86','x86 (32-bit)','x64 (64-bit)')" P1="$sFullAppVersion" Title="Registry data found under \Assist that may cause Word to stop responding" Text="You have one or more values under HKCU\Software\Policies\Microsoft\Office\15.0\Word\Options\Assist and your Microsoft Word version is {1}. In this configuration, Word has been known to stop responding.&#xA;&#xA;To resolve this problem, click the 'Click here ...' link and install the {0} update from the article. Or, install the latest Word 2013 update from Microsoft Update." GUID="519373" SSID="a1910dd4-8d7e-4057-9446-14013f5fd828" Symptoms="Crash,Freeze"></Rule>
+        <Rule Name="sKB2899568FreezeAssistC2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4667.1000')&lt;0 and count(../Instance/Setting[@Key1!='KeyExists']/Value)&gt;0" Error="Warning" P1="$sFullAppVersion" Title="Registry data found under \Assist that may cause Word to stop responding" Text="You have one or more values under HKCU\Software\Policies\Microsoft\Office\15.0\Word\Options\Assist and your Microsoft Word version is {1}. In this configuration, Word has been known to stop responding.&#xA;&#xA;To resolve this problem, click the 'Click here...' link and then follow the instructions provided in the article to update your Office installation." GUID="526631" SSID="a389db11-b62e-43b0-a94a-715bba5c85e4" Symptoms="Crash,Freeze"></Rule>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Word\Options\vprsu">
+        <Setting Key1="__VALUES"/>
+        <Rule Name="sKB2899568FreezeVprsuMsi" Query="$n2DigitVersion=15 and $nInstallType='MSI' and versioncompare($sFullAppVersion,'15.0.4667.1000')&lt;0 and count(../Instance/Setting/Value)&gt;0" Error="Warning" P0="if($bitness='x86','x86 (32-bit)','x64 (64-bit)')" P1="$sFullAppVersion" Title="Registry data found under \VPRSU that may cause Word to stop responding" Text="You have one or more values under HKCU\Software\Policies\Microsoft\Office\15.0\Word\Options\VPRSU and your Microsoft Word version is {1}. In this configuration, Word has been known to stop responding.&#xA;&#xA;To resolve this problem, click the 'Click here ...' link and install the {0} update from the article. Or, install the latest Word 2013 update from Microsoft Update." GUID="519373" SSID="39ff03ea-1b9e-41b1-ba23-e7fd5fe71d80" Symptoms="Crash,Freeze"></Rule>
+        <Rule Name="sKB2899568FreezeVprsuC2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4667.1000')&lt;0 and count(../Instance/Setting/Value)&gt;0" Error="Warning" P1="$sFullAppVersion" Title="Registry data found under \VPRSU that may cause Word to stop responding" Text="You have one or more values under HKCU\Software\Policies\Microsoft\Office\15.0\Word\Options\VPRSU and your Microsoft Word version is {1}. In this configuration, Word has been known to stop responding.&#xA;&#xA;To resolve this problem, click the 'Click here...' link and then follow the instructions provided in the article to update your Office installation." GUID="526631" SSID="786f135a-b8dd-4c13-a693-b2689ca1af1a" Symptoms="Crash,Freeze"></Rule>
+      </Object>
+		  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+			  <Setting Key1="__VALUES"></Setting>
+			  <Setting Key1="VBAOff">
+				  <Rule Name="sHklmVBAOffPol" Query="$.=1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKLM" Text="The VBAOff value is set to a value other than 0 as a policy under HKLM. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="110c76da-3fcf-405c-8b14-1db7b6eb1600" Symptoms="VBA"></Rule>
+			  </Setting>
+			  <Rule Name="HklmVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
+		  </Object>
+    </Object>
+    <!--/OFFICE POLICIES-->
+		<!--EVENTLOGS-->
+		<Object Type="Group" Name="Application Event Logs" Class="Event Logs" GroupingClass="True">
+			<Object Type="Group" Name="Application Event Log Entries for Last Word crashes" Class="Application Event Logs" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Application Event Log Entries for Last Word crashes">
+        <Reference Type="WordCrashes" Name="WordCrashes" File="word.crashes.config.xml">
+        </Reference>
+				<Object Type="EventLog" Key1="Application" Key3="1001" Key4="winword.exe" Key7="14" Key8="10000" Task="Offline scan">
+					<Setting Key1="Message">
+						<Rule Name="event1001Message" Query="$."></Rule>
+					</Setting>
+					<Setting Key1="Type" Display="Hide">
+						<Rule Name="event1001Type" Query="$."></Rule>
+					</Setting>
+					<Setting Key1="Fault Bucket">
+						<Rule Name="OfficeQFE34188Buckets" Query="'2057391496;2082666684;2057391496;-1802914834;2082666684;-967258991;-989630004;-1802147377;2085636925;-966840305;2081323892;-967243451;2083252661;-1800499586;-966708664;-1628241750;-966850763;-1787385653;2084471176;-967119257;-967040748;-1787088527'"></Rule>
+						<Rule Name="sOfficeQFE34188" Query="$n2DigitVersion=14 and number($nBuild)&lt;6131 and not($.='') and contains($OfficeQFE34188Buckets,string($.))" Error="Error" Title="Word 2010 is randomly crashing in module MSVCR90.dll" Text="Due to a confirmed bug in Word 2010, the application is randomly crashing in module MSVCR90.dll. This problem is fixed by installing the December 2012 cumulative update for Word 2010, or a later cumulative update." GUID="280161" SSID="a63d4b44-9987-4489-ac89-c4574650fe92" Symptoms="Crash,Startup,Error message"></Rule>
+						<Rule Name="bucketNumber" Query="$."></Rule>
+						<!--P0 must be 'BUCKET', P1 and P2 are mandatory-->
+						<Rule Name="bucketLookup" Error="Error" Query="$bucketNumber!=''" P0="'BUCKET'" P1="$bucketNumber" P2="$bucketType" P3="'winword.exe'" P4="$event1001Message" Title="Event 1001" Text="{4}" Internal="True" Symptoms="Crash/Hang event lookup"></Rule>
+					</Setting>
+					<Setting Key1="Type">
+						<Rule Name="bucketType" Query="$."></Rule>
+					</Setting>
+				</Object>
+			</Object>
+		</Object>
+		<!--/EVENTLOGS-->
+		<!--MISCELLANEOUS-->
+		<Object Type="Group" Name="Miscellaneous" GroupingClass="True" Class="Miscellaneous" TrackProgress="TrackProgress">
+      <Reference Type="OffCATVersionInfo" Name="OffCATVersionInfo" File="common.config.xml">
+      </Reference>
+      <Reference Type="GPResult" Name="GPResult" File="common.config.xml">
+      </Reference>
+			<Reference Type="CommonMisc" Name="CommonMisc" File="common.config.xml"></Reference>
+			<!--DCOM Settings-->
+			<Object Type="Group" Name="DCOM Settings" Class="Miscellaneous" GroupingClass="True">
+				<Object Type="GetComputerNameEx">
+					<Setting Key1="ComputerNameNetBIOS" Substitution="MACHINENAME" Display="Hide"/>
+					<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_DCOMApplicationSetting" Key4="AppID='{00020906-0000-0000-C000-000000000046}'" Display="Hide">
+						<Setting Key1="__VALUES"></Setting>
+						<Setting Key1="RunAs">
+							<Rule Name="sUnattendedAutomation" Query="$." Error="Warning" Title="Word is detected to be working in non-user interactive mode through DCOM Settings" Text="Microsoft does not recommend, nor support, automation of Office applications from any unattended, non-interactive client application or component (including ASP, ASP.NET, DCOM, and NT Services).Please remove the DCOM settings for the Word." GUID="304008" SSID="7c43e280-fba4-4f5a-8a0a-449f0822d70f" Symptoms="Configuration (unsupported or problematic)"></Rule>
+						</Setting>
+					</Object>
+				</Object>
+			</Object>
+			<!--/DCOM Settings-->
+			<!--File associations-->
+			<Object Type="Group" Name="Word File Associations" Display="Right">
+				<Setting Key1="" Display="Hide"></Setting>
+				<Rule Name="sWDAccessDBEngineX64PlusOfficeX86" Query="$n2DigitVersion=14 and $CommonMisc_fAccessDBEngineX64 and $CommonMisc_fMsoComponentIDx86" Error="Error" Title="Unsupported configuration found: The 64-bit Microsoft Access database engine 2010 is installed along with a 32-bit version of Office 2010" Text="You have the 64-bit Microsoft Access database engine 2010 installed but you have a 32-bit version of Office 2010 installed. Mixing the 'bitness' of two Office products is not supported and can cause errors opening Word files." GUID="394608" SSID="c4a7d43c-3f44-44aa-aa46-6a1141034c55" Symptoms="Configuration (unsupported or problematic),File Open error,Error message"></Rule>
+			</Object>
+				<!--File associations-->
+		</Object>
+		<!--/MISCELLANEOUS-->
+	</Object>
+	<!--ALERTS-->
+	<Object Type="Group" Name="Informational News" GroupingClass="True" Class="Alerts">
+		<Reference Type="Alerts" Name="Alerts" File="common.config.xml"></Reference>
+	</Object>
+	<!--/ALERTS-->
+	<!--EXTERNALREFS-->
+	<Rule Name="effectiveSlowBitrate"></Rule>
+  <Rule Name="sPpCoreVersion"></Rule>
+  <Rule Name="sWordVersion"></Rule>
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>UcNSyf/ZoFcVXYYtepzNTcgl6e0=</DigestValue></Reference></SignedInfo><SignatureValue>
+    J65KujrjCcf4SOVSEscSa91VEAlN5CTXaZLU+tXhNEaw9Oo/f28oACpl8HDGM43nVpgJfIEm
+    q8T/V9fkKUX9j+0+0vmLZEn+pZWd/QbfW2/iJ0EaLlVtbr/beOWmR+MJKYiCBgPd3bNAkS3C
+    qGpcdqvLqJcaTFTfBKtjXQEiSIs//QDCYmaPkjwZTVtE9YaYEpiXQGfKcnIeYmOeKof+hcJC
+    0Ol3RZQnSiFJP8tk/IUXP+xxpvugQCK5KbHq627hqvdEHikCNlo04ohJvzdrNhviv20A/yEG
+    XJrn3+sJjA5yQza+oxEueYV6Khuu6Iil1gXvdNxHigDHtl3KQ/3S8w==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?><ArticleFeed Version="2.0.1507.02">
+  <Application name="access" version="15">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510553" Title="Training courses for Access 2013" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510554" Title="What's new in Access 2013" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510555" Title="Find a web location for my Access web app" imageMso="XmlExport"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510556" Title="Expression Builder usage" imageMso="FunctionWizard"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510558" Title="IIf Function" imageMso="FunctionsLogicalInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510559" Title="Dates as criteria in Access queries" imageMso="FunctionsDateTimeInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510560" Title="Basic tasks for an Access 2013 desktop database" imageMso="DatabaseRelationships"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510561" Title="Combo box or List box - create a list of choices" imageMso="ContentControlComboBox"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510562" Title="Discontinued features and modified functionality in Access 2013" imageMso="MicrosoftAccess"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510563" Title="Forms - create, modify, manage" imageMso="FormsMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510564" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="access" version="14">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510565" Title="Training courses for Access 2010" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510570" Title="What's new in Access 2010" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510571" Title="Expression Builder usage" imageMso="FunctionWizard"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510572" Title="IIf Function" imageMso="FunctionsLogicalInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510573" Title="Dates as criteria in Access queries" imageMso="FunctionsDateTimeInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510574" Title="Basic tasks for an Access 2010 desktop database" imageMso="DatabaseRelationships"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510575" Title="Combo box or List box - create a list of choices" imageMso="ContentControlComboBox"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510576" Title="Discontinued features and modified functionality in Access 2010" imageMso="MicrosoftAccess"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510577" Title="Forms - create, modify, manage" imageMso="FormsMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510578" Title="Import or link to data in an Excel workbook" imageMso="TableExcelSpreadsheetInsert"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510579" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="excel" version="15">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510580" Title="Training courses for Excel 2013" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510581" Title="Broken formula avoidance" imageMso="TableUnlinkExternalData"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510590" Title="Circular references - locate and repair" imageMso="FileWorkflowTasks"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510591" Title="Drop-down list creation" imageMso="ActiveXComboBox"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510592" Title="Split text into different cells" imageMso="ConvertTextToTable"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510593" Title="What's new in Excel 2013" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510594" Title="Basic tasks in Excel 2013" imageMso="MicrosoftExcel"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510595" Title="Conditional formatting using formulas" imageMso="ConditionalFormattingHightlightGreaterThan"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510596" Title="Detect errors in formulas using error checking" imageMso="ErrorChecking"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510597" Title="Sorting data in a worksheet" imageMso="SortUp"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510598" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="excel" version="14">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510599" Title="Training courses for Excel 2010" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510500" Title="Broken formula avoidance" imageMso="TableUnlinkExternalData"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510501" Title="Circular references - locate and repair" imageMso="FileWorkflowTasks"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510502" Title="Drop-down list creation" imageMso="ActiveXComboBox"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510503" Title="Split text into different cells" imageMso="ConvertTextToTable"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510504" Title="What's new in Excel 2010" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510505" Title="Basic tasks in Excel 2010" imageMso="MicrosoftExcel"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510506" Title="Conditional formatting using formulas" imageMso="ConditionalFormattingHightlightGreaterThan"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510507" Title="Detect errors in formulas using error checking" imageMso="ErrorChecking"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510508" Title="Sorting data in a worksheet" imageMso="SortUp"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510509" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="infopath" version="15">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510755" Title="Find content about InfoPath 2013" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510756" Title="Design an accessible form template" imageMso="ListToolFormTemplate"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510757" Title="Keyboard shortcuts for InfoPath 2013" imageMso="HelpKeyboardShortcuts"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510758" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="infopath" version="14">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510759" Title="Find content about InfoPath 2010" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510760" Title="Design an accessible form template" imageMso="ListToolFormTemplate"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510761" Title="Keyboard shortcuts for InfoPath 2010" imageMso="HelpKeyboardShortcuts"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510762" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="onenote" version="15">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510712" Title="What's new in OneNote 2013" imageMso="JotClipping"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510713" Title="Troubleshoot synchronization errors in OneNote" imageMso="JotSyncIncomplete"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510714" Title="Training courses for OneNote 2013" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510715" Title="Basic tasks in Microsoft OneNote 2013" imageMso="NewNotebookMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510716" Title="OneNote 2013 Quick Start Guide" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510717" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="onenote" version="14">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510718" Title="What's new in OneNote 2010" imageMso="JotClipping"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510719" Title="Troubleshoot synchronization errors in OneNote" imageMso="JotSyncIncomplete"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510720" Title="Training courses for OneNote 2010" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510721" Title="Basic tasks in Microsoft OneNote 2010" imageMso="NewNotebookMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510722" Title=" Keyboard shortcuts in OneNote 2010" imageMso="HelpKeyboardShortcuts"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510723" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="outlook" version="15" Cloud="true">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=617560" Title="Check for profile and connection problems" imageMso="ButtonTaskOfficeDiagnostic"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510351" Title="How to recover deleted items" imageMso="AccessRecycleBin"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510352" Title="Outlook .pst files - repair, open, import, export and create" imageMso="FileBackupDatabase"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510353" Title="Export or back up messages, calendar, tasks, and contacts" imageMso="ExportSavedExports"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510354" Title="How to share my calendar" imageMso="AddPeoplesCalendar"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510357" Title="Contacts - create, manage, import, and share" imageMso="SharingOpenContactFolder"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524575" Title="Email signatures - create, modify, and manage" imageMso="SignatureInsertMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524558" Title="Out of Office replies - enable, disable, and configure" imageMso="OutOfOffice"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510355" Title="Manage your folders in Outlook" imageMso="CreateMailRule"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524562" Title="Archive older items - configure automatic deletion or archival" imageMso="Archive"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510356" Title="Rules - create, delete, edit, import" imageMso="AdvancedFilterDialog"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510358" Title="Junk Email settings - configure, edit, enable, disable" imageMso="JunkEmailOptions"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510359" Title="Calendars - how to customize and configure" imageMso="ShowSchedulingPage"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510360" Title="Delegate settings - how to configure" imageMso="AddOrRemoveAttendees"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510361" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="outlook" version="15" Cloud="false">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510335" Title="Contacts - create, manage, import, and share" imageMso="SharingOpenContactFolder"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510331" Title="Email signatures - create, modify, and manage" imageMso="SignatureInsertMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524554" Title="Out of Office replies - enable, disable, and configure" imageMso="OutOfOffice"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524573" Title="Manage your folders in Outlook" imageMso="CreateMailRule"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510334" Title="Outlook .pst files - repair, open, import, export and create" imageMso="FileBackupDatabase"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510337" Title="Share my calendar with other people" imageMso="AddPeoplesCalendar"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510336" Title="Email accounts - add, delete, manage" imageMso="AccountSettings"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524561" Title="Archive older items - configure automatic deletion or archival" imageMso="Archive"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524578" Title="Spell check - enable, disable and configure settings" imageMso="SpellCheck"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510338" Title="Rules - create, delete, edit, import" imageMso="AddRulesMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510330" Title="Training courses for Outlook 2013" imageMso="FunctionsEngineeringInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510329" Title="What's new in Outlook 2013" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510339" Title="More Help	Info" imageMso="Info"/>
+  </Application>
+  <Application name="outlook" version="14" Cloud="true">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=617560" Title="Check for profile and connection problems" imageMso="ButtonTaskOfficeDiagnostic"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510362" Title="How to recover deleted items" imageMso="AccessRecycleBin"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510363" Title="Outlook .pst files - repair, open, import, export and create" imageMso="FileBackupDatabase"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510364" Title="Export or back up messages, calendar, tasks, and contacts" imageMso="ExportSavedExports"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510365" Title="How to share my calendar" imageMso="AddPeoplesCalendar"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510368" Title="Contacts - create, manage, import, and share" imageMso="SharingOpenContactFolder"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524576" Title="Email signatures - create, modify, and manage" imageMso="SignatureInsertMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524557" Title="Out of Office replies - enable, disable, and configure" imageMso="OutOfOffice"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510366" Title="Manage your folders in Outlook" imageMso="CreateMailRule"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524564" Title="Archive older items - configure automatic deletion or archival" imageMso="Archive"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510367" Title="Rules - create, delete, edit, import" imageMso="AdvancedFilterDialog"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510369" Title="Junk Email settings - configure, edit, enable, disable" imageMso="JunkEmailOptions"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510370" Title="Calendars - how to customize and configure" imageMso="ShowSchedulingPage"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510371" Title="Delegate settings - how to configure" imageMso="AddOrRemoveAttendees"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510372" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="outlook" version="14" Cloud="false">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510346" Title="Contacts - create, manage, import, and share" imageMso="SharingOpenContactFolder"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510342" Title="Email signatures - create, modify, and manage" imageMso="SignatureInsertMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524556" Title="Out of Office replies - enable, disable, and configure" imageMso="OutOfOffice"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524574" Title="Manage your folders in Outlook" imageMso="CreateMailRule"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510345" Title="Outlook .pst files - repair, open, import, export and create" imageMso="FileBackupDatabase"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510348" Title="Share my calendar with other people" imageMso="AddPeoplesCalendar"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510347" Title="Email accounts - add, delete, manage" imageMso="AccountSettings"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524563" Title="Archive older items - configure automatic deletion or archival" imageMso="Archive"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=524579" Title="Spell check - enable, disable and configure settings" imageMso="SpellCheck"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510349" Title="Rules - create, delete, edit, import" imageMso="AddRulesMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510341" Title="Training courses for Outlook 2010" imageMso="FunctionsEngineeringInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510340" Title="What's new in Outlook 2010" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510350" Title="More Help	Info" imageMso="Info"/>
+  </Application>
+  <Application name="powerpoint" version="15">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510644" Title="What's new in PowerPoint 2013" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510645" Title="Training courses for PowerPoint 2013" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510646" Title="Add, rearrange, and delete slides" imageMso="SlideNew"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510647" Title="Change the size of your slides" imageMso="SlideShowResolutionGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510648" Title="Insert PDF file content into a PowerPoint presentation" imageMso="SendPdf"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510649" Title="Play music for the duration of your slide show" imageMso="SlideShowVolume"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510650" Title="Print slides with or without speaker notes" imageMso="SpeakerNotes"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510651" Title="Basic tasks for creating a PowerPoint 2013 presentation" imageMso="SlideMasterLayout"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510652" Title="Create superscript or subscript text or numbers using keyboard shortcuts" imageMso="Subscript"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510653" Title="Add a picture as a slide background" imageMso="SlideMasterPicturePlaceholderInsert"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510654" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="powerpoint" version="14">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510655" Title="What's new in PowerPoint 2010" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510656" Title="Training courses for PowerPoint 2010" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510657" Title="Add, rearrange, and delete slides" imageMso="SlideNew"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510658" Title="Change the size of your slides" imageMso="SlideShowResolutionGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510659" Title="Insert PDF file content into a PowerPoint presentation" imageMso="SendPdf"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510660" Title="Play music for the duration of your slide show" imageMso="SlideShowVolume"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510661" Title="Print slides with or without speaker notes" imageMso="SpeakerNotes"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510662" Title="Basic tasks for creating a PowerPoint 2010 presentation" imageMso="SlideMasterLayout"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510663" Title="Create superscript or subscript text or numbers using keyboard shortcuts" imageMso="Subscript"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510664" Title="Add a picture as a slide background" imageMso="SlideMasterPicturePlaceholderInsert"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510665" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="publisher" version="15">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510763" Title="What's new in Publisher 2013" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510764" Title="Tips for working with images" imageMso="PictureInsertMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510765" Title="Fit text in a shape" imageMso="TextBoxInsert"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510766" Title="Training courses for Publisher 2013" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510767" Title="Basic tasks in Publisher 2013" imageMso="Microsoft Publisher"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510768" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="publisher" version="14">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510769" Title="What's new in Publisher 2010" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510770" Title="Tips for working with images" imageMso="PictureInsertMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510771" Title="Fit text in a shape" imageMso="TextBoxInsert"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510772" Title="Getting started with Publisher 2010" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510773" Title="Add, change, or remove a border in Publisher" imageMso="BordersAndTitlesGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510774" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="word" version="15">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510683" Title="Insert pictures" imageMso="PictureInsertMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510684" Title="Training courses for Word 2013" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510685" Title="What's new in Word 2013" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510686" Title="Add page numbers" imageMso="PageNumber"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510687" Title="Open documents created in earlier versions of Word" imageMso="FileSaveAsWord97_2003"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510688" Title="Insert a check box to make a checklist" imageMso="ActiveXCheckBox"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510689" Title="Start page numbering later in your document" imageMso="PageNumberBottomCenter"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510690" Title="Mail merge using an Excel spreadsheet" imageMso="MailMergeDocument"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510691" Title="Create a fillable form" imageMso="ListCreateListForm"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510692" Title="Basic tasks in Word 2013" imageMso="MindMapExportWord"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510693" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="word" version="14">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510694" Title="Insert pictures" imageMso="PictureInsertMenu"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510695" Title="Training courses for Word 2010" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510696" Title="What's new in Word 2010" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510697" Title="Add page numbers" imageMso="PageNumber"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510698" Title="Open documents created in earlier versions of Word" imageMso="FileSaveAsWord97_2003"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510699" Title="Insert a check box to make a checklist" imageMso="ActiveXCheckBox"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510700" Title="Start page numbering later in your document" imageMso="PageNumberBottomCenter"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510701" Title="Mail merge using an Excel spreadsheet" imageMso="MailMergeDocument"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510702" Title="Create a fillable form" imageMso="ListCreateListForm"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510703" Title="Basic tasks in Word 2010" imageMso="MindMapExportWord"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510704" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="visio" version="15">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510777" Title="Training courses for Visio 2013" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510778" Title="Visio 2013 Quick Start Guide" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510779" Title="Basic tasks in Visio" imageMso="DiagramFlipVertical"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510780" Title="Keyboard shortcuts" imageMso="HelpKeyboardShortcuts"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510781" Title="Create an organization chart automatically from employee data" imageMso="OrganizationChartLayoutStandard"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510782" Title="More Help" imageMso="Info"/>
+  </Application>
+  <Application name="visio" version="14">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510784" Title="Training courses for Visio 2010" imageMso="FunctionsInformationInsertGallery"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510785" Title="Getting started with Visio 2010" imageMso="Help"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510786" Title="Create a basic flowchart in Visio 2010" imageMso="DiagramFlipVertical"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510787" Title="Keyboard shortcuts" imageMso="HelpKeyboardShortcuts"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510788" Title="Create an organization chart" imageMso="OrganizationChartLayoutStandard"/>
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=510789" Title="More Help" imageMso="Info"/>
+  </Application>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>Bg1UJg+XgEWH4AsKhJomjOPhpEQ=</DigestValue></Reference></SignedInfo><SignatureValue>
+    LImE/gkUPyDX1eisXS4O6VmNkFN5DTVn4207I7M6WvKPDW6NaHP9D9Jm4xybmBCrP0wkQmEQ
+    D3Dm946TQ93Kd3QzAK2hx0dhjIzINOmxEcRQWILVVlLheiL1VDV6fKy9DSQj2hSSPSOa6JBF
+    VCj+Lx+vpOvB0D7RmR1Tp+oMAMHi8rsA6hhvLqD+UlDIZritqHsBAeVgRhfs50YICJcdBvTp
+    ppLbbJsM+Xk4rL0eHBn0O9JT4greCSu5IOQ66WFJCxzdbonZ9aBdsglzg2Aul5xne554SfP2
+    r6bFqaUYa2NI+JUUkqJr1XKOlLmCAJVBlHzVsW0x3d2IZB5EUWEKWA==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ArticleFeed>

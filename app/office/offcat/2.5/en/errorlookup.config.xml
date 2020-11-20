@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?><!-- maxEvaluationLength attribute can be used to change the length of the string we examine with the error detection feature. The default length is 500 characters. --><!-- Add maxEvaluationLength="###" to the following line to modify the string length that is evaluated.--><ErrorLookup xmlns="urn:schemas.microsoft.com:diagnostics:offcat:errorlookup" version="2.0.1602.18">
+	<!--<Error SSID="12345678-90ab-cdef-1234-567890abcdef" GUID="890832" KBID="2221111" Symptoms="">
+		<Applications>
+       <app version="2013">msaccess</app>
+       <app version="2013">excel</app>
+       <app version="2013">infopath</app>
+       <app version="2013">groove</app>
+       <app version="2013">publisher</app>
+       <app version="2013">onenote</app>
+       <app version="2013">outlook</app>
+       <app version="2013">powerpnt</app>
+       <app version="2013">mspub</app>
+       <app version="2013">visio</app>
+       <app version="2013">winword</app>
+
+		</Applications>
+		<Patterns>
+			<pattern lang="en-us">
+				<s>This worksheet is corrupt</s>
+				<s>0x80070005</s>
+			</pattern>
+			<pattern>
+				<s>^\w*\d{4}</s> <!- -Regex pattern - ->
+			</pattern>
+			<pattern lang="es-es">
+				<s>Esta hoja de trabajo está dañado.</s>
+				<s>0x80070005</s>
+			</pattern>
+      
+ **case insensitive regex - make sure to use <r> and not <s> and also .* and not *
+       <pattern lang="en-us">
+         <r>.*[Dd]elegates page is not available.*[Nn]etwork problems.*</r>
+       </pattern>
+       
+		</Patterns>
+	</Error>
+ 	<Error SSID="75E2E2DB-3CB1-48A7-B3D9-83C94A015732" GUID="890831" KBID="" Symptoms="">
+		<Applications>
+			<app version="2013">outlook</app>
+		</Applications>
+		<Patterns>
+			<pattern lang="en-us">
+				<s>This will be permanently deleted*</s>
+			</pattern>
+		</Patterns>
+	</Error>-->
+   <!--Error SSID="" GUID="" KBID="" Symptoms="">
+     <Applications>
+       <app version="2013">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>*</s>
+       </pattern>
+       <pattern lang="en-us">
+         <s>*</s>
+       </pattern>
+     </Patterns>
+   </Error-->
+   <Error SSID="e38d0299-0ac3-409f-88d7-023df065d827" GUID="524761" KBID="926205" Symptoms="Error message,Delegation">
+     <Applications>
+       <app version="2013">outlook</app>
+       <app version="2010">outlook</app>
+       <app version="2007">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>The delegates page is not available*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="c87f739d-c2e7-43a6-a210-c16f737c4bc9" GUID="511144" KBID="886616" Symptoms="Error message,Rules">
+     <Applications>
+       <app version="2013">outlook</app>
+       <app version="2010">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>One or more rules could not be uploaded to Exchange server and have been deactivated*insufficient space to store*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="96b3931f-4a99-4ba7-9419-dbfb2c5d1a2c" GUID="511143" KBID="2480582" Symptoms="Autodiscover,Error message,Exchange connection,Startup">
+     <Applications>
+       <app version="2013">outlook</app>
+       <app version="2010">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>Allow this website to configure*server settings*Your account was redirected to this website for settings.</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="304ff684-7282-4990-aa9c-9e93d3db4b0f" GUID="511142" KBID="923575" Symptoms="Error message,Outlook profile,Startup">
+     <Applications>
+       <app version="2013">outlook</app>
+       <app version="2010">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>There is a problem with the proxy server's security certificate*Outlook is unable to connect to this server*</s>
+       </pattern>
+       <pattern lang="en-us">
+         <s>There is a problem with the proxy server's security certificate*The name on the security certificate is invalid or does not match the name of the site. Outlook is unable to connect to this server*</s>
+       </pattern>
+       <pattern lang="en-us">
+         <s>There is a problem with the proxy server's security certificate*The security certificate is not from a trusted certifying authority. Outlook is unable to connect to this server*</s>
+       </pattern>
+       <pattern lang="en-us">
+         <s>There is a problem with the proxy server's security certificate*The name on the security certificate is invalid or does not match the name of the target site outlook.office365.com. Outlook is unable to connect to the proxy server*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="7f421d79-6455-4deb-808e-8876928d3e4e" GUID="511137" KBID="2659085" Symptoms="Email send/receive,Error message,Startup">
+     <Applications>
+       <app version="2010">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>0x8004010F*Outlook data file cannot be accessed.</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="5a9e629d-1f12-4791-ab9e-5b4644848629" GUID="511137" KBID="2659085" Symptoms="Email send/receive,Error message,Startup">
+     <Applications>
+       <app version="2013">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>0x8004010F*The operation failed. An object could not be found.</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="0FB38FE3-CFAD-45FC-8804-CCA7B8804C2E" GUID="511121" KBID="310049" Symptoms="Error message,Hyperlinks">
+     <Applications>
+       <app version="2010">outlook</app>
+       <app version="2007">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>This operation has been canceled due to restrictions in effect on this computer*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="3727ba16-17c0-4d78-8e19-dad2ef9a4f18" GUID="511121" KBID="310049" Symptoms="Error message,Hyperlinks">
+     <Applications>
+       <app version="2013">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>Your organization's policies are preventing us from completing this action for you*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="FFC9FAA5-9FE2-4AD9-9BD1-0D9E8DC776E1" GUID="511123" KBID="2222370" Symptoms="Email attachments,Error message">
+     <Applications>
+       <app version="2010">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>The attachment size exceeds the allowable limit.</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="70ab1be1-4de7-4ab5-bb6b-75d621c3940b" GUID="511128" KBID="2813269" Symptoms="Email attachments,Error message">
+     <Applications>
+       <app version="2013">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>The file you're attaching is bigger than the server allows*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="41FB8564-A304-469B-9015-26BF85177F90" GUID="511136" KBID="2853427" Symptoms="Error message,Formulas">
+     <Applications>
+       <app version="2010">excel</app>
+       <app version="2013">excel</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>We found a problem with this formula*Try clicking Insert Function on the Formulas tab to fix it*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="387e5256-f955-47a7-ac2d-360f968912d4" GUID="512388" KBID="942146" Symptoms="Error message,File Open error">
+     <Applications>
+       <app version="2010">excel</app>
+       <app version="2007">excel</app>
+       <app version="2010">winword</app>
+       <app version="2007">winword</app>
+       <app version="2010">powerpnt</app>
+       <app version="2007">powerpnt</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>*is locked for editing*by*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+    <Error SSID="1e815eee-6a1e-44fd-a877-01467ed86f6f" GUID="517038" KBID="3007582" Symptoms="Error message,Exchange account,Exchange connection">
+     <Applications>
+       <app version="2013">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>*The application experienced an internal error loading the SSL libraries*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="7bd96bdb-b095-4816-87b8-323d9f709d2b" GUID="517118" KBID="2216578" Symptoms="Calendar,Error message">
+     <Applications>
+       <app version="2013">outlook</app>
+       <app version="2010">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>More than 30 calendars cannot be viewed at once.</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="260ab541-a9b3-45e8-9fcb-24f808ebba3b" GUID="393229" KBID="2745026" Symptoms="Activation,Office 365">
+     <Applications>
+       <app version="2013">msaccess</app>
+       <app version="2013">excel</app>
+       <app version="2013">infopath</app>
+       <app version="2013">groove</app>
+       <app version="2013">onenote</app>
+       <app version="2013">outlook</app>
+       <app version="2013">powerpnt</app>
+       <app version="2013">mspub</app>
+       <app version="2013">visio</app>
+       <app version="2013">winword</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>We are unable to connect right now*try again later.</s>
+       </pattern>
+       <pattern lang="en-us">
+         <s>Sorry*connect to your account*try again later.</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="26892581-160b-40bf-89f3-f80ba3fd4ab1" GUID="526510" KBID="2899838" Symptoms="Activation,Office 365">
+     <Applications>
+       <app version="2013">msaccess</app>
+       <app version="2013">excel</app>
+       <app version="2013">infopath</app>
+       <app version="2013">groove</app>
+       <app version="2013">onenote</app>
+       <app version="2013">outlook</app>
+       <app version="2013">powerpnt</app>
+       <app version="2013">mspub</app>
+       <app version="2013">visio</app>
+       <app version="2013">winword</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>*something went wrong*do this for you right now*0x80070005*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="3635f139-864f-457c-afc3-20fae36ab67d" GUID="530022" KBID="2810023" Symptoms="Error message,Terminal Server">
+     <Applications>
+       <app version="2013">msaccess</app>
+       <app version="2013">excel</app>
+       <app version="2013">infopath</app>
+       <app version="2013">groove</app>
+       <app version="2013">publisher</app>
+       <app version="2013">onenote</app>
+       <app version="2013">outlook</app>
+       <app version="2013">powerpnt</app>
+       <app version="2013">mspub</app>
+       <app version="2013">visio</app>
+       <app version="2013">winword</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>*cannot be used on a computer running Terminal Services*Volume License edition*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="1b266d3c-af4d-4d45-b067-ac3b20e00f82" GUID="512472" KBID="2593557" Symptoms="Error message,Delegation">
+     <Applications>
+       <app version="2013">outlook</app>
+       <app version="2010">outlook</app>
+       <app version="2007">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>*Delegates settings were not saved correctly*do not have sufficient permission to perform this operation*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="70e92d44-8b8b-4dba-bd8c-6227d223eeba" GUID="613152" KBID="3062702" Symptoms="Error message,Email message display">
+     <Applications>
+       <app version="2013">outlook</app>
+       <app version="2010">outlook</app>
+       <app version="2007">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>*open this item*text formatting command is not available*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+   <Error SSID="efddd8cd-9431-4e62-ae0f-83bfd223da96" GUID="613153" KBID="3062443" Symptoms="Error message">
+     <Applications>
+       <app version="2016">outlook</app>
+       <app version="2013">outlook</app>
+       <app version="2010">outlook</app>
+     </Applications>
+     <Patterns>
+       <pattern lang="en-us">
+         <s>*could not create the work file*temp environment variable*</s>
+       </pattern>
+     </Patterns>
+   </Error>
+ <Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>zdjfWTEBIf9AqDFlpdcuaHXd47Q=</DigestValue></Reference></SignedInfo><SignatureValue>
+     eVe+xj0fArZyPLbMldnzYH886wjEKnyqKaKy39uy0mi14ibkUaA2N4VAeWlKKZ1BPmkU69FX
+     d2Jp2rBeAnGeXtcysCx7fRzcvvu5RNbFTmYRl7Gh4/b7l8Jufn07Z0ArsLo/VY/P1MDAjavr
+     MiWWOlYwalZFVBi/3K8A/vPGLhaBoFrluYK3AjnF2D52fn2Jd3thIwzJI1i3SZna/sGQt9aK
+     nRM00UpEYpB4lxdQm/fFjgHIdrCLYadhzlKw2wGU6rO36jmVgQ+aEnx+HBOt2Z3qfxuYGzvw
+     TRQXJ7+VHPcnfUYzz7T5FdztOf/mUKaDeRhaq7vN4+191yXZyUWFLg==
+   </SignatureValue><KeyInfo>
+       <KeyValue>
+         <RSAKeyValue>
+           <Modulus>
+             kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+             jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+             GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+             i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+             FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+           </Modulus>
+           <Exponent>AQAB</Exponent>
+         </RSAKeyValue>
+       </KeyValue>
+       <X509Data>
+         <X509Certificate>
+           MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+           CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+           A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+           aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+           EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+           TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+           ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+           uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+           mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+           Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+           jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+           W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+           DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+           SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+           MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+           BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+           dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+           AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+           QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+           2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+           pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+           2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+           4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+           6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+         </X509Certificate>
+       </X509Data>
+       <X509Data>
+         <X509Certificate>
+           MIIFmTCCA4GgAwIBAgIQea0WoUqgpa1Mc1j0BxMuZTANBgkqhkiG9w0BAQUFADBfMRMwEQYK
+           CZImiZPyLGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRN
+           aWNyb3NvZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDEwNTA5MjMxOTIyWhcN
+           MjEwNTA5MjMyODEzWjBfMRMwEQYKCZImiZPyLGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJ
+           bWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3Jp
+           dHkwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDzXfqAZ9Rap6kMLJAg0DUIPHWE
+           zbcHiZyJ2t7Ow2D6kWhanpRxKRh2fMLgyCV2lA5Y+gQ0Nubfr/eAuulYCyuT5Z0F43cikfc0
+           ZDwikR1e4QmQvBT+/HVYGeF5tweSo66IWQjYnwfKA1j8aCltMtfSqMtL/OELSDJP5uu4rU/k
+           XG8TlJnbldV126gat5SRtHdb9UgMj2p5fRRwBH1tr5D12nDYR7e/my9s5wW34RFgrHmRFHzF
+           1qbk4X7Vw37lktI8ALU2gt554W3ztW74nzPJy1J9c5g224uha6KVl5uj3sJNJv8GlmclBsjn
+           rOTuEjOVMZnINQhONMp5U9W1vmMyWUA2wKVOBE0921sHM+RYv+8/U2TYQlk1V/0PRXwkBE2e
+           1jh0EZcikM5oRHSSb9VLb7CG48c2QqDQ/MHAWvmjYbkwR3GWChawkcBCle8Qfyhq4yofseTN
+           Az93cQTHIPxJDx1FiKTXy36IrY4t7EXbxFEEySr87IaemhGXW97OU4jm4rf9rJXCKEDb7wSQ
+           34EzOdmyRaUjhwalVYkxuwYtYA5BGH0fLrWXyxHrFdUkpZTvFRSJ/Utz+jJb/NEzAPlZYnAH
+           Muouq0Ate8rdIWcbMJmPFqojqEHRsG4RmzbE3kB0nOFYZcFgHnpbOMiPuwQmfNQWQOW2a2yq
+           hv0Av87BNQIDAQABo1EwTzALBgNVHQ8EBAMCAcYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4E
+           FgQUDqyCYEBWJ5flJRP8KuEKU5VZ5KQwEAYJKwYBBAGCNxUBBAMCAQAwDQYJKoZIhvcNAQEF
+           BQADggIBAMURTQM6YN1dUhF3j7K7NsiyBb+0t6jYIJ1cEwO2HCL6BhM1tshj1JpHbyZX0lXx
+           BLEmX9apUGigvNK4bszD6azfGc14rFl0rGY0NsQbPmw4TDMOMBINoyb+UVMA/69aToQNDx/k
+           bQUuToVLjWwzb1TSZKu/UK99ejmgN+1jAw/8EwbOFjbUVDuVG1FiOuVNF9QFOZKaJ6hbqr3s
+           u77jIIlgcWxWs6UT0G0OI36VA+1oPfLYY7hrTbboMLXhypRL96KqXZkwsj2nwlFsKCABJCcr
+           SwC3nRFrcL6yEIK8DJto0I07JIeqmShynTNfWZC99d6TnjpiWjQ54ohVHbkGsMGJay3XacMZ
+           EjaE0Mmg2v8vaXiy5Xra69cMwPe9Yxe4ORM4ojZbe/KFVmodZGLBOOKqv1FmopT1EpxmIhBr
+           8rcwki3yKfA9OxRDaKLxnCk3y844ICVtfGfzfiQSJAMIgUfspZ6X9RjXz7vV73aW7/3O21ad
+           laBC+ZdY4dcxItNfWeY+biIA6kOEtiXb2fMIVmjAZGsdfOy2k6JiV24u2OdYj8QxSSbd3ik1
+           h/UwcXBbFDxpvYkSfesuo/7Yf56CWlIKK8FDK9kwiJ/IEPuJjeahhXUzfmye23MTZGJppS99
+           ypZtn/gETTCSPW4hFCHJPeDD/YprnUr90aGdmUN3P7Da
+         </X509Certificate>
+       </X509Data>
+       <X509Data>
+         <X509Certificate>
+           MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+           LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+           ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+           MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+           UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+           b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+           ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+           VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+           p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+           Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+           rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+           MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+           DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+           YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+           QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+           dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+           AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+           L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+           tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+           PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+           8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+           Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+           8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+           KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+           DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+           2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+           gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+           aZuW4hCoELQ3UAjWwz0=
+         </X509Certificate>
+       </X509Data>
+     </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ErrorLookup>
