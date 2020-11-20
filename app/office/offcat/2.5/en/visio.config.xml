@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Visio Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,visio.crashes.config.xml" Symptoms="1">
+	<Configuration ConfigName="Visio Configuration" ChangeDescription="2.0.1604.18" ConfigVersion="2.0.1604.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,visio.crashes.config.xml" Symptoms="1">
     <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
     <!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"></Substitution>
@@ -19,22 +19,30 @@
 		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
 		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
 		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
-		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
+    <ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
 		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
 		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
 		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
 		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
 		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
 		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
-		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
 	</Configuration>
 	<Object Type="Group" Name="Visio Scan" Class="Scan Type" GroupingClass="True">
-		<!--OFFICE DETAILS-->
+    <Reference Type="WindowsUpdatesScriptPt1" Name="WindowsUpdatesScriptPt1" File="common.config.xml"></Reference>
+    <!--OFFICE DETAILS-->
 		<Object Type="Group" Name="Install details">
 			<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Visio" Key6="visio" Key7="%MAJORVERSION%">
 				<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
 				</Setting>
-				<Setting Key1="Bitness" Substitution="APPBITNESS">
+        <Object Type="IfThenElse" Key1="'%WOW6432NODE%'=''" Key2="emptyval" Key3="%WOW6432NODE%">
+          <Setting Key1="wowcacheval" Substitution="WOWCACHEVAL" Display="Hide"/>
+          <Object Type="Cache" Name="wowcache" Key1="Add" Key2="wowcache" Key3="%WOWCACHEVAL%">
+          </Object>
+        </Object>
+        <Setting Key1="Bitness" Substitution="APPBITNESS">
 					<Rule Name="bitness" Query="$."></Rule>
 				</Setting>
 				<Setting Key1="FullVersion">
@@ -42,7 +50,7 @@
 					<Rule Name="nBuild" Query="substring-before(substring-after(string($.),concat($n2DigitVersion,'.0.')),'.')"></Rule>
 					<Rule Name="sFullAppVersion" Query="$.">
 					</Rule>
-          <Rule Name="sVisio16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with Visio %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of Visio (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="543fcf15-aafa-4fda-85c9-fd10e15451cf" Symptoms="_Alert from OffCAT"></Rule>
+          <!--Rule Name="sVisio16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with Visio %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of Visio (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="543fcf15-aafa-4fda-85c9-fd10e15451cf" Symptoms="_Alert from OffCAT"></Rule-->
         </Setting>
 				<Setting Key1="Name">
 					<Rule Name="appName" Query="$."></Rule>
@@ -50,6 +58,7 @@
 				<Setting Key1="Path"></Setting>
 				<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
 				</Setting>
+        <Object Type="Cache" Name="InstallPathCACHE" Key1="Add" Key2="INSTALLPATHCACHE" Key3="%INSTALLPATH%"/>
 				<Setting Key1="Version">
 					<Rule Name="n4DigitSKUVersion" Query="$."></Rule>
 				</Setting>
@@ -57,6 +66,7 @@
 				<Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
 				<Setting Key1="Type">
 					<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+          <Rule Name="f2016MSI" Query="$n4DigitSKUVersion='2016' and $.='MSI'"></Rule>
 				</Setting>
 				<!--SKU-->
 				<Object Type="Group" Name="Office SKU">
@@ -86,7 +96,7 @@
 								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
 								</Setting>
 								<Object Type="If" Key1="contains('%PN%','Single Image')">
-									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
 										<Setting Key1="ID" Substitution="REGID" Display="Hide">
 										</Setting>
 										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
@@ -108,7 +118,7 @@
 								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
 								</Setting>
 								<Object Type="If" Key1="contains('%PN%','Single Image')">
-									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
 										<Setting Key1="ID" Substitution="REGID" Display="Hide">
 										</Setting>
 										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
@@ -156,6 +166,10 @@
 				<Reference Type="MSO" Name="MSO" File="common.config.xml">
 				</Reference>
 				<!--/MSO-->
+        <!--ADALCSIDLL-->
+        <Reference Type="ADALCSIDLL" Name="ADALCSIDLL" File="common.config.xml">
+        </Reference>
+        <!--/ADALCSI-->
 				<!--OART.dll-->
 				<Reference Type="OART" Name="OART" File="common.config.xml">
 				</Reference>
@@ -173,8 +187,11 @@
 				</Object>
 			</Object>
 			<Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
-				<Object Type="Group" Name="ClickToRun Updates" GroupingClass="True" Class="Office Update" Display="Right">
-					<Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml"></Reference>
+				<Object Type="Group" Name="ClickToRun Details" GroupingClass="True" Class="Office Update" Display="Right">
+          <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+            <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+            <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml"></Reference>
+          </Object>
 				</Object>
 			</Object>
 			<!--/INSTALLED UPDATES-->
@@ -187,9 +204,12 @@
                 <Rule Name="fKB2956155Installed" Query="versioncompare($sVislibDllVersion,'15.0.4701.1001')" P0="if($fKB2956155Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2956155','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090"></Rule>
               </Object>
             </Object>
+            <Object Type="Cache" Name="InstallPathCACHE" Key1="Dump" Key2="INSTALLPATHCACHE" Display="Hide">
+              <Setting Key1="Val" Substitution="INSTALLPATH" Display="Hide"></Setting>
             <Reference Type="ADAL" Name="ADAL" File="common.config.xml">
             </Reference>
-            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($MachineDetails_KB2977629Installed and $fKB2956155Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P1="if($MachineDetails_KB2977629Installed,'Installed','Not Installed')" P2="if($fKB2956155Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;Windows update KB2977629 - {1}&#xA;%APPNAME% 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="ffbb417e-2dbd-4558-9cd8-7368f751615f" Symptoms="Modern Authentication for Office"></Rule>
+            </Object>
+            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($fKB2956155Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P2="if($fKB2956155Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" P4="'%APPNAME%'" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;{4} 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="e51d49ab-d1e7-4f74-929b-086c05b40cab" Symptoms="Modern Authentication for Office"></Rule>
           </Object>
         </Object>
       </Object>
@@ -204,7 +224,11 @@
 		<!--MACHINE DETAILS-->
 		<Object Type="Group" Name="Machine Details">
 			<Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml"></Reference>
-		</Object>
+      <Reference Type="ServicesRunning" Name="ServicesRunning" File="common.config.xml"></Reference>
+      <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml"></Reference>
+      <Reference Type="WUDetails" Name="WUDetails" File="common.config.xml"></Reference>
+      <Reference Type="WindowsUpdatesToInstall" Name="WindowsUpdatesToInstall" File="common.config.xml"></Reference>
+    </Object>
 		<!--MACHINE DETAILS-->
 		<!--ADD-INS-->
 		<Object Type="Group" Name="Registered add-ins" Class="Add-ins" GroupingClass="True" TrackProgress="TrackProgress">
@@ -277,7 +301,7 @@
 							<Setting Key1="FriendlyName" Display="Right">
 							</Setting>
 						</Object>
-						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="Visio add-ins have been automatically disabled" Text="Visio add-ins have been disabled due to performance or stability issues. Please see 'Registered add-ins' under Configuration Details for the list of disabled add-ins." GUID="272802" SSID="d0a693c0-b372-4589-a2d9-9deb6b59fec1" Symptoms="Add-ins"></Rule>
+						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="Visio add-ins have been automatically disabled" Text="Visio add-ins have been disabled due to performance or stability issues. Please see 'Registered add-ins' under Configuration Details for the list of disabled add-ins." GUID="272802" SSID="46637076-d2c4-40c3-b58c-6ed5b4154f15" Symptoms="Add-ins"></Rule>
 					</Object>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Visio\Resiliency\DoNotDisableAddinList" Display="Right">
@@ -318,7 +342,7 @@
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 					<Setting Key1="__VALUES"></Setting>
 					<Setting Key1="VBAOff">
-						<Rule Name="sHkcuVBAOff" Query="$.=1 and $HklmVBAOff=-1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA functionality is impaired or disabled (HKCU registry data)" Text="The VBAOff value in the HKCU registry hive is set to a value other than 0. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="4b17edd1-2a3f-42be-acfd-abf460a0f310" Symptoms="VBA"></Rule>
+						<Rule Name="sHkcuVBAOff" Query="$.=1 and $HklmVBAOff=-1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA functionality is impaired or disabled (HKCU registry data)" Text="The VBAOff value in the HKCU registry hive is set to a value other than 0. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="a6029f64-61e2-4769-86aa-975f9eb33f06" Symptoms="VBA"></Rule>
 					</Setting>
 					<Rule Name="HkcuVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 				</Object>
@@ -346,7 +370,7 @@
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 					<Setting Key1="__VALUES"></Setting>
 					<Setting Key1="VBAOff">
-						<Rule Name="sHklmVBAOff" Query="$.=1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="Visual Basic for Applications is disabled (HKLM registry data)" Text="The VBAOff value = 1 in the registry under the HKLM hive. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="a7e01c21-78d8-4a10-b3d6-cbae9ffe2187" Symptoms="VBA"></Rule>
+						<Rule Name="sHklmVBAOff" Query="$.=1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="Visual Basic for Applications is disabled (HKLM registry data)" Text="The VBAOff value = 1 in the registry under the HKLM hive. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="88a7ab19-529d-43bb-ab0c-8d0781e9e571" Symptoms="VBA"></Rule>
 					</Setting>
 					<Rule Name="HklmVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 				</Object>
@@ -373,14 +397,14 @@
 				<Setting Key1="__VALUES"></Setting>
 				<Rule Name="fPolicies" Query="count(../Instance[contains(lower-case(@Name),'visio')]/Setting)&gt;0"></Rule>
 				<Setting Key1="VBAOff">
-					<Rule Name="sHkcuVBAOffPol" Query="$.=1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKCU" Text="The VBAOff value is set to a value other than 0 as a policy under HKCU. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="7e2b210a-d7b9-483c-8868-c29c347a6c8a" Symptoms="VBA"></Rule>
+					<Rule Name="sHkcuVBAOffPol" Query="$.=1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKCU" Text="The VBAOff value is set to a value other than 0 as a policy under HKCU. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="55c04c95-43ca-4179-9fa3-d650018176a8" Symptoms="VBA"></Rule>
 				</Setting>
 				<Rule Name="HkcuVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 			</Object>
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 				<Setting Key1="__VALUES"></Setting>
 				<Setting Key1="VBAOff">
-					<Rule Name="sHklmVBAOffPol" Query="$.=1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKLM" Text="The VBAOff value is set to a value other than 0 as a policy under HKLM. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="110c76da-3fcf-405c-8b14-1db7b6eb1600" Symptoms="VBA"></Rule>
+					<Rule Name="sHklmVBAOffPol" Query="$.=1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKLM" Text="The VBAOff value is set to a value other than 0 as a policy under HKLM. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="b0806507-8600-4ac2-9234-44beb6a1238e" Symptoms="VBA"></Rule>
 				</Setting>
 				<Rule Name="HklmVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 			</Object>
@@ -409,15 +433,20 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
 	<Rule Name="sWordVersion"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
-  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
-  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
-  <Rule Name="fLync2013AddinFoundWow"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>gMWX6EGEzwAjFmp23r/JSte60SE=</DigestValue></Reference></SignedInfo><SignatureValue>
-    hW7McblpO9Aa38ex8PcvpHcQSWNOH79rTmLicTnafckIygQmX/Fefa85A4jBi5ryVWKE+Ifw
-    wQg8RLELsiNljZxh+1aQ4SEy+FCtF4UtJG8Ao6TCktvC2pNCWMKl37sN0fw/RtnnTSzJvFjQ
-    DvoHoFQGE8N3DR+94+OB5O5IpafBWR01mm4Rdzn1R4VCdkzn/4QTQt/JlGZB/n3ZWE6IMvkS
-    M/rhYET9gaVaCu1rdYkXEce2xrVCqnhb3jY34l5junvwmdjBreBtP2/q05sgDeWfc4xhRtHg
-    VSovlKY1gX0Xzn3MsyolDC1RnHgT9AFWcv5/RcFHrvf9nDeiK71dRA==
+  <Rule Name="fOfficeProductVersion15"></Rule>
+  <Rule Name="fOfficeProductVersion15x64"></Rule>
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+  <Rule Name="OUTLOOKVERSION_sOutlookExeVersion"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>P4EmKsINxDtMAa7Stez6dzz48ZI=</DigestValue></Reference></SignedInfo><SignatureValue>
+    YvGtN0Oqg2uRrlN1jQPDVZqejWBENUdyH/QOT48I8Xvys+2Hy2UMsQigqD2yq22c4WaAR0Mf
+    cZsBQ8UdsaoaveF+Ldg9EhlwtxUFRvfP92u9gpQIhS1eDmAG/K93//wzuF1P6I8ntSzE3Glz
+    KtI2yBFb7x7S1suwCWFYapqswGsyigSL/gw97/HI/tNyHDsEDthT0N7cGVKqVjqrr8+czH+K
+    bqCYm33HKiUGkUX9N2MoLJL/GORcxoY6FNo0fkJ7gmI41WavOxBkE0r0covOeH0JWTA6yZYk
+    37azD/K2HxHEOFc0XCcBGXpOslEZCsuYZ95vLuF5gLRmezVaJeYZDg==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -522,28 +551,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAALFpr8Q3a5GTXgAAAAAAsTANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI3WhcNMTcwODAzMTcxMzI3WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
-QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
-7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
-f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
-NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
-+7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAuB5CzdlupvWjSYQ/N2yCah7oUs5NBYH0s2RuWHAJXNOZEnRFmuBP
+BLSJhWsrspK9GahJ3FZuQEcq2+uBGpjBnZIWXVEzunBgIoUiL313gYGGe8u+/u1nbv0dZNzwijaA
+M2itgpwKvPBHv3Gqq8cFWzVRHTgO31lV4IA28ZhueAocWFNvLV9RkrXBpMwtvbwLqyA/ednmK4+E
+BfsgLbuGcUFS/wyAq7+ZhqUDq+LzHhFLl55V7iApITvmU6kNzZPtvY3QZVPmcq6K3IjwpV4bkr72
+9y+ndWZmfgvqlUvV78hV6zusR6zHiy/NJQH2w8LaPW1YIUZImWJ/jFAUqG7Q5QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFAGGI3nEkNLTKbg8V2lFYretn114MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
-d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
-5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
-lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
-IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
-vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAD3G
+M+JdCkrA5KQO5uQdsjwIqCLoJ/kTICat57wPtZA5nbP3NW05sObKPJtA18zQIXzaCWhXVLQ+S+D2
+L/zWJ1cMvHTM+BUxsdOOo+DwDNSFSjG6/0srv7YXigPkkN5jnHdxDmTWBd/TJaGzL+88Sa3uOayC
+xMi0VJB9DbARKRjs0vMxeIsffF7ZEFtWxmeH5CLPmuy5CJiVqo2EJw7qm/QOIX3pXbSAjwighcP5
+RN4li8n3F37B3nhUm05qNF9rIo1Hf7sWWHdwHvT6KHMl0MV/Np80Y2ofnGBNwxphl95bQE8C295+
+QbrEWxAYaQaqMbBgG8FS0uXOqRSYgaRSkpk=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -570,34 +599,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQCFbsxxuWk70Brfx7Hw9y+kdxBJY04fv2tOYuJxOdp9yQjKBCZf8V59rzkDiMGLmvJVYoT4
-h/DBCDxEsQuyI2WNnGH7VpDhITL4UK0XhS0kbwCjpMKS28Lak0JYwqXfuw3R/D9G2edNLMm8WNAO
-+gegVAYTw3cNH73j44Hk7kilp8FZHTWabhF3OfVHhUJ2TOf/hBNC38mUZkH+fdlYTogy+RIz+uFg
-RP2BpVoK7Wt1iRcRx7bGtUKqeFveNjfiXmO6e/CZ2MGt4G0/b+rTmyAN5Z9zjGFG0eBVKi+UpjWB
-fRfOfcyzKiUMLVGceBP0AVZy/n9FwUeu9/2cN6IrvV1EoIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0wYJKoZIhvcNAQcCoIIGxDCCBsACAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQBi8a03Q6qDa5GuU3WNA8NVmp6NYEQ1R3If9A5Pjwjxe/Kz7YfLZQyxCKCoPbKrbZzhZoBH
+Qx9xmwFDxR2xqhq94X4t2D0SGXC3FQVG98/3a72ClAiFLV4OYAb8r3f//DO4XU/ojye1LMTcaXMq
+0jbIEVvvHtLWy7AJYVhqmqzAazKKBIv+DD3v8cj+03IcOwQO2FPQ3twZUqpWOquvz5zMf4puoJib
+fccqJQaRRf03Yygskv8Y5FzGhjoU2jR+QnuCYjjVZq87EGQTSvRyi854fQlZMDrJliTftrMP8rYf
+EcQ4VzRcJwEZek6yURkKy5hn3m8u4XmAtGZ7NVol5hkOoIIDfKGCA3gwggJgAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
+Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAM9R4brIoF4Sym5kS7aEWeErck/aggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
-MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
-AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
-CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
-g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
-YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
-jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
-nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
-aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
-AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
-Fw0xNTA3MDkxNDQ3MjlaMCMGCSqGSIb3DQEJBDEWBBRsQ4L2lk4nocpHW28LDIiuxb1xNTANBgkq
-hkiG9w0BAQUFAASCAQA++tzkJbKO2NXt5qtosTbxnYGtnLE47yfIDL7GS1awf8ZHFNVg31Vvste1
-qytD1zOtmThqd4/ZxCJA+1u5BwzCKU1QvdHqnNO8Ruz7v5mdCGYnmLKxhzrqUU5KhZRmGGjVmM0F
-CrJhhdySHrjJReWUGxCCUbZYgEVBj+N1DuQ9p/XQJ6/33XnlnCtGMw+M9pET/+yyS+5SE9Lq68YB
-1C1TNpbyb5FSnVVgh6G93LlX7WCPAjEBOgL/OhgAVy1r+vnMTwhAXHMWRQUHHQxDg3yQ1aABgmkp
-YqS3gc3JwPi1J8uKLd4YaMDislX0LxV8K/PE4L2Vc6d+7DhuTDU2N70u</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/4cwIhgPMjAxNjA4MDExNzA0
+MDdaGA8yMDE2MDgwMjE3MDQwN1owdjA8BgorBgEEAYRZCgQBMS4wLDAKAgUA20n/hwIBADAJAgEA
+AgEgAgH/MAcCAQACAhhFMAoCBQDbS1EHAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkK
+AwGgCjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADzmycqYOkjMI4nM
+Eh8BXeCJwRmsEZF0pZdrfVyk1JDEIPKbTpX98nrosAMn7khtRPzyJbrvaVKDmDelQF38infAFG+r
+RIonmx0Z8n8oX48bgJjbWt2EBQkGq4L+sPfoKvZzigs65P5haO5nXAkihhh9Iq9MlSCxFZVxngjd
+DON8cbsM7YCNaJZTG5OAHr6X8J4H7U3vo+1KY+ZxLDn9CR7fVLheWvNdefwOeUYxJ0t1H72pLZg3
+OrFEk9+v1e658gMeZ23NFCiDmWwgoi6+MxJDNQMUUWXb4/Dplfuk9jg7ojZq+hlgx/Rh7U7l5mKh
+mKU41auRUhb3D17D+JXgxzAxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
+V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0
+aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACxaa/EN2uRk14AAAAA
+ALEwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDgwMTE3MjkzMVowIwYJKoZIhvcNAQkEMRYEFPRaW8nXIMiWhnPZsdXUkYHFc9XnMA0GCSqG
+SIb3DQEBBQUABIIBAB1DVbyc9XCY8aAdixHlDxI9RtT6nJ/UMeyrfAyURPCCQmGUpbtIVKlMg1b6
+ZAUqQWsXMweTZj2NTnClGGoPgARN7kUlK26Ncr9aXBPxNufReZRA3NH3J9OkpcuATNJ9A6Pqgxex
+kWMrTvdIlmxUiXoT9x4HyxxTJyl5WpxD4FUxCIxkLstlXCY+GWA5D+rPAShAYxttMcI34u779M/t
+QRtut58geyZk/RotuC1lVXsQLjMHrCPPWtbhvkhRBMXbIWcJPjF70rCIxT4kiG9227WeKpZP+As5
+vYOk28Bcrq4HvZnzKBxKDTfF5D1DJDPwubKwmnBUmP3J8u2YkUVP+lE=</CounterSignature></Object></Signature></ObjectCollector>

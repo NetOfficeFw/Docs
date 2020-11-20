@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-  <Configuration ConfigName="Lync Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
+  <Configuration ConfigName="Lync Configuration" ChangeDescription="2.0.1607.11" ConfigVersion="2.0.1607.11" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,lync.crashes.config.xml" Symptoms="1">
     <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
     <!--!!! GLOBAL SUBSTITUTIONS SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
     <Substitution Name="MAJORVERSION"></Substitution>
@@ -19,6 +19,7 @@
     <ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
     <ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
     <ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
     <ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
     <ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
     <ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
@@ -26,15 +27,21 @@
     <ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
     <ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
     <ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
     <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
   </Configuration>
   <Object Type="Group" Name="Skype for Business Scan" Class="Scan Type" GroupingClass="True">
-
+    <Reference Type="WindowsUpdatesScriptPt1" Name="WindowsUpdatesScriptPt1" File="common.config.xml"></Reference>
     <!--OFFICE DETAILS-->
     <Object Type="Group" Name="Install details">
       <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Skype for Business" Key6="lync" Key7="%MAJORVERSION%">
         <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
         </Setting>
+        <Object Type="IfThenElse" Key1="'%WOW6432NODE%'=''" Key2="emptyval" Key3="%WOW6432NODE%">
+          <Setting Key1="wowcacheval" Substitution="WOWCACHEVAL" Display="Hide"/>
+          <Object Type="Cache" Name="wowcache" Key1="Add" Key2="wowcache" Key3="%WOWCACHEVAL%">
+          </Object>
+        </Object>
         <Setting Key1="Bitness" Substitution="APPBITNESS">
           <Rule Name="bitness" Query="$."></Rule>
         </Setting>
@@ -58,7 +65,17 @@
         <Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
         <Setting Key1="Type">
           <Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+          <Rule Name="f2016MSI" Query="$n4DigitSKUVersion='2016' and $.='MSI'"></Rule>
         </Setting>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\15.0\ClickToRun" Display="Hide">
+          <Setting Key1="PackageFolder" Substitution="C2RPATH15" Display="Hide"></Setting>
+          <Object Type="File" Key2="%C2RPATH15%\root\office15\ucaddin.dll" Display="Hide">
+            <Setting Key1="Exists" Display="Hide">
+              <Rule Name="fUcaddinC2rFound" Query="$.=1"></Rule>
+            </Setting>
+          </Object>
+        </Object>
+        <Rule Name="sOutlook15MsiPlusSfbC2R" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $fUcaddinC2rFound" Error="Error" Title="Outlook crashes and errors with Lync/Skype for Business" Text="You have an 'MSI' installation of Outlook 2013 but your Skype for Business (formerly Lync) installation is 'Click-to-run'. This is an unsupported configuration and you can expect to see either crashes in Outlook or errors related to Outlook in Skype for Business.&#xA;&#xA;Click the 'Click here ...' link for details on how to fix this issue." GUID="616888" SSID="31e9d242-960c-4150-88bc-b0aa90f005d7" Symptoms="Crash,Configuration (unsupported or problematic),Skype for Business integration"></Rule>
         <!--SKU-->
         <Object Type="Group" Name="Office SKU">
           <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
@@ -82,7 +99,7 @@
               </Object>
             </Object>
           </Object>
-          
+
           <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
             <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{D5B16A67-9FA6-4B77-AE2A-3B1F49CE9D3B}">
               <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
@@ -190,6 +207,30 @@
         <Reference Type="MSO" Name="MSO" File="common.config.xml">
         </Reference>
         <!--/MSO-->
+        <!--Emsmdb32-->
+        <Reference Type="Emsmdb32DllInfo" Name="Emsmdb32DllInfo" File="outlook.config.xml">
+        </Reference>
+        <!--/Emsmdb32-->
+        <!--Outlook-->
+        <Object Type="File" Key2="%INSTALLPATH%\outlook.exe" Display="Right">
+          <Setting Key1="Exists" Substitution="OUTLOOKFOUND" Display="Hide">
+          </Setting>
+          <Setting Key1="Version" Substitution="OUTLOOKVERSIONFOUND" Display="Hide">
+          </Setting>
+          <Object Type="Cache" Name="OlVersionCache" Key1="Add" Key2="OLVCACHE" Key3="%OUTLOOKVERSIONFOUND%">
+          </Object>
+          <Object Type="If" Key1="%OUTLOOKFOUND%=1">
+            <Object Type="Group" Name="Version  =%OUTLOOKVERSIONFOUND%" Display="Right">
+              <Setting Key1="" Display="Hide"></Setting>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="%OUTLOOKFOUND%=0">
+            <Object Type="Group" Name="Outlook.exe not found in this path" Display="Right">
+              <Setting Key1="" Display="Hide"></Setting>
+            </Object>
+          </Object>
+        </Object>
+        <!--/Outlook-->
       </Object>
       <!--INSTALLED UPDATES-->
       <Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
@@ -198,9 +239,12 @@
         </Object>
       </Object>
       <Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
-        <Object Type="Group" Name="ClickToRun Updates" GroupingClass="True" Class="Office Update" Display="Right">
-          <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
-          </Reference>
+        <Object Type="Group" Name="ClickToRun Details" GroupingClass="True" Class="Office Update" Display="Right">
+          <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+            <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+            <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+            </Reference>
+          </Object>
         </Object>
       </Object>
       <!--/INSTALLED UPDATES-->
@@ -214,13 +258,217 @@
     <!--MACHINE DETAILS-->
     <Object Type="Group" Name="Machine Details">
       <Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml"></Reference>
+      <Reference Type="ServicesRunning" Name="ServicesRunning" File="common.config.xml"></Reference>
+      <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml"></Reference>
+      <Reference Type="WUDetails" Name="WUDetails" File="common.config.xml"></Reference>
+      <Reference Type="WindowsUpdatesToInstall" Name="WindowsUpdatesToInstall" File="common.config.xml"></Reference>
     </Object>
     <!--/MACHINE DETAILs-->
+    <!--REG SETTINGS-->
+    <Object Type="Group" Name="Lync/Skype Registry Settings" Class="Lync Settings" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Office Registry Settings">
+      <!--Lync HKCU settings-->
+      <Object Type="Group" Name="HKEY_CURRENT_USER">
+        <!--Associations-->
+        <Object Type="Group" Name="HKCU\Software\Classes\sip">
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Classes\sip" Display="Right">
+            <Setting Key1="__VALUES"></Setting>
+          </Object>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Classes\sip" Key4="" Key5="Subtree" Key6="True" Display="Right">
+            <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+            </Setting>
+            <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+              <Setting Key1="__VALUES">
+              </Setting>
+            </Object>
+          </Object>
+        </Object>
+        <!--IM Providers-->
+        <Object Type="Group" Name="HKCU\Software\IM Providers">
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\IM Providers" Display="Right">
+            <Setting Key1="__VALUES"></Setting>
+            <Rule Name="nDefaultIMProvider" Query="if(../Instance/Setting[@Key1='DefaultIMApp']=true(),../Instance/Setting[@Key1='DefaultIMApp']/Value,-1)"></Rule>
+            <Rule Name="sLyncSfbNotDefaultIMProvider" Query="not(lower-case($nDefaultIMProvider)='lync' or lower-case($nDefaultIMProvider)='communicator' or lower-case($nDefaultIMProvider)='skype')" Error="None" P0="$nDefaultIMProvider" Title="Non-Microsoft Instant Messaging client '{0}' is configured as the default IM provider" Text="The '{0}' client is configured as the default Instant Messaging provider. This is not necessarily a problem configuration. But, if you are using a Microsoft IM client (Skype, Lync, or Communicator) as your IM client you may need to modify the DefaultIMApp value under 'HKCU\Software\IM Providers' in the registry.&#xA;&#xA;Click the 'Tell me more ...' link for details." GUID="396847" SSID="20827122-9760-4300-98a0-5d7869b39cd6" Symptoms="Contacts,Presence missing"></Rule>
+          </Object>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\IM Providers" Key4="" Key5="Subtree" Key6="True" Display="Right">
+            <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+            </Setting>
+            <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+              <Setting Key1="__VALUES">
+              </Setting>
+            </Object>
+          </Object>
+        </Object>
+        <!--Lync HKCU settings-->
+        <Object Type="Group" Name="HKCU\Software\Microsoft\Office\%MAJORVERSION%.0\Lync">
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Lync" Display="Right">
+            <Setting Key1="__VALUES"></Setting>
+            <Setting Key1="AllowSavePassword"></Setting>
+            <Rule Name="fAllowSavePassword" Query="if((../Instance/Setting/@Key1='AllowSavePassword')=true(),../Instance/Setting[@Key1='AllowSavePassword']/Value,-1)"></Rule>
+            <Setting Key1="SavePassword">
+              <Rule Name="sSavePasswordNoSept2015Update" Query="$fSavePasswordPol=-1 and $.=0 and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4745.1000')&lt;=0" Error="Warning" P0="if($bitness='x86' and $nInstallType='MSI','624364',if($bitness='x64' and $nInstallType='MSI','624365','624366'))" P1="if($nInstallType='MSI','and then install the update from the Microsoft Download site','and then update Office using the steps in the &quot;Get the latest version of Office&quot; section of the article')" P2="'%MAJORVERSION%'" Title="The SavePassword registry value is not being used (as expected) by Skype for Business" Text="The SavePassword value was found in the registry under HKCU\Software\Microsoft\Office\{2}.0\Lync but it is not being used by Skype for Business because you do not have the update from September 8, 2015 (or a later update) installed.&#xA;&#xA;After installing the September 8, 2015 update (or later update), you will also want to add the AllowSavePassword registry value. Please click the 'Click here ...' link for complete details.&#xA;&#xA;To install the latest update for Skype for Business, click the 'Download the update ...' link {1}." GUID="624358" PATCH="{0}" SSID="a358069b-4393-4efc-951d-03d40857ca70" Symptoms="Password prompt"></Rule>
+              <Rule Name="sSavePasswordNoAllowSavePassword" Query="$fSavePasswordPol=-1 and ($.=0 or $.=1) and $fAllowSavePassword=-1 and $fAllowSavePasswordPol=-1 and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4745.1000')&gt;0" Error="Warning" P2="'%MAJORVERSION%'" Title="The SavePassword registry value is not being used (as expected) by Skype for Business" Text="The SavePassword value was found in the registry under HKCU\Software\Microsoft\Office\{2}.0\Lync but it is not being used (as expected) by Skype for Business because you do not also have the AllowSavePassword registry value.&#xA;&#xA;Please click the 'Click here ...' link for complete details on this issue." GUID="624367" SSID="e8091eec-4187-4fc4-bc24-86b4454d9a15" Symptoms="Password prompt"></Rule>
+            </Setting>
+          </Object>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Lync" Key4="^((?!ConfAddin)(?!GroupStateCacheU).)*$" Key5="Subtree" Key6="True" Display="Right">
+            <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+            </Setting>
+            <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+              <Setting Key1="__VALUES">
+              </Setting>
+            </Object>
+          </Object>
+        </Object>
+        <!--Office Common HKCU settings-->
+        <Object Type="Group" Name="HKCU\Software\Microsoft\Office\%MAJORVERSION%.0\Common">
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+            <Setting Key1="__VALUES"></Setting>
+            <Setting Key1="TurnOffPhotograph"></Setting>
+            <Rule Name="fTurnOffPhotograph" Query="if(../Instance/Setting[@Key1='TurnOffPhotograph']=true(),../Instance/Setting[@Key1='TurnOffPhotograph']/Value,-1)"></Rule>
+            <Rule Name="sTurnOffPhotographLync" Query="($fTurnOffPhotographPol=-1 and $fTurnOffPhotograph=1) or $fTurnOffPhotographPol=1" Error="Warning" P0="if($fTurnOffPhotographPol=-1,'in the registry','by group policy')" P1="if($fTurnOffPhotographPol=-1,'HKCU\Software\Microsoft\Office\%MAJORVERSION%.0\Common','HKCU\Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common')" Title="Photographs for contacts are not displayed" Text="Your contacts do not have their photographs displayed because the 'Show user photographs when available' option (in Outlook) is disabled. It is disabled because TurnOffPhotograph=1 {0} under '{1}'.&#xA;&#xA;Click the 'Click here ...' link for steps to re-enable this option." GUID="691539" SSID="d14740db-adf7-4a85-8aa4-7e6bd5671db8" Symptoms="Contacts,Photo"></Rule>
+          </Object>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Key5="Subtree" Key6="True" Display="Right">
+            <Setting Key1="__VALUES"></Setting>
+          </Object>
+        </Object>
+        <!--Outlook 16.0 HKCU settings -->
+        <Object Type="Group" Name="HKCU\Software\Microsoft\Office\%MAJORVERSION%.0\Outlook">
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook" Display="Right">
+            <Setting Key1="DefaultProfile" Substitution="DEFPROF" Display="Hide"></Setting>
+            <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\16.0\Outlook\Profiles\%DEFPROF%\0a0d020000000000c000000000000046" Display="Hide">
+              <Setting Key1="01023d15" Substitution="KGUID" Display="Hide"></Setting>
+              <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\16.0\Outlook\Profiles\%DEFPROF%\%KGUID%" Display="Right">
+                <Setting Key1="001e6603">
+                </Setting>
+              </Object>
+            </Object>
+            <Object Type="Cache" Name="OlVersionCache" Key1="Dump" Key2="OLVCACHE" Display="Hide">
+              <Setting Key1="Value" Substitution="OUTLOOKVERSIONFOUND" Display="Hide">
+                <Rule Name="nOutlookMV" Query="substring('%OUTLOOKVERSIONFOUND%',1,2)">
+                </Rule>
+              </Setting>
+            </Object>
+            <Rule Name="fOL16LegDnExists" Query="if((../Instance/Object/Instance/Object/Instance/Setting/@Key1='001e6603')=true(),1,-1)"></Rule>
+            <Rule Name="sMissing001e6603PropSkypeIssue" Query="$nOutlookMV=16 and $fOL16LegDnExists=-1 and ($nInstallType='ClickToRun' or ($nInstallType='MSI' and versioncompare($sFullAppVersion,'16.0.4405.1000')&lt;0))" Error="Warning" Title="Possible problems with the MAPI connection to Exchange Server" Text="The MAPI connection to Exchange Server may not be available to Skype for Business 2016 clients due to missing information in the Windows Registry. When this issue occurs, the Skype for Business Configuration Information feature shows 'MAPI Unavailable.' Additionally, if you click the 'Conversations' tab and then click 'View more in Outlook,' you receive an error message that states 'Your Outlook profile is not configured correctly...' Delegate functionality may also be broken. &#xA;&#xA;Click the 'Click here ...' link to see the solution to this problem." GUID="798487" SSID="96fca1e6-8a9e-4871-b064-cb83be19b364" Symptoms="Outlook profile,MAPI Unavailable,Delegation">
+            </Rule>
+          </Object>
+        </Object>
+        <!--/Outlook 16.0 HKCU settings -->
+      </Object>
+      <!--Lync HKLM settings-->
+      <Object Type="Group" Name="HKEY_LOCAL_MACHINE">
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Lync" Display="Right">
+          <Setting Key1="__VALUES">
+          </Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Lync" Key4="" Key5="Subtree" Key6="True" Display="Right">
+          <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+          </Setting>
+          <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+            <Setting Key1="__VALUES">
+            </Setting>
+          </Object>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\%MAJORVERSION%.0\Lync" Display="Right">
+          <Setting Key1="__VALUES">
+          </Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\%MAJORVERSION%.0\Lync" Key4="" Key5="Subtree" Key6="True" Display="Right">
+          <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+          </Setting>
+          <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+            <Setting Key1="__VALUES">
+            </Setting>
+          </Object>
+        </Object>
+      </Object>
+    </Object>
+    <!--/REG SETTINGS-->
+    <!--Lync/Skype POLICIES-->
+    <Object Type="Group" Name="Lync/Skype Client Policies" Class="Policies" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Office Policies">
+      <!--Lync HKCU policies-->
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Lync" Display="Right">
+        <Setting Key1="__VALUES">
+        </Setting>
+        <Setting Key1="DisableHttpConnect">
+          <Rule Name="sDisableHttpConnectHKCU" Query="$.=1" Error="Warning" P2="'%MAJORVERSION%'" Title="Possible connection problems because DisableHttpConnect=1 under HKCU\Software\Policies\Microsoft\Office\{2}.0\Lync" Text="When DisableHttpConnect=1, Lync/Skype does not try to connect to the server by using HTTP if TLS or TCP are unavailable. By default, Lync/Skpe first attempts to connect to the server by using TLS or TCP and, if neither of these transport methods is successful, Lync/Skype tries to connect by using HTTP.&#xA;&#xA;This is a non-default configuration. Click the 'Click here ...' link for details on this setting." GUID="618953" SSID="ba7dfa06-4f1a-4e87-8def-8ff049a463ec" Symptoms="Connection issues"/>
+        </Setting>
+        <Setting Key1="AllowSavePassword"></Setting>
+        <Rule Name="fAllowSavePasswordPol" Query="if((../Instance/Setting/@Key1='AllowSavePassword')=true(),../Instance/Setting[@Key1='AllowSavePassword']/Value,-1)"></Rule>
+        <Setting Key1="SavePassword">
+          <Rule Name="sSavePasswordNoSept2015UpdatePol" Query="$.=0 and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4745.1000')&lt;=0" Error="Warning" P0="if($bitness='x86' and $nInstallType='MSI','624364',if($bitness='x64' and $nInstallType='MSI','624365','624366'))" P1="if($nInstallType='MSI','and then install the update from the Microsoft Download site','and then update Office using the steps in the &quot;Get the latest version of Office&quot; section of the article')" P2="'%MAJORVERSION%'" Title="The SavePassword registry value is not being used (as expected) by Skype for Business" Text="The SavePassword value was found in the registry under HKCU\Software\Policies\Microsoft\Office\{2}.0\Lync but it is not being used by Skype for Business because you do not have the update from September 8, 2015 (or a later update) installed.&#xA;&#xA;After installing the September 8, 2015 update (or later update), you will also want to add the AllowSavePassword registry value. Please click the 'Click here ...' link for complete details.&#xA;&#xA;To install the latest update for Skype for Business, click the 'Download the update ...' link {1}." GUID="624358" PATCH="{0}" SSID="83e7ab7d-af6c-4359-a289-7c070263087c" Symptoms="Password prompt"></Rule>
+          <Rule Name="sSavePasswordNoAllowSavePasswordPol" Query="($.=0 or $.=1) and $fAllowSavePasswordPol=-1 and $fAllowSavePassword=-1 and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4745.1000')&gt;0" Error="Warning" P2="'%MAJORVERSION%'" Title="The SavePassword registry value is not being used (as expected) by Skype for Business" Text="The SavePassword value was found in the registry under HKCU\Software\Policies\Microsoft\Office\{2}.0\Lync but it is not being used (as expected) by Skype for Business because you do not also have the AllowSavePassword registry value.&#xA;&#xA;Please click the 'Click here ...' link for complete details on this issue." GUID="624367" SSID="53636e1d-d659-4368-be95-948c60d5c228" Symptoms="Password prompt"></Rule>
+        </Setting>
+        <Rule Name="fSavePasswordPol" Query="if((../Instance/Setting/@Key1='SavePassword')=true(),../Instance/Setting[@Key1='SavePassword']/Value,-1)"></Rule>
+        <Rule Name="fPolicies" Query="count(../Instance[contains(lower-case(@Name),'lync')]/Setting)&gt;0"></Rule>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Lync" Key4="" Key5="Subtree" Key6="True" Display="Right">
+        <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+        </Setting>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Right">
+          <Setting Key1="__VALUES">
+          </Setting>
+        </Object>
+      </Object>
+      <!--Office Common policies-->
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+        <Setting Key1="TurnOffPhotograph">
+        </Setting>
+        <Rule Name="fTurnOffPhotographPol" Query="if(../Instance/Setting[@Key1='TurnOffPhotograph']=true(),../Instance/Setting[@Key1='TurnOffPhotograph']/Value,-1)"></Rule>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Key5="Subtree" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+      </Object>
+      <!--Lync HKLM policies-->
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Lync" Display="Right">
+        <Setting Key1="__VALUES">
+        </Setting>
+        <Setting Key1="DisableHttpConnect">
+          <Rule Name="sDisableHttpConnectHKLM" Query="$.=1" Error="Warning" P2="'%MAJORVERSION%'" Title="Possible connection problems because DisableHttpConnect=1 under HKLM\Software\Policies\Microsoft\Office\{2}.0\Lync" Text="When DisableHttpConnect=1, Lync/Skype does not try to connect to the server by using HTTP if TLS or TCP are unavailable. By default, Lync/Skpe first attempts to connect to the server by using TLS or TCP and, if neither of these transport methods is successful, Lync/Skype tries to connect by using HTTP.&#xA;&#xA;This is a non-default configuration. Click the 'Click here ...' link for details on this setting." GUID="618953" SSID="e4352863-f04e-4e06-8d92-b9441389a798" Symptoms="Connection issues"/>
+        </Setting>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Lync" Key4="" Key5="Subtree" Key6="True" Display="Right">
+        <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+        </Setting>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Right">
+          <Setting Key1="__VALUES">
+          </Setting>
+        </Object>
+      </Object>
+      <!--Lync HKLM WOW policies-->
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Policies\Microsoft\Office\%MAJORVERSION%.0\Lync" Display="Right">
+        <Setting Key1="__VALUES">
+        </Setting>
+        <Setting Key1="DisableHttpConnect">
+          <Rule Name="sDisableHttpConnectHKLMWow" Query="$.=1" Error="Warning" P2="'%MAJORVERSION%'" Title="Possible connection problems because DisableHttpConnect=1 under HKLM\Software\Wow6432Node\Policies\Microsoft\Office\{2}.0\Lync" Text="When DisableHttpConnect=1, Lync/Skype does not try to connect to the server by using HTTP if TLS or TCP are unavailable. By default, Lync/Skpe first attempts to connect to the server by using TLS or TCP and, if neither of these transport methods is successful, Lync/Skype tries to connect by using HTTP.&#xA;&#xA;This is a non-default configuration. Click the 'Click here ...' link for details on this setting." GUID="618953" SSID="7f063cc1-cd0b-4e2c-9697-a9b2862a25ed" Symptoms="Connection issues"/>
+        </Setting>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Policies\Microsoft\Office\%MAJORVERSION%.0\Lync" Key4="" Key5="Subtree" Key6="True" Display="Right">
+        <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+        </Setting>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Right">
+          <Setting Key1="__VALUES">
+          </Setting>
+        </Object>
+      </Object>
+    </Object>
+    <!--/Lync/Skype POLICIES-->
     <!--EVENTLOGS-->
     <Object Type="Group" Name="Application Event Logs" Class="Event Logs" GroupingClass="True">
-      <Object Type="Group" Name="Application Event Log Entries for last Skype for Business crashes" Class="Application Event Logs" GroupingClass="True" TrackProgress="TrackProgress">
-        <Object Type="EventLog" Key1="Application" Key3="1000" Key4="lync.exe" Key7="14" Key8="10000">
-          <Setting Key1="__ALL"></Setting>
+      <Object Type="Group" Name="Application Event Log Entries for the last Skype for Business crashes" Class="Application Event Logs" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Application Event Log Entries for Last Lync crashes">
+        <Reference Type="LyncCrashes" Name="LyncCrashes" File="lync.crashes.config.xml"></Reference>
+        <Object Type="EventLog" Key1="Application" Key3="1001" Key4="lync.exe" Key7="14" Key8="10000" Task="Offline scan">
+          <Setting Key1="Message">
+            <Rule Name="event1001Message" Query="$."></Rule>
+          </Setting>
+          <Setting Key1="Fault Bucket">
+            <Rule Name="bucketNumber" Query="$."></Rule>
+            <!--P0 must be 'BUCKET', P1 and P2 are mandatory-->
+            <Rule Name="bucketLookup" Error="Error" Query="$bucketNumber!=''" P0="'BUCKET'" P1="$bucketNumber" P2="$bucketType" P3="'lync.exe'" P4="$event1001Message" Title="Event 1001" Text="{4}" Internal="True" Symptoms="Crash/Hang event lookup"></Rule>
+          </Setting>
+          <Setting Key1="Type">
+            <Rule Name="bucketType" Query="$."></Rule>
+          </Setting>
         </Object>
       </Object>
     </Object>
@@ -229,17 +477,46 @@
     <Object Type="Group" Name="Miscellaneous" GroupingClass="True" Class="Miscellaneous" TrackProgress="TrackProgress">
       <Reference Type="OffCATVersionInfo" Name="OffCATVersionInfo" File="common.config.xml">
       </Reference>
+      <!--IM Providers-->
+      <Object Type="Group" Name="Instant Messaging settings" Class="Miscellaneous" GroupingClass="True">
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Microsoft\Office\%MAJORVERSION%.0\Common">
+          <Setting Key1="TurnOffPhotograph"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Microsoft\Office\%MAJORVERSION%.0\Common\IM">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Policies\Microsoft\Office\%MAJORVERSION%.0\Common\IM">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\IM Providers">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\IM Providers" Key5="Subtree">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+      </Object>
+      <!--/IM Providers-->
       <Reference Type="GPResult" Name="GPResult" File="common.config.xml">
       </Reference>
     </Object>
     <!--/MISCELLANEOUS-->
   </Object>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>mBeHVyTBfBXTMw60FszRRd9LBls=</DigestValue></Reference></SignedInfo><SignatureValue>
-    iEzJNqCxKsnYAaarWSoPQUKllFVM7Hq4SeAjlUXnOKQx9uUoA42VAyZ5pj9xXVJDsgvDM4+t
-    cAE+dqYrjnQyW2bC7QVcGR8fp9LmJlw2p89GqsMy/iATNQlkoSKwOoqc0LL3w+a6v5noM/sz
-    L/6BBSW+8vu/17zZFj3U+PeodJ4voD6nurVfL7D8eP/S7ij0HE+jlxFD7MjdZPcHZ5GwoVvQ
-    dDStwcyrLTaLgcISYVteWwP+r33AcDm2XeqSRJGJ0TyHiyC7LwOHwCBaTvvagnGpiwx5Hcqg
-    bcBASPGQw2l5kjm4r+gD1zfCbkegEa/WKmx+NbmvwifCp0EdfW4E9g==
+  <!--EXTERNALREFS-->
+  <Rule Name="effectiveSlowBitrate"></Rule>
+  <Rule Name="sPpCoreVersion"></Rule>
+  <Rule Name="sWordVersion"></Rule>
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+  <!--Rule Name="OUTLOOKVERSION_sOutlookExeVersion"></Rule-->
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>MWDsPPZ7GWj/kEjGjMJB7OBSJ70=</DigestValue></Reference></SignedInfo><SignatureValue>
+    So/+gGYYoAUZHynYpDDJR66EnENEwBGbdUL0PTlVVS8MRBk2c1XIvL04gTTq8gIyMdYYechA
+    rtp0jaMXzuA/1szlWlCasGQunmp62/J69CtcS+L12eHn8Y57PRGvG3tWZoa4+OjGjWu0mLMd
+    KaC2GBRDkZKHp2YFU/mHbo2xCD2XHZM7VLbjkpMl2+7iyBKMEaCly9lCPI4lMQC+aEMbfC3K
+    tEXEYBsULzd+BWZ/tYocYq/m4HghK2c+Sspogm2gaNie/nbYzQBvc313wrLEzgDxFNUqeCoY
+    70bh2xmfiqE3RLhw6TiN5Rplu5KhTBTXZPLWEQ4DqkuQSHooBwhg0A==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -344,28 +621,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
 dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
 QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
-7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
-f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
-NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
-+7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
-d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
-5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
-lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
-IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
-vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -392,34 +669,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQCITMk2oLEqydgBpqtZKg9BQqWUVUzserhJ4COVRec4pDH25SgDjZUDJnmmP3FdUkOyC8Mz
-j61wAT52piuOdDJbZsLtBVwZHx+n0uYmXDanz0aqwzL+IBM1CWShIrA6ipzQsvfD5rq/megz+zMv
-/oEFJb7y+7/XvNkWPdT496h0ni+gPqe6tV8vsPx4/9LuKPQcT6OXEUPsyN1k9wdnkbChW9B0NK3B
-zKstNouBwhJhW15bA/6vfcBwObZd6pJEkYnRPIeLILsvA4fAIFpO+9qCcamLDHkdyqBtwEBI8ZDD
-aXmSObiv6APXN8JuR6ARr9YqbH41ua/CJ8KnQR19bgT2oIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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
-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
+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
-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</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/o4wIhgPMjAxNjA4MDExNjU5
+NThaGA8yMDE2MDgwMjE2NTk1OFowczA5BgorBgEEAYRZCgQBMSswKTAKAgUA20n+jgIBADAGAgEA
+AgECMAcCAQACAhg+MAoCBQDbS1AOAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkKAwGg
+CjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADW8Wc1X7wC6a6anLPjY
+Z2LaN5A9sqH61c4KUXHRWQ3NmrcTAt5MRePI0Rf9rcgxQdA/DPFaeCoOLMvfTtc1njNwsDsbcjp8
+p37u2Rr/E0WNFRoraruy1H8HEHx3Tev0SNGOKot7vdrkByf8qTKKOtA4EpEnH9SEuHYhDBN7SfW4
+qcWVmL5KhJDtvtQDqfPzMa7fL7ybRLblnfVnJD/dIz973Q0gS2aFre7EyRAkKlJVOy2m4J1kDXAG
+Z7GfdnVjTB0PDzILYM2HrdlGs0c6CsKLqUnB4H7oEQTVDXGJhjj02Nozcq4uEucHns5H3JS1puGO
+AwoOxcxZQYGdexa7AqUxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9u
+MSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACvU0d3bBvxowIAAAAAAK8w
+CQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE2
+MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFJyYd/HMdurz1KYsJsMA76gIRqoLMA0GCSqGSIb3
+DQEBBQUABIIBAI1WWLIJLrId/lUXRfmlYEy7uF2iXWQDkNdE8rwZSKeTiymzX4g4uJIn1zwL2HUS
+SkDTZ5YesAUmr6njk1AuRYZpAQTJCII3IAsRU2sAdBjTLW8m4mmgCAmbm2X6t+GpfQycyjYLCHhJ
+giX2Tzl/vcMFDVYpe9Y1E92OMdoekTZtu0Y6W1Mh+EWbmXnt/XPet+JTpp0B/krNRMgsWi7cwq/6
+Y3iAdW42vCo+wYTXmpeIru2yMEhYCBbmouXIdjFdypF3ruJHO58KufcyEepFDWbjETgZlqzLXOnE
+ZxfNFI5n6WzVgoOJzeXhm4SaiNVCUsi3Ph8h1uojSt2D7wq/nmI=</CounterSignature></Object></Signature></ObjectCollector>

@@ -1,177 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Infopath Crashes" ChangeDescription="2.0.1605.23" ConfigVersion="2.0.1605.23" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
-		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
-		<Substitution Name="MAJORVERSION"></Substitution>
-		<Substitution Name="INSTALLTYPE"></Substitution>
-		<Substitution Name="APPNAME">InfoPath</Substitution>
+	<Configuration ConfigName="Outlook Update Check" ChangeDescription="2.0.1604.28" ConfigVersion="2.0.1604.28" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="" Symptoms="1">
+    <Substitution Name="MAJORVERSION"></Substitution>
+    <Substitution Name="INSTALLTYPE"></Substitution>
+    <Substitution Name="APPNAME">Outlook</Substitution>
     <Substitution Name="DAYS"></Substitution>
     <Substitution Name="MAXEVENTS"></Substitution>
-		<ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
-		<!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
-    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
-		<ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
-		<ObjectProcessor Name="Directory" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DirectoryObjectProcessor"/>
-		<ObjectProcessor Name="DsGet" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor"/>
-		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
-		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
-		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
-		<ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
-		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
+		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
+		<ConfigPreprocessor Name="0 OutlookGlobalSubstitutionConfigPreprocessor Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.OutlookGlobalSubstitutionConfigPreprocessor"/>
+		<ConfigPreprocessor Name="1 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
 		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
 		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
 		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+		<ObjectProcessor Name="Outlook" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OutlookObjectProcessor"/>
+		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
 		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
-		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
-		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
-		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
-		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
-		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
-		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
+    <ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+    <ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
+		<RestrictionType Name="Task">
+			<Option Name="Offline Scan" Text="RestrictionText" Title="RestrictionTitle" Filter="True"/>
+		</RestrictionType>
 	</Configuration>
-
-	<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="InfoPath" Key6="infopath" Key7="%MAJORVERSION%">
-		<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
-		</Setting>
-		<Setting Key1="Bitness" Substitution="APPBITNESS">
-			<Rule Name="bitness" Query="$.">            
-			</Rule>
-		</Setting>
-    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Add" Key2="WOW6432NODECACHE" Key3="%WOW6432NODE%">
-    </Object>
-    <Object Type="Cache" Name="AppBitnessCache" Key1="Add" Key2="APPBITNESSCACHE" Key3="%APPBITNESS%">
-    </Object>
-		<Setting Key1="FullVersion">
-			<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))">            
-			</Rule>
-			<Rule Name="sFullAppVersion" Query="$."></Rule>
-		</Setting>
-		<Setting Key1="Name">
-			<Rule Name="appName" Query="$."></Rule>
-		</Setting>
-		<Setting Key1="Path"></Setting>
-		<Setting Key1="Version">
-			<Rule Name="n4DigitSKUVersion" Query="$.">
-			</Rule>
-		</Setting>
-		<Setting Key1="Type">
-			<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+  
+  <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Outlook" Key6="outlook" Key7="%MAJORVERSION%" Display="Hide">
+    <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
+    </Setting>
+    <Setting Key1="Bitness" Substitution="APPBITNESS" Display="Hide">
+      <Rule Name="bitness" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="FullVersion" Display="Hide">
+      <Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
+      <Rule Name="sFullAppVersion" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="Name" Display="Hide">
+      <Rule Name="appName" Query="$.">
+      </Rule>
+    </Setting>
+    <Setting Key1="Version" Substitution="APPVERSION" Display="Hide">
+      <Rule Name="n4DigitSKUVersion" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="Type" Substitution="INSTALLTYPE" Display="Hide">
       <Rule Name="nInstallType" Query="$."></Rule>
-		</Setting>
+      <Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+      <Rule Name="f2016MSI" Query="$n4DigitSKUVersion='2016' and $.='MSI'"></Rule>
+    </Setting>
+
+<Object Type="If" Key1="'%MAJORAPPVERSION%'='15.0' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+    <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{E9E5CFFC-AFFE-4F83-A695-7734FA4775B9}">
+  	  <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+		  <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+		  <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+			  <Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+			  <Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+			  <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
+				  <Setting Key1="" Display="Hide"></Setting>
+			  </Object>
+			  <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+				  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+					  <Setting Key1="ProductVersion" Display="Hide">
+						  <Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
+					  </Setting>
+				  </Object>
+				  <Setting Key1="ProductName" Display="Hide">
+					  <Rule Name="SKUName2013" Query="$."></Rule>
+				  </Setting>
+			  </Object>
+		  </Object>
+	  </Object>
+  </Object>
+	<Object Type="If" Key1="'%MAJORAPPVERSION%'='15.0' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+		<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{3A5F96E7-F51D-4942-98DB-3CD037FB39E5}">
+			<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+			<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+			<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+				<Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+				<Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+				<Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
+					<Setting Key1="" Display="Hide"></Setting>
+				</Object>
+				<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+					<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+						<Setting Key1="ProductVersion" Display="Hide">
+							<Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
+						</Setting>
+					</Object>
+					<Setting Key1="ProductName" Display="Hide">
+						<Rule Name="SKUName201364" Query="$."></Rule>
+					</Setting>
+				</Object>
+			</Object>
+		</Object>
 	</Object>
-  <Object Type="Cache" Name="AppBitnessCache" Key1="Dump" Key2="APPBITNESSCACHE" Display="Hide">
-    <Setting Key1="Val" Substitution="APPBITNESS" Display="Hide"></Setting>
-    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Dump" Key2="WOW6432NODECACHE" Display="Hide">
-      <Setting Key1="Val" Substitution="WOW6432NODE" Display="Hide">
-      </Setting>
-      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
-        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{3741355B-72CF-4CEE-948E-CC9FBDBB8E7A}">
-          <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
-          <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
-          <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
-            <Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
-            <Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
-            <Rule Name="sNoIRMInfoPath2013" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU2013='0011' and ($ReleaseType2013='1' or $ReleaseType2013='0')) or $SKU2013='0044')" P0="$SKUName2013" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="b5a7887a-f4c6-4622-bd17-ed771c6f874b" Symptoms="Information Rights Management"></Rule>
-            <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
-              <Setting Key1="" Display="Hide"></Setting>
-            </Object>
-            <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
-                <Setting Key1="ProductVersion" Display="Hide">
-                  <Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
-                </Setting>
-              </Object>
-              <Setting Key1="ProductName" Display="Hide">
-                <Rule Name="SKUName2013" Query="$."></Rule>
-              </Setting>
-            </Object>
-          </Object>
-        </Object>
-      </Object>
-      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
-        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{19AF7201-09A2-4C73-AB50-FCEF94CB2BA9}">
-          <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
-          <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
-          <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
-            <Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
-            <Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
-            <Rule Name="sNoIRMInfoPath201364" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU201364='0011' and ($ReleaseType201364='1' or $ReleaseType201364='0')) or $SKU201364='0044')" P0="$SKUName201364" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="10fbf07a-d90e-4407-871e-aafdc97a0a6b" Symptoms="Information Rights Management"></Rule>
-            <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
-              <Setting Key1="" Display="Hide"></Setting>
-            </Object>
-            <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
-                <Setting Key1="ProductVersion" Display="Hide">
-                  <Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
-                </Setting>
-              </Object>
-              <Setting Key1="ProductName" Display="Hide">
-                <Rule Name="SKUName201364" Query="$."></Rule>
-              </Setting>
-            </Object>
-          </Object>
-        </Object>
-      </Object>
-    </Object>
+
+    <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml">
+    </Reference>
+    <Reference Type="MSO" Name="MSO" File="common.config.xml">
+    </Reference>
+    <Reference Type="CloudMbxRegistry" Name="CloudMbxRegistry" File="outlook.config.xml">
+    </Reference>
+    <Reference Type="Office_Updates" Name="Office_Updates" File="officeupdates.config.xml">
+    </Reference>
+    <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+    </Reference>
+
   </Object>
   
-  <Type Name="InfoPathCrashes">
-    
-	  <!--EVENTLOGS-->
-		<Object Type="EventLog" Key1="Application" Key3="1000" Key4="infopath.exe" Key5="%MAXEVENTS%" Key7="%DAYS%" Key8="10000">
-			<Setting Key1="__ALL"></Setting>
-      <Setting Key1="Faulting Application Name" Display="Right"></Setting>
-      <Setting Key1="Faulting Application Version" Display="Right">
-        <Rule Name="nFaultingAppVersion" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Faulting Application Timestamp" Display="Right">
-        <Rule Name="faultAppTimeStamp" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Faulting Module Name" Display="Right">
-        <Rule Name="faultModuleName" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Faulting Module Version" Display="Right">
-        <Rule Name="nFaultingModuleVersion" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Faulting Module Timestamp" Display="Right">
-        <Rule Name="faultModuleTimestamp" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Exception code" Display="Right"></Setting>
-      <Setting Key1="Fault offset" Display="Right">
-        <Rule Name="faultOffset" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Timegenerated" Display="Hide">
-        <Rule Name="TimeOfCrash" Query="$."></Rule>
-      </Setting>
-		</Object>
-		<!--/EVENTLOGS-->
-    
-  </Type>
-
-  <Reference Type="InfoPathCrashes" Name="InfoPathCrashes" File="infopath.crashes.config.xml">
-  </Reference>
-	<Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml">
-	</Reference>
-	<Reference Type="MSO" Name="MSO" File="common.config.xml">
-	</Reference>
-	<Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
-	</Reference>		
-
-	<!--EXTERNALREF-->
-	<Rule Name="effectiveSlowBitrate"></Rule>
-  <Rule Name="sPpCoreVersion"></Rule>
-	<Rule Name="sWordVersion"></Rule>
+  <!--EXTERNALREFS-->
+	<Rule Name="sPpCoreVersion"></Rule>
+  <Rule Name="sWordVersion"></Rule>
   <Rule Name="fPolicies"></Rule>
-  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
-  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
-  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
-  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+  <Rule Name="effectiveSlowBitrate"></Rule>
 
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>eYF/IaT+xJzNl2EVp8smP3YNGmk=</DigestValue></Reference></SignedInfo><SignatureValue>
-    EWAfKb98qXwmtExPEkdkNNnootuep642VWw4jjA7rCYqJM6rjM/l/bTXbP5OaPg74hgMjZvC
-    QG6GJ5pmOOsFoXXT7vYw6+L8570y0BWl4ckwGsMD0CqTw9haIJYuJtCL5RF2THZVHwN2b4wd
-    2XjosE1/ZBxGiXft0+VTMo70nZ9Ia4vb6kjn4q/0G1XWbDAWovreUbZaDQ/8KEoshfd/TcLo
-    g6Ufda2WBGWBILGO5LcqOHlloNj/y6gHsRyOKPzQ6IhU/mN0WbmvTQrCdrdZfHA+zZqPiMNb
-    W5tCdU3Bp4xJQUPVO0axFeC4Dnnr5wW0zPBLddjupgErGf6GvYO87g==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>1ijAuImsRkxe7oGpIzd0BngO1FQ=</DigestValue></Reference></SignedInfo><SignatureValue>
+    hWKeqPV1I8KRmB8jhd+znRu0ucGABH7dWd/Iw1In1SguM7TxsvmCvFINy22VOhe8UZPgH0r0
+    ZrlWNBudcabHURU/xeHTloGPdP3vOSTB+9KA69pyN3oxudZHN9UZKeSwhNwxvSN/XHwP0/R5
+    tuiSfVwz2xFUxo7GoPRHz6mwfmMyY88lJSAACj1+YH70mCHBas6puvib6U1XzSU/VP7U4mOM
+    cGW9tGwdQFw4Ex8E4rnzDR+9Pb3MXCjSEAqKY2vckMM2ZgjLL0irUMKjYkOQZus0Z+bqDiNh
+    FHEWETLOiXin4okynS+E6hQ62gv7CpJtOCGAP6IsZU3J+QkJYiDaZA==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -325,11 +272,11 @@ zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
 LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0wYJKoZIhvcNAQcCoIIGxDCCBsACAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQARYB8pv3ypfCa0TE8SR2Q02eii256nrjZVbDiOMDusJiokzquMz+X9tNds/k5o+DviGAyN
-m8JAboYnmmY46wWhddPu9jDr4vznvTLQFaXhyTAawwPQKpPD2Fogli4m0IvlEXZMdlUfA3ZvjB3Z
-eOiwTX9kHEaJd+3T5VMyjvSdn0hri9vqSOfir/QbVdZsMBai+t5RtloND/woSiyF939NwuiDpR91
-rZYEZYEgsY7ktyo4eWWg2P/LqAexHI4o/NDoiFT+Y3RZua9NCsJ2t1l8cD7Nmo+Iw1tbm0J1TcGn
-jElBQ9U7RrEV4LgOeevnBbTM8Et12O6mASsZ/oa9g7zuoIIDfKGCA3gwggJgAgEBMIHjoYG5pIG2
+BASCAQCFYp6o9XUjwpGYHyOF37OdG7S5wYAEft1Z38jDUifVKC4ztPGy+YK8Ug3LbZU6F7xRk+Af
+SvRmuVY0G51xpsdRFT/F4dOWgY90/e85JMH70oDr2nI3ejG51kc31Rkp5LCE3DG9I39cfA/T9Hm2
+6JJ9XDPbEVTGjsag9EfPqbB+YzJjzyUlIAAKPX5gfvSYIcFqzqm6+JvpTVfNJT9U/tTiY4xwZb20
+bB1AXDgTHwTiufMNH709vcxcKNIQCopja9yQwzZmCMsvSKtQwqNiQ5Bm6zRn5uoOI2EUcRYRMs6J
+eKfiiTKdL4TqFDraC/sKkm04IYA/oixlTcn5CQliINpkoIIDfKGCA3gwggJgAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
 Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
@@ -349,9 +296,9 @@ mKU41auRUhb3D17D+JXgxzAxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
 V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0
 aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACxaa/EN2uRk14AAAAA
 ALEwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
-DTE2MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFBHrUn4mZpHpSCC4SgkZ1n2PeyMPMA0GCSqG
-SIb3DQEBBQUABIIBABXwfksCI4UWRKY7UP7aNiwcIMl0122GNe2zwGDe0arH5x2D/9woPXV0U4r5
-0LFdG2uJl7IYbHyyXbGjiKdGdYl5f/0NJnIu4fjRdt66IcLhp7ck5imHIELdkZBm+LmBn4Qv1rDo
-9Z8da6QkneJCOrB9JChTulY+3QP4JsA68Ye6dVTWYA//91xQAxImuGUqf/W7bCf6nH5sBsJDVwc9
-qZyWq/6OZDNy0bhNw7VM45qQn9Z+8xN3p89POoAO8LRpyghN0zj8paUTsu+9+zH2Ov2jyW1AiLeD
-YEQNkhyBm/PP+4X9RoW8ACOD+hsrjMwIY+MtVJui8yeDeuUbIddzLz0=</CounterSignature></Object></Signature></ObjectCollector>
+DTE2MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFKr4nMGzciZXufygixy81dBpb5UpMA0GCSqG
+SIb3DQEBBQUABIIBACYDrhDCvWTM8Yrt+h5dX82YFmN5xGz0XZdC6IT8pd8HqCbPXLeLIc5SQARa
+GVgGpL7oYO0ynjbYC//NCUuMZ2cRzoPrnC6iTZm/y/7/DlB+eV+Xae7dxj+cN+QoPhVhWcE71yay
+OA0aWRpZiMk0bbpwJhufbHHYU6EiONLDhgOV2MoDS/Bmm8OCS72IDf8NbfZi4pldH/xyaCHrfc8S
+rgm76VrBKQHxiUKC3CRAsUCBcZhW2k2ImzqGsOpOqLhcRaDPMOkdtoqxsfe0lSF+wy1Cfgizq3YR
+Ghz1+fHljeO/ahPF39lfQ6HmWzqHARHRs99ge+Bt25VSPjpsBaT0xRc=</CounterSignature></Object></Signature></ObjectCollector>

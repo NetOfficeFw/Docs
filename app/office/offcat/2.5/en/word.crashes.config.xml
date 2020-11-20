@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Word Crashes" ChangeDescription="2.0.1505.18" ConfigVersion="2.0.1505.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
+	<Configuration ConfigName="Word Crashes" ChangeDescription="2.0.1605.23" ConfigVersion="2.0.1605.23" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
 		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
 		<!--!!! GLOBAL SUBSTITUTIONS SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"></Substitution>
@@ -9,13 +9,14 @@
     <Substitution Name="MAXEVENTS"></Substitution>
 		<ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
 		<!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
 		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
 		<ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
 		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
 		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
 		<ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
 		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
-		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>&gt;
+		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
 		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
 		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
 		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
@@ -44,6 +45,10 @@
 		<Setting Key1="Bitness" Substitution="APPBITNESS" Display="Hide">
 			<Rule Name="bitness" Query="$."></Rule>
 		</Setting>
+    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Add" Key2="WOW6432NODECACHE" Key3="%WOW6432NODE%">
+    </Object>
+    <Object Type="Cache" Name="AppBitnessCache" Key1="Add" Key2="APPBITNESSCACHE" Key3="%APPBITNESS%">
+    </Object>
 		<Setting Key1="FullVersion" Display="Hide">
 			<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
 			<Rule Name="sFullAppVersion" Query="$."></Rule>
@@ -59,50 +64,58 @@
       <Rule Name="nInstallType" Query="$."></Rule>
 		</Setting>
 	</Object>
-	<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
-			<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{09D07EFC-505F-4D9C-BFD5-ACE3217F6654}">
-				<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
-				<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
-				<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
-					<Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
-					<Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
-						<Setting Key1="" Display="Hide"></Setting>
-					</Object>
-					<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
-							<Setting Key1="ProductVersion" Display="Hide">
-								<Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
-							</Setting>
-						</Object>
-						<Setting Key1="ProductName" Display="Hide">
-							<Rule Name="SKUName2013" Query="$."></Rule>
-						</Setting>
-					</Object>
-				</Object>
-			</Object>
-	</Object>
-	<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
-			<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{6FF09BDF-B087-4E23-A9B9-272DBFD64099}">
-				<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
-				<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
-				<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
-					<Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
-					<Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
-						<Setting Key1="" Display="Hide"></Setting>
-					</Object>
-					<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
-							<Setting Key1="ProductVersion" Display="Hide">
-								<Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
-							</Setting>
-						</Object>
-						<Setting Key1="ProductName" Display="Hide">
-							<Rule Name="SKUName201364" Query="$."></Rule>
-						</Setting>
-					</Object>
-				</Object>
-			</Object>
-	</Object>
+  <Object Type="Cache" Name="AppBitnessCache" Key1="Dump" Key2="APPBITNESSCACHE" Display="Hide">
+    <Setting Key1="Val" Substitution="APPBITNESS" Display="Hide"></Setting>
+    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Dump" Key2="WOW6432NODECACHE" Display="Hide">
+      <Setting Key1="Val" Substitution="WOW6432NODE" Display="Hide">
+      </Setting>
+      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{09D07EFC-505F-4D9C-BFD5-ACE3217F6654}">
+          <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+          <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+          <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+            <Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+            <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
+              <Setting Key1="" Display="Hide"></Setting>
+            </Object>
+            <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                <Setting Key1="ProductVersion" Display="Hide">
+                  <Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
+                </Setting>
+              </Object>
+              <Setting Key1="ProductName" Display="Hide">
+                <Rule Name="SKUName2013" Query="$."></Rule>
+              </Setting>
+            </Object>
+          </Object>
+        </Object>
+      </Object>
+      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{6FF09BDF-B087-4E23-A9B9-272DBFD64099}">
+          <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+          <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+          <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+            <Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+            <Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
+              <Setting Key1="" Display="Hide"></Setting>
+            </Object>
+            <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                <Setting Key1="ProductVersion" Display="Hide">
+                  <Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
+                </Setting>
+              </Object>
+              <Setting Key1="ProductName" Display="Hide">
+                <Rule Name="SKUName201364" Query="$."></Rule>
+              </Setting>
+            </Object>
+          </Object>
+        </Object>
+        <Reference Type="WordCrashes" Name="WordCrashes" File="word.crashes.config.xml"/>
+      </Object>
+    </Object>
+  </Object>
 
   <Type Name="WordCrashes">
     
@@ -142,8 +155,8 @@
       <Rule Name="n73260618461Crash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4615.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00015fc9')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='osf.dll')]])"></Rule>
       <Rule Name="s3424702OsfCrashWord" Query="$n2DigitVersion=15 and ($n73109411026Crash&gt;0 or $n85935812310Crash&gt;0 or $n73317526977Crash&gt;0 or $n73260618461Crash&gt;0)" Error="Error" P0="$n73109411026Crash + $n85935812310Crash + $n73317526977Crash + $n73260618461Crash" Title="Known crashing issue when you exit Word with the Insert tab active on the Ribbon" Text="The issue where Word crashes when you exit the program with the Insert tab active has been detected {0} times. Please click the 'Click here...' link to see the most recent details on this issue." GUID="403547" SSID="d19a2445-5c66-4b01-9b5a-4cebd8b81de3" Symptoms="Crash"></Rule>
 
-  <Rule Name="n_mrmapiCrash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='6.1.7601.18409')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='kernelbase.dll')]])"></Rule>
-  <Rule Name="s_mrmapiCrash" Query="$nInstallType='MSI' and $n2DigitVersion=15 and $n_mrmapiCrash&gt;0" Error="Error" P0="$n_mrmapiCrash" Title="A known crashing issue in offcat_rts.exe was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392663" SSID="9d7c6369-df0d-49d2-85bb-0ffee3c4fa62" Symptoms="Crash,Event Log"></Rule>
+      <Rule Name="n_mrmapiCrash" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='6.1.7601.18409')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='kernelbase.dll')]])"></Rule>
+      <Rule Name="s_mrmapiCrash" Query="$nInstallType='MSI' and $n2DigitVersion=15 and $n_mrmapiCrash&gt;0" Error="Error" P0="$n_mrmapiCrash" Title="A known crashing issue in offcat_rts.exe was detected in the application event log" Text="A known crashing issue was detected in your application event log {0} times. This issue is fixed in Office 2013 Service Pack 1. Please click the 'Click here...' link to download Service Pack 1." GUID="392663" SSID="9d7c6369-df0d-49d2-85bb-0ffee3c4fa62" Symptoms="Crash,Event Log"></Rule>
 
       <Rule Name="nCrashIgd10umd32Word" Query="count(../Instance[Setting[@Key1='Faulting Module Name' and (lower-case(Value)='igd10umd32.dll')]])"></Rule>
       <Rule Name="sCrashIgd10umd32Word" Query="$n2DigitVersion=15 and $nCrashIgd10umd32Word&gt;0" Error="Error" P0="$nCrashIgd10umd32Word" Title="Word crashing issue with Igd10mud32.dll found" Text="A crashing issue in Winword.exe that was caused by Igd10umd32.dll was found {0} times in the application event log. This problem has been known to be caused by an outdated Intel graphics accelerator driver.&#xA;&#xA;Please click the 'Click here ...' link for details." GUID="404005" SSID="86d69c55-43b5-4b8b-92ec-00bf4dc4c0f8" Symptoms="Crash,Error message,Event Log"></Rule>
@@ -156,9 +169,55 @@
       <Rule Name="s3459258MsoCrashWordX64" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x64' and ($n3459258MsoCrashWord00000000013F766E&gt;0 or $n3459258MsoCrashWord00000000013EB86E&gt;0)" Error="Error" P0="$n3459258MsoCrashWord00000000013F766E + $n3459258MsoCrashWord00000000013EB86E" Title="Known crashing issue when Word stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Word stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506818" SSID="4f6e2e99-952e-49f1-98d4-239ae1f16ab9" Symptoms="Crash"></Rule>
       <Rule Name="s3459258MsoCrashWordC2R" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='ClickToRun' and $n2DigitVersion=15 and ($n3459258MsoCrashWord00003ABC&gt;0 or $n3459258MsoCrashWord0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashWord00003ABC + $n3459258MsoCrashWord0000329C" Title="Known crashing issue when Word stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Word stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506861" SSID="a74c4406-98ca-4bfe-a389-2366c8be7af6" Symptoms="Crash"></Rule>
 
+      <Rule Name="n3507209Crash74072277045" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00043bbd')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='fm20.dll')]])"></Rule>
+      <Rule Name="n3507209Crash74301344235" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00043bdf')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='fm20.dll')]])"></Rule>
+      <Rule Name="n3507209Crash120261842184" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='000000000002d892')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='fm20.dll')]])"></Rule>
+      <Rule Name="sWord15Crash3507209Msi" Query="$nInstallType='MSI' and $n2DigitVersion=15 and not($OfficeUpdates_sKB3023052Installed) and ($n3507209Crash74072277045&gt;0 or $n3507209Crash74301344235&gt;0 or $n3507209Crash120261842184&gt;0)" Error="Error" P0="$n3507209Crash74072277045 + $n3507209Crash74301344235 + $n3507209Crash120261842184" P1="if($bitness='x86','32-bit','64-bit')" Title="Known crash in Word has been detected" Text="A Word crashing issue that is fixed by the July 14, 2015 update in KB 3023052 (and any subsequent update for FM20.dll) has been detected {0} time(s).&#xA;&#xA;Please click the 'Click here ...' link for details on the July 14, 2015 update for FM20.dll and then install the {1} update from the article." GUID="619844" SSID="1ff3e95f-5f49-4c2c-82e0-7460ea819380" Symptoms="Crash"></Rule>
+      <Rule Name="sWord15Crash3507209C2R" Query="$nInstallType='ClickToRun' and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4737.1003')&lt;0 and ($n3507209Crash74072277045&gt;0 or $n3507209Crash74301344235&gt;0 or $n3507209Crash120261842184&gt;0)" Error="Error" P0="$n3507209Crash74072277045 + $n3507209Crash74301344235 + $n3507209Crash120261842184" Title="Known crash in Word has been detected" Text="A Word crashing issue that is fixed by the July 14, 2015 update for Office 2013 has been detected {0} time(s).&#xA;&#xA;To resolve this problem, click the 'Click here...' link and then update Office using the steps in the 'Get the latest version of Office' section of the article." GUID="619848" SSID="349d7e62-485b-4edc-8ae7-64c23d650c02" Symptoms="Crash"></Rule>
+
+      <Rule Name="n2264340Crash0018873f" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0018873f')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash001591c2" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='001591c2')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0000000000208e9a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000208e9a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0015a2d6" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0015a2d6')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec8f2" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec8f2')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00183891" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00183891')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001f9652" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001f9652')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001efa6a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001efa6a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0000000000208d1e" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000208d1e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00188357" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00188357')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00183a4d" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00183a4d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00158118" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00158118')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001f978e" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001f978e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ebd4a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ebd4a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec0ba" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec0ba')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ebe0a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ebe0a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00158397" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00158397')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001efa8e" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001efa8e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0000000000211d72" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000211d72')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec2da" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec2da')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0000000000200832" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0000000000200832')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash001887fa" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='001887fa')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec502" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec502')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001eb912" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001eb912')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0015a383" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0015a383')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000002125e6" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000002125e6')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00000000001ec53a" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00000000001ec53a')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash00181757" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='00181757')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+      <Rule Name="n2264340Crash0015903d" Query="count(../Instance[Setting[@Key1='Fault offset' and (lower-case(Value)='0015903d')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso30win32client.dll')]])"/>
+
+      <Rule Name="sWord16Crash2264340" Query="$n2DigitVersion=16 and ($n2264340Crash0018873f&gt;0 or $n2264340Crash001591c2&gt;0 or $n2264340Crash0000000000208e9a&gt;0 or $n2264340Crash0015a2d6&gt;0 or $n2264340Crash00000000001ec8f2&gt;0 or $n2264340Crash00183891&gt;0 or $n2264340Crash00000000001f9652&gt;0 or $n2264340Crash00000000001efa6a&gt;0 or $n2264340Crash0000000000208d1e&gt;0 or $n2264340Crash00188357&gt;0 or $n2264340Crash00183a4d&gt;0 or $n2264340Crash00158118&gt;0 or $n2264340Crash00000000001f978e&gt;0 or $n2264340Crash00000000001ebd4a&gt;0 or $n2264340Crash00000000001ec0ba&gt;0 or $n2264340Crash00000000001ebe0a&gt;0 or $n2264340Crash00158397&gt;0 or $n2264340Crash00000000001efa8e&gt;0 or $n2264340Crash0000000000211d72&gt;0 or $n2264340Crash00000000001ec2da&gt;0 or $n2264340Crash0000000000200832&gt;0 or $n2264340Crash001887fa&gt;0 or $n2264340Crash00000000001ec502&gt;0 or $n2264340Crash00000000001eb912&gt;0 or $n2264340Crash0015a383&gt;0 or $n2264340Crash00000000002125e6&gt;0 or $n2264340Crash00000000001ec53a&gt;0 or $n2264340Crash00181757&gt;0 or $n2264340Crash0015903d&gt;0)" Error="Error" P0="$n2264340Crash0018873f + $n2264340Crash001591c2 + $n2264340Crash0000000000208e9a + $n2264340Crash0015a2d6 + $n2264340Crash00000000001ec8f2 + $n2264340Crash00183891 + $n2264340Crash00000000001f9652 + $n2264340Crash00000000001efa6a + $n2264340Crash0000000000208d1e + $n2264340Crash00188357 + $n2264340Crash00183a4d + $n2264340Crash00158118 + $n2264340Crash00000000001f978e + $n2264340Crash00000000001ebd4a + $n2264340Crash00000000001ec0ba + $n2264340Crash00000000001ebe0a + $n2264340Crash00158397 + $n2264340Crash00000000001efa8e + $n2264340Crash0000000000211d72 + $n2264340Crash00000000001ec2da + $n2264340Crash0000000000200832 + $n2264340Crash001887fa + $n2264340Crash00000000001ec502 + $n2264340Crash00000000001eb912 + $n2264340Crash0015a383 + $n2264340Crash00000000002125e6 + $n2264340Crash00000000001ec53a + $n2264340Crash00181757 + $n2264340Crash0015903d" Title="Known crashing issue in Word" Text="A crashing issue that occurs in Word has been detected {0} time(s).&#xA;&#xA;Please click the 'Click here...' link for details on this issue." GUID="787610" SSID="12b9a7c3-bfa5-46bd-ae1a-efa08a59d923" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" SaraSvc="True" Symptoms="Crash"/>
+
       <Reference Type="CommonCrashes" Name="CommonCrashes" File="common.config.xml"></Reference>
 
     </Object>
+
+    <Object Type="EventLog" Key1="Application" Key2="emet" Key3="2" Key4="word.exe" Key7="14" Key8="10000">
+      <Setting Key1="Message"></Setting>
+      <Rule Name="nEmetEvent2CountWord" Query="count(../Instance)"></Rule>
+      <Rule Name="sEmetMitigationWord" Query="$nEmetEvent2CountWord&gt;0" Error="Error" P0="$nEmetEvent2CountWord" P1="'%APPNAME%'" Title="{1} was closed by the Enhanced Mitigation Experience Toolkit (EMET)" Text="The Application Event log indicates the Enhanced Mitigation Experience Toolkit forced {1} to close {0} times in the last 14 days.&#xA;&#xA;Please click the 'Click here ...' link for details on this type of event." GUID="623505" SSID="d41a7cbc-c7e5-4bed-99df-acd37f4c6e6d" Symptoms="Crash"></Rule>
+    </Object>
+
+    <Reference Type="NonOfficeAppCrashes" Name="NonOfficeAppCrashes" File="common.config.xml"></Reference>
 
     <Reference Type="DisplayLinkUMD" Name="DisplayLinkUMD" File="common.config.xml">
     </Reference>
@@ -173,18 +232,25 @@
 	</Reference>
 	<Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
 	</Reference>
+  <Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml">
+  </Reference>
 	
 	<!--EXTERNALREFS-->
   <Rule Name="effectiveSlowBitrate"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
+  <Rule Name="fPolicies"></Rule>
   <Rule Name="sWordVersion"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
 
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>wDE3rutO6thszg3hDFA2guKIMTU=</DigestValue></Reference></SignedInfo><SignatureValue>
-    EkEYIg/ya91C5coXZJX4Hhk39uAeqSGyVsxshh5cocJlBcRzH8wnlA6ZDv7vwn6rSGlqhv3X
-    5U9HkHPNJaAV8SBmih54IqO3t6DfIqi3dNraTsWBtX96LUuysiwJ/vZMMBnbiuiK0Jr6YBmU
-    8Ski2SbCy2ysLhGEgduTsim6Gnmgw8IKnKJvZsUY02oiqOmBAYgj+dprBVbsToXvGV96S7Gz
-    EgWPvozySN3M1/qBpotbN7pWD180ZAwPvCELtXcVchV05rMtuH1tpl/s2dPllnX0dJIQIqW4
-    nEj1qklL2e9SDyWSJeuPTrbM+kwhGpbs/nF5S1YGpZG8qaFe+SRKhg==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>HtVoFgrteq0dN+tWBjilheNseSY=</DigestValue></Reference></SignedInfo><SignatureValue>
+    IwyDvT6XFgIyQxOHIh8R58HO+53uEVjN2vktJsMMoajXteOsWoB8rnPjJ61il7r02EjBjtd3
+    kQz2b11l+zuFW7rt0RR7854V2RNKrZ0R7+kiizCZ+XF5jsJ1k9AVac/Ailxwhyindp+pXP7M
+    Jsk4IvV/7RZio0PbdLNSwbOugOTL2xJk9GUo/3O4+2XGNWFUYufhsmrKLpCY79CtiTvfBB5P
+    Fw7YiJpwTwzKSPcSUb8A7rzH4r+ZosHIsQevkcmvForbapZBSOrMvaLNhziR/bQCRoKXg4Nw
+    Hp/UR5wFznhlc3yT5gdbXeYDsZdJYT22scTXqVry5VVfAX87rDZsXw==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -289,28 +355,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAALFpr8Q3a5GTXgAAAAAAsTANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI3WhcNMTcwODAzMTcxMzI3WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
-QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
-7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
-f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
-NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
-+7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAuB5CzdlupvWjSYQ/N2yCah7oUs5NBYH0s2RuWHAJXNOZEnRFmuBP
+BLSJhWsrspK9GahJ3FZuQEcq2+uBGpjBnZIWXVEzunBgIoUiL313gYGGe8u+/u1nbv0dZNzwijaA
+M2itgpwKvPBHv3Gqq8cFWzVRHTgO31lV4IA28ZhueAocWFNvLV9RkrXBpMwtvbwLqyA/ednmK4+E
+BfsgLbuGcUFS/wyAq7+ZhqUDq+LzHhFLl55V7iApITvmU6kNzZPtvY3QZVPmcq6K3IjwpV4bkr72
+9y+ndWZmfgvqlUvV78hV6zusR6zHiy/NJQH2w8LaPW1YIUZImWJ/jFAUqG7Q5QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFAGGI3nEkNLTKbg8V2lFYretn114MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
-d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
-5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
-lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
-IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
-vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAD3G
+M+JdCkrA5KQO5uQdsjwIqCLoJ/kTICat57wPtZA5nbP3NW05sObKPJtA18zQIXzaCWhXVLQ+S+D2
+L/zWJ1cMvHTM+BUxsdOOo+DwDNSFSjG6/0srv7YXigPkkN5jnHdxDmTWBd/TJaGzL+88Sa3uOayC
+xMi0VJB9DbARKRjs0vMxeIsffF7ZEFtWxmeH5CLPmuy5CJiVqo2EJw7qm/QOIX3pXbSAjwighcP5
+RN4li8n3F37B3nhUm05qNF9rIo1Hf7sWWHdwHvT6KHMl0MV/Np80Y2ofnGBNwxphl95bQE8C295+
+QbrEWxAYaQaqMbBgG8FS0uXOqRSYgaRSkpk=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -337,34 +403,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQASQRgiD/Jr3ULlyhdklfgeGTf24B6pIbJWzGyGHlyhwmUFxHMfzCeUDpkO/u/CfqtIaWqG
-/dflT0eQc80loBXxIGaKHngio7e3oN8iqLd02tpOxYG1f3otS7KyLAn+9kwwGduK6IrQmvpgGZTx
-KSLZJsLLbKwuEYSB25OyKboaeaDDwgqcom9mxRjTaiKo6YEBiCP52msFVuxOhe8ZX3pLsbMSBY++
-jPJI3czX+oGmi1s3ulYPXzRkDA+8IQu1dxVyFXTmsy24fW2mX+zZ0+WWdfR0khAipbicSPWqSUvZ
-71IPJZIl649Otsz6TCEaluz+cXlLVgalkbypoV75JEqGoIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0wYJKoZIhvcNAQcCoIIGxDCCBsACAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQAjDIO9PpcWAjJDE4ciHxHnwc77ne4RWM3a+S0mwwyhqNe146xagHyuc+MnrWKXuvTYSMGO
+13eRDPZvXWX7O4Vbuu3RFHvznhXZE0qtnRHv6SKLMJn5cXmOwnWT0BVpz8CKXHCHKKd2n6lc/swm
+yTgi9X/tFmKjQ9t0s1LBs66A5MvbEmT0ZSj/c7j7ZcY1YVRi5+GyasoukJjv0K2JO98EHk8XDtiI
+mnBPDMpI9xJRvwDuvMfiv5miwcixB6+Rya8WittqlkFI6sy9os2HOJH9tAJGgpeDg3Aen9RHnAXO
+eGVzfJPmB1td5gOxl0lhPbaxxNepWvLlVV8BfzusNmxfoIIDfKGCA3gwggJgAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
+Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAM9R4brIoF4Sym5kS7aEWeErck/aggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
-MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
-AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
-CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
-g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
-YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
-jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
-nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
-aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
-AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
-Fw0xNTA3MDkxNDQ3MzJaMCMGCSqGSIb3DQEJBDEWBBRt5Gv6T3vSOdH5xVaUazKuA9SqLDANBgkq
-hkiG9w0BAQUFAASCAQB+kfiHxPk6CzJHfM9AdkiG+NoewqxdX/BEBhKE6dx7E1XK4KSl4dplHRio
-DfpteDF7LeFooqMYF4lkw7QhXLR0D38c4Jo1CSKFzuneMSzpTeVbi0DkotyhWQ1YMLIK2RyQ21C7
-Z4jhEL8xZ2GAdIo3AaBJGnZdGy5vtGU6vzENToDnezrIe8vdkxiFHuWWcO2WUMAuKqOlvj3Pgj7x
-9CQ+vMT+7nNQh5oLOsTpW5rBnxHe8njjpORzqPiNDzWMsCkvbGTNDTe2PkoG72yqq109jQUDxknj
-yBJElLYLkTCmZwAlIzrGEszZas/Gv9esIgPh7So4j2MCy5Jr6gwR1mgb</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/4cwIhgPMjAxNjA4MDExNzA0
+MDdaGA8yMDE2MDgwMjE3MDQwN1owdjA8BgorBgEEAYRZCgQBMS4wLDAKAgUA20n/hwIBADAJAgEA
+AgEgAgH/MAcCAQACAhhFMAoCBQDbS1EHAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkK
+AwGgCjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADzmycqYOkjMI4nM
+Eh8BXeCJwRmsEZF0pZdrfVyk1JDEIPKbTpX98nrosAMn7khtRPzyJbrvaVKDmDelQF38infAFG+r
+RIonmx0Z8n8oX48bgJjbWt2EBQkGq4L+sPfoKvZzigs65P5haO5nXAkihhh9Iq9MlSCxFZVxngjd
+DON8cbsM7YCNaJZTG5OAHr6X8J4H7U3vo+1KY+ZxLDn9CR7fVLheWvNdefwOeUYxJ0t1H72pLZg3
+OrFEk9+v1e658gMeZ23NFCiDmWwgoi6+MxJDNQMUUWXb4/Dplfuk9jg7ojZq+hlgx/Rh7U7l5mKh
+mKU41auRUhb3D17D+JXgxzAxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
+V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0
+aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACxaa/EN2uRk14AAAAA
+ALEwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDgwMTE3MjkzM1owIwYJKoZIhvcNAQkEMRYEFChP7J1RyrArdiQRvrtWoin6jd7HMA0GCSqG
+SIb3DQEBBQUABIIBAKhJ8K1pHonmSpUHG/MMuZbe0KfNNbBlLYEnanz2ZSNhxNytDx/JvG+RAkuO
+QcGgS7FAEp75LWU/Bko+ARm3w43n3fNVRoOTmF5cEHV4QTP1DWhm/9HPsCz7eccGjnj1k/H9ZOR+
+GSqSeWBo1DIprY7h5G1PxKN1I1Ec0Qgf9PNuIWN3OEdqfgxPTtJQrzQWP2AvD/sD+8vBdqc3k53D
++H9byR7Z5cOHl8ixZVw/4mxZnVWMFK/KCeBMIa6if1bvjDiF9yFGscw6BMgtzaACaNMWAdvSE3PO
+7lsOSgqMlehp0tXPPLWV2nkIVK3TPlf4/OU/vpFyXyri4mgfWCsNVhE=</CounterSignature></Object></Signature></ObjectCollector>

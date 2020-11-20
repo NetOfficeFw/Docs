@@ -1,7 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?><OutlookLogging>
-  <Configuration ConfigName="Outlook Logging" ConfigVersion="2.0.1505.06" ChangeDescription="2.0.1505.06" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" Symptoms="1">
+  <Configuration ConfigName="Real-time Logging" ConfigVersion="2.0.1605.20" ChangeDescription="2.0.1605.20" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" Symptoms="1">
+    <Substitution Name="MAJORVERSION"/>
+    <Substitution Name="CSVFILENAME"/>
+    <Substitution Name="ETLFILENAME"/>
+    <Substitution Name="APPNAME"/>
+    <Substitution Name="SCENARIOID"/>
+    <ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+    <ObjectProcessor Name="CSV" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CSVObjectProcessor"/>
+    <ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+    <ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+    <ObjectProcessor Name="OFFX" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OffXFileObjectProcessor"/>
+    <ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+    <ObjectProcessor Name="ZipPackage" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.ZipPackageObjectProcessor"/>
   </Configuration>
-  <Scenario Name="Message stuck in the outbox" Version="15.0" ScenarioId="0">
+  <Object Type="Group" Name="Real-Time logging data" LogText="Collecting Real-time logging data" TrackProgress="TrackProgress">
+    <Setting Display="Hide"></Setting>
+    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\OffCAT" Key4="" Key5="Base" Display="Hide">
+      <Setting Key1="DataDirectory" Display="Hide">
+        <Rule Name="sOffcatDataDirectory" Query="$."></Rule>
+      </Setting>
+    </Object>
+    <Object Type="CSV" Key2="%CSVFILENAME%" Key4="True" Key5=";" Display="Hide">
+      <!--keeping it simple for now, if we want scenario specific rules, the Scenario name (or Id) is passed
+        as a global substitution. if needed in the future we could use restrictions-->
+      <Setting Key1="TimeStamp" Substitution="TIMESTAMP" Display="Hide"/>
+      <Setting Key1="Message" Substitution="MESSAGE" Display="Hide"/>
+      <Object Type="Group" Name="%TIMESTAMP%: %MESSAGE%">
+        <Setting Display="Hide"/>
+      </Object>
+    </Object>
+    <Object Type="OFFX" Key1="%CSVFILENAME%" Key2="RTL" Key3="text/plain" Key4="ADD" Key5="True"/>
+    <Rule Name="sCsvFileName" Query="substring('%CSVFILENAME%',string-length($sOffcatDataDirectory)+2)"></Rule>    
+    <!--should we prevent that if the file's too big or can we just rely on MaxFileSize set on the scenarios-->
+    <Object Type="OFFX" Key1="%ETLFILENAME%" Key2="RTL" Key3="application/etl" Key4="ADD" Key5="True"/>
+    <Rule Name="sEtlFileName" Query="substring('%ETLFILENAME%',string-length($sOffcatDataDirectory)+2)"></Rule>
+    <!--scenario specific collection-->
+    <Object Type="If" Key1="%SCENARIOID%=10">
+      <Object Type="ZipPackage" Key1="%LOCALAPPDATA%\Microsoft\Office\16.0\Wef" Key2="Subtree" Display="Hide">
+        <Object Type="OFFX" Key1="%TEMP%\Wef.zip" Key2="Agave" Key3="application/offcat" Key4="ADD" Key5="True"/>
+        <Rule Name="fWefZipFileAdded" Query="count(../Instance)&gt;0"></Rule>
+      </Object>
+    </Object>
+    <Rule Name="rtlfiles" Error="None" Query="true()" Title="Log files are available in this scan" P0="$sCsvFileName" P1="$sEtlFileName" P2="if($fWefZipFileAdded,' - Wef.zip','')" Text="Log files are available in this scan. Click the 'Configuration Details' tile and then select the 'Collected Log Files' tab to view the files collected during this scan.&#xA;&#xA; - {0}&#xA; - {1}&#xA;{2}" Symptoms="!_Log files created"></Rule>
+  </Object>
+  <Scenario Name="Message stuck in the outbox" Version="15.0" ScenarioId="0" Applications="Outlook">
     <Provider Name="CssTraceEventParser">
       <Keyword Name="CssOutbox" KeywordId="8" Level="Customer">
         <Event Name="CssOutboxEvtSendMessage" Level="Customer" Flag="None" Message="A message is being sent from Outlook"></Event>
@@ -75,7 +117,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Message stuck in the outbox" Version="16.0" ScenarioId="1">
+  <Scenario Name="Message stuck in the outbox" Version="16.0" ScenarioId="1" Applications="Outlook">
     <Provider Name="CssTraceEventParser">
       <Keyword Name="CssOutbox" KeywordId="8" Level="Customer">
         <Event Name="CssOutboxEvtSendMessage" Level="Customer" Flag="None" Message="A message is being sent from Outlook"></Event>
@@ -149,7 +191,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Junk Mail Decision Process" Version="14.0" ScenarioId="2">
+  <Scenario Name="Junk Mail Decision Process" Version="14.0" ScenarioId="2" Applications="Outlook">
     <Provider Name="OutlookTraceEventParser">
       <Keyword Name="Css" KeywordId="134217728" Level="Customer">
         <Event Name="CssEvtJunkAction" Level="Customer" Flag="None" Message="{0}">
@@ -209,7 +251,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Junk Mail Decision Process" Version="15.0" ScenarioId="3">
+  <Scenario Name="Junk Mail Decision Process" Version="15.0" ScenarioId="3" Applications="Outlook">
     <Provider Name="CssTraceEventParser">
       <Keyword Name="CssJunkmail" KeywordId="4" Level="Customer">
         <Event Name="CssEvtJunkAction" Level="Customer" Flag="None" Message="{0}">
@@ -275,7 +317,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Junk Mail Decision Process" Version="16.0" ScenarioId="4">
+  <Scenario Name="Junk Mail Decision Process" Version="16.0" ScenarioId="4" Applications="Outlook">
     <Provider Name="CssTraceEventParser">
       <Keyword Name="CssJunkmail" KeywordId="4" Level="Customer">
         <Event Name="CssEvtJunkAction" Level="Customer" Flag="None" Message="{0}">
@@ -360,7 +402,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Offline Address Book Download" Version="14.0" ScenarioId="5">
+  <Scenario Name="Offline Address Book Download" Version="14.0" ScenarioId="5" Applications="Outlook">
     <Provider Name="OutlookTraceEventParser">
       <Keyword Name="OAB" KeywordId="268435456" Level="Customer">
         <Event Name="EvtOABDownloadState" Level="Customer" Flag="None" Message="Download state = {0}">
@@ -455,7 +497,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Offline Address Book Download" Version="15.0" ScenarioId="6">
+  <Scenario Name="Offline Address Book Download" Version="15.0" ScenarioId="6" Applications="Outlook">
     <Provider Name="EmsmdbTraceEventParser" UnVersioned="True">
       <Keyword Name="OAB" KeywordId="2" Level="Customer">
         <Event Name="EmsmdbOabEvtAsyncDownload" Level="Customer" Flag="None" Message="Start asynchronous Offline Address Book download"></Event>
@@ -578,7 +620,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Offline Address Book Download" Version="16.0" ScenarioId="7">
+  <Scenario Name="Offline Address Book Download" Version="16.0" ScenarioId="7" Applications="Outlook">
     <Provider Name="EmsmdbTraceEventParser" UnVersioned="True">
       <Keyword Name="OAB" KeywordId="2" Level="Customer">
         <Event Name="EmsmdbOabEvtAsyncDownload" Level="Customer" Flag="None" Message="Start asynchronous Offline Address Book download"></Event>
@@ -701,7 +743,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Synchronization Issues" Version="15.0" ScenarioId="8">
+  <Scenario Name="Synchronization Issues" Version="15.0" ScenarioId="8" Applications="Outlook">
     <Provider Name="CssTraceEventParser">
       <Keyword Name="CssOutbox" KeywordId="8" Level="Customer">
         <Event Name="CssOutboxEvtSILog" Level="Customer" Flag="None" Message="{0}">
@@ -712,7 +754,7 @@
       </Keyword>
     </Provider>
   </Scenario>
-  <Scenario Name="Synchronization Issues" Version="16.0" ScenarioId="9">
+  <Scenario Name="Synchronization Issues" Version="16.0" ScenarioId="9" Applications="Outlook">
     <Provider Name="CssTraceEventParser">
       <Keyword Name="CssOutbox" KeywordId="8" Level="Customer">
         <Event Name="CssOutboxEvtSILog" Level="Customer" Flag="None" Message="{0}">
@@ -723,12 +765,28 @@
       </Keyword>
     </Provider>
   </Scenario>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>j/1aazhHpS65RpgsL0TdmL7rgM8=</DigestValue></Reference></SignedInfo><SignatureValue>
-    DggO3PYKjjhRtVpH7abvKfqGWMFAFrmMFpCvvTMkfmLGRVC051z5zZnIuuXMEpRAm+98uD6u
-    ZqnKuAHv0EUq5sTLYM7IeRjozJegUuYPDSiPlX2QqcSOM84uKw5rZTKsv3/DjcnU0vK+8Uvt
-    A7odLanOtAvWDyQDEqyhC4yOZH050JjjMFJ4Sr0DHiosC4fXp153DP9L/sauMHP9aMiz7j3U
-    WuEQ78Yvi7c8I/Q4DAV0XQBltiMShMjmG8LsHJ/o0cBp06SoX1kBydYCPNb3Hnr8dciO31pl
-    nSqq2E6K9wtstjnYCv5KZeSaakQWPllxgzAGVwXmWmCXT0XM0rXVew==
+  <Scenario Name="Office Add-in Issues" Version="16.0" ScenarioId="10" Applications="Outlook;Word;Excel;PowerPoint" MaxFileSize="5">
+    <Provider Name="O16.O16_OfficeLoggingLibletTraceEventParser" Level="Informational">
+      <Keyword Name="LoggingScope" KeywordId="0">
+        <Event Name="LoggingLibletInfo" Level="Exclude" Flag="Info" Message="{0}">
+        </Event>
+      </Keyword>
+    </Provider>
+  </Scenario>
+  <!--<Scenario Name="Mail App test" Version="Universal" ScenarioId="11" Applications="Mail" MaxFileSize="5">
+    <Provider Name="HxCommGlobalTraceEventParser" Unversionned="True" Level="VerboseAll">
+      <Keyword Name="Performance" KeywordId="2">
+        <Event Name="ScenarioStart" Level="Verbose" Flag="Info" Message="{0}"/>
+        <Event Name="ScenarioStop" Level="Verbose" Flag="Info" Message="{0}"/>
+      </Keyword>
+    </Provider>
+  </Scenario>-->
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>s7lky3ennjpvao4nrTQB5AFkmtU=</DigestValue></Reference></SignedInfo><SignatureValue>
+    OdXtxKlfhQlySohhjhlZIN00tFRt1TbYIjO9f0ugbjSweSKwmzXm9d+e/WlthseYOhPu8Uvg
+    Eu72TW4YrGhrdUUL/3qJqcM9N3joilebtuObDtOrSoYCsFy1v03Ua6xya4Te1S1K5r7oOa1x
+    ZgQJTzPwUoIXChniA9V605n1HHE06Qd0ssNVJoXybT14DYDcC0WEDksSZQwG58tqhElwEqON
+    j046yYfRBNehmQiQ8cI16evulv+/Fj1W19hci3QqwAO+qWZQ5sfaXx/QRDhCco8LTpMRC/Cx
+    aGEyc5Ybtx7cvOF6OBWgIggXgMrJNXeq87h73gLlq4z4lajC0pUt7Q==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -833,28 +891,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAALFpr8Q3a5GTXgAAAAAAsTANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI3WhcNMTcwODAzMTcxMzI3WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
-QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
-7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
-f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
-NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
-+7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAuB5CzdlupvWjSYQ/N2yCah7oUs5NBYH0s2RuWHAJXNOZEnRFmuBP
+BLSJhWsrspK9GahJ3FZuQEcq2+uBGpjBnZIWXVEzunBgIoUiL313gYGGe8u+/u1nbv0dZNzwijaA
+M2itgpwKvPBHv3Gqq8cFWzVRHTgO31lV4IA28ZhueAocWFNvLV9RkrXBpMwtvbwLqyA/ednmK4+E
+BfsgLbuGcUFS/wyAq7+ZhqUDq+LzHhFLl55V7iApITvmU6kNzZPtvY3QZVPmcq6K3IjwpV4bkr72
+9y+ndWZmfgvqlUvV78hV6zusR6zHiy/NJQH2w8LaPW1YIUZImWJ/jFAUqG7Q5QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFAGGI3nEkNLTKbg8V2lFYretn114MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
-d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
-5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
-lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
-IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
-vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAD3G
+M+JdCkrA5KQO5uQdsjwIqCLoJ/kTICat57wPtZA5nbP3NW05sObKPJtA18zQIXzaCWhXVLQ+S+D2
+L/zWJ1cMvHTM+BUxsdOOo+DwDNSFSjG6/0srv7YXigPkkN5jnHdxDmTWBd/TJaGzL+88Sa3uOayC
+xMi0VJB9DbARKRjs0vMxeIsffF7ZEFtWxmeH5CLPmuy5CJiVqo2EJw7qm/QOIX3pXbSAjwighcP5
+RN4li8n3F37B3nhUm05qNF9rIo1Hf7sWWHdwHvT6KHMl0MV/Np80Y2ofnGBNwxphl95bQE8C295+
+QbrEWxAYaQaqMbBgG8FS0uXOqRSYgaRSkpk=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -881,34 +939,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQAOCA7c9gqOOFG1Wkftpu8p+oZYwUAWuYwWkK+9MyR+YsZFULTnXPnNmci65cwSlECb73y4
-Pq5mqcq4Ae/QRSrmxMtgzsh5GOjMl6BS5g8NKI+VfZCpxI4zzi4rDmtlMqy/f8ONydTS8r7xS+0D
-uh0tqc60C9YPJAMSrKELjI5kfTnQmOMwUnhKvQMeKiwLh9enXncM/0v+xq4wc/1oyLPuPdRa4RDv
-xi+Ltzwj9DgMBXRdAGW2IxKEyOYbwuwcn+jRwGnTpKhfWQHJ1gI81vceevx1yI7fWmWdKqrYTor3
-C2y2OdgK/kpl5JpqRBY+WXGDMAZXBeZaYJdPRczStdV7oIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0wYJKoZIhvcNAQcCoIIGxDCCBsACAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQA51e3EqV+FCXJKiGGOGVkg3TS0VG3VNtgiM71/S6BuNLB5IrCbNeb13579aW2Gx5g6E+7x
+S+AS7vZNbhisaGt1RQv/eompwz03eOiKV5u245sO06tKhgKwXLW/TdRrrHJrhN7VLUrmvug5rXFm
+BAlPM/BSghcKGeID1XrTmfUccTTpB3Syw1UmhfJtPXgNgNwLRYQOSxJlDAbny2qESXASo42PTjrJ
+h9EE16GZCJDxwjXp6+6W/78WPVbX2FyLdCrAA76pZlDmx9pfH9BEOEJyjwtOkxEL8LFoYTJzlhu3
+Hty84Xo4FaAiCBeAysk1d6rzuHveAuWrjPiVqMLSlS3toIIDfKGCA3gwggJgAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
+Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAM9R4brIoF4Sym5kS7aEWeErck/aggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
-MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
-AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
-CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
-g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
-YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
-jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
-nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
-aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
-AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
-Fw0xNTA3MDkxNDQ3MjlaMCMGCSqGSIb3DQEJBDEWBBRvIAc4cRKogncPlWanGiZUaAHBdzANBgkq
-hkiG9w0BAQUFAASCAQA8Gq99Amzu8wWG69e7AoDKBct/C5PPzmjQqFlSrFDzP9yNLMSzZzFdlltD
-6VEWrNTNJf/kJriHnHqMGGHDw01eF1m6BZ3aUmAlKUMNzy5Hic6UTPduoF3Kx3cpyCjaRuUgD3yP
-h070Aaj1fiDcR9ZGmD+s6+dfaMbM1hnke25eNJYn8NszKBU4SIQFr12QcW4U2ij7n4gAR2SSb3Ow
-U66kmk999iZdly/677P8mTQD08pVapAd9MTYUI/6dNhY/JvYyHfE2QsK2X5IAa7HMZmAb9WkzVFr
-0C4vhG1pjT38268wkBe+9d3/wl55ycW74FjmgT/LyPrEr+yb7MCWaFkH</CounterSignature></Object></Signature></OutlookLogging>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/4cwIhgPMjAxNjA4MDExNzA0
+MDdaGA8yMDE2MDgwMjE3MDQwN1owdjA8BgorBgEEAYRZCgQBMS4wLDAKAgUA20n/hwIBADAJAgEA
+AgEgAgH/MAcCAQACAhhFMAoCBQDbS1EHAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkK
+AwGgCjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADzmycqYOkjMI4nM
+Eh8BXeCJwRmsEZF0pZdrfVyk1JDEIPKbTpX98nrosAMn7khtRPzyJbrvaVKDmDelQF38infAFG+r
+RIonmx0Z8n8oX48bgJjbWt2EBQkGq4L+sPfoKvZzigs65P5haO5nXAkihhh9Iq9MlSCxFZVxngjd
+DON8cbsM7YCNaJZTG5OAHr6X8J4H7U3vo+1KY+ZxLDn9CR7fVLheWvNdefwOeUYxJ0t1H72pLZg3
+OrFEk9+v1e658gMeZ23NFCiDmWwgoi6+MxJDNQMUUWXb4/Dplfuk9jg7ojZq+hlgx/Rh7U7l5mKh
+mKU41auRUhb3D17D+JXgxzAxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
+V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0
+aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACxaa/EN2uRk14AAAAA
+ALEwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFE58L8a43bUR3lG8sEuiAC58OZSyMA0GCSqG
+SIb3DQEBBQUABIIBAA+bfaq5iLdndyOkQePBX/q8vfXWrR006rtEVyxX0QOGypCYHwz8xb8N20X9
+pjfSfzfgigxVggypVllereQqtfOsPPKYMR46aTfYVCRP0JI9Z/+U1oyRG3YIS0wA1HoTXDlQ9ngv
+np2IOFe3OD2OGXNfzQG8wZrsEWYgvVFyqrMHjeI0fxitAEic8QW8dIJGDgssm/Jod56d4v18r2Qz
+6W4i4hFfYcfNwnPuPXK1EiAeWyVbY9W2a60H7xMDZRkz3pbnbQFLMIVG6dfXzi16EAJqwVQ3KFD+
+4wNv0rJnqNiEyDqCKBn0LNQCjFCeNRPO6pbNMiXAk/TtyCUqf96x4oo=</CounterSignature></Object></Signature></OutlookLogging>

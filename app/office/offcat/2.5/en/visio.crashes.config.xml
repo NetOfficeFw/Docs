@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Visio Crashes" ChangeDescription="2.0.1504.21" ConfigVersion="2.0.1504.21" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
+	<Configuration ConfigName="Visio Crashes" ChangeDescription="2.0.1605.23" ConfigVersion="2.0.1605.23" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"></Substitution>
 		<Substitution Name="INSTALLTYPE"></Substitution>
@@ -8,6 +8,7 @@
     <Substitution Name="MAXEVENTS"></Substitution>
 		<ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
 		<!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
 		<ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
 		<ObjectProcessor Name="Directory" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DirectoryObjectProcessor"/>
 		<ObjectProcessor Name="DsGet" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor"/>
@@ -34,6 +35,10 @@
 		<Setting Key1="Bitness" Substitution="APPBITNESS">
 			<Rule Name="bitness" Query="$."></Rule>
 		</Setting>
+    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Add" Key2="WOW6432NODECACHE" Key3="%WOW6432NODE%">
+    </Object>
+    <Object Type="Cache" Name="AppBitnessCache" Key1="Add" Key2="APPBITNESSCACHE" Key3="%APPBITNESS%">
+    </Object>
 		<Setting Key1="FullVersion">
 			<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
 			<Rule Name="nBuild" Query="substring-before(substring-after(string($.),concat($n2DigitVersion,'.0.')),'.')"></Rule>
@@ -54,30 +59,37 @@
       <Rule Name="nInstallType" Query="$."></Rule>
 		</Setting>
 	</Object>
-	<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
-		<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{5D502092-1543-4D9B-89FE-7B4364417CC6}">
-			<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
-				<Rule Name="SKU2013" Query="substring(string($.),11,4)"></Rule>
-				<Rule Name="ReleaseType2013" Query="substring(string($.),3,1)"></Rule>
-			</Setting>
-			<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-				<Setting Key1="ProductName" Display="Hide">
-				</Setting>
-			</Object>
-		</Object>
-	</Object>
-	<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
-		<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{7069FF90-1D63-4F85-A2AB-6F0D01C78D83}">
-			<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
-				<Rule Name="SKU201364" Query="substring(string($.),11,4)"></Rule>
-				<Rule Name="ReleaseType201364" Query="substring(string($.),3,1)"></Rule>
-			</Setting>
-			<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-				<Setting Key1="ProductName" Display="Hide">
-				</Setting>
-			</Object>
-		</Object>
-	</Object>
+  <Object Type="Cache" Name="AppBitnessCache" Key1="Dump" Key2="APPBITNESSCACHE" Display="Hide">
+    <Setting Key1="Val" Substitution="APPBITNESS" Display="Hide"></Setting>
+    <Object Type="Cache" Name="Wow6432NodeCache" Key1="Dump" Key2="WOW6432NODECACHE" Display="Hide">
+      <Setting Key1="Val" Substitution="WOW6432NODE" Display="Hide">
+      </Setting>
+      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{5D502092-1543-4D9B-89FE-7B4364417CC6}">
+          <Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+            <Rule Name="SKU2013" Query="substring(string($.),11,4)"></Rule>
+            <Rule Name="ReleaseType2013" Query="substring(string($.),3,1)"></Rule>
+          </Setting>
+          <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+            <Setting Key1="ProductName" Display="Hide">
+            </Setting>
+          </Object>
+        </Object>
+      </Object>
+      <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+        <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{7069FF90-1D63-4F85-A2AB-6F0D01C78D83}">
+          <Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+            <Rule Name="SKU201364" Query="substring(string($.),11,4)"></Rule>
+            <Rule Name="ReleaseType201364" Query="substring(string($.),3,1)"></Rule>
+          </Setting>
+          <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+            <Setting Key1="ProductName" Display="Hide">
+            </Setting>
+          </Object>
+        </Object>
+      </Object>
+    </Object>
+  </Object>
   
   <Type Name="VisioCrashes">
 
@@ -125,12 +137,16 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
 	<Rule Name="sWordVersion"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>OiSibGS/qH9JqkOmazyABsH2P4s=</DigestValue></Reference></SignedInfo><SignatureValue>
-    YMvTzvLHIEC83EqG1S2dq9is3TCTHayBVfKUrLbEpy4nIYkRBuUAEph7a1/Cyfw2GJbp6o4H
-    D0ba+PkWxwen8fwgx/eRRCzgZeNLGjPaZIZA8Z6DMjQtOzRJX5MvMdLbohlIdalqEFtjKgB4
-    GVg17A652HM/R0glGAM5rWJ8QIDx64Fli0CQrpB83uQbLAWdLYa0y7xdyLTCgPidPcbtkXBp
-    6qa/6/mDyDOT+j1QOnXyhFfT5bqZ2QmukllR5OSRsaORSFK0Yq5izyDRPwpzPvK2+CgEIEwU
-    iiRsuub3ZB8V6qXjHhQ4YO+la/V99iZ5SfazLKQ4SbkLK7bHnlGOZg==
+  <Rule Name="fPolicies"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>/dfxIQK2lMgQ9p7TiJBgnvHMt+8=</DigestValue></Reference></SignedInfo><SignatureValue>
+    LGxXHdGINdlYy3HFn4/xZnbR32c5hpILgWRpjC6JCFhPwpmnpGNMIVPUKE3qPwsHhz0VC/Lp
+    ZUy7So65aKkIfTpf6UkylJJrS+H8+oCYjyVmh1Q53gcws7xqCbHW6GLr1UAR49bccaWmHgIj
+    uXS06F1vuUAs2srQtWl+c1XT/wBzAEt87sToOrbjBxqLYfUdSCpqJSX23h00NTtwcZoUCBoI
+    J4v2VBRDyC6YwTCW+TqSatsazJ0ZfpjKQQDX4b90q3GO2rKl+g2IoHN5tY619Y4GVOw5gAs/
+    i58GMwI6nhG+2IjDq7OvSRD3zujCP9RQ54mzIuTFzBg94BhFkhafDg==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -235,28 +251,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAALFpr8Q3a5GTXgAAAAAAsTANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI3WhcNMTcwODAzMTcxMzI3WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
-QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
-7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
-f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
-NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
-+7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAuB5CzdlupvWjSYQ/N2yCah7oUs5NBYH0s2RuWHAJXNOZEnRFmuBP
+BLSJhWsrspK9GahJ3FZuQEcq2+uBGpjBnZIWXVEzunBgIoUiL313gYGGe8u+/u1nbv0dZNzwijaA
+M2itgpwKvPBHv3Gqq8cFWzVRHTgO31lV4IA28ZhueAocWFNvLV9RkrXBpMwtvbwLqyA/ednmK4+E
+BfsgLbuGcUFS/wyAq7+ZhqUDq+LzHhFLl55V7iApITvmU6kNzZPtvY3QZVPmcq6K3IjwpV4bkr72
+9y+ndWZmfgvqlUvV78hV6zusR6zHiy/NJQH2w8LaPW1YIUZImWJ/jFAUqG7Q5QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFAGGI3nEkNLTKbg8V2lFYretn114MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
-d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
-5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
-lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
-IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
-vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAD3G
+M+JdCkrA5KQO5uQdsjwIqCLoJ/kTICat57wPtZA5nbP3NW05sObKPJtA18zQIXzaCWhXVLQ+S+D2
+L/zWJ1cMvHTM+BUxsdOOo+DwDNSFSjG6/0srv7YXigPkkN5jnHdxDmTWBd/TJaGzL+88Sa3uOayC
+xMi0VJB9DbARKRjs0vMxeIsffF7ZEFtWxmeH5CLPmuy5CJiVqo2EJw7qm/QOIX3pXbSAjwighcP5
+RN4li8n3F37B3nhUm05qNF9rIo1Hf7sWWHdwHvT6KHMl0MV/Np80Y2ofnGBNwxphl95bQE8C295+
+QbrEWxAYaQaqMbBgG8FS0uXOqRSYgaRSkpk=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -283,34 +299,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQBgy9PO8scgQLzcSobVLZ2r2KzdMJMdrIFV8pSstsSnLichiREG5QASmHtrX8LJ/DYYlunq
-jgcPRtr4+RbHB6fx/CDH95FELOBl40saM9pkhkDxnoMyNC07NElfky8x0tuiGUh1qWoQW2MqAHgZ
-WDXsDrnYcz9HSCUYAzmtYnxAgPHrgWWLQJCukHze5BssBZ0thrTLvF3ItMKA+J09xu2RcGnqpr/r
-+YPIM5P6PVA6dfKEV9PlupnZCa6SWVHk5JGxo5FIUrRirmLPINE/CnM+8rb4KAQgTBSKJGy65vdk
-HxXqpeMeFDhg76Vr9X32JnlJ9rMspDhJuQsrtseeUY5moIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0wYJKoZIhvcNAQcCoIIGxDCCBsACAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQAsbFcd0Yg12VjLccWfj/FmdtHfZzmGkguBZGmMLokIWE/CmaekY0whU9QoTeo/CweHPRUL
+8ullTLtKjrloqQh9Ol/pSTKUkmtL4fz6gJiPJWaHVDneBzCzvGoJsdboYuvVQBHj1txxpaYeAiO5
+dLToXW+5QCzaytC1aX5zVdP/AHMAS3zuxOg6tuMHGoth9R1IKmolJfbeHTQ1O3BxmhQIGggni/ZU
+FEPILpjBMJb5OpJq2xrMnRl+mMpBANfhv3SrcY7asqX6DYigc3m1jrX1jgZU7DmACz+LnwYzAjqe
+Eb7YiMOrs69JEPfO6MI/1FDnibMi5MXMGD3gGEWSFp8OoIIDfKGCA3gwggJgAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
+Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAM9R4brIoF4Sym5kS7aEWeErck/aggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
-MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
-AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
-CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
-g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
-YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
-jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
-nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
-aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
-AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
-Fw0xNTA3MDkxNDQ3MjlaMCMGCSqGSIb3DQEJBDEWBBSlUVl6pdquJYE451zFho/VHy7QTjANBgkq
-hkiG9w0BAQUFAASCAQB+PiTyVTjvXOmfgb5brjGjFaH+55jwFduhqTY2RHSSMXhaDZGWhtsNU4QA
-ExXwwC3eZL+iR8+cemtqCbgi+EUIg3zzcc68P7cQD7kYCzIs2SnR3sHFsurzPR99xec9Sk3hx+zk
-ae45bqN5hqxvJ9VEItcQU2WXu3qNe6GKfMfhHUusQlWEtnsl+ABhCEOy+46g6LwnHCnL5tOF08jx
-4pJm1hAOseZjFsSpA6J3kqEKXw3/Fp8XsNOfdOskudd/DbFNo8ZKqExG6nex7/Uv4DPbC1gAAwJH
-0st+mQDx3gEOyfDnB1S2e0efbbKA7JpPsCDqhRaRoIsoefnzD4qrIsir</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/4cwIhgPMjAxNjA4MDExNzA0
+MDdaGA8yMDE2MDgwMjE3MDQwN1owdjA8BgorBgEEAYRZCgQBMS4wLDAKAgUA20n/hwIBADAJAgEA
+AgEgAgH/MAcCAQACAhhFMAoCBQDbS1EHAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkK
+AwGgCjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADzmycqYOkjMI4nM
+Eh8BXeCJwRmsEZF0pZdrfVyk1JDEIPKbTpX98nrosAMn7khtRPzyJbrvaVKDmDelQF38infAFG+r
+RIonmx0Z8n8oX48bgJjbWt2EBQkGq4L+sPfoKvZzigs65P5haO5nXAkihhh9Iq9MlSCxFZVxngjd
+DON8cbsM7YCNaJZTG5OAHr6X8J4H7U3vo+1KY+ZxLDn9CR7fVLheWvNdefwOeUYxJ0t1H72pLZg3
+OrFEk9+v1e658gMeZ23NFCiDmWwgoi6+MxJDNQMUUWXb4/Dplfuk9jg7ojZq+hlgx/Rh7U7l5mKh
+mKU41auRUhb3D17D+JXgxzAxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
+V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0
+aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACxaa/EN2uRk14AAAAA
+ALEwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDgwMTE3MjkzMlowIwYJKoZIhvcNAQkEMRYEFH08dBzLYvqU/lAMcZs7pUDfbGaMMA0GCSqG
+SIb3DQEBBQUABIIBAHHlA/wmvhL0vPqgUQUFHYxgNKCJwARNu51e4idzPUjMTaSiPuuRm26sE/dA
+eRL+UZc6ltYw98niWF+YmMsmjY7205HOJwoDE0M43gvYi1gc2nQCLO5Qv08yLcq3x7P2uW2nbYze
+72hJFO7t+u406f+qU+SjBIDOV3cw+N3YmBu6+l22HP3V0OqZN4DPQnJGukLEtle5u4A+X+N23jM3
+7feOJfcCulO6KeM2a1+sRgbrUq4xg4PXtTm9qbs2WhGMUnWj2yTCw2EpyWBZNOptrBdz97n4kvJN
+YIlHqr8jxSnYW7bSh1UgjzxbzDq/cZrHqtY6G/gJH2zED9xWfG1V0RM=</CounterSignature></Object></Signature></ObjectCollector>

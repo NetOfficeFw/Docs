@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="PowerPoint Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,powerpoint.crashes.config.xml" Symptoms="1">
+	<Configuration ConfigName="PowerPoint Configuration" ChangeDescription="2.0.1604.18" ConfigVersion="2.0.1604.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,powerpoint.crashes.config.xml" Symptoms="1">
 		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"/>
@@ -19,21 +19,30 @@
 		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
 		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
 		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
-		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
+    <ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
 		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
 		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
 		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
 		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
 		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
 		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
-		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
 	</Configuration>
 	<Object Type="Group" Name="PowerPoint Scan" Class="Scan Type" GroupingClass="True">
-		<!--OFFICE DETAILS-->
+    <Object Type="Cache" Name="APPNAMECACHE" Key1="Add" Key2="APPNAMECACHE" Key3="%APPNAME%"/>
+    <Reference Type="WindowsUpdatesScriptPt1" Name="WindowsUpdatesScriptPt1" File="common.config.xml"></Reference>
+    <!--OFFICE DETAILS-->
     <Object Type="Group" Name="Install details">
       <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="PowerPoint" Key6="powerpnt" Key7="%MAJORVERSION%">
         <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
         </Setting>
+        <Object Type="IfThenElse" Key1="'%WOW6432NODE%'=''" Key2="emptyval" Key3="%WOW6432NODE%">
+          <Setting Key1="wowcacheval" Substitution="WOWCACHEVAL" Display="Hide"/>
+          <Object Type="Cache" Name="wowcache" Key1="Add" Key2="wowcache" Key3="%WOWCACHEVAL%">
+          </Object>
+        </Object>
         <Setting Key1="Bitness" Substitution="APPBITNESS">
           <Rule Name="bitness" Query="$.">
           </Rule>
@@ -50,6 +59,7 @@
         </Setting>
         <Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
         </Setting>
+        <Object Type="Cache" Name="InstallPathCACHE" Key1="Add" Key2="INSTALLPATHCACHE" Key3="%INSTALLPATH%"/>
         <Object Type="File" Key2="%INSTALLPATH%\powerpnt.exe">
           <Setting Key1="Version"></Setting>
         </Object>
@@ -58,7 +68,7 @@
             <Rule Name="sPpCoreVersion" Query="$."></Rule>
             <Rule Name="sPowerPointPR" Query="number(substring($.,11,1))=3" Error="Error" P0="$sPpCoreVersion" Title="The build number for PpCore.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for PpCore.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please install the latest publicly available update." SSID="ccce9160-dac1-464f-b32f-4b10f7bda1b5" Symptoms="Configuration (unsupported or problematic)">
             </Rule>
-            <Rule Name="sPowerPoint16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with PowerPoint %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of PowerPoint (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="6b8f809f-6046-4a7b-86c9-9c92b06be397" Symptoms="_Alert from OffCAT"></Rule>
+            <!--Rule Name="sPowerPoint16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with PowerPoint %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of PowerPoint (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="6b8f809f-6046-4a7b-86c9-9c92b06be397" Symptoms="_Alert from OffCAT"></Rule-->
           </Setting>
         </Object>
         <Setting Key1="Version">
@@ -69,6 +79,7 @@
         <Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
         <Setting Key1="Type">
           <Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+          <Rule Name="f2016MSI" Query="$n4DigitSKUVersion='2016' and $.='MSI'"></Rule>
         </Setting>
         <!--SKU-->
         <Object Type="Group" Name="Office SKU">
@@ -110,7 +121,7 @@
                 <Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
                 </Setting>
                 <Object Type="If" Key1="contains('%PN%','Single Image')">
-                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
                     <Setting Key1="ID" Substitution="REGID" Display="Hide">
                     </Setting>
                     <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
@@ -137,7 +148,7 @@
                 <Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
                 </Setting>
                 <Object Type="If" Key1="contains('%PN%','Single Image')">
-                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
                     <Setting Key1="ID" Substitution="REGID" Display="Hide">
                     </Setting>
                     <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
@@ -291,6 +302,10 @@
         <Reference Type="MSO" Name="MSO" File="common.config.xml">
         </Reference>
         <!--/MSO-->
+        <!--ADALCSIDLL-->
+        <Reference Type="ADALCSIDLL" Name="ADALCSIDLL" File="common.config.xml">
+        </Reference>
+        <!--/ADALCSI-->
         <!--MSMapi32-->
         <Reference Type="MSMAPI32" Name="MSMAPI32" File="common.config.xml">
         </Reference>
@@ -299,6 +314,10 @@
         <Reference Type="OART" Name="OART" File="common.config.xml">
         </Reference>
         <!--/OART.dll-->
+        <!--Outlook.exe-->
+        <Reference Type="OUTLOOKVERSION" Name="OUTLOOKVERSION" File="common.config.xml">
+        </Reference>
+        <!--/Outlook.exe-->
       </Object>
       <!--INSTALLED UPDATES-->
       <Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
@@ -307,24 +326,30 @@
         </Object>
       </Object>
       <Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
-        <Object Type="Group" Name="ClickToRun Update Details" GroupingClass="True" Class="Office Update" Display="Right">
-          <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
-          </Reference>
+        <Object Type="Group" Name="ClickToRun Details" GroupingClass="True" Class="Office Update" Display="Right">
+          <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+            <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+            <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+            </Reference>
+          </Object>
         </Object>
       </Object>
       <!--/INSTALLED UPDATES-->
       <!--ADAL updates-->
       <Object Type="If" Key1="number('%MAJORVERSION%')=15">
-        <Object Type="Group" Name="Office 2013 Modern Authentication support">
+        <Object Type="Group" Name="Office 2013 Modern Authentication support for Office 365">
           <Object Type="Group" Name="Prerequisites" Display="Right">
             <Object Type="Group" Name="%APPNAME%" Display="Right">
               <Object Type="Group" Name="Hidden">
                 <Rule Name="fKB2965206Installed" Query="versioncompare($sPpCoreVersion,'15.0.4701.1001')" P0="if($fKB2965206Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2965206','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090"></Rule>
               </Object>
             </Object>
+            <Object Type="Cache" Name="InstallPathCACHE" Key1="Dump" Key2="INSTALLPATHCACHE" Display="Hide">
+              <Setting Key1="Val" Substitution="INSTALLPATH" Display="Hide"></Setting>
             <Reference Type="ADAL" Name="ADAL" File="common.config.xml">
             </Reference>
-            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($MachineDetails_KB2977629Installed and $fKB2965206Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P1="if($MachineDetails_KB2977629Installed,'Installed','Not Installed')" P2="if($fKB2965206Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;Windows update KB2977629 - {1}&#xA;%APPNAME% 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="ffbb417e-2dbd-4558-9cd8-7368f751615f" Symptoms="Modern Authentication for Office"></Rule>
+            </Object>
+            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($fKB2965206Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P2="if($fKB2965206Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" P4="'%APPNAME%'" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;{4} 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="70bf73ca-5f1a-4dae-8166-f0d21fff2f3d" Symptoms="Modern Authentication for Office 365"></Rule>
           </Object>
         </Object>
       </Object>
@@ -339,9 +364,12 @@
 		<!--/USER DETAILS-->
 		<!--MACHINE DETAILS-->
 		<Object Type="Group" Name="Machine Details">
-			<Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml">
-			</Reference>
-		</Object>
+			<Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml"></Reference>
+      <Reference Type="ServicesRunning" Name="ServicesRunning" File="common.config.xml"></Reference>
+      <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml"></Reference>
+      <Reference Type="WUDetails" Name="WUDetails" File="common.config.xml"></Reference>
+      <Reference Type="WindowsUpdatesToInstall" Name="WindowsUpdatesToInstall" File="common.config.xml"></Reference>
+    </Object>
 		<!--MACHINE DETAILS-->
 		<!--ADD-INS-->
 		<Object Type="Group" Name="Registered Add-ins" Class="Add-ins" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Registered Add-ins">
@@ -356,7 +384,7 @@
 						<Setting Key1="(Default)" Substitution="PDFMAKERPATH">
 						</Setting>
 						<Object Type="File" Key2="%PDFMAKERPATH%">
-							<Setting Key1="Version">&gt;
+							<Setting Key1="Version">
                 <Rule Name="sPDFMakerPowerPoint14" Query="$n2DigitVersion=14 and versioncompare($.,'10.0.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with PowerPoint. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="dee70b89-016d-4c22-a29d-ea65d3214bcc" Symptoms="Crash,Add-ins"></Rule>
                 <Rule Name="sPDFMakerPowerPoint14x64" Query="$n2DigitVersion=14 and $bitness='x64' and versioncompare($.,'10.1.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have ({0}) is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="6ec78a53-22a8-473a-9058-90cf76d4607f" Symptoms="Crash,Add-ins"></Rule>
                 <Rule Name="sPDFMakerPowerPoint15" Query="$n2DigitVersion=15 and versioncompare($.,'11.0.1.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with PowerPoint. Please update the add-in to version 11.0.1 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="e0973a7a-2a7a-47c3-b735-15cdbac0b6ca" Symptoms="Crash,Add-ins"></Rule>
@@ -446,6 +474,12 @@
 			</Object>
       </Object>
 			<!--/HKLM WOW addins-->
+      <!--HKLM C2R addins-->
+      <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+        <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+        <Reference Type="C2RAddins" Name="C2RAddins" File="common.config.xml"></Reference>
+      </Object>
+      <!--HKLM C2R addins-->
 			<!--RESILIENCY-->
 			<Object Type="Group" Name="Resiliency" Class="Add-ins" Display="Right">
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\PowerPoint\Resiliency" Display="Right">
@@ -458,7 +492,7 @@
 							<Setting Key1="Module" Display="Right"></Setting>
 							<Setting Key1="FriendlyName" Display="Right"></Setting>
 						</Object>
-						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="Add-ins have been automatically disabled because of performance or stability issues" Text="PowerPoint add-ins have been disabled due to performance or stability issues. To see the list of disabled add-ins, click the Configuration Details tile (above) and then search for 'Disabled Add-ins' using the Find feature." GUID="272802" SSID="d0a693c0-b372-4589-a2d9-9deb6b59fec1" Symptoms="Add-ins"></Rule>
+						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="Add-ins have been automatically disabled because of performance or stability issues" Text="PowerPoint add-ins have been disabled due to performance or stability issues. To see the list of disabled add-ins, click the Configuration Details tile (above) and then search for 'Disabled Add-ins' using the Find feature." GUID="272802" SSID="b52a536c-20e6-4746-9b80-b5d7c8967518" Symptoms="Add-ins"></Rule>
 					</Object>					
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\PowerPoint\Resiliency\DoNotDisableAddinList" Display="Right">
@@ -480,7 +514,10 @@
 		<!--/ADD-INS-->
 		<!--Problem Addins-->
 		<Object Type="Group" Name="Add-ins with known problems" GroupingClass="True" Class="ProblemAddins" TrackProgress="TrackProgress">
-			<Reference Type="CommonProbAddins" Name="CommonProbAddins" File="common.config.xml"></Reference>
+      <Object Type="Cache" Name="APPNAMECACHE" Key1="Dump" Key2="APPNAMECACHE" Display="Hide">
+	      <Setting Key1="AppNameVal" Substitution="APPNAME" Display="Hide"></Setting>
+			  <Reference Type="CommonProbAddins" Name="CommonProbAddins" File="common.config.xml"></Reference>
+      </Object>
 		</Object>
 		<!--/PROBLEM ADDINS-->
 		<!--REG SETTINGS-->
@@ -499,19 +536,19 @@
 					<Setting Key1="__VALUES">
 					</Setting>
 					<Setting Key1="DisableRobustifiedUNC">
-						<Rule Name="sDisableRobustifiedUNC" Query="$." Error="Warning" Title="DisableRobustifiedUNC=1" Text="This registry value is only intended for troubleshooting purpose and is not supported in production environment." GUID="" SSID="000b795b-9490-457f-9db0-ba5a8461633c" Symptoms="Configuration (unsupported or problematic)"/>
+						<Rule Name="sDisableRobustifiedUNC" Query="$." Error="Warning" Title="DisableRobustifiedUNC=1" Text="This registry value is only intended for troubleshooting purpose and is not supported in production environment." GUID="" SSID="e1bcf3df-fb6b-454d-be5b-3c159d5b8ace" Symptoms="Configuration (unsupported or problematic)"/>
 					</Setting>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\PowerPoint\Security\FileValidation" Display="Right">
 					<Setting Key1="Enable">
-						<Rule Name="sOfficeFileValidation" Query="$.=1 and $n2DigitVersion&lt;15" Error="None" Text="The Office File Validation (OFV) is installed on the computer and configured to load" Title="The Office File Validation (OFV) is installed on the computer. Because the add-in is configured to process files when they are opened, these files may open more slowly than when the OFV add-in is not installed." SSID="efe9b458-5d57-4e2e-ae83-4742d8bc3521" Symptoms="Informational"></Rule>
+						<Rule Name="sOfficeFileValidation" Query="$.=1 and $n2DigitVersion&lt;15" Error="None" Text="The Office File Validation (OFV) is installed on the computer and configured to load" Title="The Office File Validation (OFV) is installed on the computer. Because the add-in is configured to process files when they are opened, these files may open more slowly than when the OFV add-in is not installed." SSID="ca1683f6-5e93-43d6-b435-51a4bfd88129" Symptoms="Informational"></Rule>
 					</Setting>
 				</Object>
 				<!--common-->
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 					<Setting Key1="__VALUES"></Setting>
 					<Setting Key1="VBAOff">
-						<Rule Name="sHkcuVBAOff" Query="$.=1 and $HklmVBAOff=-1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA functionality is impaired or disabled (HKCU registry data)" Text="The VBAOff value in the HKCU registry hive is set to a value other than 0. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="4b17edd1-2a3f-42be-acfd-abf460a0f310" Symptoms="VBA"></Rule>
+						<Rule Name="sHkcuVBAOff" Query="$.=1 and $HklmVBAOff=-1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA functionality is impaired or disabled (HKCU registry data)" Text="The VBAOff value in the HKCU registry hive is set to a value other than 0. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="024698d3-a48f-4674-8d22-89f51dff9767" Symptoms="VBA"></Rule>
 					</Setting>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Key4="^((?!Identity)(?!Internet)(?!Logging)(?!OfficeStart)(?!Open Find)(?!Research)(?!Roaming)(?!ServicesManagerCache)(?!UserSidEmailMapping).)*$" Key5="Subtree" Key6="True" Display="Right">
@@ -544,7 +581,7 @@
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 					<Setting Key1="__VALUES"></Setting>
 					<Setting Key1="VBAOff">
-						<Rule Name="sHklmVBAOff" Query="$.=1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="Visual Basic for Applications is disabled (HKLM registry data)" Text="The VBAOff value = 1 in the registry under the HKLM hive. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="a7e01c21-78d8-4a10-b3d6-cbae9ffe2187" Symptoms="VBA"></Rule>
+						<Rule Name="sHklmVBAOff" Query="$.=1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="Visual Basic for Applications is disabled (HKLM registry data)" Text="The VBAOff value = 1 in the registry under the HKLM hive. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="dfb0be1a-7ef3-40df-92f0-dd47d2f719fc" Symptoms="VBA"></Rule>
 					</Setting>
 					<Rule Name="HklmVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 				</Object>
@@ -573,14 +610,14 @@
 			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 				<Setting Key1="__VALUES"></Setting>
 				<Setting Key1="VBAOff">
-					<Rule Name="sHkcuVBAOffPol" Query="$.=1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKCU" Text="The VBAOff value is set to a value other than 0 as a policy under HKCU. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="7e2b210a-d7b9-483c-8868-c29c347a6c8a" Symptoms="VBA"></Rule>
+					<Rule Name="sHkcuVBAOffPol" Query="$.=1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKCU" Text="The VBAOff value is set to a value other than 0 as a policy under HKCU. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="33270c82-c5e8-4987-86bd-d4634764b888" Symptoms="VBA"></Rule>
 				</Setting>
 				<Rule Name="HkcuVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 			</Object>
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 				<Setting Key1="__VALUES"></Setting>
 				<Setting Key1="VBAOff">
-					<Rule Name="sHklmVBAOffPol" Query="$.=1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKLM" Text="The VBAOff value is set to a value other than 0 as a policy under HKLM. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="110c76da-3fcf-405c-8b14-1db7b6eb1600" Symptoms="VBA"></Rule>
+					<Rule Name="sHklmVBAOffPol" Query="$.=1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKLM" Text="The VBAOff value is set to a value other than 0 as a policy under HKLM. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="5f6a52d2-63e6-4af3-9601-babdf125353a" Symptoms="VBA"></Rule>
 				</Setting>
 				<Rule Name="HklmVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 			</Object>
@@ -606,7 +643,7 @@
 				</Object>
 			</Object>
 			<Object Type="If" Key1="number('%MAJORVERSION%')&gt;12">
-				<Object Type="Group" Name="Microsoft Office Alerts" Class="Application Event Logs" GroupingClass="True" LogText="Collecting Microsoft Office Alerts" TrackProgress="TrackProgress">
+				<Object Type="Group" Name="Microsoft Office Alerts - %APPNAME%" Class="Application Event Logs" GroupingClass="True" LogText="Collecting Microsoft Office Alerts" TrackProgress="TrackProgress">
 					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Excel\Addins" Key5="Subtree" Display="Hide">
 						<Setting Key1="__KEYNAME" Display="Hide">
 						</Setting>
@@ -619,6 +656,22 @@
 						<Rule Name="sPPTPowerPivotError" Title="Error found in the Office Alerts log was caused by the PowerPivot add-in" Error="Warning" Query="../Instance/Setting[@Key1='Message']=true() and $fXlPowerPivot and $n2DigitVersion=14" Text="An error found in the Office Alerts log indicated a problem saving a PowerPoint file. This problem can occur when the PowerPivot add-in is enabled." GUID="285407" SSID="d98904cb-2081-4368-a61b-8cc0bd0bb9c8" Symptoms="PowerPivot,Error message,Event Log">
 						</Rule>
 					</Object>
+          <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="400762" Key5="1" Key7="14">
+            <Setting Key1="Message" Display="Right">
+            </Setting>
+            <Rule Name="nError400762Count" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'attempt to repair')])"></Rule>
+          </Object>
+          <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="400763" Key5="1" Key7="14">
+            <Setting Key1="Message" Display="Right">
+            </Setting>
+            <Rule Name="nError400763Count" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'read some content')])"></Rule>
+          </Object>
+          <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="400184" Key5="1" Key7="14">
+            <Setting Key1="Message" Display="Right">
+            </Setting>
+            <Rule Name="nError400184Count" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'controls on this presentation')])"></Rule>
+          </Object>
+          <Rule Name="nFlash1900185ErrorCount" Query="$nError400762Count + $nError400763Count + $nError400184Count"></Rule>
 				</Object>
 			</Object>
 		</Object>
@@ -633,43 +686,64 @@
 				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Interface\{9149349D-5A91-11CF-8700-00AA0060263B}" Display="Right">
 					<Setting Key1="(Default)" Key2=""/>
 					<Setting Key1="(Default)" Key2="Exists"/>
-					<Rule Name="sBadPPTInterfaceReg1" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='_Presentation') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness=$MachineDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="7c195dab-895c-460d-b4ae-99e42a8966c7" Symptoms="File Open error,Email attachments"/>
+					<Rule Name="sBadPPTInterfaceReg1" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='_Presentation') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness=$OSDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="7c195dab-895c-460d-b4ae-99e42a8966c7" Symptoms="File Open error,Email attachments"/>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Interface\{9149349D-5A91-11CF-8700-00AA0060263B}\ProxyStubClsid32">
 					<Setting Key1="(Default)" Key2=""/>
 					<Setting Key1="(Default)" Key2="Exists"/>
-					<Rule Name="sBadPPTInterfaceReg2" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='{00020424-0000-0000-C000-000000000046}') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness=$MachineDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="49f6696f-f10a-41fa-b9ba-1f971fe909fd" Symptoms="File Open error,Email attachments"/>
+					<Rule Name="sBadPPTInterfaceReg2" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='{00020424-0000-0000-C000-000000000046}') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness=$OSDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="49f6696f-f10a-41fa-b9ba-1f971fe909fd" Symptoms="File Open error,Email attachments"/>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Interface\{9149349D-5A91-11CF-8700-00AA0060263B}\TypeLib">
 					<Setting Key1="(Default)" Key2=""/>
 					<Setting Key1="(Default)" Key2="Exists"/>
 					<Setting Key1="Version" Key2=""/>
 					<Setting Key1="Version" Key2="Exists"/>
-					<Rule Name="sBadPPTInterfaceReg3" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='{91493440-5A91-11CF-8700-00AA0060263B}') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness=$MachineDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="b19bd319-f234-4bcc-bf84-7bcf00cbc5ff" Symptoms="File Open error,Email attachments"/>
-					<Rule Name="sBadPPTInterfaceReg4" Query="(((../Instance/Setting[@Key1='Version' and @Key2=''])=true() and ../Instance/Setting[@Key1='Version' and @Key2='']/Value!='2.a') or (../Instance/Setting[@Key1='Version' and @Key2=''])=false()) and $bitness=$MachineDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="19ca3e37-1c0d-490b-a45b-da02ac1a57a9" Symptoms="File Open error,Email attachments"/>
+					<Rule Name="sBadPPTInterfaceReg3" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='{91493440-5A91-11CF-8700-00AA0060263B}') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness=$OSDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="b19bd319-f234-4bcc-bf84-7bcf00cbc5ff" Symptoms="File Open error,Email attachments"/>
+					<Rule Name="sBadPPTInterfaceReg4" Query="(((../Instance/Setting[@Key1='Version' and @Key2=''])=true() and ../Instance/Setting[@Key1='Version' and @Key2='']/Value!='2.a') or (../Instance/Setting[@Key1='Version' and @Key2=''])=false()) and $bitness=$OSDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="19ca3e37-1c0d-490b-a45b-da02ac1a57a9" Symptoms="File Open error,Email attachments"/>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Wow6432Node\Interface\{9149349D-5A91-11CF-8700-00AA0060263B}">
 					<Setting Key1="(Default)" Key2=""/>
 					<Setting Key1="(Default)" Key2="Exists"/>
-					<Rule Name="sBadPPTInterfaceRegWow1" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='_Presentation') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness!=$MachineDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="fee2c9f8-4e8e-4444-8da9-1445670ffcf9" Symptoms="File Open error,Email attachments"/>
+					<Rule Name="sBadPPTInterfaceRegWow1" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='_Presentation') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness!=$OSDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="fee2c9f8-4e8e-4444-8da9-1445670ffcf9" Symptoms="File Open error,Email attachments"/>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Wow6432Node\Interface\{9149349D-5A91-11CF-8700-00AA0060263B}\ProxyStubClsid32">
 					<Setting Key1="(Default)" Key2=""/>
 					<Setting Key1="(Default)" Key2="Exists"/>
-					<Rule Name="sBadPPTInterfaceRegWow2" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='{00020424-0000-0000-C000-000000000046}') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness!=$MachineDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="2bee65d5-a7d9-4ba2-8dc5-a48538110bce" Symptoms="File Open error,Email attachments"/>
+					<Rule Name="sBadPPTInterfaceRegWow2" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='{00020424-0000-0000-C000-000000000046}') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness!=$OSDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="2bee65d5-a7d9-4ba2-8dc5-a48538110bce" Symptoms="File Open error,Email attachments"/>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Wow6432Node\Interface\{9149349D-5A91-11CF-8700-00AA0060263B}\TypeLib">
 					<Setting Key1="(Default)" Key2=""/>
 					<Setting Key1="(Default)" Key2="Exists"/>
 					<Setting Key1="Version" Key2=""/>
 					<Setting Key1="Version" Key2="Exists"/>
-					<Rule Name="sBadPPTInterfaceRegWow3" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='{91493440-5A91-11CF-8700-00AA0060263B}') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness!=$MachineDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="c1bf78e3-f8da-4b95-9355-858936a56e02" Symptoms="File Open error,Email attachments"/>
-					<Rule Name="sBadPPTInterfaceRegWow4" Query="(((../Instance/Setting[@Key1='Version' and @Key2=''])=true() and ../Instance/Setting[@Key1='Version' and @Key2='']/Value!='2.a') or (../Instance/Setting[@Key1='Version' and @Key2=''])=false()) and $bitness!=$MachineDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="d5ab5674-2a29-4f67-b20d-e70bf0f78f83" Symptoms="File Open error,Email attachments"/>
+					<Rule Name="sBadPPTInterfaceRegWow3" Query="(((../Instance/Setting[@Key1='(Default)' and @Key2=''])=true() and ../Instance/Setting[@Key1='(Default)' and @Key2='']/Value!='{91493440-5A91-11CF-8700-00AA0060263B}') or (../Instance/Setting[@Key1='(Default)' and @Key2=''])=false()) and $bitness!=$OSDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="c1bf78e3-f8da-4b95-9355-858936a56e02" Symptoms="File Open error,Email attachments"/>
+					<Rule Name="sBadPPTInterfaceRegWow4" Query="(((../Instance/Setting[@Key1='Version' and @Key2=''])=true() and ../Instance/Setting[@Key1='Version' and @Key2='']/Value!='2.a') or (../Instance/Setting[@Key1='Version' and @Key2=''])=false()) and $bitness!=$OSDetails_OSArchitecture and $n2DigitVersion=14" Error="Warning" Title="Missing registry information will prevent the opening of PowerPoint files in Protected View" Text="Registry information for PowerPoint is missing. You may not be able to open files in Protected View." GUID="273801" SSID="d5ab5674-2a29-4f67-b20d-e70bf0f78f83" Symptoms="File Open error,Email attachments"/>
 				</Object>
 			</Object>
 			<Reference Type="CommonMisc" Name="CommonMisc" File="common.config.xml">
 			</Reference>
+      <Object Type="Group" Name="Adobe Flash Player ActiveX control (Shockwave Flash Object)">
+        <Object Type="Engine">
+          <Setting Key1="EnvironmentVariable" Key2="WINDIR" Substitution="WINDIR" Display="Hide"></Setting>
+          <Object Type="File" Key2="%WINDIR%\System32\Macromed\Flash\Flash32_19_0_0_185.ocx">
+            <Setting Key1="Version"></Setting>
+            <Setting Key1="Exists">
+              <Rule Name="fFlash1000185Foundx86" Query="$.=1"></Rule>
+            </Setting>
+          </Object>
+          <Object Type="File" Key2="%WINDIR%\System32\Macromed\Flash\Flash64_19_0_0_185.ocx">
+            <Setting Key1="Version"></Setting>
+            <Setting Key1="Exists">
+              <Rule Name="fFlash1000185Foundx64" Query="$.=1"></Rule>
+            </Setting>
+          </Object>
+        </Object>
+        <Object Type="Group" Name="Hidden">
+          <Rule Name="sPptFlash1900185ControlError" Query="($fFlash1000185Foundx86 or $fFlash1000185Foundx64) and $nFlash1900185ErrorCount&gt;0" Error="Warning" Title="Error opening presentations that include a Flash control" Text="One or more errors indicating 'PowerPoint found a problem ...' or 'PowerPoint couldn't read some content ...' or 'Some controls can't be activated ...' were detected. These errors can occur when you open a presentation containing a Shockwave Flash Object control and you have Adobe Flash Player 19.0.0.185 installed.&#xA;&#xA;Please update your Adobe Flash Player or click the 'Click here ...' for information on this issue on the Adobe web site." GUID="627562" SSID="c4e6e602-7577-4036-9633-081a27dd3aeb" Symptoms="Error message,File Open error"></Rule>
+        </Object>
+      </Object>
 		</Object>
+    
 		<!--/MISCELLANEOUS-->
 	</Object>
 	<!--ALERTS-->
@@ -680,15 +754,17 @@
 	<!--EXTERNALREFS-->
 	<Rule Name="effectiveSlowBitrate"></Rule>
 	<Rule Name="sWordVersion"></Rule>
-  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
-  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
-  <Rule Name="fLync2013AddinFoundWow"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>jrzSegNZMU8uwRHi83x7uMEf1RI=</DigestValue></Reference></SignedInfo><SignatureValue>
-    IowLcuMHvG7b64gNHji2V2FHYnTbLX9VsKPcWpP1usRR5WXjWxzc0Ui0YNPVZZTDtb+XjrUe
-    Vf7qeJEAg6Vli9ojHhrhKEDmvjmj2JNd3jhP4SD8si3hBUXJyb7DlYwdrYCmuM8uHvNGiEZf
-    uzjoIOHbvOgVnhl/wGYh4XM+7E/U5nKzW8sPRsSePyW3+a6qpg0phXqmQ5HEyOwwYneLm3T9
-    WWX2o/r3yFY4l924kB5SEr5mFtIilccl6QFJb62ChJgMg+pXxsJXXTJ5Hh8ueWdJ6RkWTH3i
-    FLctUSXap7LwcdB/TkPzc2Ja11/lcRg0BbrxNaWRVyiMwSuePoTXIg==
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>3/iH3MhvFLvCc+YJ9FsaZfHnb6w=</DigestValue></Reference></SignedInfo><SignatureValue>
+    XbsNCuMlSrjQHuIp/fNYpc4rAVGFrMboSd8u8IwhJFBFAS5YKbbJOJt0NWum6HrNBH15xMKd
+    qmJIL0pIfR9vDFJRw2/304H4HBA2YR93o37O/68rpOPyFlA5auoaa4fQgXqaXRW+GQsRed8H
+    E8LImN2ia5VIBRSwBZFdwhuSns2gBocfLrEjF6Qt0jCpA26RcWpK48FD/G6E/MQYBNu/30LZ
+    WSlVFtsaZEQjgrR6V5GjYUpi+dVQtAY3WCF9TgmVLDFo16y0BzEzU7t1oaUd1hfB9GYW0bH1
+    yJPwwDhLFwMkbGdKTVM3yVeYVarZ2FmYmwb2TQFIBHaiGRVLhwf+Mg==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -793,28 +869,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHQNgGQOfWd9owAAAAAAdDANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA1WhcNMTYwNjIwMTczMjA1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
-MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEA4NFrifjVvo5YgN/jD+4M6zszXn3GnmZHP9AerBSCDRiftpwnIvG2
-hpREQXSJkW8X9t+Y5jbLX3iS6XJ+S7kExWIUc3HGf2NBW+tk8r1cVWJGzA9ewQnEr9nxvyV94Beg
-UO4lqkXl48Z+vxBZqcGPPtn77GQbY1u1p7jq681X6xtD9WWRv1D1+cEGvH2qzDfnBqmgzLH1M8wN
-ssh1ZgDRbTCTR8+OomdEXhoTf/McHucPncG8SPyBgW1UauJpE8bO9ZdnMmxIyhHCVjrW3Dpi9PwQ
-l2RIC4pc8RbClfDLYBukA5sMyfe7kr8Ac2czHKJ673VKGUZaDH6aW6A6HVQ16wIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFCUsOGYFtEU5DmC29u69PuDdr4wNMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEEG
-50j6xJHcMBMNInjC0iPTszPL+yYh1978CncY+4Nyzu/ULIaP4xXj1RICZ1xbN9MDe02RW0FTZgn9
-457fLHgJORo2HYqBocllfJx7kbIPSptB3cdEC2EFyUwu8rRrKKoIR+4IrGZUF1aQiMbpddAhEDh5
-yT+7VTDFpjmmU7/NXFbSThcUvGISy+lL8MWR3J2EypjWDttWFGht21OLMM+6J2V1oDFvk6N1EGDq
-qu7uduvljAup0655zzS+SR8i0MT1o+/zrjDcjohGI4ygqjyXrwfbdug2VN+Ls4mewOospGBr8d/D
-thI6rzM4elFxNTXm5AjiUZaC+b7hG4N8e2c=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -841,34 +917,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQAijAty4we8btvriA0eOLZXYUdidNstf1Wwo9xak/W6xFHlZeNbHNzRSLRg09VllMO1v5eO
-tR5V/up4kQCDpWWL2iMeGuEoQOa+OaPYk13eOE/hIPyyLeEFRcnJvsOVjB2tgKa4zy4e80aIRl+7
-OOgg4du86BWeGX/AZiHhcz7sT9TmcrNbyw9GxJ4/Jbf5rqqmDSmFeqZDkcTI7DBid4ubdP1ZZfaj
-+vfIVjiX3biQHlISvmYW0iKVxyXpAUlvrYKEmAyD6lfGwlddMnkeHy55Z0npGRZMfeIUty1RJdqn
-svBx0H9OQ/NzYlrXX+VxGDQFuvE1pZFXKIzBK54+hNcioIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0AYJKoZIhvcNAQcCoIIGwTCCBr0CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQBduw0K4yVKuNAe4in981ilzisBUYWsxuhJ3y7wjCEkUEUBLlgptsk4m3Q1a6boes0EfXnE
+wp2qYkgvSkh9H28MUlHDb/fTgfgcEDZhH3ejfs7/ryuk4/IWUDlq6hprh9CBeppdFb4ZCxF53wcT
+wsiY3aJrlUgFFLAFkV3CG5KezaAGhx8usSMXpC3SMKkDbpFxakrjwUP8boT8xBgE27/fQtlZKVUW
+2xpkRCOCtHpXkaNhSmL51VC0BjdYIX1OCZUsMWjXrLQHMTNTu3WhpR3WF8H0ZhbRsfXIk/DAOEsX
+AyRsZ0pNUzfJV5hVqtnYWZibBvZNAUgEdqIZFUuHB/4yoIIDeaGCA3UwggJdAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAlPdzZMzyO6SV17j1edQd119kEpuggcIwgb+k
+Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAVVOJIetMkgprira+lJqMuHewz+yggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlI9JcwIhgPMjAxNTA3MDkxMzI0
-MzlaGA8yMDE1MDcxMDEzMjQzOVowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2Uj0lwIBADAKAgEA
-AgInnwIB/zAHAgEAAgIaYTAKAgUA2UpGFwIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
-CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAJCwGlz7Z2Zd7l
-MmBUfQV4TY7bav1WJ2H9BeqlBMB+v4G1mNTbeCYH+XZkkVM/Acynhl9+9w1MXgx1543Ov2Q9v2M8
-NHlRSu4Au4+Hy2Zx4oIqmJIszWO97bqL/tMtid5x3mKXTt6GPjXx/2HYJESQiVEvEYygbU3tdqFa
-S7h7JnxsBbmh7cfXOdFq/fCL/q8NBly848EpLEOrXZ83rZaIJxfjUhpwrKZH6Wa9SHJks1rV/xwF
-gY50XdXRbmMJPvoCbCtdTSuW3kR9NEe1zZsQYFCKn69hBvZCwnR7tAn14BqbX2aU/PUgWzF2HuMa
-JegBkYRZOm+ZHnGB38s2KDHaMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAA
-AAB0MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
-Fw0xNTA3MDkxNDQ3MjlaMCMGCSqGSIb3DQEJBDEWBBTyuJl6iJLBjpAEuWL+6+0HcxzdATANBgkq
-hkiG9w0BAQUFAASCAQBhsWUHdQpTPIiHLZNFduA97q1RllA+xhG6llBWz3s+vg4yN1n5+YsdUhI2
-yo0ATXfjTmAysZrTeYqNpW5GgYLmghICioImkj1OhkO42IXdczWcjwzn66KbkaHBlF94Wmo9Fb0s
-uxZU6piwn9k6vH6BOXENgxq97EyJax357o+/qeqCBa5vowRSr+46S8XKzcUDnmCjEuZ90I/e8xC8
-+whrlkLHQn2pletmMl4HZ9bMq/IKMKGSMhAxoTaB5XHk0iGFC5e6R0i8G551M5dt6OlMEfAWas1W
-gUpgMlzToKdMUkefJPs6K9xmtmqGGMFMSedorKV6ZJbhPaFp4O7dKFzg</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/o4wIhgPMjAxNjA4MDExNjU5
+NThaGA8yMDE2MDgwMjE2NTk1OFowczA5BgorBgEEAYRZCgQBMSswKTAKAgUA20n+jgIBADAGAgEA
+AgECMAcCAQACAhg+MAoCBQDbS1AOAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkKAwGg
+CjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADW8Wc1X7wC6a6anLPjY
+Z2LaN5A9sqH61c4KUXHRWQ3NmrcTAt5MRePI0Rf9rcgxQdA/DPFaeCoOLMvfTtc1njNwsDsbcjp8
+p37u2Rr/E0WNFRoraruy1H8HEHx3Tev0SNGOKot7vdrkByf8qTKKOtA4EpEnH9SEuHYhDBN7SfW4
+qcWVmL5KhJDtvtQDqfPzMa7fL7ybRLblnfVnJD/dIz973Q0gS2aFre7EyRAkKlJVOy2m4J1kDXAG
+Z7GfdnVjTB0PDzILYM2HrdlGs0c6CsKLqUnB4H7oEQTVDXGJhjj02Nozcq4uEucHns5H3JS1puGO
+AwoOxcxZQYGdexa7AqUxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9u
+MSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACvU0d3bBvxowIAAAAAAK8w
+CQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE2
+MDgwMTE3MjkyN1owIwYJKoZIhvcNAQkEMRYEFIEN+XHJnMo3qwVQ94bG7HRqV8dvMA0GCSqGSIb3
+DQEBBQUABIIBAADG/w7vVfesfvxD8Ey4Zq2PsTFoP8RxIJPh1R26evz4cz+j7Bg0ZtG0H7+AcKK6
+QpyVVZIGgWYyoySINpoZGmPYljxoaxiujBVFYvNLRIIWC+TC6Ja94yryRnn6YrNiRwuIWkYMHOzd
+HNs5Gc5eZckE7uXLK6Q7JbflMzoD89YPYKu6zVmy0ijpGP9Lwy7dJlkRYrcgkD79gopVIfwRNCBC
+KP4HnddAk1z9AMcUniNbrh1cv0F/9EZEDWckPDvOug2DyjcVqvNQauEpUyg/tZNaSGKCIDlNrcww
+WNISjCKRDLJtAnzJpJJMhMEl6xcETvgk/vSnktMuSEbKTH81pqo=</CounterSignature></Object></Signature></ObjectCollector>

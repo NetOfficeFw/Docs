@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-  <Configuration ConfigName="CalCheck" ChangeDescription="2.0.1506.29" ConfigVersion="2.0.1506.29" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" Symptoms="1">
+  <Configuration ConfigName="CalCheck" ChangeDescription="2.0.1604.06" ConfigVersion="2.0.1604.06" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" Symptoms="1">
     <Substitution Name="BITNESS"></Substitution>
     <Substitution Name="CONFIG"></Substitution>
     <Substitution Name="MAJORVERSION"></Substitution>
     <Substitution Name="PROFILE"></Substitution>
+    <Substitution Name="SARA"></Substitution>
+    
     <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
     <ConfigPreprocessor Name="1 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
     <ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
@@ -14,8 +16,10 @@
     <ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
     <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
     <ObjectProcessor Name="CalCheckLog" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CalCheckLogObjectProcessor"/>
+    <ObjectProcessor Name="CSV" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CSVObjectProcessor"/>
     <ObjectProcessor Name="OFFX" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OffXFileObjectProcessor"/>
-    <Icon Bitmap="89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF610000000467414D410000B18F0BFC6105000000097048597300000EC300000EC301C76FA8640000001674455874536F667477617265007061696E742E6E657420342E303BE8F5690000009149444154384FAD91410A802010453D43D00D82B642DB4EE5613A49DBB65DA86D30FD31059191466DF1E08F7FFE30AA21A24F9C73161C600653D0963D319083E60D10D803AC37F6C4400E9A07708520C37A644F0CA4242166050BB8E39931EE44573D7F0C78AF20991A3040FF881218F07E639CE88B4AEDEB92A9D1BE8EA295FE0D4AA646FB3A8A56FA3728991A4D44E601ACA88F03211916DE0000000049454E44AE426082"></Icon>
+    <ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
+    <Icon Resolution="16" Bitmap="89504E470D0A1A0A0000000D4948445200000010000000110806000000D4AF2CC4000000017352474200AECE1CE90000000467414D410000B18F0BFC6105000000097048597300000EC300000EC301C76FA8640000011149444154384FAD92CD8A83400CC7FBCCFB047D123FD08B8A274117C13DE982228A8217F7E45E043F40BD78504949A805EB145BDA3F844948F29B909913DC294D5388A208DAB605C771A0EBBA6B86AD1DC0B22CE038EE6665595E336C6D00711C8320081086215455058AA280699AE43FD206208A22DDBA36D8B64D71922414B3B401CCF30CBAAED3CD6B739EE7E0BA2E789E473578623C4D13C5BB1D188601AAAAD20211501405489244FE6A182FCB42F53BC0388E300C03F9755DD354F82A68BEEF131C214DD3500D014E5FBF8776FEFEA786BEEF09C0F33C6459F62100267FFEBAC3330802D0348D9AF1A3A16E1360D1D1B92E5196E5ED1231F9CC0428E6333E3B014B2F4F70AFCF4CF08EDE04005C000FFDAAD978E886FE0000000049454E44AE426082"></Icon>
     <Options>
       <Option Name="OrganizerAddress" DefaultValue="true" Description="Check for Organizer email address (PR_SENT_REPRESENTING_EMAIL_ADDRESS)"></Option>
       <Option Name="OrganizerName" DefaultValue="true" Description="Check for Organizer display name (PR_SENT_REPRESENTING_NAME)"></Option>
@@ -81,70 +85,50 @@
 			</Setting>
 			<Setting Key1="EnvironmentVariable" Key2="TEMP" Substitution="TMPDIR" Display="Hide">
 			</Setting>
-      <Object Type="If" Key1="number('%MAJORVERSION%')&lt;16">
-        <Object Type="CommandLine" Name="Calcheck" Key2="&quot;%EXECDIR%\Tools\%BITNESS%\calcheck.exe&quot;" Key3="-P &quot;%PROFILE%&quot; -o &quot;%TMPDIR%&quot; -i &quot;%CONFIG%&quot; -e -C %MAJORVERSION%" Display="Hide" MaxTime="ALL,3">
+      <Object Type="XML" Key1="&lt;Vs&gt;&lt;V v='16'&gt;15&lt;/V&gt;&lt;V v='%MAJORVERSION%'&gt;%MAJORVERSION%&lt;/V&gt;&lt;/Vs&gt;" Key3="//V[@v='%MAJORVERSION%'][1]" Key4="STRING">
+        <Setting Key1="./text()" Substitution="CALCHECKVER"/>
+        <Object Type="CommandLine" Name="Calcheck" Key2="&quot;%EXECDIR%\Tools\%BITNESS%\calcheck.exe&quot;" Key3="-P &quot;%PROFILE%&quot; -o &quot;%TMPDIR%&quot; -i &quot;%CONFIG%&quot; -e -C %CALCHECKVER%" Display="Hide" MaxTime="ALL,3">
           <Setting Key1="ReturnValue" Display="Hide">
           </Setting>
+          <Object Type="If" Key1="number('%SARA%')=1">
+            <Object Type="CSV" Key2="%TMPDIR%\CalCheckErr.csv" Key4="True" Display="Hidden">
+              <Setting Key1="Subject" Key2="0" Substitution="COL0"/>
+              <Setting Key1="Location" Key2="1" Substitution="COL1"/>
+              <Setting Key1="Start TIme" Key2="2" Substitution="COL2"/>
+              <Setting Key1="End Time" Key2="3" Substitution="COL3"/>
+              <Setting Key1="Recurring" Key2="4" Substitution="COL4"/>
+              <Setting Key1="Organizer" Key2="5" Substitution="COL5"/>
+              <Setting Key1="Is Past Item" Key2="6" Substitution="COL6"/>
+              <Setting Key1="Errors and Warnings" Key2="7" Substitution="COL7"/>
+              <Setting Key1="Other Item Subject" Key2="8" Substitution="COL8"/>
+              <Setting Key1="Other Item Start" Key2="9" Substitution="COL9"/>
+              <Setting Key1="Other Item End" Key2="10" Substitution="COL10"/>
+              <Setting Key1="EntryID" Key2="11" Substitution="COL11"/>
+              <Setting Key1="ErrorNum" Key2="12" Substitution="COL12">
+                <Rule Name="sCalCheckSara" Query="true()" GUID="000000" SSID="{92FE73D1-6E47-4304-B33C-08B81EB9E608}" Title="{0}" Text="{7}" Error="Warning" SaraSvc="True" P0="'%COL0%'" P1="'%COL1%'" P2="'%COL2%'" P3="'%COL3%'" P4="'%COL4%'" P5="'%COL5%'" P6="'%COL6%'" P7="'%COL7%'" P8="'%COL8%'" P9="'%COL9%'" P10="'%COL10%'" P11="'%COL11%'" P12="'%COL12%'"/>
+              </Setting>
+            </Object>
+          </Object>
           <Object Type="OFFX" Key1="%TMPDIR%\CalCheckErr.csv" Key2="CalCheck" Key3="text/plain" Key4="ADD" Key5="True"/>
           <Object Type="CalCheckLog" Key1="%TMPDIR%\CalCheck.log">
             <Setting Key1="Errors">
-              <Rule Name="sCalcheckErrors15AndLower" Error="Error" Query="$. &gt; 0" Title="{0} issues of type 'Error' were found in your meetings and appointments" Text="The CalCheck tool scanned the meetings and appointments in your calendar and found {0} problems classified as an 'Error'.&#xA;&#xA;Click the orange 'Calendar Issues' tile at the top of this page to see how to fix these errors.&#xA;Note: the number of errors on the tile might be lower than the number reported here when two or more errors have been found for the same item" P0="$." Symptoms="Calendar"/>
+              <Rule Name="sCalcheckErrors" Error="Error" Query="$. &gt; 0" Title="{0} issues of type 'Error' were found in your meetings and appointments" Text="The CalCheck tool scanned the meetings and appointments in your calendar and found {0} problems classified as an 'Error'.&#xA;&#xA;Click the orange 'Calendar Issues' tile at the top of this page to see how to fix these errors.&#xA;Note: the number of errors on the tile might be lower than the number reported here when two or more errors have been found for the same item" P0="$." Symptoms="Calendar"/>
             </Setting>
             <Setting Key1="Warnings">
-              <Rule Name="sCalcheckWarnings15AndLower" Error="Warning" Query="$. &gt; 0" Title="{0} issues of type 'Warning' were found in your meetings and appointments" Text="The CalCheck tool scanned the meetings and appointments in your calendar and found {0} problems classified as a 'Warning'.&#xA;&#xA;Click the orange 'Calendar Issues' tile at the top of this page to see how to fix these warnings.&#xA;Note: the number of warnings on the tile might be lower than reported here when two or more warnings have been found for the same item." P0="$." Symptoms="Calendar"/>
+              <Rule Name="sCalcheckWarnings" Error="Warning" Query="$. &gt; 0" Title="{0} issues of type 'Warning' were found in your meetings and appointments" Text="The CalCheck tool scanned the meetings and appointments in your calendar and found {0} problems classified as a 'Warning'.&#xA;&#xA;Click the orange 'Calendar Issues' tile at the top of this page to see how to fix these warnings.&#xA;Note: the number of warnings on the tile might be lower than reported here when two or more warnings have been found for the same item." P0="$." Symptoms="Calendar"/>
             </Setting>
           </Object>
           <Object Type="OFFX" Key1="%TMPDIR%\CalCheck.log" Key2="CalCheck" Key3="text/plain" Key4="ADD" Key5="True"/>
         </Object>
-      </Object>
-      <Object Type="If" Key1="number('%MAJORVERSION%')&gt;15">
-        <Object Type="CommandLine" Name="Calcheck" Key2="&quot;%EXECDIR%\Tools\%BITNESS%\calcheck.exe&quot;" Key3="-P &quot;%PROFILE%&quot; -o &quot;%TMPDIR%&quot; -i &quot;%CONFIG%&quot; -e -C 15" Display="Hide" MaxTime="ALL,3">
-          <Setting Key1="ReturnValue" Display="Hide">
-          </Setting>
-          <Object Type="OFFX" Key1="%TMPDIR%\CalCheckErr.csv" Key2="CalCheck" Key3="text/plain" Key4="ADD" Key5="True"/>
-          <Object Type="CalCheckLog" Key1="%TMPDIR%\CalCheck.log">
-            <Setting Key1="Errors">
-              <Rule Name="sCalcheckErrors16AndAbove" Error="Error" Query="$. &gt; 0" Title="{0} issues of type 'Error' were found in your meetings and appointments" Text="The CalCheck tool scanned the meetings and appointments in your calendar and found {0} problems classified as an 'Error'.&#xA;&#xA;Click the orange 'Calendar Issues' tile at the top of this page to see how to fix these errors.&#xA;Note: the number of errors on the tile might be lower than the number reported here when two or more errors have been found for the same item" P0="$." Symptoms="Calendar"/>
-            </Setting>
-            <Setting Key1="Warnings">
-              <Rule Name="sCalcheckWarnings16AndAbove" Error="Warning" Query="$. &gt; 0" Title="{0} issues of type 'Warning' were found in your meetings and appointments" Text="The CalCheck tool scanned the meetings and appointments in your calendar and found {0} problems classified as a 'Warning'.&#xA;&#xA;Click the orange 'Calendar Issues' tile at the top of this page to see how to fix these warnings.&#xA;Note: the number of warnings on the tile might be lower than reported here when two or more warnings have been found for the same item." P0="$." Symptoms="Calendar"/>
-            </Setting>
-          </Object>
-          <Object Type="OFFX" Key1="%TMPDIR%\CalCheck.log" Key2="CalCheck" Key3="text/plain" Key4="ADD" Key5="True"/>
-        </Object>
-      </Object>
+      </Object>  
 		</Object>
 	</Object>
-  <!--<Object Type="Group" Name="Fixing calendar problems in '%PROFILE%' profile..." Class="Calendar Checking Tool" GroupingClass="True" Display="Hide" TrackProgress="TrackProgress" Option="FixMyCal">
-    <Object Type="GetComputerNameEx">
-      <Setting Key1="ComputerNameNetBIOS" Display="Hide"/>
-      <Setting Key1="ComputerNameDnsFullyQualified" Display="Hide"/>
-    </Object>
-    <Object Type="Engine" Display="Hide">
-      <Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide">
-      </Setting>
-      <Setting Key1="EnvironmentVariable" Key2="TEMP" Substitution="TMPDIR" Display="Hide">
-      </Setting>
-      <Object Type="If" Key1="number('%MAJORVERSION%')&lt;16">
-        <Object Type="CommandLine" Name="Calcheck" Key2="&quot;%EXECDIR%\Tools\%BITNESS%\calcheck.exe&quot;" Key3="-P &quot;%PROFILE%&quot; -o &quot;%TMPDIR%&quot; -i &quot;%CONFIG%&quot; -e -C %MAJORVERSION% -R -F" Display="Hide" MaxTime="ALL,3">
-          <Setting Key1="ReturnValue" Display="Hide"/>
-          <Object Type="OFFX" Key1="%TMPDIR%\CalCheck.log" Key2="CalCheck" Key3="text/plain" Key4="ADD" Key5="True"/>
-        </Object>
-      </Object>
-      <Object Type="If" Key1="number('%MAJORVERSION%')&gt;15">
-        <Object Type="CommandLine" Name="Calcheck" Key2="&quot;%EXECDIR%\Tools\%BITNESS%\calcheck.exe&quot;" Key3="-P &quot;%PROFILE%&quot; -o &quot;%TMPDIR%&quot; -i &quot;%CONFIG%&quot; -e -C 15 -F -R" Display="Hide" MaxTime="ALL,3">
-          <Setting Key1="ReturnValue" Display="Hide"/>
-          <Object Type="OFFX" Key1="%TMPDIR%\CalCheck.log" Key2="CalCheck" Key3="text/plain" Key4="ADD" Key5="True"/>
-        </Object>
-      </Object>
-    </Object>
-  </Object>-->
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>srVFxo24hsDb2eTsHuTDpB2QUDQ=</DigestValue></Reference></SignedInfo><SignatureValue>
-    eJ9zOxVApXnbjbusJGaEKHVB6ba6lvD8xVFTtE/RqXT/Csg0EFCMUSG0zVH1DVJBVUD89ixr
-    XsxjQAp/ViLhb+NoPExIyXrzCwwfZoZmkEPlycbdU9Q0N/S/a7W1HquIGAN82eNhvUSSlYWL
-    LRP2TagTgLoZqb5emf29B9rAjzdX9zzJkcQg1m29Td+d8rnPOdN8P70eJYJrXc5gs1dk9Auf
-    cTmSPGFWT/e2GNyu/JMSs72bN6G1fyheM9hFlKjlHDfP2b9mfBn2/7KoD9IeAGK7q1jt7/kl
-    NSVFQp8dh/sphe7Rv0Sa4fJ2R6xkDC7Tmt93nB2FHHrhPruGY3JOZw==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>pp8TYdlSZHecsS2cg4QobItqKIU=</DigestValue></Reference></SignedInfo><SignatureValue>
+    eBc7GGXL+C/FI/g7mSr89srhZM+M0G0vDA2ZAqjvN8ZFBBi1oUDw+sjx62jyv8RLjrly3Qpu
+    dt/SeMyWbTmCA7A9y93Tr1WgsEe3s4SogTV6B7JbxAclRObR8or10NgdzP+asua9jpHouXD9
+    VVQg9xNWpi9N0rxfqgnCPxlaKGOqxTgpqLk+temUweyE/kkvN6qfCNF2YKZpbqa5rdmlidlO
+    FkEyzshmkscPufdpgwvmkTNnrlyug/BwCHgdd22+nTx7hax+QG3SvaY9QyxkE2oJVgdd5GZi
+    nRU2yiylYu02xTER/T1jGgrDkFJE+HrFfUw6WO+R9DW2b7dhpeGZUA==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -249,28 +233,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
 dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
 QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
-7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
-f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
-NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
-+7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
-d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
-5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
-lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
-IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
-vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -297,34 +281,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQB4n3M7FUCleduNu6wkZoQodUHptrqW8PzFUVO0T9GpdP8KyDQQUIxRIbTNUfUNUkFVQPz2
-LGtezGNACn9WIuFv42g8TEjJevMLDB9mhmaQQ+XJxt1T1DQ39L9rtbUeq4gYA3zZ42G9RJKVhYst
-E/ZNqBOAuhmpvl6Z/b0H2sCPN1f3PMmRxCDWbb1N353yuc8503w/vR4lgmtdzmCzV2T0C59xOZI8
-YVZP97YY3K78kxKzvZs3obV/KF4z2EWUqOUcN8/Zv2Z8Gfb/sqgP0h4AYrurWO3v+SU1JUVCnx2H
-+ymF7tG/RJrh8nZHrGQMLtOa33ecHYUceuE+u4Zjck5noIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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
-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
+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
-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</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/o4wIhgPMjAxNjA4MDExNjU5
+NThaGA8yMDE2MDgwMjE2NTk1OFowczA5BgorBgEEAYRZCgQBMSswKTAKAgUA20n+jgIBADAGAgEA
+AgECMAcCAQACAhg+MAoCBQDbS1AOAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkKAwGg
+CjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADW8Wc1X7wC6a6anLPjY
+Z2LaN5A9sqH61c4KUXHRWQ3NmrcTAt5MRePI0Rf9rcgxQdA/DPFaeCoOLMvfTtc1njNwsDsbcjp8
+p37u2Rr/E0WNFRoraruy1H8HEHx3Tev0SNGOKot7vdrkByf8qTKKOtA4EpEnH9SEuHYhDBN7SfW4
+qcWVmL5KhJDtvtQDqfPzMa7fL7ybRLblnfVnJD/dIz973Q0gS2aFre7EyRAkKlJVOy2m4J1kDXAG
+Z7GfdnVjTB0PDzILYM2HrdlGs0c6CsKLqUnB4H7oEQTVDXGJhjj02Nozcq4uEucHns5H3JS1puGO
+AwoOxcxZQYGdexa7AqUxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9u
+MSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACvU0d3bBvxowIAAAAAAK8w
+CQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE2
+MDgwMTE3MjkyN1owIwYJKoZIhvcNAQkEMRYEFEhGaH1SMYoktSWUb9yd/yhrJva0MA0GCSqGSIb3
+DQEBBQUABIIBALUgeiQ1g/+t5gr9ffZAoMBxrpgiMuSvXRHqQXQnc2lkNtjvUXXIIv0HAkbK87vX
+f5q4rM6XdiJ03uhgE740phbrnq/S5IA3tzd+stXof6YMenrrEaVXWsv+fb4mMfahPDJ18jUzpExg
+WFvuRPEe/MGU3AqhYJUZoS0Hkv/+eZDsGQlkaOx0fyQv+HIWwBoMlhzvhlx0hitaUjXTlShuPx27
+WAjWFJlNelCYDc+4///VhClwMj7SppqOYt5wO2yh+Pzp87i5ZjZHSOUtguKH5Ww/30nxtOJGRwPL
+DuoS0R3T1iRwrK8XUdC7fkSjLGhIMRvVMY9nn9BEXhWLCxNFjOU=</CounterSignature></Object></Signature></ObjectCollector>

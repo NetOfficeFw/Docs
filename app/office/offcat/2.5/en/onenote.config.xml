@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="OneNote Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,onenote.crashes.config.xml" Symptoms="1">
+	<Configuration ConfigName="OneNote Configuration" ChangeDescription="2.0.1604.18" ConfigVersion="2.0.1604.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,onenote.crashes.config.xml" Symptoms="1">
     		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"></Substitution>
@@ -19,29 +19,37 @@
 		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
 		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
 		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
-		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
+    <ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
 		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
 		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
 		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
 		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
 		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
 		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
-		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
 	</Configuration>
 	<Object Type="Group" Name="OneNote Scan" Class="Scan Type" GroupingClass="True">
-		<!--OFFICE DETAILS-->
+    <Reference Type="WindowsUpdatesScriptPt1" Name="WindowsUpdatesScriptPt1" File="common.config.xml"></Reference>
+    <!--OFFICE DETAILS-->
 		<Object Type="Group" Name="Install details">
 			<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="OneNote" Key6="onenote" Key7="%MAJORVERSION%">
 				<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
 				</Setting>
-				<Setting Key1="Bitness" Substitution="APPBITNESS">
+        <Object Type="IfThenElse" Key1="'%WOW6432NODE%'=''" Key2="emptyval" Key3="%WOW6432NODE%">
+          <Setting Key1="wowcacheval" Substitution="WOWCACHEVAL" Display="Hide"/>
+          <Object Type="Cache" Name="wowcache" Key1="Add" Key2="wowcache" Key3="%WOWCACHEVAL%">
+          </Object>
+        </Object>
+        <Setting Key1="Bitness" Substitution="APPBITNESS">
 					<Rule Name="bitness" Query="$."></Rule>
 				</Setting>
 				<Setting Key1="FullVersion">
 					<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
 					<Rule Name="sFullAppVersion" Query="$.">
 					</Rule>
-          <Rule Name="sOneNote16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with OneNote %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of OneNote (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="7dd41c57-372c-49aa-83e8-c78d44b1eb74" Symptoms="_Alert from OffCAT"></Rule>
+          <!--Rule Name="sOneNote16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with OneNote %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of OneNote (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="7dd41c57-372c-49aa-83e8-c78d44b1eb74" Symptoms="_Alert from OffCAT"></Rule-->
         </Setting>
 				<Setting Key1="Name">
 					<Rule Name="appName" Query="$."></Rule>
@@ -50,6 +58,7 @@
 				</Setting>
 				<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
 				</Setting>
+        <Object Type="Cache" Name="InstallPathCACHE" Key1="Add" Key2="INSTALLPATHCACHE" Key3="%INSTALLPATH%"/>
 				<Setting Key1="Version">
 					<Rule Name="n4DigitSKUVersion" Query="$.">
 					</Rule>          
@@ -58,6 +67,7 @@
 				<Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
 				<Setting Key1="Type">
 					<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+          <Rule Name="f2016MSI" Query="$n4DigitSKUVersion='2016' and $.='MSI'"></Rule>
 				</Setting>
 				<!--SKU-->
 				<Object Type="Group" Name="Office SKU">
@@ -86,7 +96,7 @@
 								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
 								</Setting>
 								<Object Type="If" Key1="contains('%PN%','Single Image')">
-									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
 										<Setting Key1="ID" Substitution="REGID" Display="Hide">
 										</Setting>
 										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
@@ -108,7 +118,7 @@
 								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
 								</Setting>
 								<Object Type="If" Key1="contains('%PN%','Single Image')">
-									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
 										<Setting Key1="ID" Substitution="REGID" Display="Hide">
 										</Setting>
 										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
@@ -248,6 +258,10 @@
 				<Reference Type="MSO" Name="MSO" File="common.config.xml">
 				</Reference>
 				<!--/MSO-->
+        <!--ADALCSIDLL-->
+        <Reference Type="ADALCSIDLL" Name="ADALCSIDLL" File="common.config.xml">
+        </Reference>
+        <!--/ADALCSI-->
 				<!--OART.dll-->
 				<Reference Type="OART" Name="OART" File="common.config.xml">
 				</Reference>
@@ -260,9 +274,12 @@
 				</Object>
 			</Object>
 			<Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
-				<Object Type="Group" Name="ClickToRun Updates" GroupingClass="True" Class="Office Update" Display="Right">
-					<Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
-					</Reference>
+				<Object Type="Group" Name="ClickToRun Details" GroupingClass="True" Class="Office Update" Display="Right">
+          <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+            <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+            <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+            </Reference>
+          </Object>
 				</Object>
 			</Object>
 			<!--INSTALLED UPDATES-->
@@ -275,9 +292,12 @@
                 <Rule Name="fKB2956165Installed" Query="versioncompare($sFullAppVersion,'15.0.4701.1000')" P0="if($fKB2956165Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2956165','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090"></Rule>
               </Object>
             </Object>
+            <Object Type="Cache" Name="InstallPathCACHE" Key1="Dump" Key2="INSTALLPATHCACHE" Display="Hide">
+              <Setting Key1="Val" Substitution="INSTALLPATH" Display="Hide"></Setting>
             <Reference Type="ADAL" Name="ADAL" File="common.config.xml">
             </Reference>
-            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($MachineDetails_KB2977629Installed and $fKB2956165Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P1="if($MachineDetails_KB2977629Installed,'Installed','Not Installed')" P2="if($fKB2956165Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;Windows update KB2977629 - {1}&#xA;%APPNAME% 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="ffbb417e-2dbd-4558-9cd8-7368f751615f" Symptoms="Modern Authentication for Office"></Rule>
+            </Object>
+            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($fKB2956165Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P2="if($fKB2956165Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" P4="'%APPNAME%'" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;{4} 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="14ca4fdf-9720-456d-8dfa-a788c59c22c8" Symptoms="Modern Authentication for Office"></Rule>
           </Object>
         </Object>
       </Object>
@@ -292,7 +312,11 @@
 		<!--MACHINE DETAILS-->
 		<Object Type="Group" Name="Machine Details">
 			<Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml"></Reference>
-		</Object>
+      <Reference Type="ServicesRunning" Name="ServicesRunning" File="common.config.xml"></Reference>
+      <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml"></Reference>
+      <Reference Type="WUDetails" Name="WUDetails" File="common.config.xml"></Reference>
+      <Reference Type="WindowsUpdatesToInstall" Name="WindowsUpdatesToInstall" File="common.config.xml"></Reference>
+    </Object>
 		<!--/MACHINE DETAILS-->
 		<!--ADD-INS-->
 		<Object Type="Group" Name="Registered add-ins" GroupingClass="True">
@@ -332,7 +356,7 @@
 							<Setting Key1="Module" Display="Right"></Setting>
 							<Setting Key1="FriendlyName" Display="Right"></Setting>
 						</Object>
-						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="OneNote add-ins have been automatically disabled" Text="OneNote add-ins have been disabled due to performance or stability issues. Please see 'Registered add-ins' under Configuration Details for the list of disabled add-ins." GUID="272802" SSID="d0a693c0-b372-4589-a2d9-9deb6b59fec1" Symptoms="Add-ins"></Rule>
+						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="OneNote add-ins have been automatically disabled" Text="OneNote add-ins have been disabled due to performance or stability issues. Please see 'Registered add-ins' under Configuration Details for the list of disabled add-ins." GUID="272802" SSID="39fa02a6-f79b-4bc4-8824-e37be1ee3994" Symptoms="Add-ins"></Rule>
 					</Object>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\OneNote\Resiliency\DoNotDisableAddinList" Display="Right">
@@ -439,15 +463,18 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
 	<Rule Name="sWordVersion"></Rule>
-  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
-  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
-  <Rule Name="fLync2013AddinFoundWow"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>veWipXIf+0P90ZtHGuiiWAFhBWY=</DigestValue></Reference></SignedInfo><SignatureValue>
-    D87EQg6L6KKSGf54Havz83RMcbGcxg429gE4LyRw3kAonkLNbO7AsohU4SneGicVUgoMdnyi
-    YyLf9yN8pLGLIYVyGP7cUIA6HkpHNkst9yvzrOz2mxA7rhVdXIBLZkPLLT8IEuGQBufOLfGh
-    JCJqvwskYrwgUPb/WgnKuxOzKUtTGNzQ8qY5BpQznuQT4q5bPVxFNubfODAdI7U/2/LEzmV4
-    9E7llti/YoDVmw47TFLOcbvfBqEA/6i1G8dS5DMRl+fo4uFKvN2QHtDy5Yc8araabSqbHG43
-    44hBPmCUWpAqQHTM749hihb1hN3hytJjeeVkoqltkQJLVwF9HBJVkQ==
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+  <Rule Name="OUTLOOKVERSION_sOutlookExeVersion"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>x2KEF9yP83CQfZdswL4zamxsyK0=</DigestValue></Reference></SignedInfo><SignatureValue>
+    CNErS/r712D85T6eMtAZCidBN6jotUJzIKihgbl4VChy2iPdOnWdNsP8LammYHM7E26HSNdT
+    QibQUYFKKf3wBZUTmprFxoxGXtKtueLtgY+3m8f0mcPG6U4zoV6R5+5oIlWSKGoVO43NoN2G
+    vCi9HuTg0jz5E49WHLFvnSJA52H9RwlqYalxltH3fQ9ruZn0bkkwusGP8J05Yqufm1MR+W1D
+    w8rVsFboRKL0yzmofwxpaPyR9doQNvkXiG4HRS1ebB1NX3wSIMuzeOi5S8DAyCIH3IVEbwJI
+    iAXpe857fcCbt1llUI+kIwQimlvaxsySwbIwLJaL9FBDMbDwm/XG5w==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -552,28 +579,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHQNgGQOfWd9owAAAAAAdDANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA1WhcNMTYwNjIwMTczMjA1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
-MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEA4NFrifjVvo5YgN/jD+4M6zszXn3GnmZHP9AerBSCDRiftpwnIvG2
-hpREQXSJkW8X9t+Y5jbLX3iS6XJ+S7kExWIUc3HGf2NBW+tk8r1cVWJGzA9ewQnEr9nxvyV94Beg
-UO4lqkXl48Z+vxBZqcGPPtn77GQbY1u1p7jq681X6xtD9WWRv1D1+cEGvH2qzDfnBqmgzLH1M8wN
-ssh1ZgDRbTCTR8+OomdEXhoTf/McHucPncG8SPyBgW1UauJpE8bO9ZdnMmxIyhHCVjrW3Dpi9PwQ
-l2RIC4pc8RbClfDLYBukA5sMyfe7kr8Ac2czHKJ673VKGUZaDH6aW6A6HVQ16wIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFCUsOGYFtEU5DmC29u69PuDdr4wNMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEEG
-50j6xJHcMBMNInjC0iPTszPL+yYh1978CncY+4Nyzu/ULIaP4xXj1RICZ1xbN9MDe02RW0FTZgn9
-457fLHgJORo2HYqBocllfJx7kbIPSptB3cdEC2EFyUwu8rRrKKoIR+4IrGZUF1aQiMbpddAhEDh5
-yT+7VTDFpjmmU7/NXFbSThcUvGISy+lL8MWR3J2EypjWDttWFGht21OLMM+6J2V1oDFvk6N1EGDq
-qu7uduvljAup0655zzS+SR8i0MT1o+/zrjDcjohGI4ygqjyXrwfbdug2VN+Ls4mewOospGBr8d/D
-thI6rzM4elFxNTXm5AjiUZaC+b7hG4N8e2c=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -600,34 +627,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQAPzsRCDovoopIZ/ngdq/PzdExxsZzGDjb2ATgvJHDeQCieQs1s7sCyiFThKd4aJxVSCgx2
-fKJjIt/3I3yksYshhXIY/txQgDoeSkc2Sy33K/Os7PabEDuuFV1cgEtmQ8stPwgS4ZAG584t8aEk
-Imq/CyRivCBQ9v9aCcq7E7MpS1MY3NDypjkGlDOe5BPirls9XEU25t84MB0jtT/b8sTOZXj0TuWW
-2L9igNWbDjtMUs5xu98GoQD/qLUbx1LkMxGX5+ji4Uq83ZAe0PLlhzxqtpptKpscbjfjiEE+YJRa
-kCpAdMzvj2GKFvWE3eHK0mN55WSiqW2RAktXAX0cElWRoIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0AYJKoZIhvcNAQcCoIIGwTCCBr0CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQAI0StL+vvXYPzlPp4y0BkKJ0E3qOi1QnMgqKGBuXhUKHLaI906dZ02w/wtqaZgczsTbodI
+11NCJtBRgUop/fAFlROamsXGjEZe0q254u2Bj7ebx/SZw8bpTjOhXpHn7mgiVZIoahU7jc2g3Ya8
+KL0e5ODSPPkTj1YcsW+dIkDnYf1HCWphqXGW0fd9D2u5mfRuSTC6wY/wnTliq5+bUxH5bUPDytWw
+VuhEovTLOah/DGlo/JH12hA2+ReIbgdFLV5sHU1ffBIgy7N46LlLwMDIIgfchURvAkiIBel7znt9
+wJu3WWVQj6QjBCKaW9rGzJLBsjAslov0UEMxsPCb9cbnoIIDeaGCA3UwggJdAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAlPdzZMzyO6SV17j1edQd119kEpuggcIwgb+k
+Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAVVOJIetMkgprira+lJqMuHewz+yggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlI9JcwIhgPMjAxNTA3MDkxMzI0
-MzlaGA8yMDE1MDcxMDEzMjQzOVowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2Uj0lwIBADAKAgEA
-AgInnwIB/zAHAgEAAgIaYTAKAgUA2UpGFwIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
-CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAJCwGlz7Z2Zd7l
-MmBUfQV4TY7bav1WJ2H9BeqlBMB+v4G1mNTbeCYH+XZkkVM/Acynhl9+9w1MXgx1543Ov2Q9v2M8
-NHlRSu4Au4+Hy2Zx4oIqmJIszWO97bqL/tMtid5x3mKXTt6GPjXx/2HYJESQiVEvEYygbU3tdqFa
-S7h7JnxsBbmh7cfXOdFq/fCL/q8NBly848EpLEOrXZ83rZaIJxfjUhpwrKZH6Wa9SHJks1rV/xwF
-gY50XdXRbmMJPvoCbCtdTSuW3kR9NEe1zZsQYFCKn69hBvZCwnR7tAn14BqbX2aU/PUgWzF2HuMa
-JegBkYRZOm+ZHnGB38s2KDHaMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAA
-AAB0MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
-Fw0xNTA3MDkxNDQ3MjlaMCMGCSqGSIb3DQEJBDEWBBTvrsvMzNTD3I4LXGhZ2JuSCyEmbTANBgkq
-hkiG9w0BAQUFAASCAQDVUVu/3NZCa2c715vXDmWJusLrCzxqe4p1E+emYHCgPyAerUGDbaXxsgrj
-0StB8gLNZOf/8r7LaCUWG+3Cy4kBXKZEWD2i5e0tM8mXUppcR/PSLaGu+eI6ZPkbUQ+sz463vkVa
-1bAveAZCtxDHwyYIb0af+HYv5tB3mnA+Z8IL/Cibainkre1pR5Wwj/WFGg7b5cc5vk0OdQtk2K2K
-wSlM4VnHNVcLhAVhGtulWIy3/mtDjNBpbqTyfa/M3g/ST6d3wBIfN1SvgjJJSQJtRLRdTxvkN/Zf
-6YcS0sf9JnRDrDPA0oMjaaa/E2dt9HcCjsdYk6RCqiZLw6K1fj4uCWqn</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/o4wIhgPMjAxNjA4MDExNjU5
+NThaGA8yMDE2MDgwMjE2NTk1OFowczA5BgorBgEEAYRZCgQBMSswKTAKAgUA20n+jgIBADAGAgEA
+AgECMAcCAQACAhg+MAoCBQDbS1AOAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkKAwGg
+CjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADW8Wc1X7wC6a6anLPjY
+Z2LaN5A9sqH61c4KUXHRWQ3NmrcTAt5MRePI0Rf9rcgxQdA/DPFaeCoOLMvfTtc1njNwsDsbcjp8
+p37u2Rr/E0WNFRoraruy1H8HEHx3Tev0SNGOKot7vdrkByf8qTKKOtA4EpEnH9SEuHYhDBN7SfW4
+qcWVmL5KhJDtvtQDqfPzMa7fL7ybRLblnfVnJD/dIz973Q0gS2aFre7EyRAkKlJVOy2m4J1kDXAG
+Z7GfdnVjTB0PDzILYM2HrdlGs0c6CsKLqUnB4H7oEQTVDXGJhjj02Nozcq4uEucHns5H3JS1puGO
+AwoOxcxZQYGdexa7AqUxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9u
+MSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACvU0d3bBvxowIAAAAAAK8w
+CQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE2
+MDgwMTE3MjkyN1owIwYJKoZIhvcNAQkEMRYEFJGrfqjIkvE3CKnVaPu+CbdI5+eSMA0GCSqGSIb3
+DQEBBQUABIIBALbTJ4V6OvwtOYjiHUENyDlS8oUU7MK0fwULy7jBSYF0X7x9u6AdrwN6J19B7ynJ
+MHBrGbXg7D0Q/YgJAefSXsfRIp7uZacexLEAPIOZlw51OGGUHqiSuJpCnviLZifgEFvQRCpBy94x
+Iwt+mb2VeWds57JhjgvhjhsVllDeYByoQPJxA1M4p6lnlfSAJoAPlLhmhJyXU26mLhVfOYvf1dyJ
+qsTGpZp1TeDVb7Ru0fhsRbdwR0N7+QQ4Zo2L0e4hGJ3SmV7qXnv475i4zrfG+QHFsecBna/pkOje
+hW2i+EtMIGGOEAcilYV2hyopHBrQkx+HPWR4kJwCIsW+kRAG6c0=</CounterSignature></Object></Signature></ObjectCollector>

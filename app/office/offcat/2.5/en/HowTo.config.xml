@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><ArticleFeed Version="2.0.1501.20">
+<?xml version="1.0" encoding="utf-8"?><ArticleFeed Version="2.0.1507.02">
   <Application name="access" version="15">
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510553" Title="Training courses for Access 2013" imageMso="FunctionsInformationInsertGallery"/>
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510554" Title="What's new in Access 2013" imageMso="Help"/>
@@ -80,6 +80,7 @@
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510723" Title="More Help" imageMso="Info"/>
   </Application>
   <Application name="outlook" version="15" Cloud="true">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=617560" Title="Check for profile and connection problems" imageMso="ButtonTaskOfficeDiagnostic"/>
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510351" Title="How to recover deleted items" imageMso="AccessRecycleBin"/>
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510352" Title="Outlook .pst files - repair, open, import, export and create" imageMso="FileBackupDatabase"/>
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510353" Title="Export or back up messages, calendar, tasks, and contacts" imageMso="ExportSavedExports"/>
@@ -111,6 +112,7 @@
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510339" Title="More Help	Info" imageMso="Info"/>
   </Application>
   <Application name="outlook" version="14" Cloud="true">
+    <Article url="http://go.microsoft.com/fwlink/?LinkId=617560" Title="Check for profile and connection problems" imageMso="ButtonTaskOfficeDiagnostic"/>
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510362" Title="How to recover deleted items" imageMso="AccessRecycleBin"/>
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510363" Title="Outlook .pst files - repair, open, import, export and create" imageMso="FileBackupDatabase"/>
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510364" Title="Export or back up messages, calendar, tasks, and contacts" imageMso="ExportSavedExports"/>
@@ -225,12 +227,12 @@
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510788" Title="Create an organization chart" imageMso="OrganizationChartLayoutStandard"/>
     <Article url="http://go.microsoft.com/fwlink/?LinkId=510789" Title="More Help" imageMso="Info"/>
   </Application>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>EewkAHW4RWcvpAAyN18Xo4+9rHc=</DigestValue></Reference></SignedInfo><SignatureValue>
-    VkFGT7Y4p7WIdT10/Xl2CVX9iifMJk/D/rNx+4cySgFTENmN7B0eNp04h1ljuy87OrTwAFtI
-    xaivEvnWidRMRG7nh2o1hMp+jR28E0U4gqyzgPtayJeOfyoaDavmEcKwMQ2a23T/78dOUv55
-    meULuOxOcR7x7+g/oZHerWHp4n5hF+TKxRGoupdDVSomeAUNFfvTI6RcFALivGrsLE8jph7G
-    bGzhxDG5BfwUybUlg5BI2tGOWg3Invw0kHgIUGYA2/lhmmYjTDjdGkVDdSZ0pQisb1ib7G3y
-    0A2cpBuPzXqEjPCxCcR9Nzik35gFmILAfqfo87nXXEBg2BTCLck1pA==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>Bg1UJg+XgEWH4AsKhJomjOPhpEQ=</DigestValue></Reference></SignedInfo><SignatureValue>
+    LImE/gkUPyDX1eisXS4O6VmNkFN5DTVn4207I7M6WvKPDW6NaHP9D9Jm4xybmBCrP0wkQmEQ
+    D3Dm946TQ93Kd3QzAK2hx0dhjIzINOmxEcRQWILVVlLheiL1VDV6fKy9DSQj2hSSPSOa6JBF
+    VCj+Lx+vpOvB0D7RmR1Tp+oMAMHi8rsA6hhvLqD+UlDIZritqHsBAeVgRhfs50YICJcdBvTp
+    ppLbbJsM+Xk4rL0eHBn0O9JT4greCSu5IOQ66WFJCxzdbonZ9aBdsglzg2Aul5xne554SfP2
+    r6bFqaUYa2NI+JUUkqJr1XKOlLmCAJVBlHzVsW0x3d2IZB5EUWEKWA==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -335,28 +337,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHQNgGQOfWd9owAAAAAAdDANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA1WhcNMTYwNjIwMTczMjA1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
-MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEA4NFrifjVvo5YgN/jD+4M6zszXn3GnmZHP9AerBSCDRiftpwnIvG2
-hpREQXSJkW8X9t+Y5jbLX3iS6XJ+S7kExWIUc3HGf2NBW+tk8r1cVWJGzA9ewQnEr9nxvyV94Beg
-UO4lqkXl48Z+vxBZqcGPPtn77GQbY1u1p7jq681X6xtD9WWRv1D1+cEGvH2qzDfnBqmgzLH1M8wN
-ssh1ZgDRbTCTR8+OomdEXhoTf/McHucPncG8SPyBgW1UauJpE8bO9ZdnMmxIyhHCVjrW3Dpi9PwQ
-l2RIC4pc8RbClfDLYBukA5sMyfe7kr8Ac2czHKJ673VKGUZaDH6aW6A6HVQ16wIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFCUsOGYFtEU5DmC29u69PuDdr4wNMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEEG
-50j6xJHcMBMNInjC0iPTszPL+yYh1978CncY+4Nyzu/ULIaP4xXj1RICZ1xbN9MDe02RW0FTZgn9
-457fLHgJORo2HYqBocllfJx7kbIPSptB3cdEC2EFyUwu8rRrKKoIR+4IrGZUF1aQiMbpddAhEDh5
-yT+7VTDFpjmmU7/NXFbSThcUvGISy+lL8MWR3J2EypjWDttWFGht21OLMM+6J2V1oDFvk6N1EGDq
-qu7uduvljAup0655zzS+SR8i0MT1o+/zrjDcjohGI4ygqjyXrwfbdug2VN+Ls4mewOospGBr8d/D
-thI6rzM4elFxNTXm5AjiUZaC+b7hG4N8e2c=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -383,34 +385,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQBWQUZPtjintYh1PXT9eXYJVf2KJ8wmT8P+s3H7hzJKAVMQ2Y3sHR42nTiHWWO7Lzs6tPAA
-W0jFqK8S+daJ1ExEbueHajWEyn6NHbwTRTiCrLOA+1rIl45/KhoNq+YRwrAxDZrbdP/vx05S/nmZ
-5Qu47E5xHvHv6D+hkd6tYenifmEX5MrFEai6l0NVKiZ4BQ0V+9MjpFwUAuK8auwsTyOmHsZsbOHE
-MbkF/BTJtSWDkEja0Y5aDcie/DSQeAhQZgDb+WGaZiNMON0aRUN1JnSlCKxvWJvsbfLQDZykG4/N
-eoSM8LEJxH03OKTfmAWYgsB+p+jzuddcQGDYFMItyTWkoIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0AYJKoZIhvcNAQcCoIIGwTCCBr0CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQAsiYT+CRQ/INfV6KxdLg7pWY2QU3kNNWfjbTsjszpa8o8Nbo1oc/0P0mbjHJuYEKs/TCRC
+YRAPcOb3jpND3cp3dDMAraHHR2GMjMg06bERxFBYgtVWUuF6IvVUNXp8rL0NJCPaFJI9I5rokEVU
+KP4vH6+k68HQPtGZHVOn6gwAweLyuwDqGG8uoP5SUMhmuK2oewEB5WBGF+znRggIlx0G9Ommktts
+mwz5eTisvR4cGfQ70lPiCt4JK7kg5DrpYUkLHN1uidn1oF2yCXODYC6XnGd7nnhJ8/avpsWppRhr
+Y0j4lRSSomvVco6UuYIAlUGUfNWxbTHd3YhkHkRRYQpYoIIDeaGCA3UwggJdAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAlPdzZMzyO6SV17j1edQd119kEpuggcIwgb+k
+Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAVVOJIetMkgprira+lJqMuHewz+yggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlI9JcwIhgPMjAxNTA3MDkxMzI0
-MzlaGA8yMDE1MDcxMDEzMjQzOVowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2Uj0lwIBADAKAgEA
-AgInnwIB/zAHAgEAAgIaYTAKAgUA2UpGFwIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
-CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAJCwGlz7Z2Zd7l
-MmBUfQV4TY7bav1WJ2H9BeqlBMB+v4G1mNTbeCYH+XZkkVM/Acynhl9+9w1MXgx1543Ov2Q9v2M8
-NHlRSu4Au4+Hy2Zx4oIqmJIszWO97bqL/tMtid5x3mKXTt6GPjXx/2HYJESQiVEvEYygbU3tdqFa
-S7h7JnxsBbmh7cfXOdFq/fCL/q8NBly848EpLEOrXZ83rZaIJxfjUhpwrKZH6Wa9SHJks1rV/xwF
-gY50XdXRbmMJPvoCbCtdTSuW3kR9NEe1zZsQYFCKn69hBvZCwnR7tAn14BqbX2aU/PUgWzF2HuMa
-JegBkYRZOm+ZHnGB38s2KDHaMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAA
-AAB0MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
-Fw0xNTA3MDkxNDQ3MjhaMCMGCSqGSIb3DQEJBDEWBBS9OqpcDSAWSMyqMpG5pyVf/WoBTTANBgkq
-hkiG9w0BAQUFAASCAQBC6ulBAScSEINVQwjmGmY2TQW+x+U+aAGWjW8lGK2R37oFfM1PQDOii2N9
-Zxy0PcAsRJBBKzmGK7Kgw1DjGHXJAS6VDXRmte3oFDBU7HsI0XZB+Ls/kjhnpR6RY6nTmWkncRQl
-BDxdFhDYoEaJ146odw0zP5KU1fA6BjzSimVIQz09HsUK994d5XZv8xdF/lruPkK06cX9ZTlljoBa
-0xpC/Js456gLOLl/1VWo+XST4CDEP2RXrukjs0lQSR0F6/oVnacegSdF8CD8iiPNPg5kF8XEHauU
-2jI1Rt9E/bp+5s86B54zNz/xwDyBYP/e6Ek+SFluOj4shamEnABL4m2+</CounterSignature></Object></Signature></ArticleFeed>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/o4wIhgPMjAxNjA4MDExNjU5
+NThaGA8yMDE2MDgwMjE2NTk1OFowczA5BgorBgEEAYRZCgQBMSswKTAKAgUA20n+jgIBADAGAgEA
+AgECMAcCAQACAhg+MAoCBQDbS1AOAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkKAwGg
+CjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADW8Wc1X7wC6a6anLPjY
+Z2LaN5A9sqH61c4KUXHRWQ3NmrcTAt5MRePI0Rf9rcgxQdA/DPFaeCoOLMvfTtc1njNwsDsbcjp8
+p37u2Rr/E0WNFRoraruy1H8HEHx3Tev0SNGOKot7vdrkByf8qTKKOtA4EpEnH9SEuHYhDBN7SfW4
+qcWVmL5KhJDtvtQDqfPzMa7fL7ybRLblnfVnJD/dIz973Q0gS2aFre7EyRAkKlJVOy2m4J1kDXAG
+Z7GfdnVjTB0PDzILYM2HrdlGs0c6CsKLqUnB4H7oEQTVDXGJhjj02Nozcq4uEucHns5H3JS1puGO
+AwoOxcxZQYGdexa7AqUxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9u
+MSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACvU0d3bBvxowIAAAAAAK8w
+CQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE2
+MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFDJkkcHgQNeaFnKXi4PNvJb1j1cBMA0GCSqGSIb3
+DQEBBQUABIIBAFHgNQtrfSDgoYrOrTFqT6Pk3m1tneGtBg0xZa81zQRZ6oroDA9adeJzyhA/neJE
+72U8QzkYtCvsotUUwTne5Xzz/froD6UU7zgWKq1Wdo3/N4P/XA/sr1pU2RLuLOAfurxOFA9unYmu
+IV1s01c8BnbMaCrQwn+PkV+H84KDdAAHLts9GmzkBe9WutNJeiZUUbawgUkeNyGTbE3dJR+on1tE
+IlRruSfRx3OE+2ZYSy0P7rF97iLJNkplJixBFm8Qc2wLm6AW+jwIgxUCf6TCATaZ1xu0cbElZNON
+h1ppruFsWME5oHQtw2juBmm4VlAgTgdgPfj10JS17gj7/xJOaTA=</CounterSignature></Object></Signature></ArticleFeed>

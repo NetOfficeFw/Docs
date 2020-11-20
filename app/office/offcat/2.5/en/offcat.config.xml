@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="OffCAT Master Configuration File" ConfigVersion="2.0.1506.29" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" ChangeDescription="2.0.1506.29" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" PH="1" ReferencedFiles="access.config.xml,all.config.xml,calcheck.config.xml,common.config.xml,communicator.config.xml,excel.config.xml,infopath.config.xml,kms.config.xml,lync.config.xml,officeupdates.config.xml,onedrive.config.xml,onenote.config.xml,outlook.config.xml,outlook.logging.config.xml,publisher.config.xml,powerpoint.config.xml,visio.config.xml,word.config.xml">
+	<Configuration ConfigName="OffCAT Master Configuration File" ConfigVersion="2.0.1604.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" ChangeDescription="2.0.1604.18" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" PH="1" ReferencedFiles="access.config.xml,all.config.xml,calcheck.config.xml,common.config.xml,communicator.config.xml,excel.config.xml,infopath.config.xml,kms.config.xml,lync.config.xml,officeupdates.config.xml,onedrive.config.xml,onenote.config.xml,outlook.config.xml,outlook.autodiscover.config.xml,outlook.logging.config.xml,outlook.search.config.xml,outlook.uptodate.config.xml,publisher.config.xml,powerpoint.config.xml,roiscan.config.xml,visio.config.xml,word.config.xml">
 	</Configuration>
 	<OfficeReleases>
     <OfficeRelease MajorMinorVersion="11.0" GUID="{BC174BAD-2F53-4855-A1D5-0D575C19B1EA}" SKUVersion="2003" OutlookPIAGUID="{14D3E42A-A318-4D77-9895-A7EE585EFC3B}">
@@ -86,12 +86,601 @@
     <!--<OfficeAlert StartDate="2013/10/22" EndDate="2015/12/6" Name="endofsupportXP" OfficeVersions="16.0" OffCATVersion="1.9.1413.2201" Title="Support for Windows XP ended on April 8, 2014"  Text="The support for Windows XP ended on April 8, 2014. After this date, there will be no new updates (security or non-security) or assisted support options (free or paid)." Severity="Warning" MoreInfoURL="389060"></OfficeAlert>-->
     <OfficeAlert StartDate="1601/1/1" EndDate="1601/1/1" OffCATVersion="2.0.0.0" Name="OutDatedAlert" Title="Your OffCAT configuration files may be out of date by more than {0} days" Text="The most accurate OffCAT scans are performed with the latest rules. Please click the link below to update your OffCAT configuration files." Severity="Warning" MoreInfoURL="OutDatedAlert"></OfficeAlert>
 </OfficeAlerts>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>CGFUeGEUnTuGLtWeCMdXFl80XN8=</DigestValue></Reference></SignedInfo><SignatureValue>
-    Ph/SRrpPYSv49Dy6sU/b4EKSLqBR7t36d3pVKezT2pGZi+POLdjxO6R4YVEZYmqPVYxvU5Ck
-    ciOVvHJR8zBr0q+QV6catwY57qImUCmg2vfWZhD9zwutGFTCFDDfk1l3gUED7+o0VW/MlXg6
-    Ji9gtizzAANT7dYbTQ/W1x241BH0NNJ5EH+OUEcxdNFjVwPReo/MaCNizDyKLjfb+PItXmgt
-    ncFAGbLZZfABTphRnTVbj1y8pnO9goRtD84QKEpW6sUzANnzJ0/n52EigHwz0sJUDTwxNDkb
-    3RpEwP4ohNpuwKHqKtrTdfQojUdk26nUD9BUorVKrveR2IFwSrbOjQ==
+  <ConfigurationSummaryStylesheet>
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl">
+      <xsl:output method="text" indent="no"/>
+      <xsl:strip-space elements="*"/>
+      <xsl:variable name="lineBreak">
+        <xsl:text>
+</xsl:text>
+      </xsl:variable>
+      <xsl:variable name="threeTabs">
+        <xsl:text>
+			</xsl:text>
+      </xsl:variable>
+      <xsl:variable name="twoTabs">
+        <xsl:text>
+		</xsl:text>
+      </xsl:variable>
+      <xsl:variable name="oneTab">
+        <xsl:text>
+	</xsl:text>
+      </xsl:variable>
+      <xsl:template match="/">
+        <xsl:variable name="scanApp" select="translate(//Run/@ScannedApp,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+        <xsl:call-template name="WindowsInfo"/>
+        <xsl:call-template name="HardwareInfo"/>
+        <xsl:call-template name="UserInfo"/>
+        <xsl:call-template name="SoftwareInfo"/>
+        <xsl:choose>
+          <xsl:when test="contains('ACCESS;LYNC;SKYPE',$scanApp)">
+            <xsl:call-template name="OfficeInfo"/>
+            <xsl:call-template name="BuildInfo">
+              <xsl:with-param name="scannedApp" select="$scanApp"/>
+            </xsl:call-template>
+            <xsl:call-template name="MSOInfo"/>
+            <xsl:call-template name="C2RInfo"/>
+          </xsl:when>
+          <xsl:when test="contains('EXCEL',$scanApp)">
+            <xsl:call-template name="OfficeInfo"/>
+            <xsl:call-template name="BuildInfo">
+              <xsl:with-param name="scannedApp" select="$scanApp"/>
+            </xsl:call-template>
+            <xsl:call-template name="MSOInfo"/>
+            <xsl:call-template name="OartInfo"/>
+            <xsl:call-template name="C2RInfo"/>
+            <xsl:call-template name="RegisteredAddinsInfo"/>
+            <xsl:call-template name="ExcelAdditionalInfo"/>
+          </xsl:when>
+          <xsl:when test="contains('OUTLOOK',$scanApp)">
+            <xsl:call-template name="OfficeInfo"/>
+            <xsl:call-template name="OutlookBuildInfo"/>
+            <xsl:call-template name="MSOInfo"/>
+            <xsl:call-template name="WordInfoFromOutlookScan"/>
+            <xsl:call-template name="C2RInfo"/>
+            <xsl:call-template name="OutlookProfileInfo"/>
+            <xsl:call-template name="RegisteredAddinsInfo"/>
+            <xsl:call-template name="OutlookAdditionalInfo"/>
+          </xsl:when>
+          <xsl:when test="contains('POWERPOINT',$scanApp)">
+            <xsl:call-template name="OfficeInfo"/>
+            <xsl:call-template name="BuildInfo">
+              <xsl:with-param name="scannedApp" select="$scanApp"/>
+            </xsl:call-template>
+            <xsl:call-template name="MSOInfo"/>
+            <xsl:call-template name="PpCoreInfo"/>
+            <xsl:call-template name="OartInfo"/>
+            <xsl:call-template name="C2RInfo"/>
+            <xsl:call-template name="RegisteredAddinsInfo"/>
+          </xsl:when>
+          <xsl:when test="contains('INFOPATH;ONEDRIVE;ONENOTE;PUBLISHER;VISIO;WORD',$scanApp)">
+            <xsl:call-template name="OfficeInfo"/>
+            <xsl:call-template name="BuildInfo">
+              <xsl:with-param name="scannedApp" select="$scanApp"/>
+            </xsl:call-template>
+            <xsl:call-template name="MSOInfo"/>
+            <xsl:call-template name="OartInfo"/>
+            <xsl:call-template name="C2RInfo"/>
+          </xsl:when>
+          <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>
+      </xsl:template>
+
+      <xsl:template name="WindowsInfo">
+        <xsl:text>Windows Info</xsl:text>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Name = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='WMI' and @Key3='Win32_OperatingSystem']/Setting[@Key1='Caption']/Value"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Bitness = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='WMI' and @Key3='Win32_OperatingSystem']/Setting[@Key1='OSArchitecture']/Value"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Version = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='WMI' and @Key3='Win32_OperatingSystem']/Setting[@Key1='Version']/Value"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Service Pack Level = </xsl:text>
+        <xsl:choose>
+          <xsl:when test="//Instance[@Type='WMI' and @Key3='Win32_OperatingSystem']/Setting[@Key1='ServicePackMajorVersion']/Value = 0">RTM</xsl:when>
+          <xsl:when test="//Instance[@Type='WMI' and @Key3='Win32_OperatingSystem']/Setting[@Key1='ServicePackMajorVersion']/Value = ''">RTM</xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="//Instance[@Type='WMI' and @Key3='Win32_OperatingSystem']/Setting[@Key1='ServicePackMajorVersion']/Value"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Windows Directory = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='WMI' and @Key3='Win32_OperatingSystem']/Setting[@Key1='WindowsDirectory']/Value"/>
+        <xsl:if test="//Instance[@Type='Group' and starts-with(@Name,'Client session')]">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text></xsl:text>
+          <xsl:value-of select="//Instance[@Type='Group' and starts-with(@Name,'Client session')]/@Name"/>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="HardwareInfo">
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>Hardware Info</xsl:text>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Machine Name = </xsl:text>
+        <xsl:value-of select="//Instance [@Type='GetComputerNameEx']/Setting[@Key1='ComputerNameNetBIOS']/Value"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Computer Manufacturer = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='WMI' and @Key3='Win32_ComputerSystem']/Setting[@Key1='Manufacturer']/Value"/>
+        <xsl:variable name="model" select="//Instance[@Type='WMI' and @Key3='Win32_ComputerSystem']/Setting[@Key1='Model']/Value"/>
+        <xsl:variable name="modelLower" select="translate($model,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Virtual Machine = </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$modelLower = 'virtual machine'">
+            <xsl:text>True</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>False</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="//Instance[@Type='WMI' and @Key3='Win32_PointingDevice']/Setting[@Key1='PointingType']">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Touch Enabled = </xsl:text>
+          <xsl:choose>
+            <xsl:when test="//Instance[@Type='WMI' and @Key3='Win32_PointingDevice']/Setting[@Key1='PointingType' and Value='8']">
+              <xsl:text>True</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>False</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="UserInfo">
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>User Info</xsl:text>
+        <xsl:variable name="scanType" select="//Setting[@Key1='ScanType']/Value"/>
+        <xsl:variable name="scanApp" select="//Run/@ScannedApp"/>
+        <xsl:choose>
+          <xsl:when test="translate($scanType,'FUL','ful') = 'full' and translate($scanApp,'OUTLK','outlk') = 'outlook'">
+            <!--Full scan-->
+            <xsl:variable name="userName" select="//Instance[@Type='Namespace']/Setting[@Key1='currentuser']/Value"/>
+            <xsl:variable name="dn" select="//Instance[@Type='Directory']/Setting[@Key1='distinguishedName']/Value"/>
+            <xsl:value-of select="$oneTab"/>
+            <xsl:text>Name = </xsl:text>
+            <xsl:value-of select="$userName"/>
+            <xsl:value-of select="$oneTab"/>
+            <xsl:text>DN = </xsl:text>
+            <xsl:value-of select="$dn"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="userName" select="//Instance[@Type='GetUserNameEx']/Setting[@Key1='NameDisplay']/Value"/>
+            <xsl:variable name="dn" select="//Instance[@Type='GetUserNameEx']/Setting[@Key1='NameFullyQualifiedDN']/Value"/>
+            <xsl:value-of select="$oneTab"/>
+            <xsl:text>Name = </xsl:text>
+            <xsl:value-of select="$userName"/>
+            <xsl:value-of select="$oneTab"/>
+            <xsl:text>DN = </xsl:text>
+            <xsl:value-of select="$dn"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>User profile location = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='Engine']/Setting[@Key1='EnvironmentVariable' and @Key2='USERPROFILE']/Value"/>
+      </xsl:template>
+      <xsl:template name="OfficeInfo">
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>Office Info</xsl:text>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>SKU = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='Group' and @Name='Office SKU']//Setting[@Key1='ProductName']/Value"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Bitness = </xsl:text>
+        <xsl:value-of select="//Setting[@Key1='Bitness' and @Substitution='APPBITNESS']/Value"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Service Pack Level = </xsl:text>
+        <xsl:value-of select="//Message[starts-with(@Name,'InstalledServicePack_')]/@Text"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Installation Type = </xsl:text>
+        <xsl:value-of select="//Run/@ScannedAppInstallType"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Installation Folder = </xsl:text>
+        <xsl:value-of select="//Setting[@Key1='InstallPath' and @Substitution='INSTALLPATH']/Value"/>
+
+
+      </xsl:template>
+      <xsl:template name="SoftwareInfo">
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>Software Info</xsl:text>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Default Browser = </xsl:text>
+        <xsl:value-of select="//Setting[@Key1='(Default)' and @Substitution='BROWSER']/Value"/>
+        <xsl:for-each select="//Instance[@Type='WMI'and @Key2='root\SecurityCenter2' and starts-with(@Key3,'AntiVirusProduct')]">
+          <xsl:variable name="displayName" select="Setting[@Key1='displayName']/Value"/>
+          <xsl:variable name="state" select="Setting[@Key1='productstate']/Value"/>
+          <xsl:if test="$state != ''">
+            <xsl:variable name="enabled">
+              <xsl:choose>
+                <xsl:when test="(($state mod 8192) - ($state mod 4096)) &gt; 0">
+                  <xsl:text>enabled</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:text>not enabled</xsl:text>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="uptodate">
+              <xsl:choose>
+                <xsl:when test="(($state mod 32) - ($state mod 16)) &gt; 0">
+                  <xsl:text>not up to date</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:text>up to date</xsl:text>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:value-of select="$oneTab"/>
+            <xsl:text>Antivirus "</xsl:text>
+            <xsl:value-of select="$displayName"/>
+            <xsl:text>" is </xsl:text>
+            <xsl:value-of select="$enabled"/>
+            <xsl:text> and </xsl:text>
+            <xsl:value-of select="$uptodate"/>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:template>
+      <xsl:template name="OutlookBuildInfo">
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>Build Info</xsl:text>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Outlook.exe </xsl:text>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Path = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='Group' and @Name='Office Installation Details (scanned version)']//Setting[@Key1='Path']/Value"/>
+        <xsl:variable name="fullVersion" select="//Instance[@Type='Group' and @Name='Office Installation Details (scanned version)']//Setting[@Key1='FullVersion']/Value"/>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Build = </xsl:text>
+        <xsl:value-of select="$fullVersion"/>
+        <xsl:variable name="installType" select="//Run[@ScannedAppInstallType]"/>
+        <xsl:if test="($installType = 'MSI') and (string-length($fullVersion) &gt;= 2) and (//Rule[starts-with(@Name,'OfficeUpdates_OUTLOOK') and starts-with(@Query,substring($fullVersion,0,2))])">
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:text>Latest Version = </xsl:text>
+          <xsl:value-of select="//Rule[starts-with(@Name,'OfficeUpdates_OUTLOOK') and starts-with(@Query,substring($fullVersion,0,2))]/@Query"/>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="BuildInfo">
+        <xsl:param name="scannedApp"></xsl:param>
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>Build Info</xsl:text>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text></xsl:text>
+        <xsl:value-of select="$scannedApp"/>
+        <xsl:text>.exe</xsl:text>
+        <xsl:variable name="installType" select="//Run[@ScannedAppInstallType]"/>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Path = </xsl:text>
+        <xsl:value-of select="//Instance[@Type='Group' and @Name='Install details']//Setting[@Key1='Path']/Value"/>
+        <xsl:variable name="fullVersion" select="//Instance[@Type='Group' and @Name='Install details']//Setting[@Key1='FullVersion']/Value"/>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Build = </xsl:text>
+        <xsl:value-of select="$fullVersion"/>
+        <xsl:if test="($installType = 'MSI') and (string-length($fullVersion) &gt;= 2) and (//Rule[starts-with(@Name,concat('OfficeUpdates_',$scannedApp)) and starts-with(@Query,substring($fullVersion,0,2))])">
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:text>Latest Version = </xsl:text>
+          <xsl:value-of select="//Rule[starts-with(@Name,concat('OfficeUpdates_',$scannedApp)) and starts-with(@Query,substring($fullVersion,0,2))]/@Query"/>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="C2RInfo">
+        <xsl:variable name="installType" select="//Run[@ScannedAppInstallType]"/>
+        <xsl:if test="$installType != 'MSI'">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>ClickToRun</xsl:text>
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:text>Build = </xsl:text>
+          <xsl:value-of select="//Setting[starts-with(@Substitution,'C2RINSTALLEDVERSION')]/Value"/>
+          <xsl:variable name="msoBuild" select="//Instance[@Type='File' and contains(@Key2,'mso.dll')]/Setting[@Key1='Version']/Value"/>
+          <xsl:if test="string-length($msoBuild) &gt;=4">
+            <xsl:variable name="majorMinor" select="substring(string($msoBuild),0,5)"/>
+            <xsl:value-of select="$twoTabs"/>
+            <xsl:text>Latest Version = </xsl:text>
+            <xsl:variable name="singleQuote">
+              <xsl:text>'</xsl:text>
+            </xsl:variable>
+            <xsl:value-of select="translate(//Rule[contains(@Name,'C2RLatestVersionFromWeb') and contains(@Query,concat($majorMinor,'.'))]/@Query,$singleQuote,'')"/>
+          </xsl:if>
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:text>Updating Enabled = </xsl:text>
+          <xsl:variable name="updatingEnabled" select="//Setting[@Key1='UpdatesEnabled']/Value"/>
+          <xsl:call-template name="ValueIfEmpty">
+            <xsl:with-param name="node" select="$updatingEnabled"/>
+            <xsl:with-param name="valueIfEmpty">
+              <xsl:text>False</xsl:text>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>C2R Channel = </xsl:text>
+        <xsl:value-of select="//Message[@Name='C2R_Updates_sC2R2016Branch']/@P0"/>
+      </xsl:template>
+      <xsl:template name="WordInfoFromOutlookScan">
+        <xsl:variable name="installType" select="//Run[@ScannedAppInstallType]"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Winword.exe</xsl:text>
+        <xsl:variable name="wordVersion" select="//Setting[@Key1='Version' and @Substitution='WORDVERSIONFOUND']/Value"/>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Path = </xsl:text>
+        <xsl:value-of select="$wordVersion/../../@Name"/>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Build = </xsl:text>
+        <xsl:value-of select="$wordVersion"/>
+        <xsl:if test="($installType='MSI') and (string-length($wordVersion)&gt;=2) and (//Rule[starts-with(@Name,'OfficeUpdates_WORD') and starts-with(@Query,substring($wordVersion,0,2))]/@Query)">
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:text>Latest Version = </xsl:text>
+          <xsl:value-of select="//Rule[starts-with(@Name,'OfficeUpdates_WORD') and starts-with(@Query,substring($wordVersion,0,2))]/@Query"/>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="MSOInfo">
+        <xsl:variable name="installType" select="//Run[@ScannedAppInstallType]"/>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Mso.dll</xsl:text>
+        <xsl:variable name="msoBuild" select="//Instance[@Type='File' and contains(@Key2,'mso.dll')]/Setting[@Key1='Version']/Value"/>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Path = </xsl:text>
+        <xsl:value-of select="$msoBuild/../../@Name"/>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Build = </xsl:text>
+        <xsl:value-of select="$msoBuild"/>
+        <xsl:if test="($installType='MSI') and (string-length($msoBuild)&gt;=2) and (//Rule[starts-with(@Name,'OfficeUpdates_MSO') and starts-with(@Query,substring($msoBuild,0,2))]/@Query)">
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:text>Latest Version = </xsl:text>
+          <xsl:value-of select="//Rule[starts-with(@Name,'OfficeUpdates_MSO') and starts-with(@Query,substring($msoBuild,0,2))]/@Query"/>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="OutlookProfileInfo">
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>Outlook Profile Info</xsl:text>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Default Profile = </xsl:text>
+        <xsl:value-of select="//Setting[@Key1='DefaultProfile']/Value"/>
+        <xsl:if test="//Run[@OutlookScanType='Full']">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Scanned Profile = </xsl:text>
+          <xsl:value-of select="//Setting[@Key1='CurrentProfileName']/Value"/>
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Mailbox Server = </xsl:text>
+          <xsl:value-of select="//Setting[@Key1='ExchangeMailboxServerName']/Value"/>
+        </xsl:if>
+
+        <xsl:if test="//Setting[@Key1='00033009']/Value[contains(text(),'STATUS_PRIMARY_IDENTITY')]/../..">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>User SMTP Address = </xsl:text>
+          <xsl:value-of select="//Setting[@Key1='00033009']/Value[contains(text(),'STATUS_PRIMARY_IDENTITY')]/../../Setting[@Key1='0x6641001f' and @Substitution='USEREMAILSMTP']/Value"/>
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Server Version = </xsl:text>
+          <xsl:value-of select="//Setting[@Key1='00033009']/Value[contains(text(),'STATUS_PRIMARY_IDENTITY')]/../../Setting[@Key1='0x663b0102' and @Substitution='SERVERVERSION']/Value"/>
+
+        </xsl:if>
+
+        <xsl:if test="//Run[@OutlookScanType='Full']">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Office 365 = </xsl:text>
+          <xsl:choose>
+            <xsl:when test="//Message[@Name='sExSrvNameCloud']">
+              <xsl:text>True</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>False</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
+
+        <xsl:if test="//Instance[@Type='Group' and starts-with(@Name,'Profile Type =')]">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:value-of select="//Instance[@Type='Group' and starts-with(@Name,'Profile Type =')]/@Name"/>
+        </xsl:if>
+        <xsl:if test="//Instance[@Type='Group' and starts-with(@Name,'Profile Mode =')]">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:value-of select="//Instance[@Type='Group' and starts-with(@Name,'Profile Mode =')]/@Name"/>
+        </xsl:if>
+        <xsl:if test="//Instance[@Type='Group' and starts-with(@Name,'Cached mode download style =')]">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:value-of select="//Instance[@Type='Group' and starts-with(@Name,'Cached mode download style =')]/@Name"/>
+        </xsl:if>
+        <xsl:if test="//Instance[@Type='Group' and starts-with(@Name,'Download Shared Folders')]">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:value-of select="//Instance[@Type='Group' and starts-with(@Name,'Download Shared Folders')]/@Name"/>
+        </xsl:if>
+        <xsl:if test="//Run/@OutlookScanType='Full'">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Stores in Profile</xsl:text>
+          <xsl:for-each select="//Instance[@Type='Stores']">
+            <xsl:variable name="displayName" select="Setting[@Key1='DisplayName' and @Substitution='STORENAME']/Value"/>
+            <xsl:variable name="defaultStore" select="Setting[@Key1='Default' and @Substitution='DEFAULTSTORE']/Value"/>
+            <xsl:value-of select="$twoTabs"/>
+            <xsl:value-of select="$displayName"/>
+            <xsl:if test="$defaultStore = 'True'">
+              <xsl:text> (default)</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$threeTabs"/>
+            <xsl:text>Type = </xsl:text>
+            <xsl:choose>
+              <xsl:when test="Setting[@Key1='ExchangeStoreType' and @Substitution='EXSTRTYPE']/Value = 'olNotExchange'">
+                <xsl:text>PST</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="Setting[@Key1='ExchangeStoreType' and @Substitution='EXSTRTYPE']/Value"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test=".//Rule[@Name='nFolderCount' and @Pass='True']/Result">
+              <xsl:value-of select="$threeTabs"/>
+              <xsl:text>Folders = </xsl:text>
+              <xsl:value-of select=".//Rule[@Name='nFolderCount' and @Pass='True']/Result"/>
+            </xsl:if>
+
+          </xsl:for-each>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="OutlookAdditionalInfo">
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>Additional Info</xsl:text>
+        <xsl:variable name="calCheckErrors" select="//Instance[@Type='CalCheckLog']/Setting[@Key1='Errors']/Value"/>
+        <xsl:variable name="calCheckWarnings" select="//Instance[@Type='CalCheckLog']/Setting[@Key1='Warnings']/Value"/>
+        <xsl:if test="count($calCheckErrors) + count($calCheckWarnings) &gt; 0">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Calendar Issues Detected</xsl:text>
+          <xsl:if test="$calCheckErrors">
+            <xsl:value-of select="$twoTabs"/>
+            <xsl:text>Errors = </xsl:text>
+            <xsl:value-of select="$calCheckErrors"/>
+          </xsl:if>
+          <xsl:if test="$calCheckWarnings">
+            <xsl:value-of select="$twoTabs"/>
+            <xsl:text>Warnings = </xsl:text>
+            <xsl:value-of select="$calCheckWarnings"/>
+          </xsl:if>
+        </xsl:if>
+
+        <xsl:variable name="oabDownloadTime" select="//Setting[@Key1='OAB Last Modified Time' and @Format='DateTime']/Value"/>
+        <xsl:if test="$oabDownloadTime">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>OAB last download time = </xsl:text>
+          <xsl:value-of select="$oabDownloadTime"/>
+        </xsl:if>
+
+        <xsl:variable name="defaultMailClient" select="//Instance[@Type='Registry' and @Key2='HKEY_CURRENT_USER' and @Key3='SOFTWARE\Clients\Mail\']/Setting[@Key1='(Default)']/Value"/>
+        <xsl:if test="$defaultMailClient">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Default mail client (HKCU) = </xsl:text>
+          <xsl:value-of select="$defaultMailClient"/>
+        </xsl:if>
+
+        <xsl:variable name="defaultMailClientMachine" select="//Instance[@Type='Registry' and @Key2='HKEY_LOCAL_MACHINE' and @Key3='SOFTWARE\Clients\Mail\']/Setting[@Key1='(Default)']/Value"/>
+        <xsl:if test="$defaultMailClientMachine">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Default mail client (HKLM) = </xsl:text>
+          <xsl:value-of select="$defaultMailClientMachine"/>
+        </xsl:if>
+
+        <xsl:variable name="defaultInstantMessagingClient" select="//Instance[@Type='Registry' and @Key2='HKEY_CURRENT_USER' and @Key3='SOFTWARE\IM Providers']/Setting[@Key1='DefaultIMApp']/Value"/>
+        <xsl:if test="$defaultInstantMessagingClient">
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>Default Instant Messaging application = </xsl:text>
+          <xsl:value-of select="$defaultInstantMessagingClient"/>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="ExcelAdditionalInfo">
+        <xsl:variable name="xlStartFiles" select="//Instance[@Name='Files in the Office Install XLStart Folder']//Setting[@Key1='FullName']/Value"/>
+        <xsl:if test="count($xlStartFiles)">
+          <xsl:value-of select="$lineBreak"/>
+          <xsl:text>Files in the Office Install XLStart Folder</xsl:text>
+          <xsl:for-each select="$xlStartFiles">
+            <xsl:value-of select="$oneTab"/>
+            <xsl:value-of select="."/>
+          </xsl:for-each>
+        </xsl:if>
+        <xsl:variable name="xlFileAssociations" select="//Instance[@Name='Excel File Associations']//Instance[@Type='Registry']"/>
+        <xsl:if test="count($xlStartFiles)">
+          <xsl:value-of select="$lineBreak"/>
+          <xsl:text>Excel File Associations</xsl:text>
+          <xsl:for-each select="$xlFileAssociations">
+            <xsl:variable name="defaultValue" select="Setting[@Key1='(Default)']/Value"/>
+            <xsl:value-of select="$oneTab"/>
+            <xsl:text>HKCR\</xsl:text>
+            <xsl:value-of select="@Key3"/>
+            <xsl:text>(Default) = </xsl:text>
+            <xsl:choose>
+              <xsl:when test="$defaultValue = ''">
+                <xsl:text>&lt;missing value&gt;</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$defaultValue"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="PpCoreInfo">
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>ppcore.dll</xsl:text>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Path = </xsl:text>
+        <xsl:variable name="ppCorePath" select="//Instance[@Type='File' and contains(@Key2,'PpCore.dll')]"/>
+        <xsl:value-of select="$ppCorePath/@Key2"/>
+        <xsl:if test="$ppCorePath != ''">
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:text>Build = </xsl:text>
+          <xsl:value-of select="$ppCorePath/Setting[@Key1='Version']/Value"/>
+        </xsl:if>
+      </xsl:template>
+
+      <xsl:template name="OartInfo">
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>Oart.dll</xsl:text>
+        <xsl:value-of select="$twoTabs"/>
+        <xsl:text>Path = </xsl:text>
+        <xsl:variable name="oartPath" select="//Instance[@Type='File' and contains(@Key2,'oart.dll')]"/>
+        <xsl:value-of select="$oartPath/@Key2"/>
+        <xsl:if test="$oartPath != ''">
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:text>Build = </xsl:text>
+          <xsl:value-of select="$oartPath/Setting[@Key1='Version']/Value"/>
+        </xsl:if>
+      </xsl:template>
+      <xsl:template name="RegisteredAddinsInfo">
+        <xsl:value-of select="$lineBreak"/>
+        <xsl:text>Registered add-ins</xsl:text>
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>HKEY_CURRENT_USER</xsl:text>
+        <xsl:for-each select="//Object[@Type='Group' and @Name='Registered add-ins']//Instance[@Key2='HKEY_CURRENT_USER' and not(contains(@Key3,'Wow6432Node'))]//Setting[@Key1='FriendlyName' and not(@FromValues)]/Value">
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:value-of select="."/>
+        </xsl:for-each>
+
+        <xsl:variable name="hkcuWowAddins" select="//Object[@Type='Group' and @Name='Registered add-ins']//Instance[@Key2='HKEY_CURRENT_USER' and contains(@Key3,'Wow6432Node')]//Setting[@Key1='FriendlyName' and not(@FromValues)]/Value"/>
+        <xsl:if test="count($hkcuWowAddins) &gt; 0">
+
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>HKEY_CURRENT_USER (Wow)</xsl:text>
+          <xsl:for-each select="$hkcuWowAddins">
+            <xsl:value-of select="$twoTabs"/>
+            <xsl:value-of select="."/>
+          </xsl:for-each>
+        </xsl:if>
+
+        <xsl:value-of select="$oneTab"/>
+        <xsl:text>HKEY_LOCAL_MACHINE</xsl:text>
+        <xsl:for-each select="//Object[@Type='Group' and @Name='Registered add-ins']//Instance[@Key2='HKEY_LOCAL_MACHINE' and not(contains(@Key3,'Wow6432Node'))]//Setting[@Key1='FriendlyName' and not(@FromValues)]/Value">
+          <xsl:value-of select="$twoTabs"/>
+          <xsl:value-of select="."/>
+        </xsl:for-each>
+
+        <xsl:variable name="hklmWowAddins" select="//Object[@Type='Group' and @Name='Registered add-ins']//Instance[@Key2='HKEY_LOCAL_MACHINE' and contains(@Key3,'Wow6432Node')]//Setting[@Key1='FriendlyName' and not(@FromValues)]/Value"/>
+        <xsl:if test="count($hklmWowAddins) &gt; 0">
+
+          <xsl:value-of select="$oneTab"/>
+          <xsl:text>HKEY_LOCAL_MACHINE (Wow)</xsl:text>
+          <xsl:for-each select="$hklmWowAddins">
+            <xsl:value-of select="$twoTabs"/>
+            <xsl:value-of select="."/>
+          </xsl:for-each>
+        </xsl:if>
+
+      </xsl:template>
+      <xsl:template name="ValueIfEmpty">
+        <xsl:param name="node"></xsl:param>
+        <xsl:param name="valueIfEmpty"></xsl:param>
+        <xsl:choose>
+          <xsl:when test="$node = ''">
+            <xsl:value-of select="$valueIfEmpty"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$node"/>
+          </xsl:otherwise>
+        </xsl:choose>
+
+      </xsl:template>
+      <xsl:template match="*"></xsl:template>
+    </xsl:stylesheet>
+  </ConfigurationSummaryStylesheet>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>IQB8EY3nv1qEI7zwji83JlFwe18=</DigestValue></Reference></SignedInfo><SignatureValue>
+    RqOKKY4O9pR7E76e9aGv8Gvaf0tp+WaTapSUq6gk90KZ9mEDT/IxHQJPc5OHtSvW/XLyXfh2
+    TM0Fahd0/s7s/ESaRFurl8Ig5G5hoY/Vnlo1WM/tITmF8use+gyIgRVrjIOIHECybTslL5Mh
+    yA7HkkO8zF8g/wj8S9J+W8cGDnCHcM8NR2O9ErUOXFvXqLnbeJ2X61KrCzyXp1SKETlm/Hxn
+    CQEJiw/LGotigkUgNv890GgPkycv5Qlrs6iUoBida6qnOb88lvdhxliPqQ1NhKpscqkBU5JG
+    jmy7181XVadKcRIJXT2XErGnQ3dHdawEWoCM2s6/QSKw8tCQUaKcyA==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -196,28 +785,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAALFpr8Q3a5GTXgAAAAAAsTANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI3WhcNMTcwODAzMTcxMzI3WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
-QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
-7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
-f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
-NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
-+7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAuB5CzdlupvWjSYQ/N2yCah7oUs5NBYH0s2RuWHAJXNOZEnRFmuBP
+BLSJhWsrspK9GahJ3FZuQEcq2+uBGpjBnZIWXVEzunBgIoUiL313gYGGe8u+/u1nbv0dZNzwijaA
+M2itgpwKvPBHv3Gqq8cFWzVRHTgO31lV4IA28ZhueAocWFNvLV9RkrXBpMwtvbwLqyA/ednmK4+E
+BfsgLbuGcUFS/wyAq7+ZhqUDq+LzHhFLl55V7iApITvmU6kNzZPtvY3QZVPmcq6K3IjwpV4bkr72
+9y+ndWZmfgvqlUvV78hV6zusR6zHiy/NJQH2w8LaPW1YIUZImWJ/jFAUqG7Q5QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFAGGI3nEkNLTKbg8V2lFYretn114MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
-d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
-5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
-lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
-IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
-vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAD3G
+M+JdCkrA5KQO5uQdsjwIqCLoJ/kTICat57wPtZA5nbP3NW05sObKPJtA18zQIXzaCWhXVLQ+S+D2
+L/zWJ1cMvHTM+BUxsdOOo+DwDNSFSjG6/0srv7YXigPkkN5jnHdxDmTWBd/TJaGzL+88Sa3uOayC
+xMi0VJB9DbARKRjs0vMxeIsffF7ZEFtWxmeH5CLPmuy5CJiVqo2EJw7qm/QOIX3pXbSAjwighcP5
+RN4li8n3F37B3nhUm05qNF9rIo1Hf7sWWHdwHvT6KHMl0MV/Np80Y2ofnGBNwxphl95bQE8C295+
+QbrEWxAYaQaqMbBgG8FS0uXOqRSYgaRSkpk=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -244,34 +833,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQA+H9JGuk9hK/j0PLqxT9vgQpIuoFHu3fp3elUp7NPakZmL484t2PE7pHhhURliao9VjG9T
-kKRyI5W8clHzMGvSr5BXpxq3BjnuoiZQKaDa99ZmEP3PC60YVMIUMN+TWXeBQQPv6jRVb8yVeDom
-L2C2LPMAA1Pt1htND9bXHbjUEfQ00nkQf45QRzF00WNXA9F6j8xoI2LMPIouN9v48i1eaC2dwUAZ
-stll8AFOmFGdNVuPXLymc72ChG0PzhAoSlbqxTMA2fMnT+fnYSKAfDPSwlQNPDE0ORvdGkTA/iiE
-2m7Aoeoq2tN19CiNR2TbqdQP0FSitUqu95HYgXBKts6NoIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0wYJKoZIhvcNAQcCoIIGxDCCBsACAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQBGo4opjg72lHsTvp71oa/wa9p/S2n5ZpNqlJSrqCT3Qpn2YQNP8jEdAk9zk4e1K9b9cvJd
++HZMzQVqF3T+zuz8RJpEW6uXwiDkbmGhj9WeWjVYz+0hOYXy6x76DIiBFWuMg4gcQLJtOyUvkyHI
+DseSQ7zMXyD/CPxL0n5bxwYOcIdwzw1HY70StQ5cW9eoudt4nZfrUqsLPJenVIoROWb8fGcJAQmL
+D8sai2KCRSA2/z3QaA+TJy/lCWuzqJSgGJ1rqqc5vzyW92HGWI+pDU2EqmxyqQFTkkaObLvXzVdV
+p0pxEgldPZcSsadDd0d1rARagIzazr9BIrDy0JBRopzIoIIDfKGCA3gwggJgAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
+Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAM9R4brIoF4Sym5kS7aEWeErck/aggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
-MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
-AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
-CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
-g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
-YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
-jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
-nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
-aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
-AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
-Fw0xNTA3MDkxNDQ3MjhaMCMGCSqGSIb3DQEJBDEWBBTnvoTzRB/ncHQKxXkN9WyCyOsUJzANBgkq
-hkiG9w0BAQUFAASCAQAa+O4tsEXlPKFKMNJpCYYntwfuXcZTRr0ZJgeylgC6rOLs5lfTASceRRUx
-W5g2n+LFt5g/AMfX+xMagJKd3eBEZDF6VRrw6H/Y/W3gz2KPTqELDNS/+jaoalvZMXjdkJcx/tSL
-pgjWdseEUhOlcsiikdUxtnIZWofiBhjxfwyDqNe1OZMt2vKglzCkxOcCpm5UkjF6OTWVtC0ZQC+s
-H0Ke//AxnzO5i/uivfsc17jgoBKXRhsj0WPm6iESpcqFAm4dN2LbPJ0SjBN1ZLdQmWMoht29cq2M
-YIBB7Hof4ptw0y1/sd9P9tNqVhG1u2C8ORZAvI/e0+vkp4jp+VciRgTe</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/4cwIhgPMjAxNjA4MDExNzA0
+MDdaGA8yMDE2MDgwMjE3MDQwN1owdjA8BgorBgEEAYRZCgQBMS4wLDAKAgUA20n/hwIBADAJAgEA
+AgEgAgH/MAcCAQACAhhFMAoCBQDbS1EHAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkK
+AwGgCjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADzmycqYOkjMI4nM
+Eh8BXeCJwRmsEZF0pZdrfVyk1JDEIPKbTpX98nrosAMn7khtRPzyJbrvaVKDmDelQF38infAFG+r
+RIonmx0Z8n8oX48bgJjbWt2EBQkGq4L+sPfoKvZzigs65P5haO5nXAkihhh9Iq9MlSCxFZVxngjd
+DON8cbsM7YCNaJZTG5OAHr6X8J4H7U3vo+1KY+ZxLDn9CR7fVLheWvNdefwOeUYxJ0t1H72pLZg3
+OrFEk9+v1e658gMeZ23NFCiDmWwgoi6+MxJDNQMUUWXb4/Dplfuk9jg7ojZq+hlgx/Rh7U7l5mKh
+mKU41auRUhb3D17D+JXgxzAxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
+V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0
+aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACxaa/EN2uRk14AAAAA
+ALEwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFOs0Q270YXpEuJBQV33m65ZrPb/IMA0GCSqG
+SIb3DQEBBQUABIIBAIVhm0yP5Py4ynRIevEsulEyM3sjiAFK6pzuadXR9rV04CQm6tLvyZXWgjJ+
+4NGaw20Uv1tdAbGq6/+zWSwDi/iI8Gwou8e8eLDbgwVycsaxMAZp24yT4FTSEbus/5KZbFjOg2Hm
+6VuCxEo5bII5BA7RPjDaHBFyASj9dTF7DDc5w+ArEzati4U/rqaXPuembmkfDwRXJJ6bN00OBb5P
+UGmLKJ1LUM0fvIZuQSN3zeHo+sjIUwSgFVHatjBedhZrJHBnivq1Ldjnhzn06CarDCg6GO5bEep/
+dMj/uDbEaJ81K5MNsdWY5AiPtQ8zdgIS/b/TeKTWvyF1Fky5yk31gDM=</CounterSignature></Object></Signature></ObjectCollector>

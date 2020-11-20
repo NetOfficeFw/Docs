@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
 	<!--!!! ONLY MODIFY ChangeDescription AND ConfigVersion, DO NOT TOUCH THE REST OR DO IT AT YOUR OWN RISK!!!-->
-	<Configuration ConfigName="Excel Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,excel.crashes.config.xml" Symptoms="1">
+	<Configuration ConfigName="Excel Configuration" ChangeDescription="2.0.1606.13" ConfigVersion="2.0.1606.13" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,excel.crashes.config.xml" Symptoms="1">
 		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"/>
@@ -20,22 +20,31 @@
 		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
 		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
 		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
-		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
+    <ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
 		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
 		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
 		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
 		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
 		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
 		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
-		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
+    <ObjectProcessor Name="Cache" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.CacheObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
 	</Configuration>
 	<Object Type="Group" Name="Excel Scan" Class="Scan Type" GroupingClass="True">
-		<!--OFFICE DETAILS-->
+    <Object Type="Cache" Name="APPNAMECACHE" Key1="Add" Key2="APPNAMECACHE" Key3="%APPNAME%"/>
+    <Reference Type="WindowsUpdatesScriptPt1" Name="WindowsUpdatesScriptPt1" File="common.config.xml"></Reference>
+    <!--OFFICE DETAILS-->
 		<Object Type="Group" Name="Install details">
 			<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Excel" Key6="excel" Key7="%MAJORVERSION%">
 				<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
 				</Setting>
-				<Setting Key1="Bitness" Substitution="APPBITNESS">
+        <Object Type="IfThenElse" Key1="'%WOW6432NODE%'=''" Key2="emptyval" Key3="%WOW6432NODE%">
+          <Setting Key1="wowcacheval" Substitution="WOWCACHEVAL" Display="Hide"/>
+          <Object Type="Cache" Name="wowcache" Key1="Add" Key2="wowcache" Key3="%WOWCACHEVAL%">
+          </Object>
+        </Object>
+        <Setting Key1="Bitness" Substitution="APPBITNESS">
 					<Rule Name="bitness" Query="$.">
 					</Rule>
 				</Setting>
@@ -46,7 +55,7 @@
 					</Rule>
 					<Rule Name="sExcelPR" Query="number(substring($.,11,1))=3" Error="Error" P0="$sFullAppVersion" Title="The build number for Excel.exe indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Excel.exe '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please install the latest publicly available update." SSID="8371b2c8-fdab-422e-9f9d-0a0c75b6ceae" Symptoms="Configuration (unsupported or problematic)">
 					</Rule>
-          <Rule Name="sExcel16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with Excel %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of Excel (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="bf36dfa1-9991-4dfc-8f77-87ced0c05da2" Symptoms="_Alert from OffCAT"></Rule>
+          <!--Rule Name="sExcel16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with Excel %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of Excel (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="bf36dfa1-9991-4dfc-8f77-87ced0c05da2" Symptoms="_Alert from OffCAT"></Rule-->
         </Setting>
 				<Setting Key1="Name">
 					<Rule Name="appName" Query="$.">
@@ -56,6 +65,7 @@
 				</Setting>
 				<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
 				</Setting>
+        <Object Type="Cache" Name="InstallPathCACHE" Key1="Add" Key2="INSTALLPATHCACHE" Key3="%INSTALLPATH%"/>
 				<Setting Key1="Version">
 					<Rule Name="n4DigitSKUVersion" Query="$.">
 					</Rule>
@@ -64,6 +74,7 @@
 				<Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
 				<Setting Key1="Type">
 					<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+          <Rule Name="f2016MSI" Query="$n4DigitSKUVersion='2016' and $.='MSI'"></Rule>
 				</Setting>				
 				<!--SKU-->
 				<Object Type="Group" Name="Office SKU">
@@ -105,7 +116,7 @@
 								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
 								</Setting>
 								<Object Type="If" Key1="contains('%PN%','Single Image')">
-									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
 										<Setting Key1="ID" Substitution="REGID" Display="Hide">
 										</Setting>
 										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
@@ -132,7 +143,7 @@
 								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
 								</Setting>
 								<Object Type="If" Key1="contains('%PN%','Single Image')">
-									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Display="Hide">
 										<Setting Key1="ID" Substitution="REGID" Display="Hide">
 										</Setting>
 										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
@@ -183,7 +194,6 @@
 								<Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
 									<Setting Key1="" Display="Hide"></Setting>
 								</Object>
-								<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
 								<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
 									<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
 										<Setting Key1="ProductVersion" Display="Hide">
@@ -293,6 +303,10 @@
 				<Reference Type="MSO" Name="MSO" File="common.config.xml">
 				</Reference>
 				<!--/MSO-->
+        <!--ADALCSIDLL-->
+        <Reference Type="ADALCSIDLL" Name="ADALCSIDLL" File="common.config.xml">
+        </Reference>
+        <!--/ADALCSI-->
         <!--MSMapi32-->
         <Reference Type="MSMAPI32" Name="MSMAPI32" File="common.config.xml">
         </Reference>
@@ -301,6 +315,14 @@
 				<Reference Type="OART" Name="OART" File="common.config.xml">
 				</Reference>
 				<!--/OART.dll-->
+        <!--CHART.dll-->
+        <Reference Type="CHART" Name="CHART" File="common.config.xml">
+        </Reference>
+        <!--/CHART.dll-->
+        <!--Outlook.exe-->
+        <Reference Type="OUTLOOKVERSION" Name="OUTLOOKVERSION" File="common.config.xml">
+        </Reference>
+        <!--/Outlook.exe-->
 			</Object>
 			<!--INSTALLED UPDATES-->
 			<Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
@@ -309,24 +331,30 @@
 				</Object>
 			</Object>
 			<Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
-				<Object Type="Group" Name="ClickToRun Update Details" GroupingClass="True" Class="Office Update" Display="Right">
-					<Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
-					</Reference>
+				<Object Type="Group" Name="ClickToRun Details" GroupingClass="True" Class="Office Update" Display="Right">
+          <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+            <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+					  <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+					  </Reference>
+          </Object>
 				</Object>
 			</Object>
 			<!--INSTALLED UPDATES-->
       <!--ADAL updates-->
       <Object Type="If" Key1="number('%MAJORVERSION%')=15">
-        <Object Type="Group" Name="Office 2013 Modern Authentication support">
+        <Object Type="Group" Name="Office 2013 Modern Authentication support for Office 365">
           <Object Type="Group" Name="Prerequisites" Display="Right">
             <Object Type="Group" Name="%APPNAME%" Display="Right">
               <Object Type="Group" Name="Hidden">
                 <Rule Name="fKB2956145Installed" Query="versioncompare($sFullAppVersion,'15.0.4701.1001')" P0="if($fKB2956145Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2956145','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090"></Rule>
               </Object>
             </Object>
+            <Object Type="Cache" Name="InstallPathCACHE" Key1="Dump" Key2="INSTALLPATHCACHE" Display="Hide">
+              <Setting Key1="Val" Substitution="INSTALLPATH" Display="Hide"></Setting>
             <Reference Type="ADAL" Name="ADAL" File="common.config.xml">
             </Reference>
-            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($MachineDetails_KB2977629Installed and $fKB2956145Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P1="if($MachineDetails_KB2977629Installed,'Installed','Not Installed')" P2="if($fKB2956145Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;Windows update KB2977629 - {1}&#xA;%APPNAME% 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="ffbb417e-2dbd-4558-9cd8-7368f751615f" Symptoms="Modern Authentication for Office"></Rule>
+            </Object>
+            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($fKB2956145Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P2="if($fKB2956145Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" P4="'%APPNAME%'" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;{4} 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="b9591d7b-b735-427a-9380-8b92fa4ebeda" Symptoms="Modern Authentication for Office 365"></Rule>
           </Object>
         </Object>
       </Object>
@@ -341,9 +369,13 @@
 		<!--/USER DETAILS-->
 		<!--MACHINE DETAILS-->
 		<Object Type="Group" Name="Machine Details">
-			<Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml">
-			</Reference>
-		</Object>
+			<Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml"></Reference>
+      <Reference Type="ServicesRunning" Name="ServicesRunning" File="common.config.xml"></Reference>
+      <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml"></Reference>
+      <Reference Type="WUDetails" Name="WUDetails" File="common.config.xml"></Reference>
+      <Reference Type="WindowsUpdatesToInstall" Name="WindowsUpdatesToInstall" File="common.config.xml"></Reference>
+      
+    </Object>
 		<!--/MACHINE DETAILS-->
 		<!--ADD-INS-->
 		<Object Type="Group" Name="Registered add-ins" GroupingClass="True" Class="Add-ins">
@@ -360,7 +392,7 @@
 						<Object Type="File" Key2="%PDFMAKERPATH%">
 							<Setting Key1="Version">
                 <Rule Name="sPDFMakerExcel14" Query="$n2DigitVersion=14 and versioncompare($.,'10.0.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with Excel. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="7f1871bd-0f9c-488f-a1fa-29d166e16b78" Symptoms="Crash,Add-ins"></Rule>
-                <Rule Name="sPDFMakerExcel14x64" Query="$n2DigitVersion=14 and $bitness='x64' and versioncompare($.,'10.1.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have ({0}) is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="43f92f91-0f4c-44a6-b410-5ddc6d7270d9" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerExcel14x64" Query="$n2DigitVersion=14 and $bitness='x64' and versioncompare($.,'10.1.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have ({0}) is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="cf5976d2-b9a4-4089-9e1e-11e91fe3e729" Symptoms="Crash,Add-ins"></Rule>
                 <Rule Name="sPDFMakerExcel15" Query="$n2DigitVersion=15 and versioncompare($.,'11.0.1.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with Excel. Please update the add-in to version 11.0.1 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="d7afe364-b006-4d89-9e87-1811d0152ea9" Symptoms="Crash,Add-ins"></Rule>
               </Setting>
 						</Object>
@@ -438,6 +470,12 @@
 			</Object>
       </Object>
 			<!--/HKLM WOW addins-->
+      <!--HKLM C2R addins-->
+      <Object Type="Cache" Name="wowcache" Key1="Dump" Key2="wowcache" Display="Hide">
+        <Setting Key1="WowVal" Substitution="WOW6432NODE" Display="Hide"></Setting>
+        <Reference Type="C2RAddins" Name="C2RAddins" File="common.config.xml"></Reference>
+      </Object>
+      <!--HKLM C2R addins-->
 			<!--RESILIENCY-->
 			<Object Type="Group" Name="Resiliency" Class="Add-ins" Display="Right">
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Excel\Resiliency" Display="Right">
@@ -460,7 +498,7 @@
 							<Setting Key1="FriendlyName" Display="Right">
 							</Setting>
 						</Object>
-						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="Add-ins have been automatically disabled because of performance or stability issues" Text="Excel add-ins have been disabled due to performance or stability issues. To see the list of disabled add-ins, click the Configuration Details tile (above) and then search for 'Disabled Add-ins' using the Find feature." GUID="272802" SSID="d0a693c0-b372-4589-a2d9-9deb6b59fec1" Symptoms="Add-ins"></Rule>
+						<Rule Name="sDisabledAddins" Query="count(../Instance/Object/Instance)&gt;0 and $nRestrictToList&lt;1 and $n2DigitVersion&gt;14" Error="Warning" Title="Add-ins have been automatically disabled because of performance or stability issues" Text="Excel add-ins have been disabled due to performance or stability issues. To see the list of disabled add-ins, click the Configuration Details tile (above) and then search for 'Disabled Add-ins' using the Find feature." GUID="272802" SSID="9443e784-38bc-44c9-885f-8d1ba54de8b5" Symptoms="Add-ins"></Rule>
 					</Object>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Excel\Resiliency\DoNotDisableAddinList" Display="Right">
@@ -485,7 +523,10 @@
 		<!--/ADD-INS-->
 		<!--Problem Addins-->
 		<Object Type="Group" Name="Add-ins with known problems" GroupingClass="True" Class="ProblemAddins" TrackProgress="TrackProgress">
-			<Reference Type="CommonProbAddins" Name="CommonProbAddins" File="common.config.xml"></Reference>
+      <Object Type="Cache" Name="APPNAMECACHE" Key1="Dump" Key2="APPNAMECACHE" Display="Hide">
+        <Setting Key1="AppNameVal" Substitution="APPNAME" Display="Hide"></Setting>
+        <Reference Type="CommonProbAddins" Name="CommonProbAddins" File="common.config.xml"></Reference>
+      </Object>
 			<!--FineReader-->
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Excel\Addins\Sprint.ExcelIntegration.9" Display="Hide">
 				<Setting Key1="LoadBehavior" Display="Hide"></Setting>
@@ -543,7 +584,7 @@
 						<Setting Key1="__VALUES">
 						</Setting>
 						<Setting Key1="DisableRobustifiedUNC">
-							<Rule Name="sDisableRobustifiedUNC" Query="$.=1" Error="Warning" Title="DisableRobustifiedUNC=1" Text="This registry value is only intended for troubleshooting purpose and is not supported in production environment." GUID="" SSID="000b795b-9490-457f-9db0-ba5a8461633c" Symptoms="Configuration (unsupported or problematic)"/>
+							<Rule Name="sDisableRobustifiedUNC" Query="$.=1" Error="Warning" Title="DisableRobustifiedUNC=1" Text="This registry value is only intended for troubleshooting purpose and is not supported in production environment." GUID="" SSID="8f3a4456-c29b-4c76-8a8d-d5094bef9324" Symptoms="Configuration (unsupported or problematic)"/>
 						</Setting>
 						<Setting Key1="Options5">
 						</Setting>
@@ -559,8 +600,13 @@
 						</Rule>
 						<Rule Name="nOptions" Query="if(contains(lower-case('%KP%'),'excel\options') and (../Instance/Setting/@Key1='Options')=true(),../Instance/Setting[@Key1='Options']/Value,-1)">
 						</Rule>
-						<Rule Name="sIgnoreOtherApps" Query="$nOptions&gt;0 and bitwise-and($nOptions,64)=0 and $nfDdeEnabled_6_1Pol=-1" Error="Warning" Title="The 'Ignore other applications that use Dynamic Data Exchange (DDE)' setting is enabled" Text="When the 'Ignore other applications that use Dynamic Data Exchange (DDE)' setting is enabled, you will receive an error if you try to open an Excel file by double-clicking it." GUID="275825" SSID="f6b98f8e-6736-4b1a-a53a-3c9b6346afcd" Symptoms="Startup,File Open error">
-						</Rule>
+						<Rule Name="sIgnoreOtherApps" Query="$nOptions&gt;0 and bitwise-and($nOptions,64)=0 and $nfDdeEnabled_6_1Pol=-1" Error="Warning" Title="The 'Ignore other applications that use Dynamic Data Exchange (DDE)' setting is enabled" Text="When the 'Ignore other applications that use Dynamic Data Exchange (DDE)' setting is enabled, you will receive an error if you try to open an Excel file by double-clicking it.&#xA;&#xA;Note, if you click the 'Fix it for me' option you may have to manually re-enable some settings in Excel." GUID="275825" SSID="f6b98f8e-6736-4b1a-a53a-3c9b6346afcd" Symptoms="Startup,File Open error">
+              <Fix ManualOnly="True">
+                <Actions>
+                  <Action Name="SetValue" KeyName="HKCU\Software\Microsoft\Office\%MAJORVERSION%.0\Excel\Options" Type="Registry" Value="343" ValueName="Options" ValueType="REG_DWORD"></Action>
+                </Actions>
+              </Fix>
+            </Rule>
 						<Rule Name="sFullCalcOnLoadOldFile" Query="$nFullCalcOnLoadOldFile=0" Error="Warning" Title="Re-calculation of older workbooks may be affected by registry data" Text="Registry data that stops the initial calculation of external links that may no longer be available has been found. This keeps existing cell values intact, but is not recommended because further calculation results in the file may be wrong." SSID="16c01702-f226-421b-ba0f-d0d565c919b9" Display="Hide">
 						</Rule>
 					</Object>
@@ -569,7 +615,7 @@
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 					<Setting Key1="__VALUES"></Setting>
 					<Setting Key1="VBAOff">
-						<Rule Name="sHkcuVBAOff" Query="$.=1 and $HklmVBAOff=-1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA functionality is impaired or disabled (HKCU registry data)" Text="The VBAOff value in the HKCU registry hive is set to a value other than 0. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="4b17edd1-2a3f-42be-acfd-abf460a0f310" Symptoms="VBA"></Rule>
+						<Rule Name="sHkcuVBAOff" Query="$.=1 and $HklmVBAOff=-1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA functionality is impaired or disabled (HKCU registry data)" Text="The VBAOff value in the HKCU registry hive is set to a value other than 0. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="8dc58521-9148-42f0-b931-8b695a0ee5f1" Symptoms="VBA"></Rule>
 					</Setting>
 					<Rule Name="HkcuVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 				</Object>
@@ -603,7 +649,7 @@
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 					<Setting Key1="__VALUES"></Setting>
 					<Setting Key1="VBAOff">
-						<Rule Name="sHklmVBAOff" Query="$.=1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="Visual Basic for Applications is disabled (HKLM registry data)" Text="The VBAOff value = 1 in the registry under the HKLM hive. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="a7e01c21-78d8-4a10-b3d6-cbae9ffe2187" Symptoms="VBA"></Rule>
+						<Rule Name="sHklmVBAOff" Query="$.=1 and $HkcuVBAOffPol=-1 and $HklmVBAOffPol=-1" Error="Warning" Title="Visual Basic for Applications is disabled (HKLM registry data)" Text="The VBAOff value = 1 in the registry under the HKLM hive. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="8238f7c0-1185-470a-8886-92e59f1d2db5" Symptoms="VBA"></Rule>
 					</Setting>
 					<Rule Name="HklmVBAOff" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 				</Object>
@@ -668,14 +714,14 @@
 			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 				<Setting Key1="__VALUES"></Setting>
 				<Setting Key1="VBAOff">
-					<Rule Name="sHkcuVBAOffPol" Query="$.=1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKCU" Text="The VBAOff value is set to a value other than 0 as a policy under HKCU. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="7e2b210a-d7b9-483c-8868-c29c347a6c8a" Symptoms="VBA"></Rule>
+					<Rule Name="sHkcuVBAOffPol" Query="$.=1 and $HklmVBAOffPol=-1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKCU" Text="The VBAOff value is set to a value other than 0 as a policy under HKCU. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="e7009da4-ba16-4106-8671-d480a84264f5" Symptoms="VBA"></Rule>
 				</Setting>
 				<Rule Name="HkcuVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 			</Object>
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 				<Setting Key1="__VALUES"></Setting>
 				<Setting Key1="VBAOff">
-					<Rule Name="sHklmVBAOffPol" Query="$.=1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKLM" Text="The VBAOff value is set to a value other than 0 as a policy under HKLM. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="110c76da-3fcf-405c-8b14-1db7b6eb1600" Symptoms="VBA"></Rule>
+					<Rule Name="sHklmVBAOffPol" Query="$.=1" Error="Warning" Title="VBA Functionality is impaired or disabled due to Policy under HKLM" Text="The VBAOff value is set to a value other than 0 as a policy under HKLM. In this configuration, Visual Basic for Applications (VBA) is disabled in Office programs. Set VBAOff=0 if you need to use VBA." GUID="296647" SSID="92d2addb-087c-4f84-9e81-232cd56868f2" Symptoms="VBA"></Rule>
 				</Setting>
 				<Rule Name="HklmVBAOffPol" Query="if(../Instance/Setting[@Key1='VBAOff'],../Instance/Setting[@Key1='VBAOff']/Value,-1)"></Rule>
 			</Object>
@@ -713,10 +759,10 @@
 			<Object Type="Group" Name="DCOM Settings" Class="Miscellaneous" GroupingClass="True">
 				<Object Type="GetComputerNameEx">
 					<Setting Key1="ComputerNameNetBIOS" Substitution="MACHINENAME" Display="Hide"/>
-					<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_DCOMApplicationSetting" Key4="AppID='{00020812-0000-0000-C000-000000000046}'" Key5="*" Display="Hide">
+					<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_DCOMApplicationSetting" Key4="AppID='{00020812-0000-0000-C000-000000000046}'" Display="Hide">
 						<Setting Key1="__VALUES"></Setting>
 						<Setting Key1="RunAs">
-							<Rule Name="sUnattendedAutomation" Query="$." Error="Warning" Title="Excel is detected to be working in non-user interactive mode through DCOM Settings" Text="Microsoft does not recommend, nor support, automation of Office applications from any unattended, non-interactive client application or component (including ASP, ASP.NET, DCOM, and NT Services).Please remove the DCOM settings for the Excel." GUID="304008" SSID="7c43e280-fba4-4f5a-8a0a-449f0822d70f" Symptoms="Configuration (unsupported or problematic)"></Rule>
+							<Rule Name="sUnattendedAutomation" Query="$." Error="Warning" Title="Excel is detected to be working in non-user interactive mode through DCOM Settings" Text="Microsoft does not recommend, nor support, automation of Office applications from any unattended, non-interactive client application or component (including ASP, ASP.NET, DCOM, and NT Services).Please remove the DCOM settings for the Excel." GUID="304008" SSID="9faf262e-5e1d-4b8c-b6a2-50a7b18df780" Symptoms="Configuration (unsupported or problematic)"></Rule>
 						</Setting>
 					</Object>
 				</Object>        
@@ -838,15 +884,17 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
 	<Rule Name="sWordVersion"></Rule>
-  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
-  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
-  <Rule Name="fLync2013AddinFoundWow"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>NXj0eMqjCv7marSKeYCLobKqV2w=</DigestValue></Reference></SignedInfo><SignatureValue>
-    B9X3GPZLCfhczNKr/hvOf+R0EsNpFC5s6BwmjUf+VsJZpFwWb3wnCjARamoYRRIll/zQE5ML
-    7kit9iJf1PdAAZt1EgZ6rj/TQJDMv/B2G+o9Va4wasoSxUKura7xQoVA0xkxu0ivnzFrSv7v
-    DnAJG4NsIdk8SbP+5bAPc1K7oB/+M5KCaeP8/IbmCkJqbN9FeF5XGbwXbBiNPCLqLREd/pxZ
-    QRYLWjDgU4yW2V4fggQAisqouPEs/yIkUWiz4odA7Au+kv8gtV3EjFfDcIeknn5TqcnTOXUD
-    iulGd3a/bbTeCTK+u25SA5QUHyTtsS+wfbAqzAlladP1M7+sLX+WLQ==
+  <Rule Name="HKCUAddinRegistry_fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="HKLMAddinRegistry_fLync2013AddinFoundWow"></Rule>
+  <Rule Name="fMapiHttpConnected14"></Rule>
+  <Rule Name="CloudMbxRegistry_fCloudMbxDetected"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>KJ0vth42X9H7hotuDG3hlrbdDGI=</DigestValue></Reference></SignedInfo><SignatureValue>
+    d+eCdu9iBatt2cYrUorNRYek4zWNHa8DCTzGUzxMoADYQ6s3vLvObYArfwAxeP+1czj7rpyi
+    hVqBGcvFeUc4GXBd93ZoVXVa8x+Fkhd9+0Gbo4GK3wj20mPEK6KQ9tMq+p9OY4RBvVwcZODs
+    A1rXBv4k7oAlyYZ9B9GJ4UtJLZJ9URgMYDRaCzW2Gi6aBckiqfPh8+MsVHMuIw3YWg7i9sHJ
+    7Ig6SjBcPmjWH1O5I6WAMhI/f5kEkCq8YMbylui3V4ffBuXfP5SZ+H61Qpbz7HuQ5+34GOdh
+    460XT+m2neJ7vaSBKVM2xngAGuxtCWWj8BesYi6cvyMi6k5wtSpChw==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -951,28 +999,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAK9TR3dsG/GjAgAAAAAArzANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTYwNTAzMTcxMzI1WhcNMTcwODAzMTcxMzI1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
 dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
 QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
-7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
-f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
-NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
-+7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+AQEFAAOCAQ8AMIIBCgKCAQEAvIU6bFARsNjTYwC3p63ceKHrpHQuCZTbNDUUaayYlNptTs9au9YI
++P9IBOKErcKjXkxftzeQaum86O7IGQlJPvqr0Cms32bitA6yECmWddujRimd4ULql8Imc452jaG1
+pjiPfq8uZcTgYHkJ5/AMQ+K2NuGTLEw4//BTmnBMOugRKUuUZcVQZG+E9wot5slnIe1p/VgYpt8D
+ejA4crXFzAeAXtj4XEY7NdE351GaIET0Y1LeKdWjnwhz2dqjhX2BJE/HDid/HYv3bnrgHBlHfmOT
+kaB799B8amERbJjNJfqrCKofWxUBWq7R1iStUCFjSSvt+Q/OS2aoYsLXObA2rwIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFGgYUtBYbEj/U4U9IDez4/ZMdPF4MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
-d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
-5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
-lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
-IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
-vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAIz3
+2N/DMfk74OzCmb8uSgdkrVDlMU0+O4OWsClrjoUq0o6w2qNxSX+nzxxbt7e7paBO+0pyf2m4XaGB
+LfuZW8lBRC2mR+U5K1wXzZTqy/3v1dIKyngU2cPT1L8yaC5v6FkpDljzBfslTmPvPljhN41uKTif
+BPqxpO+H41lCVaG/zN6HDovSoSt8jMOh01+9VCUsbccY6J7D9iT3erE1a0FVXy7cn9mDckXaeAOf
+z8cMJWlcNWqN1J+DjUWpArxwQjVX+gxC1CUx8Z1aA+HSBfbCXaOAtLRni3VUf1Wje/mHZevDfUkM
+2gKd9TcEu2IN1pDcWnjcSb5KLOPfSOU7Xz8=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -999,34 +1047,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQAH1fcY9ksJ+FzM0qv+G85/5HQSw2kULmzoHCaNR/5WwlmkXBZvfCcKMBFqahhFEiWX/NAT
-kwvuSK32Il/U90ABm3USBnquP9NAkMy/8HYb6j1VrjBqyhLFQq6trvFChUDTGTG7SK+fMWtK/u8O
-cAkbg2wh2TxJs/7lsA9zUrugH/4zkoJp4/z8huYKQmps30V4XlcZvBdsGI08IuotER3+nFlBFgta
-MOBTjJbZXh+CBACKyqi48Sz/IiRRaLPih0DsC76S/yC1XcSMV8Nwh6SeflOpydM5dQOK6UZ3dr9t
-tN4JMr67blIDlBQfJO2xL7B9sCrMCWVp0/Uzv6wtf5YtoIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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
-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
+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
-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</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/o4wIhgPMjAxNjA4MDExNjU5
+NThaGA8yMDE2MDgwMjE2NTk1OFowczA5BgorBgEEAYRZCgQBMSswKTAKAgUA20n+jgIBADAGAgEA
+AgECMAcCAQACAhg+MAoCBQDbS1AOAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkKAwGg
+CjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADW8Wc1X7wC6a6anLPjY
+Z2LaN5A9sqH61c4KUXHRWQ3NmrcTAt5MRePI0Rf9rcgxQdA/DPFaeCoOLMvfTtc1njNwsDsbcjp8
+p37u2Rr/E0WNFRoraruy1H8HEHx3Tev0SNGOKot7vdrkByf8qTKKOtA4EpEnH9SEuHYhDBN7SfW4
+qcWVmL5KhJDtvtQDqfPzMa7fL7ybRLblnfVnJD/dIz973Q0gS2aFre7EyRAkKlJVOy2m4J1kDXAG
+Z7GfdnVjTB0PDzILYM2HrdlGs0c6CsKLqUnB4H7oEQTVDXGJhjj02Nozcq4uEucHns5H3JS1puGO
+AwoOxcxZQYGdexa7AqUxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9u
+MSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACvU0d3bBvxowIAAAAAAK8w
+CQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE2
+MDgwMTE3MjkyN1owIwYJKoZIhvcNAQkEMRYEFNBr7nv+M3nn0PIq9JiMKwv7Od0pMA0GCSqGSIb3
+DQEBBQUABIIBACnH7HRG/++ols/ZJCPsnjUsixlHAJobbAfAGVF4RuK54ill4MYecDgWBIuyuGTh
+QyL9l93I2RkvLYvHxl9CjCURGWhu7N3hnKFAYRPHxopJsSIhTDYhc4QQwoBxN3Lrdpcy4V4zstnF
+LoyQQfaiHgBY/mFtfmVsrMtOaD4LQ8PKzdYVnzAzT4oEyLN9Sf7j3hDFYdP9Jm/W9uo2oukgsV8E
+Z+G01P9x1roLmDw645hVKBJiP2eBCohfd6+du6iYIPlNHDmP3lSH/i11uQ/zjALj63fbraYoOlxR
+nAMb9OP68Zs5FnlWHg34yqoSJZ28NDN+2gH6VkClH3xQ390+iy0=</CounterSignature></Object></Signature></ObjectCollector>

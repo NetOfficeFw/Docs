@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+	<Configuration ConfigName="Outlook Search" ChangeDescription="2.0.1607.14" ConfigVersion="2.0.1607.14" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml" Symptoms="1">
+    <Substitution Name="MAJORVERSION"></Substitution>
+    <Substitution Name="INSTALLTYPE"></Substitution>
+    <Substitution Name="APPNAME">Outlook</Substitution>
+    <Substitution Name="DAYS"></Substitution>
+    <Substitution Name="MAXEVENTS"></Substitution>
+		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
+		<ConfigPreprocessor Name="0 OutlookGlobalSubstitutionConfigPreprocessor Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.OutlookGlobalSubstitutionConfigPreprocessor"/>
+		<ConfigPreprocessor Name="1 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
+		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+		<ObjectProcessor Name="Outlook" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OutlookObjectProcessor"/>
+		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+    <ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+    <ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
+		<RestrictionType Name="Task">
+			<Option Name="Offline Scan" Text="RestrictionText" Title="RestrictionTitle" Filter="True"/>
+		</RestrictionType>
+	</Configuration>
+  
+<Type Name="OutlookSearch">
+  <!--SEARCH-->
+	<Object Type="Group" Name="Search" Class="Search" GroupingClass="True">
+
+    <Object Type="Group" Name="Outlook registry">
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\Search" Display="Right">
+        <Setting Key1="SearchResultsCap"></Setting>
+        <Rule Name="fSearchResultsCap" Query="if((../Instance/Setting/@Key1='SearchResultsCap')=true(),../Instance/Setting[@Key1='SearchResultsCap']/Value,-1)"></Rule>
+        <Rule Name="sSearchResultsCap1214" Query="(($n2DigitVersion=12 or $n2DigitVersion=14) and (($fSearchResultsCapPol&gt;0 and $fSearchResultsCapPol&lt;200) or ($fSearchResultsCapPol=-1 and ($fSearchResultsCap&gt;0 and $fSearchResultsCap&lt;200))))" Error="Warning" P0="if($fSearchResultsCapPol&gt;0 and $fSearchResultsCapPol&lt;200,'Group Policy','non-policy')" Title="Your search results are limited for Cached mode profiles due to the SearchResultsCap registry value" Text="The default maximum number of results returned by a search in Outlook is 200 items when your profile is in Cached mode. Your search results are limited due to the {0} SearchResultsCap registry value.&#xA;&#xA;Please click the 'Click here ...' link for details on the {0} registry path for the 'SearchResultsCap' value." GUID="313119" SSID="4ecb75a6-1649-4cf6-b35d-f1a723227748" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search"></Rule>
+        <Rule Name="sSearchResultsCap15LT30Items" Query="versioncompare($sFullAppVersion,'15.0.4641.1001')&lt;0 and $n2DigitVersion=15 and $fSearchResultsCapPol=-1 and $fSearchResultsCap=-1" Error="Warning" Title="Search results limited to 30 items for Cached mode profiles" Text="With your build of Outlook.exe, the default maximum number of results returned by a search in Outlook 2013 is 30 items when you are using a Cached mode profile. You can install a more recent build of Outlook.exe that provides a higher default limit (250).&#xA;&#xA;Please click the 'Click here ...' link for details." GUID="313119" SSID="88ec080b-93b7-42d0-abbc-3007e41df10c" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search"></Rule>
+        <Rule Name="sSearchResultsCap15Plus" Query="$n2DigitVersion&gt;=15 and $fSearchResultsCapPol=-1 and $fSearchResultsCap&gt;0 and $fSearchResultsCap&lt;=250" Error="Warning" P0="$fSearchResultsCap" Title="Search results limited to {0} items" Text="For Cached mode profiles, the maximum number of results returned by a search in Outlook is configured in the registry at {0} items. To return more items in a search, disable the the 'Improve search speed by limiting the number of results shown' setting (on the File tab click Options and then click Search)." GUID="820552" SSID="c63d53d0-f5d7-4e14-8a73-3a8586145143" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search"></Rule>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Outlook\Search" Display="Right">
+        <Setting Key1="SearchResultsCap"></Setting>
+        <Rule Name="fSearchResultsCapPol" Query="if((../Instance/Setting/@Key1='SearchResultsCap')=true(),../Instance/Setting[@Key1='SearchResultsCap']/Value,-1)"></Rule>
+        <Rule Name="sSearchResultsCap15PlusPol" Query="$n2DigitVersion&gt;=15 and $fSearchResultsCapPol&gt;0 and $fSearchResultsCapPol&lt;=250" Error="Warning" P0="$fSearchResultsCapPol" Title="Search results limited to {0} items" Text="For Cached mode profiles, the maximum number of results returned by a search in Outlook is configured in the registry (as a group policy setting) at {0} items. To return more items in a search, please speak with your administrator to have them disable the the policy controlling the 'Improve search speed by limiting the number of results shown' setting." GUID="820552" SSID="89a3d515-7e40-4663-9036-0faed2d8839a" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search"></Rule>
+      </Object>     
+    </Object>
+    
+		<Object Type="Group" Name="Windows Desktop Search">
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Windows Desktop Search">
+				<Setting Key1="__VALUES">
+				</Setting>
+			</Object>
+		</Object>
+		<Object Type="Group" Name="Windows Search">
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Windows Search">
+				<Setting Key1="__VALUES"/>
+				<Setting Key1="UseLowPriorityConfiguration">
+					<Rule Name="sSearchLowPriorityConfigOff" Query="$.=0" Error="Warning" Title="Possible computer performance issue with UseLowPriorityConfiguration=0 in the registry" Text="The UseLowPriorityConfiguration registry value = 0. This is a non-default configuration and you may see computer performance issues due to higher priority indexing." GUID="329028" SSID="ee1e5675-b8bd-49e0-9be2-f126b48f2d54" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Slowness,Application not responding,Search,Indexing,Administration"></Rule>
+				</Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Windows Search\Gathering Manager" Display="Right">
+				<Setting Key1="DisableBackoff">
+					<Rule Name="sSearchIndexingBackoffNotEnabled" Query="$.=1" Error="Warning" Title="Possible computer performance issue with DisableBackoff=1 in the registry" Text="The DisableBackoff registry value = 1. This is a non-default configuration and you may see computer performance issues due to higher priority indexing." GUID="329029" SSID="5f773f35-2210-45e6-9a7d-a6799a3eaa5c" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Slowness,Application not responding,Search,Indexing,Administration"></Rule>
+				</Setting>
+			</Object>
+			<Object Type="Group" Name="Windows Search Policies" Display="Right">
+				<!--THINK WE CUT THAT IN 2010-->
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Policies\Microsoft\Windows\Windows Search">
+					<Setting Key1="EnableIndexingDelegateMailboxes">
+						<Rule Name="sEnableIndexingDelegateMailboxes" Error="Warning" Query="($.=1) and ($n2DigitVersion=12)" Title="EnableIndexingDelegateMailboxes=1" Text="If you have a shared Exchange mailbox in your profile, you may see performance issues as the folders in this shared mailbox are being indexed. More information: http://blogs.technet.com/mikelag/archive/2009/05/04/windows-desktop-search-and-the-implications-on-wan-performance.aspx" GUID="285784" SSID="f504bb4a-2619-4b70-ac82-44c1a382c9c3" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Slowness,Application not responding,Search,Indexing,Administration">
+						</Rule>
+					</Setting>
+					<Setting Key1="PreventIndexingOutlook">
+						<Rule Name="sPreventIndexingOutlook" Query="$.=1" Error="Warning" Title="Indexing has been disabled using a policy setting in the registry" Text="Indexing for Windows Desktop Search has been disabled in the registry. Consequently, searching for items in Outlook will take longer.&#xA;&#xA;This group policy configures the following registry data:&#xA;Key: HKLM\Software\Policies\Microsoft\Windows\Windows Search&#xA;DWORD: PreventIndexingOutlook&#xA;Value: 1&#xA;&#xA;Click the 'Click here ...' link for details on group policies for Windows Search." GUID="267393" SSID="A4D4CD56-C450-4B96-9827-2FA39EF090B2" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search,Indexing"></Rule>
+					</Setting>
+          <Setting Key1="PreventIndexingEmailAttachments">
+            <Rule Name="sPreventIndexingAttachments" Query="$.=1" Error="Warning" Title="Indexing of email attachments has been disabled by a group policy setting" Text="The indexing of email attachments has been disabled by the 'Prevent indexing e-mail attachments' policy configured by your administrator. Consequently, searching for items in Outlook may not give the expected results.&#xA;&#xA;This group policy configures the following registry data:&#xA;Key: HKLM\Software\Policies\Microsoft\Windows\Windows Search&#xA;DWORD: PreventIndexingEmailAttachments&#xA;Value: 1&#xA;&#xA;Click the 'Click here ...' link for details on group policies for Windows Search." GUID="620742" SSID="21d50e30-c16b-4ee4-a1da-4b18b25abd30" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search,Email attachments"></Rule>
+          </Setting>
+					<Setting Key1="PreventIndexingUncachedExchangeFolders">
+						<Rule Name="sPreventIndexingUncachedExchangeFolders" Query="($.=0) and ($n2DigitVersion=12)" Title="PreventIndexingUncachedExchangeFolders=0 in the registry" Text="The PreventIndexingUncachedExchangeFolders value is set to 0 in the registry. This configuration can cause performance issues with an Online mode profile." Error="Warning" GUID="275726" SSID="35649439-14f7-483a-9daf-d5ab28ec2a64" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Slowness,Application not responding,Search,Indexing,Administration">
+						</Rule>
+					</Setting>
+				</Object>
+			</Object>
+		</Object>
+    <Object Type="Group" Name="Windows Search Service Office Outlook Protocol Handler">
+	    <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="CLSID\{9E175BAF-F52A-11D8-B9A5-505054503030}">
+		    <Setting Key1="KeyExists">
+          <Rule Name="sSearchFailureWin7x64OLx86" Query="$.='True' and $OSDetails_fWin7Installed and $OSDetails_OSArchitecture='x64' and ($n2DigitVersion=12 or $n2DigitVersion=14) and $bitness='x86'" Error="Warning" Title="Outlook search fails to return results due to improper registry data" Text="The Windows registry contains a subkey that is in the wrong hive. This configuration causes Outlook searches to fail.&#xA;&#xA;Click the 'Click here ...' link for detailed steps on how to resolve this problem." GUID="525781" SSID="db40962b-2cdf-45b4-b169-b41d2f172df3" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search"></Rule>
+        </Setting>
+			</Object>
+		</Object>
+  <Object Type="Group" Name="Search ProtocolHandler keys" Display="Right">
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Classes\Outlook.Search.MAPIHandler.1" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Classes\Outlook.Search.MAPIHandler.1" Key5="Subtree" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Classes\Outlook.Search.MAPI15Handler.1" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+        <Setting Key1="KeyExists" Substitution="MAPI15HANDLER1" Display="Hide">
+          <Rule Name="fMAPI15Handler1Exists" Query="$.='True'"></Rule>
+        </Setting>
+        <Rule Name="sOLK14PlusLync15SearchX86" Query="$fMAPI15Handler1Exists and string-length($OfficeSKU_sProductNameOutlookX86)&gt;0 and string-length($OfficeSKU_sProductNameLyncX86)&gt;0 and versioncompare($OSDetails_WindowsVersion,'6.1.0.0')&gt;=0" Error="Warning" Title="Cannot open Outlook items using Search in Windows" Text="When you use the Search functionality in Windows you are unable to open Outlook items returned in your search results. This occurs because you have Outlook 2010 plus Lync 2013 installed.&#xA;&#xA;Please click the 'Click here ...' link for the resolution." GUID="306050" SSID="dc4e38a8-3e5c-4152-a0b0-84ea9b360a06" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search"></Rule>
+        <Rule Name="sOLK14PlusLync15SearchX64" Query="$fMAPI15Handler1Exists and string-length($OfficeSKU_sProductNameOutlookX64)&gt;0 and string-length($OfficeSKU_sProductNameLyncX64)&gt;0 and versioncompare($OSDetails_WindowsVersion,'6.1.0.0')&gt;=0" Error="Warning" Title="Cannot open Outlook items using Search in Windows" Text="When you use the Search functionality in Windows you are unable to open Outlook items returned in your search results. This occurs because you have Outlook 2010 plus Lync 2013 installed.&#xA;&#xA;Please click the 'Click here ...' link for the resolution." GUID="306050" SSID="db40899d-0f68-4b2d-984e-60e4c98ae5f7" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search"></Rule>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Classes\Outlook.Search.MAPI15Handler.1" Key5="Subtree" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Windows Search\ProtocolHandlers\Mapi" Key5="Subtree" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Wow6432Node\Microsoft\Windows Search\ProtocolHandlers\Mapi" Key5="Subtree" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Windows Search\ProtocolHandlers\Mapi15" Key5="Subtree" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Wow6432Node\Microsoft\Windows Search\ProtocolHandlers\Mapi15" Key5="Subtree" Display="Right">
+        <Setting Key1="__VALUES"></Setting>
+      </Object>
+    </Object>
+		<Object Type="Group" Name="Windows Search Service Status" Class="Search" Display="Right">
+			<Object Type="WMI" Key3="Win32_Service" Key4="Name='WSearch'">
+				<Setting Key1="StartMode">
+          <Rule Name="fWSearchDisabled" Query="$.='Disabled'"></Rule>
+          <Rule Name="sSearchServiceDisabled" Query="$fWSearchDisabled" Error="Warning" Title="The Windows Search service is set to 'Disabled'" Text="The Windows Search service is disabled. This will cause problems with the People Pane and your search results may take longer to appear." GUID="624038" SSID="2f8d34d4-a741-4ae8-8453-3aa03b77eae0" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="People Pane,Search"></Rule>
+        </Setting>
+				<Setting Key1="Started"></Setting>
+				<Setting Key1="DesktopInteract">
+					<Rule Name="sWSearchDesktopInteract" Error="Error" Query="$.='True'" Title="Windows Search Service has &quot;Allow service to interact with Desktop&quot; enabled" Text="If the Windows Search Service has the &quot;Allow service to interact with Desktop&quot; setting enabled, you may not see any search results in Outlook." GUID="268040" SSID="a35fb747-bdef-4c67-89a5-6de8073eab75" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search,Indexing"></Rule>
+				</Setting>
+			</Object>
+		</Object>
+		<Object Type="Group" Name="PDF iFilter" Class="IFilters" GroupingClass="True">
+			<Object Type="Group" Name="Registry data">
+				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Classes\.pdf\PersistentHandler" Key5="Base">
+					<Setting Key1="(Default)" Substitution="PDFHANDLERCLSID"/>
+					<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Classes\CLSID\%PDFHANDLERCLSID%\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}">
+						<Setting Key1="(Default)" Substitution="PDFHANDLERADDINCLSID"/>
+						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Classes\CLSID\%PDFHANDLERADDINCLSID%\InprocServer32" Key5="Base">
+							<Setting Key1="(Default)" Substitution="IFILTERDLLFILEPATH">
+								<Rule Name="iFilterDllPath" Query="$."/>
+							</Setting>
+							<Object Type="File" Key2="%IFILTERDLLFILEPATH%" Display="Hide">
+								<Setting Key1="CompanyName" Display="Hide">
+									<Rule Name="siFilterCompanyName" Query="$."></Rule>
+								</Setting>
+                <Setting Key1="Version">
+                  <Rule Name="siFilterVersion" Query="$."></Rule>
+                </Setting>
+                <Rule Name="sNoPolicyTipPDFiFilter10Plus" Query="$ExchVersion_fExchange2013 and $OSDetails_fWin7Installed and $n2DigitVersion&gt;=15 and versioncompare($siFilterVersion,'10.0.0.0')&gt;=0 and contains(lower-case('%IFILTERDLLFILEPATH%'),'acrordif')" Error="Warning" Title="Data Loss Prevention policy tips are not displayed for PDF attachments" Text="If you attach a .pdf file to an email message you do not see an expected Data Loss Prevention (DLP) policy tip. This occurs because you have version 10 (or higher) of the PDF iFilter (AcroIF.dll) installed.&#xA;&#xA;Click the 'Click here ...' link for a resolution to this issue." GUID="513020" SSID="38b0c490-94c2-4991-95d9-94dd78fd7586" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="DLP,Policy Tips">"</Rule>
+							</Object>
+						</Object>
+					</Object>
+					<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Classes\Wow6432Node\CLSID\%PDFHANDLERCLSID%\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}">
+						<Setting Key1="(Default)" Substitution="PDFHANDLERADDINCLSID"/>
+						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Classes\Wow6432Node\CLSID\%PDFHANDLERADDINCLSID%\InprocServer32" Key5="Base">
+							<Setting Key1="(Default)" Substitution="IFILTERDLLFILEPATHWOW">
+								<Rule Name="iFilterDllPathWow" Query="$."/>
+							</Setting>
+							<Object Type="File" Key2="%IFILTERDLLFILEPATHWOW%" Display="Hide">
+								<Setting Key1="CompanyName" Display="Hide">
+									<Rule Name="siFilterCompanyNameWow" Query="$."></Rule>
+								</Setting>
+                <Setting Key1="Version">
+                  <Rule Name="siFilterVersionWow" Query="$."></Rule>
+                </Setting>
+                <Rule Name="sNoPolicyTipPDFiFilter10PlusWow" Query="$ExchVersion_fExchange2013 and $OSDetails_fWin7Installed and $n2DigitVersion&gt;=15 and versioncompare($siFilterVersionWow,'10.0.0.0')&gt;=0 and contains(lower-case('%IFILTERDLLFILEPATHWOW%'),'acrordif')" Error="Warning" Title="Data Loss Prevention policy tips are not displayed for PDF attachments" Text="If you attach a .pdf file to an email message you do not see an expected Data Loss Prevention (DLP) policy tip. This occurs because you have version 10 (or higher) of the PDF iFilter (AcroIF.dll) installed.&#xA;&#xA;Click the 'Click here ...' link for a resolution to this issue." GUID="513020" SSID="20064df0-50d3-43d7-aa1c-f4c579d90b45" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="DLP,Policy Tips">"</Rule>
+              </Object>
+						</Object>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="Group" Name="iFilter Dll details">
+				<Object Type="Group" Name="dll">
+					<Rule Name="iFilterDllPathTest" Query="$iFilterDllPath" P0="$iFilterDllPath" Text="Path ={0}"/>
+					<Rule Name="iFilterCompanyName" Query="$siFilterCompanyName" P0="$siFilterCompanyName" Text="Company Name ={0}"></Rule>
+					<Rule Name="iFilterDllPathTestWow" Query="$iFilterDllPathWow" P0="$iFilterDllPathWow" Text="Path (from \Wow6432Node registry data) ={0}"/>
+					<Rule Name="iFilterCompanyNameWow" Query="$siFilterCompanyNameWow" P0="$siFilterCompanyNameWow" Text="Company Name ={0}"></Rule>
+				</Object>
+			</Object>
+		</Object>
+		<Object Type="Group" Name="Application Event Log entries for Search" Class="Event Logs" GroupingClass="True">
+			<Object Type="Group" Name="Event 10023">
+				<Object Type="EventLog" Key1="Application" Key2="Search" Key3="10023" Key5="50" Key7="14" Key8="10000">
+					<Setting Key1="Eventid"></Setting>
+					<Setting Key1="Message"></Setting>
+					<Rule Name="nEvent10023" Query="count(../Instance)">
+					</Rule>
+          <Rule Name="fPDFIndexingIssue10023" Query="$nEvent10023&gt;0 and $iFilterDllPath!=''" AlwaysEvaluate="True">
+          </Rule>
+          <Rule Name="fPDFIndexingIssue10023Wow" Query="$nEvent10023&gt;0 and $iFilterDllPathWow!=''" AlwaysEvaluate="True"></Rule>
+        </Object>
+      </Object>
+      <Object Type="Group" Name="Event 10024">
+        <Object Type="EventLog" Key1="Application" Key2="Search" Key3="10024" Key5="50" Key7="14" Key8="10000">
+          <Setting Key1="Eventid"></Setting>
+          <Setting Key1="Message"></Setting>
+          <Rule Name="nEvent10024" Query="count(../Instance)">
+          </Rule>
+          <Rule Name="fPDFIndexingIssue10024" Query="$nEvent10024&gt;0 and $iFilterDllPath!=''" AlwaysEvaluate="True"></Rule>
+          <Rule Name="fPDFIndexingIssue10024Wow" Query="$nEvent10024&gt;0 and $iFilterDllPathWow!=''" AlwaysEvaluate="True"></Rule>
+        </Object>
+      </Object>
+      <Object Type="Group" Name="10023_24" Display="Hide">
+        <Rule Name="sPDFIndexingIssue10023_24" Query="$fPDFIndexingIssue10023 or $fPDFIndexingIssue10024" Error="Warning" Title="Possible Outlook search or indexing issue (event 10023 or 10024)" Text="The PDF iFilter is registered and Event 10023 or 10024 was found in the Application Event log. This has been known to cause indexing issues in Outlook. Click the 'Click here...' link if you are unable to search for Outlook items or your indexing of Outlook items does not finish." GUID="389860" SSID="6e89317a-19d8-49ac-8571-52bdc9b5af1c" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search,Indexing">
+        </Rule>
+        <Rule Name="sPDFIndexingIssue10023_24Wow" Query="$fPDFIndexingIssue10023Wow or $fPDFIndexingIssue10024Wow" Error="Warning" Title="Possible Outlook search or indexing issue (event 10023 or 10024)" Text="The PDF iFilter is registered (under \Wow6432Node) and Event 10023 or 10024 was found in the Application Event log. This has been known to cause indexing issues in Outlook. Click the 'Click here...' link if you are unable to search for Outlook items or your indexing of Outlook items does not finish." GUID="389860" SSID="61f49972-612c-4a66-a1a8-23ab3eba5b66" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search,Indexing">
+        </Rule>
+      </Object>
+
+      <Object Type="EventLog" Key1="Application" Key3="1000" Key4="searchprotocolhost.exe" Key5="%MAXEVENTS%" Key7="7" Key8="10000">
+        <Setting Key1="Faulting Module Name" Display="Right"></Setting>
+        <Setting Key1="Fault offset" Display="Right"></Setting>
+        <Rule Name="nSearchProtocolHostMsMapi32DllCrash000017e8" Query="count(../Instance[Setting[@Key1='Faulting Module Name' and (lower-case(Value)='msmapi32.dll')] and Setting[@Key1='Fault offset' and (lower-case(Value)='000017e8')]])"></Rule>
+        <Rule Name="sSearchProtocolHostCrashOL16Act" Query="$n2DigitVersion=16 and $nSearchProtocolHostMsMapi32DllCrash000017e8&gt;0" P0="$nSearchProtocolHostMsMapi32DllCrash000017e8" Error="Error" Title="Search failures in Outlook due to crash in SearchProtocolHost.exe" Text="A crash in SearchProtocolHost.exe has been found {0} time(s) in the Application event log. This indicates a known problem where you do not get any results for a search in Outlook.&#xA;&#xA;Please click the 'Click here...' link for details on this issue." GUID="722883" SSID="6cc5bc98-bc06-47ac-87eb-b810ef5ab3a5" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search"></Rule>
+      </Object>
+      
+		</Object>
+		<Object Type="File" Key2="%INSTALLPATH%\mapiph.dll" Display="Right">
+			<Setting Key1="Exists">
+				<Rule Name="sMissingMAPIProtocolHandler" Query="$n2DigitVersion&gt;12 and $.=0" Error="Warning" Title="Outlook search may not be functioning properly because Mapiph.dll is missing." Text="Your Outlook search results may be incomplete because the file Mapiph.dll is missing from your Office installation." GUID="275610" SSID="7ba93b3c-2580-4afc-9bee-11e450058825" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search,Indexing"></Rule>
+			</Setting>
+		</Object>
+    <!--ESM-->
+		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\MMC\NodeTypes" Key5="OneLevel" Display="Hide">
+			<Setting Key1="(Default)" Display="Hide">
+			</Setting>
+      <Rule Name="sESM" Query="count(../Instance/Setting[@Key1='(Default)' and Value='Exchange System Manager Object'])&gt;0" Error="Error" Title="Exchange System Manager is installed" Text="No results are returned when you search for e-mail items using Instant Search." GUID="267394" SSID="c2f9e141-edd5-4d43-99d3-7b9cd473ad6e" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Crash,Startup,Error message,Search">
+      </Rule>
+		</Object>
+		<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" Display="Right">
+			<Setting Key1="Start_SearchComm">
+				<Rule Name="sStartSearchComm" Query="$.=0 and (versioncompare($OSDetails_WindowsVersion,'6.1.0.0')&gt;=0 and versioncompare($OSDetails_WindowsVersion,'6.2.0.0')&lt;0) and $OSDetails_sOSProductType=1" Error="Warning" Title="Search from the Windows Start menu will not locate email messages" Text="Start_SearchComm=0 in the registry. In this configuration, you will not be able to search for email messages using the Windows Search feature. However, you will be able to search for email messages from within Outlook." GUID="389087" SSID="1fb779df-266c-4f5f-b117-a69850affbe4" P9="$CloudMbxRegistry_fCloudMbxDetected" Cloud="{9}" Symptoms="Search">
+				</Rule>
+			</Setting>
+		</Object>
+	</Object>
+  <Reference Type="ExchVersion" Name="ExchVersion" File="outlook.config.xml">
+  </Reference>
+	<!--/SEARCH-->
+ </Type>
+
+  <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Outlook" Key6="outlook" Key7="%MAJORVERSION%" Display="Hide">
+    <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
+    </Setting>
+    <Setting Key1="Bitness" Substitution="APPBITNESS" Display="Hide">
+      <Rule Name="bitness" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="FullVersion" Display="Hide">
+      <Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
+      <Rule Name="sFullAppVersion" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="Name" Display="Hide">
+      <Rule Name="appName" Query="$.">
+      </Rule>
+    </Setting>
+    <Setting Key1="Version" Substitution="APPVERSION" Display="Hide">
+      <Rule Name="n4DigitSKUVersion" Query="$."></Rule>
+    </Setting>
+    <Setting Key1="Type" Substitution="INSTALLTYPE" Display="Hide">
+      <Rule Name="nInstallType" Query="$."></Rule>
+      <Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+    </Setting>
+    <Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Right">
+    </Setting>
+    
+    <Reference Type="OutlookSearch" Name="OutlookSearch" File="outlook.search.config.xml">
+    </Reference>
+    <Reference Type="OSDetails" Name="OSDetails" File="common.config.xml">
+    </Reference>
+    <Reference Type="MSO" Name="MSO" File="common.config.xml">
+    </Reference>
+    <Reference Type="OfficeSKU" Name="OfficeSKU" File="outlook.config.xml">
+    </Reference>
+    <Reference Type="CloudMbxRegistry" Name="CloudMbxRegistry" File="outlook.config.xml">
+    </Reference>
+  </Object>
+  
+  <!--EXTERNALREFS-->
+	<Rule Name="sPpCoreVersion"></Rule>
+  <Rule Name="sWordVersion"></Rule>
+  <Rule Name="fPolicies"></Rule>
+  <Rule Name="effectiveSlowBitrate"></Rule>
+
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>RdglMTuFk6Gex6pkb3FvXQQIVQo=</DigestValue></Reference></SignedInfo><SignatureValue>
+    carsHft38MJIV4oPLQ+E09twJR8G6kjZyrcibCnZ9UKRUoCBRD9LFjfuBWhFaPos5ZRvqpwN
+    FDvoJdTLswHsvXxisgvKqw9h20lpiaVY/uBSgEBgw+rCIWjjuD07kCzouWcDkAFbKGK0D+J/
+    iInveLb9IZJ+xu3UFyDks0kKnXRgqgACF1SjjPY5ibTc8UBIwfq2fRVQaNPDgMnuRt8x4tVJ
+    JmbwcA9F1Glq/4eV2wSL9UJAuyqzpEygpPJe4V/4aVt3D5j31eySLMkt2bLX6zLQnnD2gByW
+    HE4iwsU/vrrjT+Omf3wrtOeNzn7FlGsXCatG3+X0mpqHopMscQXrnw==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAALFpr8Q3a5GTXgAAAAAAsTANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTYwNTAzMTcxMzI3WhcNMTcwODAzMTcxMzI3WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAuB5CzdlupvWjSYQ/N2yCah7oUs5NBYH0s2RuWHAJXNOZEnRFmuBP
+BLSJhWsrspK9GahJ3FZuQEcq2+uBGpjBnZIWXVEzunBgIoUiL313gYGGe8u+/u1nbv0dZNzwijaA
+M2itgpwKvPBHv3Gqq8cFWzVRHTgO31lV4IA28ZhueAocWFNvLV9RkrXBpMwtvbwLqyA/ednmK4+E
+BfsgLbuGcUFS/wyAq7+ZhqUDq+LzHhFLl55V7iApITvmU6kNzZPtvY3QZVPmcq6K3IjwpV4bkr72
+9y+ndWZmfgvqlUvV78hV6zusR6zHiy/NJQH2w8LaPW1YIUZImWJ/jFAUqG7Q5QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFAGGI3nEkNLTKbg8V2lFYretn114MB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAD3G
+M+JdCkrA5KQO5uQdsjwIqCLoJ/kTICat57wPtZA5nbP3NW05sObKPJtA18zQIXzaCWhXVLQ+S+D2
+L/zWJ1cMvHTM+BUxsdOOo+DwDNSFSjG6/0srv7YXigPkkN5jnHdxDmTWBd/TJaGzL+88Sa3uOayC
+xMi0VJB9DbARKRjs0vMxeIsffF7ZEFtWxmeH5CLPmuy5CJiVqo2EJw7qm/QOIX3pXbSAjwighcP5
+RN4li8n3F37B3nhUm05qNF9rIo1Hf7sWWHdwHvT6KHMl0MV/Np80Y2ofnGBNwxphl95bQE8C295+
+QbrEWxAYaQaqMbBgG8FS0uXOqRSYgaRSkpk=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0wYJKoZIhvcNAQcCoIIGxDCCBsACAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQBxquwd+3fwwkhXig8tD4TT23AlHwbqSNnKtyJsKdn1QpFSgIFEP0sWN+4FaEVo+izllG+q
+nA0UO+gl1MuzAey9fGKyC8qrD2HbSWmJpVj+4FKAQGDD6sIhaOO4PTuQLOi5ZwOQAVsoYrQP4n+I
+ie94tv0hkn7G7dQXIOSzSQqddGCqAAIXVKOM9jmJtNzxQEjB+rZ9FVBo08OAye5G3zHi1UkmZvBw
+D0XUaWr/h5XbBIv1QkC7KrOkTKCk8l7hX/hpW3cPmPfV7JIsyS3ZstfrMtCecPaAHJYcTiLCxT++
+uuNP46Z/fCu0543OfsWUaxcJq0bf5fSamoeikyxxBeufoIIDfKGCA3gwggJgAgEBMIHjoYG5pIG2
+MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
+MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
+Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAM9R4brIoF4Sym5kS7aEWeErck/aggcIwgb+k
+gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
+MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
+Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANtJ/4cwIhgPMjAxNjA4MDExNzA0
+MDdaGA8yMDE2MDgwMjE3MDQwN1owdjA8BgorBgEEAYRZCgQBMS4wLDAKAgUA20n/hwIBADAJAgEA
+AgEgAgH/MAcCAQACAhhFMAoCBQDbS1EHAgEAMDYGCisGAQQBhFkKBAIxKDAmMAwGCisGAQQBhFkK
+AwGgCjAIAgEAAgMW42ChCjAIAgEAAgMHoSAwDQYJKoZIhvcNAQEFBQADggEBADzmycqYOkjMI4nM
+Eh8BXeCJwRmsEZF0pZdrfVyk1JDEIPKbTpX98nrosAMn7khtRPzyJbrvaVKDmDelQF38infAFG+r
+RIonmx0Z8n8oX48bgJjbWt2EBQkGq4L+sPfoKvZzigs65P5haO5nXAkihhh9Iq9MlSCxFZVxngjd
+DON8cbsM7YCNaJZTG5OAHr6X8J4H7U3vo+1KY+ZxLDn9CR7fVLheWvNdefwOeUYxJ0t1H72pLZg3
+OrFEk9+v1e658gMeZ23NFCiDmWwgoi6+MxJDNQMUUWXb4/Dplfuk9jg7ojZq+hlgx/Rh7U7l5mKh
+mKU41auRUhb3D17D+JXgxzAxggIVMIICEQIBATCBjjB3MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
+V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0
+aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0ECEzMAAACxaa/EN2uRk14AAAAA
+ALEwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDgwMTE3MjkyOFowIwYJKoZIhvcNAQkEMRYEFMnS2JIAeHJmJjTbP9h+eXy//UVSMA0GCSqG
+SIb3DQEBBQUABIIBABe0vzeF9k6FqKUDHRo5lvwgyHqBKm7zgH0uExmxyzrdyyb3Flgy2Ew/lRLx
+TWWZ7nzfE+zRpMtq4Gri8w8rMSxxJwgqs8lDx/+A3WO/5cs1gdrVhdSi3HUhoFb5Jeka0eRgmSW5
+z41JRy/ZudKgCcy/U1WZnIgjjfYcuRTpXZlupTX0GEC9CJwMJIjDjZXSfN5Jui1sL888jLWeYlJA
+tN85z+FOnDnfuHdOatGmZwfkGWpQwenMby9hQmQhOkHMhrO/wbgBCFWmOrs6zMDpqaSm/4bSRz1k
+XNMLbr6stOAtPpXjhOn6qdn3oSmQcFdy3I/addgfgkxLv8By/7kVCvs=</CounterSignature></Object></Signature></ObjectCollector>
