@@ -1,51 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-  <Configuration ConfigName="OffCAT Master Configuration File" ChangeDescription="2013/03/01" ConfigVersion="1.0.1303.1" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="access.config.xml,common.config.xml,excel.config.xml,outlook.config.xml,powerpoint.config.xml,word.config.xml">
-    &gt;
+	<Configuration ConfigName="OffCAT Master Configuration File" ConfigVersion="1.0.1412.08" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" ChangeDescription="1.0.1412.08" DownloadURL="http://www.microsoft.com/office/offcat" DownloadURL2="http://offcat2.sitebox-s.redant.selfhost.corp.microsoft.com" MaxVersion="1.9.1502.0" MinVersion="1.9.1411.0" FixItURL="http://go.microsoft.com/?linkid={0}" PH="1" ReferencedFiles="access.config.xml,access.crashes.config.xml,all.config.xml,common.config.xml,excel.config.xml,excel.crashes.config.xml,infopath.config.xml,infopath.crashes.config.xml,kms.config.xml,officeupdates.config.xml,onenote.config.xml,onenote.crashes.config.xml,outlook.config.xml,outlook.crashes.config.xml,publisher.config.xml,publisher.crashes.config.xml,powerpoint.config.xml,powerpoint.crashes.config.xml,visio.config.xml,visio.crashes.config.xml,word.config.xml,word.crashes.config.xml">
   </Configuration>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>AC/9Ti6bvmg/jh+3nUEgOm0MY3Q=</DigestValue></Reference></SignedInfo><SignatureValue>
-    QHnYKfrk8Z4sMxbIzNLfy7mPECYgbKjEYP0k3wwDCSWND8CAxzFCD0rdKrgdUkQdHjVKAmxg
-    6oirXKt7Ie9LylaK8oylinJWIGhavZp9tUdTPLfcSjH09qd4BNgMHdHqsxq+QNTrsg+Ge2dZ
-    OtPTu6O4XQQDpdhLcfbpSh8EqO8QO7aIsqKSJwVQFeeFKMcEZ1c3BxrZYI/hqCeD4YWPyb40
-    QfI1bt/djaQp+hmQDizIEv5k2rP3SEFESDlYUt886LMGEtpx5Yn2lRrqYan5fZajPQinB7NL
-    OZ+am+cgnDzux9lrbpTV6T8k1X2hUZZ1YsBZAGJCQrFHfXSesJpR0g==
+	<OfficeReleases>
+    <OfficeRelease MajorMinorVersion="11.0" GUID="{BC174BAD-2F53-4855-A1D5-0D575C19B1EA}" SKUVersion="2003" OutlookPIAGUID="{14D3E42A-A318-4D77-9895-A7EE585EFC3B}"/>
+    <OfficeRelease MajorMinorVersion="12.0" GUID="{24AAE126-0911-478F-A019-07B875EB9996}" SKUVersion="2007" OutlookPIAGUID="{ED569DB3-58C4-4463-971F-4AAABB6440BD}"/>
+		<OfficeRelease MajorMinorVersion="14.0" GUID="{1E77DE88-BCAB-4C37-B9E5-073AF52DFD7A}" SKUVersion="2010" OutlookPIAGUID="{1D844339-3DAE-413E-BC13-62D6A52816B2}" AppID="59a52881-a989-479d-af46-f275c6370663"/>
+		<OfficeRelease MajorMinorVersion="15.0" GUID="{E83B4360-C208-4325-9504-0D23003A74A5}" SKUVersion="2013" OutlookPIAGUID="{F9F828D5-9F0B-46F9-9E3E-9C59F3C5E136}" AppID="0ff1ce15-a989-479d-af46-f275c6370663"/>
+		<OfficeRelease MajorMinorVersion="16.0" GUID="{5812C571-53F0-4467-BEFA-0A4F47A9437C}" SKUVersion="16.0" OutlookPIAGUID="{F9F828D5-9F0B-46F9-9E3E-9C59F3C5E136}" AppID="0ff1ce15-a989-479d-af46-f275c6370663"/>
+	</OfficeReleases>
+	<OfficeAlerts>
+    <!--<OfficeAlert StartDate="2014/12/01" EndDate="2015/3/1" Name="version1202update" Title="OffCAT update should be installed"  Text="An important fix for OffCAT is available in an update. Click the ‘More information’ link below and then install the updated build when prompted to install OffCAT.msi. This update will also uninstall your current version of OffCAT.&#xd;&#xa;&#xd;&#xa;If you do not install this update to OffCAT, you will not be automatically notified in the future about new OffCAT versions and the detection rules in OffCAT will stop updating." Severity="Error" MoreInfoURL="521791"></OfficeAlert>-->
+    <!-->OfficeAlert StartDate="2013/10/22" EndDate="2014/12/6" Name="endofsupport2003" Title="Support for Office 2003 ended on April 8, 2014"  Text="The support for Office 2003 ended on April 8, 2014. After this date, there will be no new updates (security or non-security) or assisted support options (free or paid)." Severity="Warning" MoreInfoURL="389060"></OfficeAlert-->
+    <!--OfficeAlert StartDate="2013/10/22" EndDate="2014/12/6" Name="endofsupportXP" Title="Support for Windows XP ended on April 8, 2014"  Text="The support for Windows XP ended on April 8, 2014. After this date, there will be no new updates (security or non-security) or assisted support options (free or paid)." Severity="Warning" MoreInfoURL="521546"></OfficeAlert-->
+    <OfficeAlert StartDate="1601/1/1" EndDate="1601/1/1" Name="OutDatedAlert" Title="Your OffCAT configuration files may be out of date by more than {0} days" Text="The most accurate OffCAT scans are performed with the latest rules. Please click the link below to update your OffCAT configuration files." Severity="Warning" MoreInfoURL="OutDatedAlert"></OfficeAlert>
+</OfficeAlerts>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>KFvZpE/cX2nuTPZI3x2LSF0rhNE=</DigestValue></Reference></SignedInfo><SignatureValue>
+    VrWV2I5TiBGHBYqTsGgFDy3JFGBm3tl6shUf/j9LRRqLp7jgEeIwibEkJ2pn51yJTCs9uEa6
+    SzUs4Hx2gffzrj9jf3bGJ6alzlwTHmp4OC78uj7lgK6Cc2hAQIcgJWMdA4oxO+EOxsRKz6Uv
+    j2vnHvbMKPeartt0FqTcbcB8qE2XZoPvPDsMtob0Jz+mXWd2odkc8bEWsjc2ycILZkuxWhYc
+    Q7RV8YntlX/WXXiEiQeRbpmcgZ1jn0HpuA0BA6vty0K30hyluaYWq4PpOIorBDk41eytN0Yh
+    m2Su+xVmrQQJrz1hE2Cc0/9kSj0fkP4UmslYrvNdHaxOP1c7rnjWbg==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
           <Modulus>
-            s3R00II8h6ea1I6yBEKAlyUu5EHOk2M2XxPytHiYgMYofsyKE+89N4w7CaDYFMVcXtipHX8B
-            wbOYG1B37P7qfEXPf+EhDsWEyp8Pa7MJOLd0xFcevvBIqHla3w6bHJqovMhStQxpj4TOcVV7
-            /wkgv0B3NyEwdFuV33fLoOXBchIGPfLIVWyvwftqFifI9bNh49nOGw8e9OTNTDRsPkcR5wIr
-            XxR6BAf11z2L22d9Vz41622NAUCNGoeW4g93TIm6OJz7jgKR2yIP5dA2qbg3RdAq/JaNwWBx
-            M6WIsfbCBDCHW8PXL7J5EdiLZWKiihFmXX5/BXpzih96heXNKBDRPQ==
+            lnFd7QZG+oTLnVu3Rsew4bQROQOtsRVzYJzrp7ZuGjw//2XjNPGmpSFeVplsWOSSoQpcwtPc
+            Ui8MZZogYUBTMZxsjyF9uvn+E1BSYJU6W7lYpXRhQamU4K0mTkyhl3BJJ158Z8pPHnGERrwd
+            S7biD8XGJ8kH5noKpRcAGUxwRTgtgbRQqsVn0fp5vMXMoXKb9CU0mPhU3xI5OBIvpGulmn7H
+            YtHcz+09NPi53zUwuux5MqnhqaxVTUx/TFbDEwt28Qf5zEes+4jVUqUeKPo9Lc/PhJiGcWUR
+            z4XJCUSG4W/nsfysQESlqYsjP4JJndWWWVATWRhz/0MMrSvUfzBAZw==
           </Modulus>
           <Exponent>AQAB</Exponent>
         </RSAKeyValue>
       </KeyValue>
       <X509Data>
         <X509Certificate>
-          MIIEqTCCA5GgAwIBAgITMwAAAIhZDjxRH+JqZwABAAAAiDANBgkqhkiG9w0BAQUFADB5MQsw
+          MIIE7DCCA9SgAwIBAgITMwAAAMps1TISNcThVQABAAAAyjANBgkqhkiG9w0BAQUFADB5MQsw
           CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
           A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
-          aWduaW5nIFBDQTAeFw0xMjA3MjYyMDUwNDFaFw0xMzEwMjYyMDUwNDFaMIGDMQswCQYDVQQG
+          aWduaW5nIFBDQTAeFw0xNDA0MjIxNzM5MDBaFw0xNTA3MjIxNzM5MDBaMIGDMQswCQYDVQQG
           EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
           TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
-          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCzdHTQgjyH
-          p5rUjrIEQoCXJS7kQc6TYzZfE/K0eJiAxih+zIoT7z03jDsJoNgUxVxe2KkdfwHBs5gbUHfs
-          /up8Rc9/4SEOxYTKnw9rswk4t3TEVx6+8EioeVrfDpscmqi8yFK1DGmPhM5xVXv/CSC/QHc3
-          ITB0W5Xfd8ug5cFyEgY98shVbK/B+2oWJ8j1s2Hj2c4bDx705M1MNGw+RxHnAitfFHoEB/XX
-          PYvbZ31XPjXrbY0BQI0ah5biD3dMibo4nPuOApHbIg/l0DapuDdF0Cr8lo3BYHEzpYix9sIE
-          MIdbw9cvsnkR2ItlYqKKEWZdfn8FenOKH3qF5c0oENE9AgMBAAGjggEdMIIBGTATBgNVHSUE
-          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUJls+W12WX+L3d4h/XkVTWKguW7gwDgYDVR0PAQH/
-          BAQDAgeAMB8GA1UdIwQYMBaAFMsR6MrStBZYAck3LjMWFrlMmgofMFYGA1UdHwRPME0wS6BJ
-          oEeGRWh0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kvY3JsL3Byb2R1Y3RzL01pY0NvZFNp
-          Z1BDQV8wOC0zMS0yMDEwLmNybDBaBggrBgEFBQcBAQROMEwwSgYIKwYBBQUHMAKGPmh0dHA6
-          Ly93d3cubWljcm9zb2Z0LmNvbS9wa2kvY2VydHMvTWljQ29kU2lnUENBXzA4LTMxLTIwMTAu
-          Y3J0MA0GCSqGSIb3DQEBBQUAA4IBAQAP3kBJiJHRMTejRDhpsmor1JH7aIWuWLseDI9W+pnX
-          ypcnTOiFjnlpLOS9lj/lcGaXlTBlKa3Gyqz1D3moZ79p9A+X4woPv+6WdimyItAzxv+LSa2u
-          sv2/JervJ1DA6xn4GmRqoOEXWa/xz+yBqInosdIUBuNqbXRSZNqWlCpcaWsf7QWZGtzoZaqI
-          GxWVGtOkUZb9VZX4Y42fFAyxnn9KBP/DZq0Kr66k3mP68OrDs7Lrh9vFOK22c9J4ZOrsIVtr
-          O9ZEIvSBUqUrQymLDKEqcYJCy6sbftSlp6333vdGms5DOegqU+3PQOR3iEK/RxbgpTZq76ca
-          jTo9MwT2JSAj
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCWcV3tBkb6
+          hMudW7dGx7DhtBE5A62xFXNgnOuntm4aPD//ZeM08aalIV5WmWxY5JKhClzC09xSLwxlmiBh
+          QFMxnGyPIX26+f4TUFJglTpbuVildGFBqZTgrSZOTKGXcEknXnxnyk8ecYRGvB1LtuIPxcYn
+          yQfmegqlFwAZTHBFOC2BtFCqxWfR+nm8xcyhcpv0JTSY+FTfEjk4Ei+ka6Wafsdi0dzP7T00
+          +LnfNTC67HkyqeGprFVNTH9MVsMTC3bxB/nMR6z7iNVSpR4o+j0tz8+EmIZxZRHPhckJRIbh
+          b+ex/KxARKWpiyM/gkmd1ZZZUBNZGHP/QwytK9R/MEBnAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUH17iXVCNVoa+SjzPBOinh7XLv4MwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1K2I0MjE4ZjEzLTZmY2EtNDkw
+          Zi05YzQ3LTNmYzU1N2RmYzQ0MDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEAd1zr15E9zb17g9mFqbBDnXN8
+          F8kP7Tbbx7UsG177VAU6g3FAgQmit3EmXtZ9tmw7yapfXQMYKh0nfgfpxWUftc8Nt1THKDha
+          iOd7wRm2VjK64szLk9uvbg9dRPXUsO8b1U7Brw7vIJvy4f4nXejF/2H2GdIoCiKd381wgp4Y
+          ctgjzHosQ+7/6sDg5h2qnpczAFJvB7jTiGzepAY1p8JThmURdwmPNVm52IaoAP74MX0s9IwF
+          ncDB1XdybOlNWSaD8cKyiFeTNQB8UCu8Wfz+HCk4gtPeUpdFKRhOlludul8bo/EnUOoHleht
+          NA04V9w3KDWVOjic1O1qhV0OIhFeew==
         </X509Certificate>
       </X509Data>
       <X509Data>
@@ -111,74 +124,82 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEmjCCA4KgAwIBAgIKYQd5EAAAAAAADjANBgkqhkiG9w0BAQUFADB5MQswCQYDVQQGEwJVUzET
-MBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0
-IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgVGltZXN0YW1waW5nIFBDQTAeFw0xMjAx
-MDkyMTUzNTZaFw0xMzA0MDkyMTUzNTZaMIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGlu
-Z3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0w
-CwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAj
-BgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0YW1wIFNlcnZpY2UwggEiMA0GCSqGSIb3DQEBAQUAA4IB
-DwAwggEKAoIBAQCe9h2WIvJt7C+AOVEcHcqmE7v2URkjGfkUECKc9Qm8hw6I7TZ1xnBgM6MxJmmK
-iVEN/4yFKNgN6nPha9awQVaF9rhkISLhkAWpBDBBkOP1AeVWI6fDFIkFJGI1okJkk4amiVbXHPT2
-3s372uDRhR8cg87MkBHyT7otPJyuzt7YKGK4jW1NFvP58jVbLogiheMCPCRKN6yUMKQdSxy4POcY
-zcMyvSl1dSXqHNq+sRsNwNMIPTcmhmfIivo9q/3tNQceGXbm81U9Jnl8QoAwQiZT70d4vhzcOQSp
-AZ6eCXgMVFcrUABjHxmhNaIMd1DssKvn2Z8gflZS37KoVg+gx8MZAgMBAAGjgegwgeUwHQYDVR0O
-BBYEFBcAwPs2ZvhhbN5whjrwFkKUXP3HMB8GA1UdIwQYMBaAFG/oTj+XuTSrS4aPvJzqrDtBQ8bQ
-MEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kvY3JsL3Byb2R1
-Y3RzL3RzcGNhLmNybDBIBggrBgEFBQcBAQQ8MDowOAYIKwYBBQUHMAKGLGh0dHA6Ly93d3cubWlj
-cm9zb2Z0LmNvbS9wa2kvY2VydHMvdHNwY2EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqG
-SIb3DQEBBQUAA4IBAQCy0EyGYQJ1P4JTeRbH/HssFFchdUIsytmez5NRkkHx7g4gsK48czfn9eB9
-qiOZB9p/qb5CBItJPocQKIeuWw1cVMAgXhLF0mPxcMtfmoeajiuRB4AyU3W6ROwF37KEiQQLbHDn
-FSYwHDo8eK8/DAa6hpydCc3MHZqzTuzXURDUfFeitXL0VQImwuLJIvjOp3f3AKFxzj3gZIMGpmwk
-XdFWwqgJik82tbpToGg9W4BVZsF3QtRypAZyXw6D8bEagMj9CdiMsYYGB/efAEDy6Ram8g2HNVBV
-8kUNgT0RXS4TYuYHELdgG/UEAKJMTCCBze/9jGiwHrbcxfH9ConjJTwL</X509Certificate></X509Data><X509Data><X509Certificate>MIIEnTCCA4WgAwIBAgIQaguZT8AAJasR20UfWHpnojANBgkqhkiG9w0BAQUFADBwMSswKQYDVQQL
-EyJDb3B5cmlnaHQgKGMpIDE5OTcgTWljcm9zb2Z0IENvcnAuMR4wHAYDVQQLExVNaWNyb3NvZnQg
-Q29ycG9yYXRpb24xITAfBgNVBAMTGE1pY3Jvc29mdCBSb290IEF1dGhvcml0eTAeFw0wNjA5MTYw
-MTA0NDdaFw0xOTA5MTUwNzAwMDBaMHkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9u
-MRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xIzAhBgNV
-BAMTGk1pY3Jvc29mdCBUaW1lc3RhbXBpbmcgUENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
-CgKCAQEA3Ddu+6/IQkpxGMjOSD5TwPqrFLosMrsST1LIg+0+M9lJMZIotpFk4B9QhLrCS9F/Bfjv
-db6Lx6jVrmlwZngnZui2t++Fuc3uqv0SpAtZIikvz0DZVgQbdrVtZG1KVNvd8d6/n4PHgN9/TAI3
-lPXAnghWHmhHzdnAdlwvfbYlBLRWW2ocY/+AfDzu1QQlTTl3dAddwlzYhjcsdckO6h45CXx2/p1s
-bnrg7D6Pl55xDl8qTxhiYDKe0oNOKyJcaEWL3i+EEFCy+bUajWzuJZsT+MsQ14UO9IJ2czbGlXqi
-zGAG7AWwhjO3+JRbhEGEWIWUbrAfLEjMb5xD4GrofyaOawIDAQABo4IBKDCCASQwEwYDVR0lBAww
-CgYIKwYBBQUHAwgwgaIGA1UdAQSBmjCBl4AQW9Bw72lyniNRfhSyTY7/y6FyMHAxKzApBgNVBAsT
-IkNvcHlyaWdodCAoYykgMTk5NyBNaWNyb3NvZnQgQ29ycC4xHjAcBgNVBAsTFU1pY3Jvc29mdCBD
-b3Jwb3JhdGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFJvb3QgQXV0aG9yaXR5gg8AwQCLPDyIEdE+
-9mPs30AwEAYJKwYBBAGCNxUBBAMCAQAwHQYDVR0OBBYEFG/oTj+XuTSrS4aPvJzqrDtBQ8bQMBkG
-CSsGAQQBgjcUAgQMHgoAUwB1AGIAQwBBMAsGA1UdDwQEAwIBhjAPBgNVHRMBAf8EBTADAQH/MA0G
-CSqGSIb3DQEBBQUAA4IBAQCUTRExwnxQuxGOoWEHAQ6McEWN73NUvT8JBS3/uFFThRztOZG3o1YL
-3oy2OxvR+6ynybexUSEbbwhpfmsDoiJG7Wy0bXwiuEbThPOND74HijbB637pcF1Fn5LSzM7djsDh
-vyrNfOzJrjLVh7nLY8Q20Rghv3beO5qzG3OeIYjYtLQSVIz0nMJlSpooJpxgig87xxNleEi7z62D
-Ok+wYljeMOnpOR3jifLaOYH5EyGMZIBjBgSW8poCQy97Roi6/wLZZflK3toDdJOzBW4MzJ3cKGF8
-SPEXnBEhOAIch6wGxZYyuOVAxlM9vamJ3uhmN430IpaczLB3VFE61nJEsiP2</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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
-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</CounterSignature></Object></Signature></ObjectCollector>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEuzCCA6OgAwIBAgITMwAAAFwJq3ADEfxcFQAAAAAAXDANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTQwNTIzMTcxMzE2WhcNMTUwODIzMTcxMzE2WjCBqzELMAkGA1UEBhMCVVMxCzAJBgNVBAgT
+AldBMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTAL
+BgNVBAsTBE1PUFIxJzAlBgNVBAsTHm5DaXBoZXIgRFNFIEVTTjpCQkVDLTMwQ0EtMkRCRTElMCMG
+A1UEAxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBANYJa/7h+ToIHrYOs0PLI95ObOJZcc75TxmjL8QLy/H1Xyl5ielMpmU8xUtMXQHp
+/i9QvCCDC5hHW5nqTZ/eqcsjlYzk07XcemMgs/L/r8dp/5K7jQpF7punPfdkmj6O6rRaABbNqeXV
+TJUmQH8DmFyk6dBH1jblvqVRQb9b9uyuNN9K8gXa/fw9YY6yEa11unZrY2JOJSHPpz88ub9uBEMk
+HrvplbnGydEgydhVI1Xnsr+vLVxathcwcTMQJH5xnrFl4ma2BdMyV0nEYhPYkoyBkY8zQ5EZbBL0
+eRTm5Z/F5anhM0C22y9X05U2It3yQqmUtGTTgSMUlMPZRhdm3r0CAwEAAaOCAQkwggEFMB0GA1Ud
+DgQWBBR/kUhDg4fJeBzpVcW521b4F9FHBDAfBgNVHSMEGDAWgBQjNPjZUkZwCu1A+3b7syuwwzWz
+DzBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+dWN0cy9NaWNyb3NvZnRUaW1lU3RhbXBQQ0EuY3JsMFgGCCsGAQUFBwEBBEwwSjBIBggrBgEFBQcw
+AoY8aHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraS9jZXJ0cy9NaWNyb3NvZnRUaW1lU3RhbXBQ
+Q0EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBBQUAA4IBAQCCCVb4b+5GzEwp
+9r7Tx2pf+V2EABkXgYloZBU/wUQ2OxhtBMusE7eOlOMt66P0QnxE0QnsWr7nk9OEcuKP1R3VOVP7
+ciILZpI7ysqr+s/MZE7GRGyv4IOOFBG4sJBJn8OmlM+D4BFiWqtYo7hhlyR2rG1D947qHfOI/ipL
+7h/0HW2sIEyIAEAutLlI2tHEbsGt9DOFYQuJLF5rygNjUkox7r1VwxCnUaiSrxJgxZxdRmPTzOqf
+NcatCSB0hTUbRRKzllHhye2bgOV25fdWhesgnCiRVPtoulaFg1Vh/4hAXLENJgejxVfsFXkPlvSO
+dqGKZ1qNf05i9H7fEKDWFLqX</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIGzAYJKoZIhvcNAQcCoIIGvTCCBrkCAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQBWtZXYjlOIEYcFipOwaAUPLckUYGbe2XqyFR/+P0tFGounuOAR4jCJsSQnamfnXIlMKz24
+RrpLNSzgfHaB9/OuP2N/dsYnpqXOXBMeang4Lvy6PuWAroJzaEBAhyAlYx0DijE74Q7GxErPpS+P
+a+ce9swo95qu23QWpNxtwHyoTZdmg+88Owy2hvQnP6ZdZ3ah2RzxsRayNzbJwgtmS7FaFhxDtFXx
+ie2Vf9ZdeISJB5FumZyBnWOfQem4DQEDq+3LQrfSHKW5pharg+k4iisEOTjV7K03RiGbZK77FWat
+BAmvPWETYJzT/2RKPR+Q/hSayViu810drE4/VzuueNZuoIIDdaGCA3EwggJZAgEBMIHboYGxpIGu
+MIGrMQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0ExEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoT
+FU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBE
+U0UgRVNOOkJCRUMtMzBDQS0yREJFMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2
+aWNloiUKAQEwCQYFKw4DAhoFAAMVAMzPJzSA2L82tIXhvLtB9rgR4suooIHCMIG/pIG8MIG5MQsw
+CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
+ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVy
+IE5UUyBFU046NTdGNi1DMUUwLTU1NEMxKzApBgNVBAMTIk1pY3Jvc29mdCBUaW1lIFNvdXJjZSBN
+YXN0ZXIgQ2xvY2swDQYJKoZIhvcNAQEFBQACBQDYMFhKMCIYDzIwMTQxMjA4MTcwMzA2WhgPMjAx
+NDEyMDkxNzAzMDZaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFANgwWEoCAQAwCgIBAAICCPICAf8w
+BwIBAAICF7gwCgIFANgxqcoCAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGEWQoDAaAKMAgC
+AQACAxbjYKEKMAgCAQACAwehIDANBgkqhkiG9w0BAQUFAAOCAQEAk2x87ADg/fr2yrBW9iaD9F5+
+u8bJ2xwU2BLe8SWQ/ANdUB+reeVieTJR0lDNRvRZVbJjgCko0A3XgFnQiRY7WB8k+DULCG9lk2ga
+8pwT4Oie/TIUsu5RqhbizsnrsgXArP2pt0EGp9cH1dN9L2hfsM0bNGFG1g5VWRt2G4XZZqxvQGtg
+U0+JrfZoFsxVRC48tGIPHyrxSI+EQShKxxRDe5sT8y8nyULstM8Ya5sE31fV0SABjP1s8CR3A0sM
+7JaZ3W2+i146BkLvWbhsgM9qqe2Q2PU+piYzmVyDv9wjwwWpMCvxk1yggUqU2NQaM1YY/VRuxB9l
+uuA/7tIqFev0szGCAhUwggIRAgEBMIGOMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
+dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xITAf
+BgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQQITMwAAAFwJq3ADEfxcFQAAAAAAXDAJBgUr
+DgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTQxMjA4
+MTg1NTMzWjAjBgkqhkiG9w0BCQQxFgQUxi1dj0vzoYroK7RGI3rdsHNTFjAwDQYJKoZIhvcNAQEF
+BQAEggEAIlAI8jI4pZBuqKWkpSEkQyzjZSHf6MZK9I2P2amVGcdfIgvY8HUb6kTm/aiwMoeFOChW
+YPFaEFs1YKcJXJQwCyvH+o95G5ILy8H3mAZE3zJ/6fM+7OMpyfrTGUf6ab12ewAUO5WZzgCZnrtM
+N5iDr7g3jp6EpUzYG+2g94xlZG7xkiJD2nFXuQrFJrCWWsFUeiwlgw3fXk0VVZk0SExEqKE7quXE
+QDFAjK6TFQxZrsl5zFPgEs26ls3KI9uYnVG7Npd3YFnk+iX9TcO7vLZkjZ0MdFmbZMmr4cjSHq3n
+7P9qXUTkxSQQsQQoNlhZ0cytc8JSqzvTlDIQV3nGfPrHXg==</CounterSignature></Object></Signature></ObjectCollector>
