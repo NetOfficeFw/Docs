@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-  <Configuration ConfigName="Lync Configuration" ChangeDescription="2.0.1503.28" ConfigVersion="2.0.1503.28" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml">
+  <Configuration ConfigName="Lync Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
+    <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
     <!--!!! GLOBAL SUBSTITUTIONS SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
     <Substitution Name="MAJORVERSION"></Substitution>
     <Substitution Name="INSTALLTYPE"></Substitution>
+    <Substitution Name="APPNAME">Lync</Substitution>
+    <Substitution Name="DAYS">14</Substitution>
+    <Substitution Name="MAXEVENTS">10</Substitution>
     <ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
     <!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
     <ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
@@ -20,68 +24,186 @@
     <ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
     <ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
     <ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
+    <ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
+    <ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
   </Configuration>
-  <Object Type="Group" Name="Lync Scan" Class="Scan Type" GroupingClass="True">
+  <Object Type="Group" Name="Skype for Business Scan" Class="Scan Type" GroupingClass="True">
 
     <!--OFFICE DETAILS-->
-    <Object Type="Group" Name="Lync details">
-      <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Lync" Key6="" Key7="%MAJORVERSION%" Key8="%INSTALLTYPE%">
-        <Setting Key1="Bitness">
+    <Object Type="Group" Name="Install details">
+      <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Skype for Business" Key6="lync" Key7="%MAJORVERSION%">
+        <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
+        </Setting>
+        <Setting Key1="Bitness" Substitution="APPBITNESS">
           <Rule Name="bitness" Query="$."></Rule>
         </Setting>
         <Setting Key1="FullVersion">
           <Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
+          <Rule Name="sFullAppVersion" Query="$.">
+          </Rule>
         </Setting>
         <Setting Key1="Name">
           <Rule Name="appName" Query="$."></Rule>
         </Setting>
-        <Setting Key1="Path"></Setting>
-        <Setting Key1="Version"></Setting>
-        <Setting Key1="Type"></Setting>
-      </Object>
-      <Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
-        <Object Type="Group" Name="Installed Updates" Class="Office Update" GroupingClass="True" Display="Right" TrackProgress="TrackProgress">
-          <Object Type="MSI" Key1="UPDATE" Key2="" Key3="" Key9="Lync">
-            <Setting Key1="DisplayName">
-              <Rule Name="sPatchDN" Query="if($.='',$sPatchFamily,$.)"></Rule>
-              <Rule Name="sPatch" P0="$sPatchDN" P1="$sInstallDate" P2="$sPatchUninstallable" P3="$sPatchTargets" P4="$sMoreInfo" Query="$sState='MSIPATCHSTATE_APPLIED'" Error="None" Title="{0}" Text="Installed on {1}.&#xA;Uninstallable: {2}.&#xA;Targets: {3}.&#xA;More info: {4}"></Rule>
-            </Setting>
-            <Setting Key1="Targets">
-              <Rule Name="sPatchTargets" Query="$."></Rule>
-            </Setting>
-            <Setting Key1="Context"></Setting>
-            <Setting Key1="State">
-              <Rule Name="sState" Query="$."></Rule>
-            </Setting>
-            <Setting Key1="Uninstallable">
-              <Rule Name="sPatchUninstallable" Query="$."></Rule>
-            </Setting>
-            <Setting Key1="InstallDate">
-              <Rule Name="sInstallDate" Query="$."></Rule>
-            </Setting>
-            <Setting Key1="MoreInfoUrl">
-              <Rule Name="sMoreInfo" Query="$."></Rule>
-            </Setting>
-            <Setting Key1="LocalPackage" Substitution="PATCHPATH"></Setting>
-            <Object Type="Group" Name="MsiPatchSequence" Display="Right">
-              <Object Type="MSI" Key1="MSIPATCHSEQUENCETABLE" Key4="%PATCHPATH%" Display="Hide">
-                <Setting Key1="PatchFamily" Display="Right">
-                  <Rule Name="sPatchFamily" Query="$."></Rule>
-                </Setting>
-                <Setting Key1="Sequence" Display="Right"></Setting>
-                <Setting Key1="Attributes" Display="Right"></Setting>
+        <Setting Key1="Path">
+        </Setting>
+        <Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
+        </Setting>
+        <Setting Key1="Version">
+          <Rule Name="n4DigitSKUVersion" Query="$.">
+          </Rule>
+        </Setting>
+        <Rule Name="nInstallType" Query="'%INSTALLTYPE%'"></Rule>
+        <Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
+        <Setting Key1="Type">
+          <Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+        </Setting>
+        <!--SKU-->
+        <Object Type="Group" Name="Office SKU">
+          <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{F8D36F1C-6196-4FFA-94AA-736644D458E3}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+              <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+              <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                <Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                <Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+                <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                    <Setting Key1="ProductVersion" Display="Hide">
+                      <Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
+                    </Setting>
+                  </Object>
+                  <Setting Key1="ProductName" Display="Right"></Setting>
+                </Object>
               </Object>
             </Object>
-            <Setting Key1="ProductCode"></Setting>
-            <Setting Key1="PatchCode"></Setting>
           </Object>
+          
+          <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{D5B16A67-9FA6-4B77-AE2A-3B1F49CE9D3B}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+              <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+              <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                <Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                <Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+                <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                    <Setting Key1="ProductVersion" Display="Hide">
+                      <Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
+                    </Setting>
+                  </Object>
+                  <Setting Key1="ProductName" Display="Right"></Setting>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
+            <Object Type="C2RSKU" Key1="Lync" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+              <Setting Key1="ProductName" Display="Right">
+              </Setting>
+            </Object>
+            <Object Type="If" Key1="'%MAJORVERSION%'='15'">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active" Key5="OneLevel" Display="Hide">
+                <Setting Key1="__KEYNAME" Substitution="LIC" Display="Hide"></Setting>
+                <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active\%LIC%\x-none" Key5="Subtree" Display="Hide">
+                  <Setting Key1="__KEYNAME" Key2="lync.%APPBITNESS%.x-none.zip" Substitution="C2RAPPFOUND" Display="Hide"></Setting>
+                  <Object Type="If" Key1="'%C2RAPPFOUND%'='lync.%APPBITNESS%.x-none.zip'">
+                    <Object Type="Group" Name="ClickToRun License Family=%LIC%" Display="Right">
+                      <Setting Key1="" Display="Hide"></Setting>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+            <Object Type="If" Key1="number('%MAJORVERSION%')&gt;15">
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\ClickToRun\ProductReleaseIDs\Active" Key5="OneLevel" Display="Hide">
+                <Setting Key1="__KEYNAME" Substitution="LIC" Display="Hide"></Setting>
+                <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\ClickToRun\ProductReleaseIDs\Active\%LIC%\x-none" Key5="Subtree" Display="Hide">
+                  <Setting Key1="__KEYNAME" Key2="lync.%APPBITNESS%.x-none.zip" Substitution="C2RAPPFOUND" Display="Hide"></Setting>
+                  <Object Type="If" Key1="'%C2RAPPFOUND%'='lync.%APPBITNESS%.x-none.zip'">
+                    <Object Type="Group" Name="ClickToRun License Family=%LIC%" Display="Right">
+                      <Setting Key1="" Display="Hide"></Setting>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='16' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{E1AFBCD9-12F0-4FC0-9177-BFD3148AEC74}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+              <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+              <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                <Rule Name="SKUV16x86" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                <Rule Name="ReleaseTypeV16x86" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                <Rule Name="fProPlusV16x86" Query="$SKUV16x86='0011'"></Rule>
+                <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+                <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\16.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                    <Setting Key1="ProductVersion" Display="Hide">
+                      <Rule Name="fOfficeProductVersionV16x86" Query="$." AlwaysEvaluate="True"></Rule>
+                    </Setting>
+                  </Object>
+                  <Setting Key1="ProductName" Display="Right">
+                    <Rule Name="SKUNameV16x86" Query="$."></Rule>
+                  </Setting>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='16' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{3CFF5AB2-9B16-4A31-BC3F-FAD761D92780}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+              <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+              <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                <Rule Name="SKUV16x64" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                <Rule Name="ReleaseTypeV16x64" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                <Rule Name="fProPlusV16x64" Query="$SKUV16x64='0011'"></Rule>
+                <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+                <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\16.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                    <Setting Key1="ProductVersion" Display="Hide">
+                      <Rule Name="fOfficeProductVersionV16x64" Query="$." AlwaysEvaluate="True"></Rule>
+                    </Setting>
+                  </Object>
+                  <Setting Key1="ProductName" Display="Right">
+                    <Rule Name="SKUNameV16x64" Query="$."></Rule>
+                  </Setting>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+        </Object>
+        <!--/SKU-->
+        <!--MSO-->
+        <Reference Type="MSO" Name="MSO" File="common.config.xml">
+        </Reference>
+        <!--/MSO-->
+      </Object>
+      <!--INSTALLED UPDATES-->
+      <Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
+        <Object Type="Group" Name="Installed Updates" Class="Office Update" GroupingClass="True" Display="Right" TrackProgress="TrackProgress" LogText="Collecting Installed Updates">
+          <Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml"/>
         </Object>
       </Object>
       <Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
         <Object Type="Group" Name="ClickToRun Updates" GroupingClass="True" Class="Office Update" Display="Right">
-          <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml"></Reference>
+          <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+          </Reference>
         </Object>
       </Object>
+      <!--/INSTALLED UPDATES-->
     </Object>
     <!--/OFFICE DETAILS-->
     <!--USER DETAILS-->
@@ -96,60 +218,67 @@
     <!--/MACHINE DETAILs-->
     <!--EVENTLOGS-->
     <Object Type="Group" Name="Application Event Logs" Class="Event Logs" GroupingClass="True">
-      <Object Type="Group" Name="Application Event Log Entries for Last Lync crashes" Class="Application Event Logs" GroupingClass="True" TrackProgress="TrackProgress">
+      <Object Type="Group" Name="Application Event Log Entries for last Skype for Business crashes" Class="Application Event Logs" GroupingClass="True" TrackProgress="TrackProgress">
         <Object Type="EventLog" Key1="Application" Key3="1000" Key4="lync.exe" Key7="14" Key8="10000">
           <Setting Key1="__ALL"></Setting>
         </Object>
       </Object>
     </Object>
     <!--/EVENTLOGS-->
-    
+    <!--MISCELLANEOUS-->
+    <Object Type="Group" Name="Miscellaneous" GroupingClass="True" Class="Miscellaneous" TrackProgress="TrackProgress">
+      <Reference Type="OffCATVersionInfo" Name="OffCATVersionInfo" File="common.config.xml">
+      </Reference>
+      <Reference Type="GPResult" Name="GPResult" File="common.config.xml">
+      </Reference>
+    </Object>
+    <!--/MISCELLANEOUS-->
   </Object>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>arVQtBRIbKb7rPmfeQKNq38IOKM=</DigestValue></Reference></SignedInfo><SignatureValue>
-    WlFIFm67IwFmIDHtDHq+rWret7Tpz16LnckwAPOpFWy0psMH1Fu2etbaf0bIff0ETt9h+wUH
-    Pp5poxMc2ghunhZnr/YuUJR/lCKEoJl1XTPMng+xynTQ/UHPXQALlPgo2YowRbXAMBPQy4Ub
-    AUaawcntqW5REessRionrux9g9XDglu7BKxY7wbBk8FSU3/DmH77qKJRjtjEqvIITn3uRzHf
-    Z0zumBXYFOZjP8xUhXWm9dm/dJhfrZ0tAU7cPFJoulQ1/JSvKbQHSwLekmcP/HACl6ZJ+hYh
-    kDT0eM4POKsGT1LkeW4IyBSYlDsA/HJyMSzaS5FSBqwmMvTNzx9isA==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>mBeHVyTBfBXTMw60FszRRd9LBls=</DigestValue></Reference></SignedInfo><SignatureValue>
+    iEzJNqCxKsnYAaarWSoPQUKllFVM7Hq4SeAjlUXnOKQx9uUoA42VAyZ5pj9xXVJDsgvDM4+t
+    cAE+dqYrjnQyW2bC7QVcGR8fp9LmJlw2p89GqsMy/iATNQlkoSKwOoqc0LL3w+a6v5noM/sz
+    L/6BBSW+8vu/17zZFj3U+PeodJ4voD6nurVfL7D8eP/S7ij0HE+jlxFD7MjdZPcHZ5GwoVvQ
+    dDStwcyrLTaLgcISYVteWwP+r33AcDm2XeqSRJGJ0TyHiyC7LwOHwCBaTvvagnGpiwx5Hcqg
+    bcBASPGQw2l5kjm4r+gD1zfCbkegEa/WKmx+NbmvwifCp0EdfW4E9g==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
           <Modulus>
-            lnFd7QZG+oTLnVu3Rsew4bQROQOtsRVzYJzrp7ZuGjw//2XjNPGmpSFeVplsWOSSoQpcwtPc
-            Ui8MZZogYUBTMZxsjyF9uvn+E1BSYJU6W7lYpXRhQamU4K0mTkyhl3BJJ158Z8pPHnGERrwd
-            S7biD8XGJ8kH5noKpRcAGUxwRTgtgbRQqsVn0fp5vMXMoXKb9CU0mPhU3xI5OBIvpGulmn7H
-            YtHcz+09NPi53zUwuux5MqnhqaxVTUx/TFbDEwt28Qf5zEes+4jVUqUeKPo9Lc/PhJiGcWUR
-            z4XJCUSG4W/nsfysQESlqYsjP4JJndWWWVATWRhz/0MMrSvUfzBAZw==
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
           </Modulus>
           <Exponent>AQAB</Exponent>
         </RSAKeyValue>
       </KeyValue>
       <X509Data>
         <X509Certificate>
-          MIIE7DCCA9SgAwIBAgITMwAAAMps1TISNcThVQABAAAAyjANBgkqhkiG9w0BAQUFADB5MQsw
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
           CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
           A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
-          aWduaW5nIFBDQTAeFw0xNDA0MjIxNzM5MDBaFw0xNTA3MjIxNzM5MDBaMIGDMQswCQYDVQQG
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
           EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
           TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
-          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCWcV3tBkb6
-          hMudW7dGx7DhtBE5A62xFXNgnOuntm4aPD//ZeM08aalIV5WmWxY5JKhClzC09xSLwxlmiBh
-          QFMxnGyPIX26+f4TUFJglTpbuVildGFBqZTgrSZOTKGXcEknXnxnyk8ecYRGvB1LtuIPxcYn
-          yQfmegqlFwAZTHBFOC2BtFCqxWfR+nm8xcyhcpv0JTSY+FTfEjk4Ei+ka6Wafsdi0dzP7T00
-          +LnfNTC67HkyqeGprFVNTH9MVsMTC3bxB/nMR6z7iNVSpR4o+j0tz8+EmIZxZRHPhckJRIbh
-          b+ex/KxARKWpiyM/gkmd1ZZZUBNZGHP/QwytK9R/MEBnAgMBAAGjggFgMIIBXDATBgNVHSUE
-          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUH17iXVCNVoa+SjzPBOinh7XLv4MwUQYDVR0RBEow
-          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1K2I0MjE4ZjEzLTZmY2EtNDkw
-          Zi05YzQ3LTNmYzU1N2RmYzQ0MDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
           BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
           dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
           AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
-          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEAd1zr15E9zb17g9mFqbBDnXN8
-          F8kP7Tbbx7UsG177VAU6g3FAgQmit3EmXtZ9tmw7yapfXQMYKh0nfgfpxWUftc8Nt1THKDha
-          iOd7wRm2VjK64szLk9uvbg9dRPXUsO8b1U7Brw7vIJvy4f4nXejF/2H2GdIoCiKd381wgp4Y
-          ctgjzHosQ+7/6sDg5h2qnpczAFJvB7jTiGzepAY1p8JThmURdwmPNVm52IaoAP74MX0s9IwF
-          ncDB1XdybOlNWSaD8cKyiFeTNQB8UCu8Wfz+HCk4gtPeUpdFKRhOlludul8bo/EnUOoHleht
-          NA04V9w3KDWVOjic1O1qhV0OIhFeew==
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
         </X509Certificate>
       </X509Data>
       <X509Data>
@@ -263,12 +392,12 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQBaUUgWbrsjAWYgMe0Mer6tat63tOnPXoudyTAA86kVbLSmwwfUW7Z61tp/Rsh9/QRO32H7
-BQc+nmmjExzaCG6eFmev9i5QlH+UIoSgmXVdM8yeD7HKdND9Qc9dAAuU+CjZijBFtcAwE9DLhRsB
-RprBye2pblER6yxGKieu7H2D1cOCW7sErFjvBsGTwVJTf8OYfvuoolGO2MSq8ghOfe5HMd9nTO6Y
-FdgU5mM/zFSFdab12b90mF+tnS0BTtw8Umi6VDX8lK8ptAdLAt6SZw/8cAKXpkn6FiGQNPR4zg84
-qwZPUuR5bgjIFJiUOwD8cnIxLNpLkVIGrCYy9M3PH2KwoIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQCITMk2oLEqydgBpqtZKg9BQqWUVUzserhJ4COVRec4pDH25SgDjZUDJnmmP3FdUkOyC8Mz
+j61wAT52piuOdDJbZsLtBVwZHx+n0uYmXDanz0aqwzL+IBM1CWShIrA6ipzQsvfD5rq/megz+zMv
+/oEFJb7y+7/XvNkWPdT496h0ni+gPqe6tV8vsPx4/9LuKPQcT6OXEUPsyN1k9wdnkbChW9B0NK3B
+zKstNouBwhJhW15bA/6vfcBwObZd6pJEkYnRPIeLILsvA4fAIFpO+9qCcamLDHkdyqBtwEBI8ZDD
+aXmSObiv6APXN8JuR6ARr9YqbH41ua/CJ8KnQR19bgT2oIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
 Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
@@ -276,21 +405,21 @@ YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANkg8U4wIhgPMjAxNTA2MDkwNDU5
-NThaGA8yMDE1MDYxMDA0NTk1OFowdDA6BgorBgEEAYRZCgQBMSwwKjAKAgUA2SDxTgIBADAHAgEA
-AgIm3zAHAgEAAgIYUjAKAgUA2SJCzgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZCgMB
-oAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQBsfydNHwUJnb8ZrgfR
-Y5C4dzDhh5D6XPRNlml4t+3yOkKcbgtF19nG+GTzon7uw+cU/RrSTzkHJujlk4W6+q9C1yGrOH9E
-rPDJGoSGd+GIn/rEjfltwJeG313Zi88jENq4vHzUW1KUMwr0EmdWD05ODd7Alb5M//Ds1eG8EVHI
-IbsAlxf9XXiHnnS4hgMssswwKaqHV1HFDAy+qJXRzWw+BroWjeHo6v6en8ZtgLPEXas/pGz0edWZ
-xNjdpjT9/JhjsCp/CaOY4bUEwf7no9YEdpRRgbsdjy5vvEHPg0PFVqG3rXcdLsMDoa76es2vBpgF
-mmhFWiI0RDY82xCqsEJBMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
-c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
-bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAAAABy
-MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
-NTA2MDkxMjQ0NDBaMCMGCSqGSIb3DQEJBDEWBBSvnXGjtQEUQiCo4sPgAXQjQ9+SlDANBgkqhkiG
-9w0BAQUFAASCAQBZEM8X8lyYamq5yLuWjOHEfkyUFZZSjIj2Ts670LQkqBqXSG/Sm0c7MCcLYpe8
-rTkj+MJ232OdTlNQyMIhhycyiadXVRtsIe0HdXCLBdBIxCUSGJ2mFPjAhImaOsOK5l1V2GmkDVcj
-gEaMOR+s/ft63iL0m1BHjYiBfMtIb5JcxKLxJsmJWcl1zMoZQWUswidpHbv0spoMItQHunfPqU6z
-PiQBz5UF1RkqmQQrnvgPF9jkEY/Q1b+pyUH/TTtkY39RDKFRgTeiw6aDqDZPKa+3SI2FwpI6gO6B
-fzg+6NGjHW1VN7m9gqsa18vCBsBe0McsvZmu0hi6VC9I5QIHLv9q</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
+MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
+AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
+CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
+g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
+YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
+jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
+nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
+aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
+AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
+Fw0xNTA3MDkxNDQ3MjhaMCMGCSqGSIb3DQEJBDEWBBR6fJ+DKLEUcgl2qmu3l10W75N8eTANBgkq
+hkiG9w0BAQUFAASCAQCHEAknaxNV48g7fo+rnGBvkpEeMAUwOwZ/VO4ETpGqgieW3rQ509ehnyZi
+/of3Xaxgx3UuIRg6sIPiJG9jgKVGoPO5Lck30KTaD6wzaBG1o3mxyH/iJL721zhrD+e2A2z6YJC5
+UxxUu02T65W5GkZ9zn0YCgNeOrjrZk3FTlHXtTj3T8inTcG2bC2Rn/yOENQN8mQi80My5cvDrEtX
+Sa1mZff6/sVfczDKQqb7+Dbyzgoz7zFNIgJz1bKLAs4PoBwrdBJnid32uif5BCkWTJGXDjQog6F9
+t3pVv5r3hxF5GX44b/alaeLxBlrySR0TLH/sdO/r1kunvhLa8zPbiZDJ</CounterSignature></Object></Signature></ObjectCollector>

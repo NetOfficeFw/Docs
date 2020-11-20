@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Outlook Configuration" ChangeDescription="2.0.1505.22" ConfigVersion="2.0.1505.22" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,outlook.crashes.config.xml" Symptoms="1">
+	<Configuration ConfigName="Outlook Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,outlook.crashes.config.xml" Symptoms="1">
     <Substitution Name="MAJORVERSION"/>
     <Substitution Name="INSTALLTYPE"/>
 		<Substitution Name="APPNAME">Outlook</Substitution>
@@ -163,11 +163,7 @@
 				<Setting Key1="ScanType" Substitution="SCANTYPE" Display="Right">
           <Rule Name="sScanType" Query="$."></Rule>
         </Setting>
-				<Setting Key1="DefaultProfile" Substitution="DEFPROF" Display="Hide" ShowInSummary="True" Retrieve="FailHard">
-					<!--Rule Name="sDefaultProfile" Query="$." P0="$." Error="None" Title="Default Profile Name ={0}" Text="Default Profile Name ={0}" /-->
-				</Setting>
-
-				<!--<Setting Key1="MajorVersion" Substitution="MAJORVERSION" Display="Hide" Retrieve="FailHard">-->
+				<Setting Key1="DefaultProfile" Substitution="DEFPROF" Display="Hide" ShowInSummary="True"/>
 				<Setting Key1="MajorVersion" Display="Hide" Retrieve="FailHard">
 					<Rule Name="n2DigitVersion" Query="$."></Rule>
 				</Setting>
@@ -485,10 +481,26 @@
 	              <Rule Name="sNoMatchingExcelVersion14" Query="$.=0 and $n2DigitVersion=14" Error="Warning" P0="$n4DigitSKUVersion" Title="Excel files cannot be previewed in Outlook {0}" Text="Excel files cannot be previewed in Outlook {0} because Excel {0} is not installed. In order to preview Excel files in Outlook {0} you must have Excel {0} installed too.&#xA;&#xA;Click the 'Click here ...' link for additional information." GUID="524755" SSID="49e6520c-fee2-4183-8762-d46b51fa84a8" Symptoms="Email attachments,Error message"></Rule>
               	<Rule Name="sNoMatchingExcelVersion15" Query="$.=0 and $n2DigitVersion=15" Error="Warning" P0="$n4DigitSKUVersion" Title="Excel files cannot be previewed in Outlook {0}" Text="Excel files cannot be previewed in Outlook {0} because Excel {0} is not installed. In order to preview Excel files in Outlook {0} you must have Excel {0} installed too.&#xA;&#xA;Click the 'Click here ...' link for additional information." GUID="524756" SSID="1eef72a8-e68b-4079-9935-541300f4c6e8" Symptoms="Email attachments,Error message"></Rule>							
 							</Setting>
-				</Object>
+				    </Object>
 						<!--/Excel-->
 						<Rule Name="sMissingOLKIconWin8" Query="$fWindows8OrAbove and $nInstallType='MSI' and $n2DigitVersion=15 and $OfficeUpdates_sKB2863911Installed=true() and $OfficeUpdates_sOffice2013SP1NotInstalled=true() and $OfficeUpdates_fOffice2013SP1Slipstream=false()" Error="Warning" Title="Outlook icon missing from the Outlook tile on the Start screen" Text="The Outlook icon may be missing from the Outlook tile on the Start screen. This problem occurs when the update from KB 2863911 is installed but Office 2013 SP1 is not installed." GUID="393974" SSID="6440a1bd-fdcd-41ca-80c9-5a3eadc8019d" Symptoms="Icons,Startup"></Rule>
 					</Object>
+          <!--ADAL updates-->
+          <Object Type="If" Key1="number('%MAJORVERSION%')=15">
+            <Object Type="Group" Name="Office 2013 Modern Authentication support">
+              <Object Type="Group" Name="Prerequisites" Display="Right">
+                <Object Type="Group" Name="%APPNAME%" Display="Right">
+                  <Object Type="Group" Name="Hidden">
+                    <Rule Name="fKB2956170Installed" Query="versioncompare($sFullAppVersion,'15.0.4701.1000')" P0="if($fKB2956170Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2956170','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090"></Rule>
+                  </Object>
+                </Object>
+                <Reference Type="ADAL" Name="ADAL" File="common.config.xml">
+                </Reference>
+                <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($MachineDetails_KB2977629Installed and $fKB2956170Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P1="if($MachineDetails_KB2977629Installed,'Installed','Not Installed')" P2="if($fKB2956170Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;Windows update KB2977629 - {1}&#xA;%APPNAME% 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="ffbb417e-2dbd-4558-9cd8-7368f751615f" Symptoms="Modern Authentication for Office"></Rule>
+              </Object>
+            </Object>
+          </Object>
+          <!--/ADAL updates-->
 				</Object>
 				<!--/OFFICE DETAILS-->
 				<Object Type="Group" Name="All installed Outlook version(s)">
@@ -788,6 +800,12 @@
 							<Object Type="Group" Name="Current profile name =%CURPROF%" ShowInSummary="True">
 								<Setting Key1="" Display="Hide"></Setting>
 							</Object>
+              <Object Type="File" Key2="%APPDATA%\Microsoft\Outlook\%CURPROF%.xml" Display="Hide">
+                <Setting Key1="CreationTime" Display="Hide" Substitution="PROFILECREATIONDATE"></Setting>
+                <Object Type="Group" Name="Profile created on =%PROFILECREATIONDATE%" Display="Right">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+              </Object>
 							<Object Type="EVR">
 								<Setting Key1="APPDATA" Substitution="APPDATA" Display="Hide"></Setting>
 								<Object Type="XML" Key2="%APPDATA%\Microsoft\Outlook\%CURPROF%.xml" Key3="//userdefined" Display="Hide">
@@ -809,6 +827,7 @@
 									<Setting Key1="DisplayName" NotForExport="True">
 										<Rule Name="sDN" P0="$." P1="$sType" Query="$." Title="{0}" Text="Account named '{0} is of type: '{1}'." Error="None" Symptoms="Informational"/>
 									</Setting>
+                  <Rule Name="sDuplicateAccountInProfile" Query="count(../Instance[Setting[@Key1='SmtpAddress' and Value=$sUserSmtpAddress]])&gt;1" Error="Warning" P0="$sUserSmtpAddress" P1="count(../Instance[Setting[@Key1='SmtpAddress' and Value=$sUserSmtpAddress]])" Title="The same email account is in the profile {1} times" Text="The {0} email account is in your profile {1} times. You need to either remove the duplicate account (the one not set as the Default account) or create a new Outlook profile.&#xA;&#xA;Click the 'Click here ...' link for details on the root cause of this problem." GUID="617149" SSID="a118efff-209b-42bd-843f-fe2464afc518" Symptoms="Exchange account,Outlook profile"></Rule>
 								</Object>
                 <!--14 and below -->
                 <Object Type="If" Key1="number('%MAJORVERSION%')&lt;=14">
@@ -956,9 +975,9 @@
 							<Object Type="Group" Name="Stores in profile" GroupingClass="True" Class="Current Profile" TrackProgress="TrackProgress" Task="Outlook" LogText="Collecting data about stores in profile">
 								<Object Type="Stores" Class="Stores" GroupingClass="True">
 									<Rule Name="nSharedFoldersCountTotal" Query="count(..//Instance[@Type='Store' and Setting[@Key1='0x34140102' and lower-case(Value)='9eb4770074e411ce8c5e00aa004254e2']]//Instance[@Type='Folders'])"></Rule>
-									<Rule Name="sTooManyCachedSharedFolders12" Query="$fCachedMode and $nSharedFoldersCountTotal&gt;475 and (($fPolDownloadSharedFolders=-1 and (bitwise-and($sProfConfigFlags12,2048)=2048)) or $fPolDownloadSharedFolders=1)" Error="Error" P0="$nSharedFoldersCountTotal" P1="if($fPolDownloadSharedFolders=1,' - enabled by group policy','')" Title="Synchronization stops because {0} cached folders found in an additional mailbox(es){1}" Text="Your profile has one or more additional mailboxes with a total of {0} folders and you are caching shared folders. In this configuration, Outlook may not be able to fully synchronize the shared mailbox(es).&#xA;&#xA;In Configuration Details for this scan, click Find and then search for 'number of folders' to find the mailbox with 500 or more folders." GUID="267348" SSID="abc5a52a-c374-4ad6-91a2-7efd13358963" Symptoms="Email send/receive,Slowness,Configuration (unsupported or problematic)"></Rule>
-									<Rule Name="sTooManyCachedSharedFolders14" Query="$fCachedMode and $nSharedFoldersCountTotal&gt;475 and (($fPolDownloadSharedFolders=-1 and (bitwise-and($sProfConfigFlags14,2048)=2048)) or $fPolDownloadSharedFolders=1)" Error="Error" P0="$nSharedFoldersCountTotal" P1="if($fPolDownloadSharedFolders=1,' - enabled by group policy','')" Title="Synchronization stops because {0} cached folders found in an additional mailbox(es){1}" Text="Your profile has one or more additional mailboxes with a total of {0} folders and you are caching shared folders. In this configuration, Outlook may not be able to fully synchronize the shared mailbox(es).&#xA;&#xA;In Configuration Details for this scan, click Find and then search for 'number of folders' to find the mailbox with 500 or more folders." GUID="267348" SSID="c7201297-a460-4208-9c09-7ed647d5a20e" Symptoms="Email send/receive,Slowness,Configuration (unsupported or problematic)"></Rule>
-									<Rule Name="sTooManyCachedSharedFolders15AndAbove" Query="$fCachedMode and $nSharedFoldersCountTotal&gt;475 and (($fPolDownloadSharedFolders=-1 and (bitwise-and($sProfConfigFlags15AndAbove,2048)=2048)) or $fPolDownloadSharedFolders=1)" Error="Error" P0="$nSharedFoldersCountTotal" P1="if($fPolDownloadSharedFolders=1,' - enabled by group policy','')" Title="Synchronization stops because {0} cached folders found in an additional mailbox(es){1}" Text="Your profile has one or more additional mailboxes with a total of {0} folders and you are caching shared folders. In this configuration, Outlook may not be able to fully synchronize the shared mailbox(es).&#xA;&#xA;In Configuration Details for this scan, click Find and then search for 'number of folders' to find the mailbox with 500 or more folders." GUID="267348" SSID="d547f717-60d2-4d7e-831d-faedadf93c71" Symptoms="Email send/receive,Slowness,Configuration (unsupported or problematic)"></Rule>
+									<Rule Name="sTooManyCachedSharedFolders12" Query="$fCachedMode and $nSharedFoldersCountTotal&gt;475 and (($fPolDownloadSharedFolders=-1 and (bitwise-and($sProfConfigFlags12,2048)=2048)) or $fPolDownloadSharedFolders=1)" Error="Error" P0="$nSharedFoldersCountTotal" P1="if($fPolDownloadSharedFolders=1,' - enabled by group policy','')" Title="Synchronization stops because {0} cached folders found in an additional mailbox(es){1}" Text="Your profile has one or more additional mailboxes with a total of {0} folders and you are caching shared folders. In this configuration, Outlook may not be able to fully synchronize the shared mailbox(es).&#xA;&#xA;In Configuration Details for this scan, click Find and then search for 'number of folders' to find the mailbox with 500 or more folders." GUID="267348" SSID="abc5a52a-c374-4ad6-91a2-7efd13358963" Symptoms="Calendar,Email send/receive,Synchronization,Configuration (unsupported or problematic)"></Rule>
+									<Rule Name="sTooManyCachedSharedFolders14" Query="$fCachedMode and $nSharedFoldersCountTotal&gt;475 and (($fPolDownloadSharedFolders=-1 and (bitwise-and($sProfConfigFlags14,2048)=2048)) or $fPolDownloadSharedFolders=1)" Error="Error" P0="$nSharedFoldersCountTotal" P1="if($fPolDownloadSharedFolders=1,' - enabled by group policy','')" Title="Synchronization stops because {0} cached folders found in an additional mailbox(es){1}" Text="Your profile has one or more additional mailboxes with a total of {0} folders and you are caching shared folders. In this configuration, Outlook may not be able to fully synchronize the shared mailbox(es).&#xA;&#xA;In Configuration Details for this scan, click Find and then search for 'number of folders' to find the mailbox with 500 or more folders." GUID="267348" SSID="c7201297-a460-4208-9c09-7ed647d5a20e" Symptoms="Calendar,Email send/receive,Synchronization,Configuration (unsupported or problematic)"></Rule>
+									<Rule Name="sTooManyCachedSharedFolders15AndAbove" Query="$fCachedMode and $nSharedFoldersCountTotal&gt;475 and (($fPolDownloadSharedFolders=-1 and (bitwise-and($sProfConfigFlags15AndAbove,2048)=2048)) or $fPolDownloadSharedFolders=1)" Error="Error" P0="$nSharedFoldersCountTotal" P1="if($fPolDownloadSharedFolders=1,' - enabled by group policy','')" Title="Synchronization stops because {0} cached folders found in an additional mailbox(es){1}" Text="Your profile has one or more additional mailboxes with a total of {0} folders and you are caching shared folders. In this configuration, Outlook may not be able to fully synchronize the shared mailbox(es).&#xA;&#xA;In Configuration Details for this scan, click Find and then search for 'number of folders' to find the mailbox with 500 or more folders." GUID="267348" SSID="d547f717-60d2-4d7e-831d-faedadf93c71" Symptoms="Calendar,Email send/receive,Synchronization,Configuration (unsupported or problematic)"></Rule>
 									<Setting Key1="DisplayName" Substitution="STORENAME" Display="Right" NotForExport="True">
 										<Rule Name="sStoreName" Query="$."></Rule>
 									</Setting>
@@ -1531,9 +1550,6 @@
 														<Setting Key1="child::node()[name()='MicrosoftOnline']/child::text()" Substitution="EXSERVERCLOUD" Display="Hide">
 														</Setting>
                             <Object Type="If" Key1="'%EXSERVERCLOUD%'='True'">
-                              <Object Type="Group" Name="You mailbox server is in Office 365" Display="Right">
-                                <Setting Key1="" Display="Hide"></Setting>
-                              </Object>
                               <Object Type="XML" Key1="%AUTODISCXMLCLOUD%" Key2="" Key3="//User" Key4="STRING" Key5="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a" Display="Hide">
                                 <Setting Key1="child::node()[name()='AutoDiscoverSMTPAddress']/child::text()" Substitution="CLOUDSMTPADDR" Display="Hide">	
 	                                <Rule Name="sCloudUserSmtpAddress" Query="$."></Rule>
@@ -1565,7 +1581,7 @@
                                 </Object>
                               </Object>
                             </Object>
-														<Rule Name="sExSrvNameCloud" Query="../Instance/Setting[@Key1]/Value='True'"></Rule>
+                            <Rule Name="sExSrvNameCloud" Query="../Instance/Setting[@Key1]/Value='True'" Text="Office 365 mailbox =True" SSID="8ecb722f-e2cb-416f-bbd4-5a63869e617e"></Rule>
 													</Object>
                           <Object Type="XML" Key1="%AUTODISCXMLCLOUD%" Key3="//OutlookClientVersion" Key4="STRING" Key5="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a" Display="Hide">
                             <Setting Key1="child::node()[name()='MinRequiredVersion']/child::text()" Substitution="MINCLIENTVERSION" Display="Hide">
@@ -1590,8 +1606,8 @@
                           </Object>
                           <Rule Name="sSlowCloudConnectBypassProxyWin7MSI" Query="$n2DigitVersion=15 and $nInstallType='MSI' and not($fMapiHttpConnected) and $fWindows7Installed and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and (versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0 or $nEnableForceHtttpProxy!=1 or not($KB2916915Installed))" Error="Warning" P0="contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E')" P1="versioncompare($sFullAppVersion,'15.0.4605.1000')&gt;=0" P2="$KB2916915Installed!=1" P3="$nEnableForceHtttpProxy!=1" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. The 'Bypass proxy server for local addresses' option is enabled: {0}, Outlook 2013 has the required update installed: {1}, Windows Update KB2916915 needed: {2}, 'EnableForceHttpProxy' registry value =1 needed: {3}." GUID="393033" SSID="daee009c-8385-4240-8ad6-cb7cd5f2ebb3" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
                           <Rule Name="sSlowCloudConnectBypassProxyWin81MSI" Query="$n2DigitVersion=15 and $nInstallType='MSI' and not($fMapiHttpConnected) and $fWindows81Installed and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and (versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0 or $nEnableForceHtttpProxy!=1 or not($KB2919355Installed))" Error="Warning" P0="contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E')" P1="versioncompare($sFullAppVersion,'15.0.4605.1000')&gt;=0" P2="$KB2919355Installed!=1" P3="$nEnableForceHtttpProxy!=1" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. The 'Bypass proxy server for local addresses' option is enabled: {0}, Outlook 2013 has the required update installed: {1}, Windows Update KB2919355 needed: {2}, 'EnableForceHttpProxy' registry value =1 needed: {3}." GUID="393033" SSID="a3119c26-4830-4ac3-977a-dc9f2515b29f" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
-                          <Rule Name="sSlowCloudConnectBypassProxyWin7C2R" Query="$n2DigitVersion=15 and $nInstallType='C2R' and not($fMapiHttpConnected) and $fWindows7Installed and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and (versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0 or $nEnableForceHtttpProxy!=1 or not($KB2916915Installed))" Error="Warning" P1="if(versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0,'Update Office 2013 Click-to-Run. See KB 2625547 for details.','Update Office: not needed')" P2="if($KB2916915Installed!=1,'Install the Windows update from KB 2916915.','Windows update from KB 2916915: not needed')" P3="if($nEnableForceHtttpProxy!=1,'Set EnableForceHtttpProxy=1 in the registry. See KB  2916915.','EnableForceHtttpProxy=1 in the registry: no change needed')" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. To fix this problem:&#xA;&#xA;{1}&#xA;{2}&#xA;{3}" GUID="393033" SSID="4897e49d-d5b8-4093-8d6a-7d29c70f3d97" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
-                          <Rule Name="sSlowCloudConnectBypassProxyWin81C2R" Query="$n2DigitVersion=15 and $nInstallType='C2R' and not($fMapiHttpConnected) and $fWindows81Installed and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and (versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0 or $nEnableForceHtttpProxy!=1 or not($KB2919355Installed))" Error="Warning" P1="if(versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0,'Update Office 2013 Click-to-Run. See KB 2625547 for details.','Update Office: not needed')" P2="if($KB2919355Installed!=1,'Install the Windows update from KB 2919355.','Windows update from KB 2919355: not needed')" P3="if($nEnableForceHtttpProxy!=1,'Set EnableForceHtttpProxy=1 in the registry. See KB  2916915.','EnableForceHtttpProxy=1 in the registry: no change needed')" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. To fix this problem:&#xA;&#xA;{1}&#xA;{2}&#xA;{3}" GUID="393033" SSID="abbca359-9ba7-42b6-ba22-f18dadc27abe" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
+                          <Rule Name="sSlowCloudConnectBypassProxyWin7C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and not($fMapiHttpConnected) and $fWindows7Installed and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and (versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0 or $nEnableForceHtttpProxy!=1 or not($KB2916915Installed))" Error="Warning" P1="if(versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0,'Update Office 2013 Click-to-Run. See KB 2625547 for details.','Update Office: not needed')" P2="if($KB2916915Installed!=1,'Install the Windows update from KB 2916915.','Windows update from KB 2916915: not needed')" P3="if($nEnableForceHtttpProxy!=1,'Set EnableForceHtttpProxy=1 in the registry. See KB  2916915.','EnableForceHtttpProxy=1 in the registry: no change needed')" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. To fix this problem:&#xA;&#xA;{1}&#xA;{2}&#xA;{3}" GUID="393033" SSID="4897e49d-d5b8-4093-8d6a-7d29c70f3d97" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
+                          <Rule Name="sSlowCloudConnectBypassProxyWin81C2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and not($fMapiHttpConnected) and $fWindows81Installed and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and (versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0 or $nEnableForceHtttpProxy!=1 or not($KB2919355Installed))" Error="Warning" P1="if(versioncompare($sFullAppVersion,'15.0.4605.1000')&lt;0,'Update Office 2013 Click-to-Run. See KB 2625547 for details.','Update Office: not needed')" P2="if($KB2919355Installed!=1,'Install the Windows update from KB 2919355.','Windows update from KB 2919355: not needed')" P3="if($nEnableForceHtttpProxy!=1,'Set EnableForceHtttpProxy=1 in the registry. See KB  2916915.','EnableForceHtttpProxy=1 in the registry: no change needed')" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. To fix this problem:&#xA;&#xA;{1}&#xA;{2}&#xA;{3}" GUID="393033" SSID="abbca359-9ba7-42b6-ba22-f18dadc27abe" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
                           <Rule Name="sSlowCloudConnectBypassProxyWin8" Query="$n2DigitVersion=15 and not($fMapiHttpConnected) and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and $fWindows8Installed" Error="Warning" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. In order to fix this problem you will either need to upgrade to Windows 8.1 or turn off the 'Bypass proxy server for local addresses' setting in the Connections settings for Internet Explorer." GUID="393033" SSID="5c216bc0-70cf-49c1-82af-b76da9832f4e" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
                           <Rule Name="sSlowCloudConnectBypassProxyWin7OL14" Query="$n2DigitVersion=14 and not($fMapiHttpConnected14) and $fWindows7Installed and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and (versioncompare($sFullAppVersion,'14.0.7119.5000')&lt;0 or $nEnableForceHtttpProxy!=1 or not($KB2916915Installed))" Error="Warning" P0="contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E')" P1="versioncompare($sFullAppVersion,'14.0.7119.5000')&gt;=0" P2="$KB2916915Installed!=1" P3="$nEnableForceHtttpProxy!=1" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. The 'Bypass proxy server for local addresses' option is enabled: {0}, Outlook 2010 has the required update installed: {1}, Windows Update KB2916915 needed: {2}, 'EnableForceHttpProxy' registry value =1 needed: {3}." GUID="393033" SSID="70c93e6d-c7a9-46ae-9a5f-ae79fb625fea" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
                           <Rule Name="sSlowCloudConnectBypassProxyWin81OL14" Query="$n2DigitVersion=14 and not($fMapiHttpConnected14) and $fWindows81Installed and contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E') and $sExSrvNameCloud and (versioncompare($sFullAppVersion,'14.0.7119.5000')&lt;0 or $nEnableForceHtttpProxy!=1 or not($KB2919355Installed))" Error="Warning" P0="contains($sBypassProxyForLocalAddresses,'3C6C6F63616C3E')" P1="versioncompare($sFullAppVersion,'14.0.7119.5000')&gt;=0" P2="$KB2919355Installed!=1" P3="$nEnableForceHtttpProxy!=1" Title="Very slow connection to an Office 365 mailbox" Text="Your configuration has been known to cause very slow connection times (2-3 minutes) with Office 365 mailboxes. The 'Bypass proxy server for local addresses' option is enabled: {0}, Outlook 2010 has the required update installed: {1}, Windows Update KB2919355 needed: {2}, 'EnableForceHttpProxy' registry value =1 needed: {3}." GUID="393033" SSID="5b468de9-a8d0-437f-8d6d-129c5aeee1a2" Symptoms="Exchange connection,Office 365,Slowness"></Rule>
@@ -1617,7 +1633,7 @@
                             <Rule Name="sKB2825677InstalledE2007" Error="Error" Query="versioncompare($sFullAppVersion,'15.0.4551.1511')&lt;0 and $OfficeUpdates_sKB2837618Installed=false() and $OfficeUpdates_sKB2825677Installed and starts-with($sExVersion,'8.') and $sProfilePrimarySMTPAddress15AndAbove=''" P0="if($bitness='x86','x86','x64')" Title="Various Outlook issues because KB2825677 (October 2013 cumulative update) is installed" Text="You may experience crashes, free/busy, or Out of Office issues because the update from KB2825677 is installed and your mailbox is on Exchange 2007.&#xA;&#xA;Click the 'Click here ...' link and then install the update ({0} version) available from article 2825652 that is referenced under 'Known issues' in article 2825677." GUID="386554" SSID="ffa3077c-5483-48b0-944f-fdba32fc2dc8" Symptoms="Crash, Free Busy,Out of Office (OOF),IMAP"></Rule>
 														<Rule Name="sMissingImagesE15OnlineMode" Error="Warning" Query="'%CACHED%'='False' and starts-with($sExVersion,'15.') and versioncompare($sExVersion,'15.0.847')&lt;0" Title="Images may be missing in some email messages" Text="You are using an Online mode profile with an Exchange 2013 mailbox and Exchange 2013 Service Pack 1 is not installed. In this configuration and under certain scenarios, images may be missing from some email messages. Click the 'Click here ...' link for details." GUID="378276" SSID="dad05555-40d0-48b4-a82c-f137820f4f8f" Symptoms="Email message display,Images"></Rule>
                             <Rule Name="sE2007FwdRuleErrorMSI" Query="$nInstallType='MSI' and $nRuleNotSavedCount&gt;0 and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4641.1001')&lt;0 and starts-with($sExVersion,'8.')" Error="Warning" P0="$bitness" Title="'Rule cannot be saved' error detected" Text="At least one error was found in the Microsoft Office Alerts log (in the Event Viewer) indicating there was a problem saving an Outlook rule. This problem should be resolved in a more recent build of Outlook 2013. Please click the 'Click here ...' link to install the '{0}' version of the August 19, 2014 update." GUID="510912" SSID="0cf404e6-f36f-4fad-b6c3-4ff6eefcfd7d" Symptoms="Error message,Rules"></Rule>
-                            <Rule Name="sE2007FwdRuleErrorC2R" Query="$nInstallType='C2R' and $nRuleNotSavedCount&gt;0 and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4641.1001')&lt;0 and starts-with($sExVersion,'8.')" Error="Warning" Title="'Rule cannot be saved' error detected" Text="At least one error was found in the Microsoft Office Alerts log (in the Event Viewer) indicating there was a problem saving an Outlook rule. This problem should be resolved in a more recent build of Outlook 2013. Please click the 'Click here ...' link to see instructions for updating your Click-to-Run installation of Office 2013." GUID="510957" SSID="5a55cacf-b004-4dd5-b9b9-71ca1cea9a92" Symptoms="Error message,Rules"></Rule>
+                            <Rule Name="sE2007FwdRuleErrorC2R" Query="$nInstallType='ClickToRun' and $nRuleNotSavedCount&gt;0 and $n2DigitVersion=15 and versioncompare($sFullAppVersion,'15.0.4641.1001')&lt;0 and starts-with($sExVersion,'8.')" Error="Warning" Title="'Rule cannot be saved' error detected" Text="At least one error was found in the Microsoft Office Alerts log (in the Event Viewer) indicating there was a problem saving an Outlook rule. This problem should be resolved in a more recent build of Outlook 2013. Please click the 'Click here ...' link to see instructions for updating your Click-to-Run installation of Office 2013." GUID="510957" SSID="5a55cacf-b004-4dd5-b9b9-71ca1cea9a92" Symptoms="Error message,Rules"></Rule>
                           </Setting>
 													<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Exchange\Exchange Provider">
 														<Setting Key1="Closest GC" Substitution="CLOSESTGC">
@@ -1832,9 +1848,9 @@
 																			<Setting Key1="00036649" Format="Int" Display="Hide">
 																				<Rule Name="nProfSyncWindowSetting" Query="$."></Rule>
 																			</Setting>
-																			<Rule Name="sProfileSyncWindowSetting" Query="$fprimarystore" P0="if($nProfSyncWindowSetting=0,'all',$nProfSyncWindowSetting)" Error="None" Title="Number of months synchronized with mailbox (from profile): {0}." Text="Number of months synchronized with mailbox (from profile): {0}." Symptoms="Informational"></Rule>
-																			<Rule Name="sSyncWindowSettingWarning" Query="$fprimarystore and ($nSyncWindowSetting&gt;0 and $nSyncWindowSetting&lt;12) or ($nSyncWindowSetting=-1 and $nProfSyncWindowSetting&gt;0 and $nProfSyncWindowSetting&lt;12)" Error="Warning" Title="Less than 12 months of email messages displayed" Text="Your current Outlook configuration is synchronizing less than the default amount (12 months) of email messages to your cached mode .ost file. You will not be able to access older items if you do not have connectivity with your Exchange server." GUID="267358" SSID="e57e38a5-2bda-44f6-aa32-c0872ae742df" Symptoms="Email missing or deleted,Email folders"></Rule>
-																		</Object>
+                                      <Rule Name="sProfileSyncWindowSetting" Query="$fprimarystore and $nSyncWindowSetting=-1" Error="None" P0="if($nProfSyncWindowSetting=0,'All',$nProfSyncWindowSetting)" Text="Number of months synchronized with the mailbox: {0}. (User managed value.)" Symptoms="Informational"></Rule>
+                                      <Rule Name="sSyncWindowSettingWarning" Query="$fprimarystore and ($nSyncWindowSetting&gt;0 and $nSyncWindowSetting&lt;12) or ($nSyncWindowSetting=-1 and $nProfSyncWindowSetting&gt;0 and $nProfSyncWindowSetting&lt;12)" Error="Warning" P0="if($nSyncWindowSetting=-1,$nProfSyncWindowSetting,$nSyncWindowSetting)" P1="if($nSyncWindowSetting=-1,'configured in your Outlook profile','being managed by group policy')" Title="Less than 12 months of email messages displayed" Text="Your Outlook configuration is synchronizing {0} months of email messages which is less than the default amount (12 months). You will not be able to access older items if you do not have connectivity with your Exchange server.&#xA;&#xA;Note, the number of month is {1}." GUID="267358" SSID="e57e38a5-2bda-44f6-aa32-c0872ae742df" Symptoms="Email missing or deleted,Email folders"></Rule>
+                                    </Object>
 																	</Object>
 																</Object>
 															</Object>
@@ -1843,8 +1859,7 @@
 														<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="software\policies\microsoft\office\%MAJORVERSION%.0\outlook\cached mode" Display="Right">
 															<Setting Key1="SyncWindowSetting" Display="Right"></Setting>
 															<Rule Name="nSyncWindowSetting" Query="if((../Instance/Setting/@Key1='SyncWindowSetting')=true(),../Instance/Setting[@Key1='SyncWindowSetting']/Value,-1)"></Rule>
-															<Rule Name="sSyncWindowSettingInfo" Query="$nSyncWindowSetting&gt;-1" P0="$." Error="None" Title="Number of months synchronized with mailbox (policy): {0}. (0 means all)" Text="HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Outlook\Cached Mode\SyncWindowSetting = {0}" Symptoms="Informational"></Rule>
-														</Object>
+                              <Rule Name="sSyncWindowSettingInfo" Query="$nSyncWindowSetting&gt;-1" Error="None" P0="if($nSyncWindowSetting=0,'All',$nSyncWindowSetting)" P1="$." Text="Number of months synchronized with the mailbox: {0}. (Managed through group policy value.)" Symptoms="Informational"></Rule>														</Object>
 													</Object>
 
 													<!--itemprocsearch-->
@@ -2310,6 +2325,15 @@
 														<Rule Name="szAutoDiscoverXml" Title="AutodiscoverXml" Query="not(string-length($.)=0)" P0="$." Text="{0}" Error="None" Symptoms="Informational">
 														</Rule>
 													</Setting>
+                          <Object Type="XML" Key1="%AUTODISCXML%" Key3="//User" Key4="STRING" Key5="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a" Display="Hide">
+                            <Setting Key1="child::node()[name()='LegacyDN']/child::text()" Substitution="USERLEGACYDN" Display="Hide">
+                            </Setting>
+                            <Object Type="Group" Name="LegacyExchangeDN =%USERLEGACYDN%" Display="Right">
+                              <Setting Key1="" Display="Hide">
+                              </Setting>
+                              <Rule Name="sAutoDiscLegDNLastCharBlankFullScan" Query="substring('%USERLEGACYDN%',string-length('%USERLEGACYDN%'),1)=' '" Error="Warning" Title="Outlook in a Disconnected state because the LegacyExchangeDN value ends with a space" Text="The last character of the LegacyExchangeDN value found in the Autodiscover information is a space. This configuration is known to cause Outlook to disconnect from the server and to display an error message indicating you should 'quit and restart Outlook'.&#xA;&#xA;Click the 'Click here ...' link for details on how to remove the space from the LegacyExchangeDN value." GUID="614984" SSID="5dfb5701-0f41-4d4e-b1a4-d1c5a4980e2e" Symptoms="Error message,Exchange connection"></Rule>
+                            </Object>
+                          </Object>
                           <Object Type="If" Key1="number(substring('%EXVERSION%',1,2))&gt;=15 or contains('%EXCHANGECONNECTIONMETHOD%','External')">
 														<Object Type="Group" Name="Connection to Exchange =HTTPs" Display="Right">
 															<Setting Key1="" Display="Hide"></Setting>
@@ -2373,8 +2397,11 @@
 														<Object Type="XML" Key1="%AUTODISCXML%" Key2="" Key3="//AlternativeMailbox" Key4="STRING" Key5="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a" Display="Hide">
 															<Setting Key1="." Display="Hide"></Setting>
                               <Setting Key1="child::node()[name()='SmtpAddress']/child::text()" Substitution="AMSMTP" Display="Hide">
+                                <Rule Name="sAltMbxSmtpAddr" Query="$."></Rule>
                               </Setting>
-															<Setting Key1="child::node()[name()='Type']/child::text()" Substitution="AMTYPE" Display="Hide"></Setting>
+															<Setting Key1="child::node()[name()='Type']/child::text()" Substitution="AMTYPE" Display="Hide">
+                                <Rule Name="sAltMbxTypeArchive" Query="lower-case('%AMTYPE%')='archive'"></Rule>
+                              </Setting>
 															<Setting Key1="child::node()[name()='DisplayName']/child::text()" Substitution="AMDN" Display="Hide"></Setting>
 															<Setting Key1="child::node()[name()='LegacyDN']/child::text()" Substitution="AMLEGACYDN" Display="Hide">
 																<Rule Name="sAlternateDelegateMailboxDN" Query="$."></Rule>
@@ -2400,8 +2427,14 @@
                                 <Object Type="Group" Name="Smtp Address =%AMSMTP%" Display="Right">
                                   <Setting Key1="" Display="Hide">
                                   </Setting>
+															  </Object>
+                                <Object Type="Group" Name="Hidden">
+                                  <Rule Name="sAltMbxConnectionMapiHttp" Query="$sAltMbxTypeArchive and $sAltMbxSmtpAddr" Text="Connection method in Autodiscover response =MAPI/HTTP"></Rule>
+                                  <Rule Name="sAltMbxConnectionRpc" Query="$sAltMbxTypeArchive and $sAlternateDelegateMailboxDN" Text="Connection method in Autodiscover response =RPC"></Rule>
+                                </Object>
 															</Object>
-															</Object>
+                              <Rule Name="fArchiveMbxRpcConnection" Query="count(../Instance[Setting[@Substitution='AMTYPE' and Value='Archive'] and Setting[@Substitution='AMLEGACYDN']/Value=true()])&gt;0"></Rule>
+                              <Rule Name="sOnlineArchiveChangedConnection" Query="$fArchiveMbxRegistryMapiHttp and $fArchiveMbxRpcConnection and $nError300032Count&gt;0" Error="Warning" P0="if($sMapiHttpDisabled,'MAPI/Http is disabled in the registry','MAPI/Http is disabled on the Exchange server')" Title="Possible problems accessing an Online Archive mailbox" Text="Your Outlook configuration indicates the connection method with your Online Archive mailbox has changed from MAPI/Http to RPC because {0}.&#xA;&#xA;If you are able to access your Online Archive mailbox at this time, please ignore this error.&#xA;&#xA;If you are currently experiencing a problem accessing your Online Archive mailbox, please click the ‘Click here …’ link for details on a resolution." GUID="" SSID="50daea72-e0c2-4b8a-9c5c-c0da4e2f43bb" Symptoms="Archive mailbox,Error message"></Rule>
                               <Rule Name="sAutomappingDuplicateSelfStore" Query="count(../Instance/Setting[@Substitution='AMLEGACYDN' and Value=$sUserLegacyDN])&gt;0 or count(../Instance/Setting[@Substitution='AMSMTP' and Value=$sUserSmtpAddress])&gt;0" Error="Error" Title="Problems with reminders, sending email, To-Do bar, or indexing" Text="Your own mailbox is listed as a 'Delegate' mailbox in the Autodiscover information from your Exchange server. In this configuration, you will experience numerous problems in Outlook. If you have already configured Full Access permissions per KB article 2548313, make sure to also check the msExchDelegateListLink attribute for your account in Active Directory or the Configuration Details for this scan. Click the 'Click here ...' link for details on fixing this problem." GUID="267363" SSID="a48e5078-03da-44d8-a2bd-ddaf03995e61" Symptoms="Email send/receive,Reminders,To-Do Bar,Search,Outbox folder"></Rule>
                               <Rule Name="nArchiveMailboxes" Query="count(../Instance/Setting[@Substitution='AMTYPE' and Value='Archive'])"></Rule>
                               <Rule Name="sArchiveMailboxNotAccessible" Query="$nArchiveMailboxes&gt;0 and ($nMapiHttpProtocol=0  or ($nMapiHttpProtocol=1 and $sMapiHttpDisabled)) and starts-with($sExVersion,'15.') and $sEmsmdb322013Version='15.0.4641.1001'" Error="Error" Title="Your archive mailbox is not accessible" Text="Your archive mailbox is not accessible because you have build 15.0.4641.1001 of Outlook 2013 installed. This build is from the August 2014 update. Click the 'Click here...' link for steps to resolve this issue." GUID="509949" SSID="ef9d80db-ed3e-4c81-a67a-25707ccdf33b" Symptoms="Archive email,Error message,Exchange connection"></Rule>
@@ -2446,6 +2479,7 @@
                             <Setting Key1="ExcludeLastKnownGoodUrl">
                               <Rule Name="sExcludeLastKnownGoodUrl" Query="$.=1 and $fExcludeLastKnownGoodUrlPol=-1" Error="Warning" Title="Possible problems due to the 'ExcludeLastKnownGoodUrl' registry value" Text="The 'ExcludeLastKnownGoodUrl' value is set to 1 in the registry. This configuration may impact the time it takes for Outlook to retrieve Autodiscover information from your Exchange server." GUID="267364" SSID="f1c5076c-6160-4d51-8f18-791519ac4a55" Symptoms="Outlook profile,Startup,Autodiscover"/>
                             </Setting>
+                            <Rule Name="fExcludeLastKnownGoodUrl" Query="if(../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']=true(),../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']/Value,-1)"/>
                           </Object>
                           <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover\Boot">
 														<Setting Key1="__VALUES"></Setting>
@@ -3167,6 +3201,7 @@
                             </Object>
                             <Setting Key1="0x0E080014" Substitution="MAILBOXSIZE" Display="Hide">
                             </Setting>
+                            <Object Type="If" Key1="'%MAILBOXSIZE%'!='0x8004010F'">
                             <Object Type="Group" Name="Mailbox size" Display="Right">
                               <Object Type="Group" Name="PR_MESSAGE_SIZE_EXTENDED - 0x0E080014" Display="Right">
                                 <Setting Key1="" Display="Hide"/>
@@ -3174,6 +3209,7 @@
                               </Object>
                             </Object>
 													</Object>
+												</Object>
 												</Object>
 												<Object Type="If" Key1="'%CACHED%'='False'">
 													<Object Type="Store" Key1="%STOREID%" Display="Hide">
@@ -3217,6 +3253,25 @@
 												</Object>
 											</Object>
 											<!--/QUOTA-->
+                      <!--Receive Folder test for IPM.SCHEDULE.MESSAGE-->
+                      <Object Type="Engine" Display="Hide">
+                        <Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide"></Setting>
+                        <Object Type="CommandLine" Key2="&quot;%EXECDIR%\Tools\%BIT%\MrMAPI.exe&quot;" Key3="-online -ReceiveFolder -profile &quot;%CURPROF%&quot;" Display="Hide">
+                          <Setting Key1="Output" Substitution="MRMAPIOUTPUT" Display="Hide"/>
+                          <!--Object Type="XML" Key1="%MRMAPIOUTPUT%" Key3="//receivefoldertable/properties[contains(property[@tag='0x001A001E']/Value,'IPM.SCHEDULE.MEETING')]" Key4="STRING" Display="Hide"-->
+                          <!--Setting Key1="@index" Display="Hide"></Setting-->
+                          <Object Type="Group" Name="Messages in the Receive Folder table">
+                            <Object Type="XML" Key1="%MRMAPIOUTPUT%" Key3="//receivefoldertable/properties/property[@tag='0x001A001E']/Value" Key4="STRING" Display="Hide">
+                              <Setting Key1="." Substitution="MSGCLASS" SubstitutionFormat="(.*CDATA\[)(.*)(\]\].*)----$2" Display="Hide"></Setting>
+                              <Object Type="Group" Name="Message Class =%MSGCLASS%">
+                                <Setting Key1="" Display="Hide"></Setting>
+                              </Object>
+                              <Rule Name="sReceiveFolderMsgClassSchedule" Query="count(../Instance/Setting[@Key1='.' and contains(lower-case(Value),'ipm.schedule.meeting')])&gt;0" Error="Error" Title="Meeting invitations do not appear in the Inbox folder but the meeting appears tentatively on the Calendar" Text="Invitations to meetings are being deleted automatically and never appear in the Inbox folder. However, the meeting appears on the Calendar in a tentatively accepted state. This occurs because a hidden message in the hidden 'Receive Folder' table has a message clase = 'IPM.SCHEDULE.MEETING'.&#xA;&#xA;Click the 'Click here ...' link for details on the solution." GUID="512926" SSID="671c1bab-23ce-42d7-9003-023f848763fc" Symptoms="Calendar,Email missing or deleted,Meetings or appointments"></Rule>
+                            </Object>
+                          </Object>
+                        </Object>
+                      </Object>
+                      <!--/Receive Folder test-->
 										</Object>
 									</Object>
 									<!--/PRIMARY EXCHANGE MAILBOX STUFF-->
@@ -3254,6 +3309,9 @@
 												<Setting Key1="0x6653001f" Substitution="MAPIHTTPMAILSTOREEXT" SubstitutionFormat="(data:)(.*)----$2" Display="Hide">
 													<Rule Name="fMapiHttpMailstoreExtUrl14" Query="contains(lower-case($.),'mapi/emsmdb')"></Rule>
 												</Setting>
+                        <Setting Key1="0x0504001f" Substitution="OSCFBPROVIDER" SubstitutionFormat="(data:)(.*)----$2" Display="Hide">
+                          <Rule Name="sOscFbAccountFound1214" Query="contains(lower-case($.),'efdabf9a-7d2c-4be6-a266-872ec6fc63e7')" Error="Warning" Title="Facebook updates stop working" Text="Due to recent changes made by Facebook, the Outlook Social Connector (OSC) connection to Facebook will no longer function. Because of this change, you see an 'Invalid user name or password' error in the OSC dialog box and updates with Facebook no longer occur.&#xA;&#xA;Click the 'Click here ...' link for details on removing your Facebook connection in the OSC." GUID="615819" SSID="19b49f79-a51c-47ca-bcc7-8a0d316489a4" Symptoms="Facebook integration"></Rule>
+                        </Setting>
 												<Object Type="Group" Name="Account Name =%ACCNTNAME%" Display="Right" ShowInSummary="True">
 													<Object Type="Group" Name="Server Version =%SERVERVERSION%" Display="Right">
 														<Setting Key1="" Display="Hide"></Setting>
@@ -3383,6 +3441,12 @@
 												<Setting Key1="0x6653001f" Substitution="MAPIHTTPMAILSTOREEXT" SubstitutionFormat="(data:)(.*)----$2" Display="Hide">
 													<Rule Name="fMapiHttpMailstoreExtUrl" Query="contains(lower-case($.),'mapi/emsmdb')"></Rule>
 												</Setting>
+                        <Setting Key1="0x0504001f" Substitution="OSCFBPROVIDER" SubstitutionFormat="(data:)(.*)----$2" Display="Hide">
+                          <Rule Name="sOscFbAccountFound15" Query="contains(lower-case($.),'efdabf9a-7d2c-4be6-a266-872ec6fc63e7')" Error="Warning" Title="Facebook updates stop working" Text="Due to recent changes made by Facebook, the Outlook Social Connector (OSC) connection to Facebook will no longer function. Because of this change, you see an 'Invalid user name or password' error in the OSC dialog box and updates with Facebook no longer occur.&#xA;&#xA;Click the 'Click here ...' link for details on removing your Facebook connection in the OSC." GUID="615819" SSID="19b49f79-a51c-47ca-bcc7-8a0d316489a4" Symptoms="Facebook integration"></Rule>
+                        </Setting>
+                        <Setting Key1="0x664a001f" Substitution="AUTODISCOVERURL" Display="Hide">
+                          <Rule Name="sCloudMbxOnPremLkgUrlFullScan" Query="$n2DigitVersion&gt;=15 and $sExSrvNameCloud and not(contains(lower-case($.),'.outlook.com/')) and ($fExcludeLastKnownGoodUrlPol=0 or ($fExcludeLastKnownGoodUrlPol=-1 and $fExcludeLastKnownGoodUrl!=1))" Error="Warning" P0="$." Title="Autodiscover information is incorrect due to cached information in the registry" Text="Outlook is using the Autodiscover information from {0} which is the URL specified in the registry information for your Outlook profile. Your maillbox is in Office 365, so the URL is not valid.&#xA;&#xA;Click the 'Click here ...' link for information on how to resolve this issue." GUID="511329" SSID="9acd1897-e764-4032-8af0-74c5354ca1f3" Symptoms="Autodiscover,Exchange connection,Office 365"></Rule>
+                        </Setting>
 												<Object Type="Group" Name="Account Name =%ACCNTNAME%" Display="Right" ShowInSummary="True">
 													<Object Type="Group" Name="Server Version =%SERVERVERSION%" Display="Right">
 														<Setting Key1="" Display="Hide"></Setting>
@@ -3484,8 +3548,10 @@
 												</Object>
 												<!--/account summary-->
 											</Object>
-										</Object>
+                      <Rule Name="fArchiveMbxRegistryMapiHttp" Query="count(../Instance/Object/Instance[Setting[@Key1='001f65d0' and contains(Value,'Archive')] and Setting[@Key1='001f6641' and contains(lower-case(Value),'exchangeguid+')]])&gt;0"></Rule>
+                    </Object>
 									</Object>
+                  <Rule Name="sRegistryLegDNLastCharBlankFullScan" Query="$szAutoDiscoverXml=false() and count(//Instance[@Type='ProfileSection' and not(Setting[@Key1='001f65d0' and contains(Value,'Delegate')]) and Setting[@Key1='001e660b' and substring(Value,string-length(Value),1)=' ']])&gt;0" Error="Warning" Title="Outlook in a Disconnected state because the LegacyExchangeDN value ends with a space" Text="The last character of the LegacyExchangeDN value found in the profile registry information is a space. This configuration is known to cause Outlook to disconnect from the server and to display an error message indicating you should 'quit and restart Outlook'.&#xA;&#xA;Click the 'Click here ...' link for details on how to remove the space from the LegacyExchangeDN value." GUID="614984" SSID="10e3bd9c-aaf2-4151-8077-599b57071cf9" Symptoms="Error message,Exchange connection"></Rule>
 								</Object>
 							</Object>
 							<!--/PROFILE REGISTRY-->
@@ -3496,6 +3562,12 @@
 				<!--DEFAULT PROFILE DETAILS (IF OFFLINE SCAN ONLY)-->
 				<Object Type="If" Key1="'%SCANTYPE%'='Offline Scan'">
 					<Object Type="Group" Name="Default Profile Information" GroupingClass="True" Class="Default Profile">
+            <Object Type="File" Key2="%APPDATA%\Microsoft\Outlook\%DEFPROF%.xml" Display="Hide">
+              <Setting Key1="CreationTime" Display="Hide" Substitution="PROFILECREATIONDATE"></Setting>
+              <Object Type="Group" Name="Profile created on =%PROFILECREATIONDATE%" Display="Right">
+                <Setting Key1="" Display="Hide"></Setting>
+              </Object>
+            </Object>
 						<Object Type="Group" Name="Exchange Specifics" GroupingClass="True" Class="Default Profile">
               <Object Type="Engine" Display="Hide">
                 <Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide"></Setting>
@@ -3519,7 +3591,13 @@
                     </Setting>
                     <Setting Key1="0x6653001f" Substitution="MAPIHTTPMAILSTOREEXT" SubstitutionFormat="(data:)(.*)----$2" Display="Hide">
                     </Setting>
-              </Object>
+                    <Setting Key1="0x6622001f" Substitution="AUTODISCOVERURLO365" Display="Hide">
+                      <Rule Name="fCloudMbxInRegistry" Query="contains(lower-case($.),'office365.com')"></Rule>
+                    </Setting>
+                    <Setting Key1="0x664a001f" Substitution="AUTODISCOVERURL" Display="Hide">
+                      <Rule Name="sCloudMbxOnPremLkgUrlOfflineScan" Query="$n2DigitVersion&gt;=15 and $fCloudMbxInRegistry and not(contains(lower-case($.),'.outlook.com/')) and ($fExcludeLastKnownGoodUrlPolOfflineScan=0 or ($fExcludeLastKnownGoodUrlPolOfflineScan=-1 and $fExcludeLastKnownGoodUrlOfflineScan!=1))" Error="Warning" P0="$." Title="Autodiscover information is incorrect due to cached information in the registry" Text="Outlook is using the Autodiscover information from {0} which is the URL specified in the registry information for your Outlook profile. Your maillbox is in Office 365, so the URL is not valid.&#xA;&#xA;Click the 'Click here ...' link for information on how to resolve this issue." GUID="511329" SSID="9acd1897-e764-4032-8af0-74c5354ca1f3" Symptoms="Autodiscover,Exchange connection,Office 365"></Rule>
+                    </Setting>
+                  </Object>
                   <Rule Name="fMapiHttpMailstoreIntUrlOffline" Query="count(../Instance/Object/Instance/Setting[@Key1='0x6652001f' and contains(lower-case(Value),'mapi/emsmdb')])&gt;0"></Rule>
                   <Rule Name="fMapiHttpMailstoreExtUrlOffline" Query="count(../Instance/Object/Instance/Setting[@Key1='0x6653001f' and contains(lower-case(Value),'mapi/emsmdb')])&gt;0"></Rule>
                 </Object>
@@ -3884,16 +3962,43 @@
 													<Setting Key1="" Display="Hide"></Setting>
 												</Object>
 											</Object>
-
 											<!--/account summary-->
 										</Object>
-
 									</Object>
-
 								</Object>
+                <Rule Name="fRegistryLegDNLastCharBlank" Query="count(//Instance[@Type='ProfileSection' and not(Setting[@Key1='001f65d0' and contains(Value,'Delegate')]) and Setting[@Key1='001e660b' and substring(Value,string-length(Value),1)=' ']])&gt;0"></Rule>
+                <Rule Name="sRegistryLegDNLastCharBlankOfflineScan" Query="not($sCachedAutodiscoverXmlFound) and $fRegistryLegDNLastCharBlank" Error="Warning" Title="Outlook in a Disconnected state because the LegacyExchangeDN value ends with a space" Text="The last character of the LegacyExchangeDN value found in the profile registry information is a space. This configuration is known to cause Outlook to disconnect from the server and to display an error message indicating you should 'quit and restart Outlook'.&#xA;&#xA;Click the 'Click here ...' link for details on how to remove the space from the LegacyExchangeDN value." GUID="614984" SSID="d7b0c939-bb21-4b67-b332-e3d75a075101" Symptoms="Error message,Exchange connection"></Rule>
 							</Object>
 						</Object>
 						<!--/PROFILE REGISTRY OFFLINE-->
+            <!--Autodiscover local cache-->
+              <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\Profiles\%DEFPROF%\0a0d020000000000c000000000000046" Display="Hide">
+                <Setting Key1="01023d15" Substitution="KGUID" Display="Hide"></Setting>
+                <Object Type="EVR" Task="Offline Scan">
+                  <Setting Key1="LOCALAPPDATA" Substitution="LOCALAPPDATA" Display="Hide">
+                  </Setting>
+                  <Object Type="File" Key2="%LOCALAPPDATA%\Microsoft\Outlook\%KGUID% - Autodiscover.xml" Display="Hide">
+                    <Setting Key1="Exists">
+                      <Rule Name="sCachedAutodiscoverXmlFound" Query="$.=1"></Rule>
+                    </Setting>
+                  </Object>
+                  <Object Type="XML" Key2="%LOCALAPPDATA%\Microsoft\Outlook\%KGUID% - Autodiscover.xml" Key3="//User" Key5="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a" Display="Hide">
+                    <Setting Key1="child::node()[name()='LegacyDN']/child::text()" Substitution="USERLEGACYDN" Display="Hide">
+                    </Setting>
+                    <Object Type="Group" Name="Local Autodiscover.xml file (Outlook 2016 only)">
+                      <Object Type="Group" Name="File path =%LOCALAPPDATA%\Microsoft\Outlook\%KGUID% - Autodiscover.xml" Display="Right">
+                        <Setting Key1="" Display="Hide"></Setting>
+                      </Object>
+                      <Object Type="Group" Name="LegacyExchangeDN =%USERLEGACYDN%">
+                        <Setting Key1="" Display="Hide"></Setting>
+                        <Rule Name="sLocalAutoDiscLegDNLastCharBlank15-" Query="$n2DigitVersion&lt;16 and $fRegistryLegDNLastCharBlank and substring('%USERLEGACYDN%',string-length('%USERLEGACYDN%'),1)=' '" Error="Warning" Title="Outlook in a Disconnected state because the LegacyExchangeDN value ends with a space" Text="The last character of the LegacyExchangeDN value is a space in the profile registry data and the Autodiscover information. This configuration is known to cause Outlook to disconnect from the server and to display an error message indicating you should 'quit and restart Outlook'.&#xA;&#xA;Click the 'Click here ...' link for details on how to remove the space from the LegacyExchangeDN value." GUID="614984" SSID="13b17bca-fdbb-498e-a293-dbeff3d20aeb" Symptoms="Error message,Exchange connection"></Rule>
+                        <Rule Name="sLocalAutoDiscLegDNLastCharBlank16" Query="$n2DigitVersion&gt;15 and substring('%USERLEGACYDN%',string-length('%USERLEGACYDN%'),1)=' '" Error="Warning" Title="Outlook in a Disconnected state because the LegacyExchangeDN value ends with a space" Text="The last character of the LegacyExchangeDN value found in the Autodiscover information is a space. This configuration is known to cause Outlook to disconnect from the server and to display an error message indicating you should 'quit and restart Outlook'.&#xA;&#xA;Click the 'Click here ...' link for details on how to remove the space from the LegacyExchangeDN value." GUID="614984" SSID="da75eb8f-8a18-401c-b791-1c2c511facce" Symptoms="Error message,Exchange connection"></Rule>
+                      </Object>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            <!--/Autodiscover local cache-->
 					</Object>
 				</Object>
 				<!--/DEFAULT PROFILE DETAILS (IF OFFLINE SCAN ONLY)-->
@@ -4354,6 +4459,7 @@
                   <Setting Key1="ExcludeLastKnownGoodUrl">
                     <Rule Name="sExcludeLastKnownGoodUrlOfflineScan" Query="$n2DigitVersion&gt;=15 and $.=1 and $fExcludeLastKnownGoodUrlPolOfflineScan=-1" Error="Warning" Title="Possible mailbox connection issues due to the 'ExcludeLastKnownGoodUrl' registry value" Text="The ExcludeLastKnownGoodUrl value is set to 1 in the registry. This configuration may impact the time it takes for Outlook to retrieve Autodiscover information from your Exchange server.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="267364" SSID="f1c5076c-6160-4d51-8f18-791519ac4a55" Symptoms="Outlook profile,Startup,Autodiscover,Office 365"/>
                   </Setting>
+                  <Rule Name="fExcludeLastKnownGoodUrlOfflineScan" Query="if(../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']=true(),../Instance/Setting[@Key1='ExcludeLastKnownGoodUrl']/Value,-1)"/>
                 </Object>
                 <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\AutoDiscover\Boot">
                   <Setting Key1="__VALUES"></Setting>
@@ -4403,7 +4509,7 @@
                 
                 <Setting Key1="DisableExchange"></Setting>
                 <Rule Name="fDisableExchange" Query="if((../Instance/Setting/@Key1='DisableExchange')=true(),../Instance/Setting[@Key1='DisableExchange']/Value,-1)"></Rule>
-                <Rule Name="sDisableExchangeEnabled" Query="$fDisableExchangePol=-1 and $fDisableExchange=1" Error="None" Title="Cannot add an Exchange email account to the Outlook profile." Text="The option to add an Exchange email account to the Outlook profile is disabled because the value 'DisableExchange' = 1 is configured as a non-policy setting in the registry.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="403569" SSID="23d04659-4edc-4a86-a527-f8a1a449ad0a" Symptoms="Outlook profile,Exchange account"></Rule>
+                <Rule Name="sDisableExchangeEnabled" Query="$fDisableExchangePol=-1 and $fDisableExchange=1" Error="Warning" Title="Cannot add an Exchange (or Office 365) email account to the Outlook profile." Text="The option to add an Exchange (or Office 365) email account to the Outlook profile is disabled because the value 'DisableExchange' = 1 is configured as a non-policy setting in the registry.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="403569" SSID="23d04659-4edc-4a86-a527-f8a1a449ad0a" Symptoms="Outlook profile,Exchange account,Office 365"></Rule>
 
                 <Setting Key1="DisableHTTP"></Setting>
                 <Rule Name="fDisableHTTP" Query="if((../Instance/Setting/@Key1='DisableHTTP')=true(),../Instance/Setting[@Key1='DisableHTTP']/Value,-1)"></Rule>
@@ -4456,6 +4562,8 @@
                 <Setting Key1="__VALUES"></Setting>
                 <Rule Name="fPSTNullFreeOnClose" Query="if(../Instance/Setting[lower-case(@Key1)='pstnullfreeonclose']=true(),../Instance/Setting[lower-case(@Key1)='pstnullfreeonclose']/Value,-1)"></Rule>
                 <Rule Name="sPSTNullFreeOnClose" Query="$fPSTNullFreeOnClose=1 and $fPolPSTNullFreeOnClose=-1" Error="Warning" Title="Slow Outlook shut down because PSTNullFreeOnClose=1 in the registry" Text="PSTNullFreeOnClose=1 in the registry under HKCU\Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\PST. This can cause Outlook to take longer than expected to exit and Outlook.exe may remain running in the background.&#xA;&#xA;Click the 'Click here ...' link for details on this registry value." GUID="267342" SSID="052448db-5e62-462e-85e3-8d69de21841d" Symptoms="Slowness"></Rule>
+                <Rule Name="fUseLegacyCacheSize15Plus" Query="if(../Instance/Setting[lower-case(@Key1)='uselegacycachesize']=true(),../Instance/Setting[lower-case(@Key1)='uselegacycachesize']/Value,-1)"></Rule>
+                <Rule Name="sUseLegacyCacheSize15Plus" Query="$n2DigitVersion&gt;=15 and $fUseLegacyCacheSize15Plus=1" Error="Warning" Title="Outlook displays errors on launch because UseLegacyCacheSize=1 in the registry" Text="UseLegacyCacheSize=1 in the registry under HKCU\Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\PST. This prevents Outlook from starting.&#xA;&#xA;Click the 'Click here ...' link for details on how to change this registry value." GUID="616054" SSID="0310ca58-13b1-4f8d-ad7e-8b1576f021ec" Symptoms="Error message,Startup"></Rule>
               </Object>
               <!--/PST-->
               <!--Security-->
@@ -4510,6 +4618,11 @@
               <Setting Key1="KeyExists">
                 <Rule Name="sWordOptionsAssistFound" Query="$.='True'" Error="Warning" Title="Outlook cannot preview a Word document" Text="The registry contains the following subkey: HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\15.0\Word\Options\Assist. When the registry contains this subkey, Outlook cannot preview a Word document.&#xA;&#xA;Click the 'Click here ...' link for steps to fix this issue." GUID="511320" SSID="b9b6875d-93ba-48cf-af32-1122c6b6dbfd" Symptoms="Email attachments,Error message"></Rule>
               </Setting>
+            </Object>
+            <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\15.0\Word\Options\WordMail">
+              <Setting Key1="FirstRunOnRTM">
+              </Setting>
+              <Rule Name="fFirstRunOnRtm" Query="if((../Instance/Setting/@Key1='FirstRunOnRTM')=true(),../Instance/Setting[@Key1='FirstRunOnRTM']/Value,-1)"></Rule>
             </Object>
 						<!--/Word settings -->
             <!--OneNote settings that affect Outlook-->
@@ -4731,7 +4844,7 @@
             
             <Setting Key1="DisableExchange"></Setting>
             <Rule Name="fDisableExchangePol" Query="if((../Instance/Setting/@Key1='DisableExchange')=true(),../Instance/Setting[@Key1='DisableExchange']/Value,-1)"></Rule>
-            <Rule Name="sDisableExchangeEnabledPol" Query="$fDisableExchangePol=1" Error="None" Title="Cannot add an Exchange email account to the Outlook profile." Text="The option to add an Exchange email account to the Outlook profile is disabled because the value 'DisableExchange' = 1 is configured as a group policy setting in the registry.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="403569" SSID="bb2534e2-9590-494d-b6fb-e4295fe4d1c6" Symptoms="Outlook profile,Exchange account"></Rule>
+            <Rule Name="sDisableExchangeEnabledPol" Query="$fDisableExchangePol=1" Error="Warning" Title="Cannot add an Exchange (or Office 365) email account to the Outlook profile." Text="The option to add an Exchange (or Office 365) email account to the Outlook profile is disabled because the value 'DisableExchange' = 1 is configured as a group policy setting in the registry.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="403569" SSID="bb2534e2-9590-494d-b6fb-e4295fe4d1c6" Symptoms="Outlook profile,Exchange account,Office 365"></Rule>
 
             <Setting Key1="DisableHTTP"></Setting>
             <Rule Name="fDisableHTTPPol" Query="if((../Instance/Setting/@Key1='DisableHTTP')=true(),../Instance/Setting[@Key1='DisableHTTP']/Value,-1)"></Rule>
@@ -4788,6 +4901,11 @@
             <Setting Key1="TerminalServerSpellingStart">
               <Rule Name="sTermServSpellStartTooHigh" Query="$.&gt;=10000 and $MachineDetails_fTermServer" Error="Warning" Title="Possible performance issues due to the TerminalServerSpellingStart policy" Text="Outlook may experience peformance problems or cause high CPU because the TerminalServerSpellingStart group policy value is set too high. The default value is 5000 (decimal). Please consider lowering the value specified for the policy.&#xA;&#xA;Click the 'Click here ...' link for details on this setting." GUID="328570" SSID="7955e686-7ce2-40b3-8b26-2ac0a0d04794" Symptoms="Slowness,Application not responding,Terminal Server"></Rule>
             </Setting>
+          </Object>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\15.0\Word\Options\WordMail">
+            <Setting Key1="FirstRunOnRTM">
+            </Setting>
+            <Rule Name="fFirstRunOnRtmPol" Query="if((../Instance/Setting/@Key1='FirstRunOnRTM')=true(),../Instance/Setting[@Key1='FirstRunOnRTM']/Value,-1)"></Rule>
           </Object>
 					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 						<Setting Key1="__VALUES"></Setting>
@@ -4883,7 +5001,7 @@
                 </Setting>
 								<Rule Name="nOrphanFiles" Query="if((../Instance/Setting/@Key1='*')=true(),../Instance/Setting[@Key1='*']/Value,0)"></Rule>
 								<!--<Rule Name="sOrphans" Error="Warning" P0="$nOrphanFiles" Query="$nOrphanFiles&gt;0" Title="Orphaned Files in the Outlook Secure Temp folder" Text="There is(are) {0} file(s) in the Outlook Secure Temp Folder '%OLKSECTMPFOLDER%'. See the OutlookSecureTempFolder node in Configuration Details for the list of files. " GUID="267387" SSID="e2d9a97e-f94a-4956-94ad-1e2964450b51" Symptoms="Email attachments,Error message"></Rule>-->
-                <Rule Name="sOrphans" Error="Warning" Query="$nOrphanFiles&gt;0" P0="$nOrphanFiles" P1="$sOrphansList" P2="if(number($nOrphanFiles)=1,'is','are')" P3="if(number($nOrphanFiles)=1,'','s')" Title="Orphaned Files in the Outlook Secure Temp folder" Text="There {2} {0} file{3} in the Outlook Secure Temp Folder '%OLKSECTMPFOLDER%':&#xA;&#xA;{1}" GUID="267387" SSID="e2d9a97e-f94a-4956-94ad-1e2964450b51" Symptoms="Email attachments,Error message" FileLocation="%OLKSECTMPFOLDER%"></Rule>
+                <Rule Name="sOrphans" Error="None" Query="$nOrphanFiles&gt;0" P0="$nOrphanFiles" P1="$sOrphansList" P2="if(number($nOrphanFiles)=1,'is','are')" P3="if(number($nOrphanFiles)=1,'','s')" Title="Orphaned Files in the Outlook Secure Temp folder" Text="There {2} {0} file{3} in the Outlook Secure Temp Folder '%OLKSECTMPFOLDER%':&#xA;&#xA;{1}" SSID="e2d9a97e-f94a-4956-94ad-1e2964450b51" Symptoms="Email attachments" FileLocation="%OLKSECTMPFOLDER%"></Rule>
 							</Object>
               <Object Type="File" Key2="%OLKSECTMPFOLDER%" Key3="*.*" Key5="Files" Key6="\r\n" Key7="true" Key8="- " Task="Offline scan" Display="Hide">
                 <Setting Key1="Files" Display="Right">
@@ -5165,6 +5283,11 @@
                 </Setting>
                 <Rule Name="sRedirectedPersonalPathPSTError" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'0x80070035')])&gt;0 and $sPersonalFolderRedirected" Error="Warning" P0="$sPersonalPath" Title="Error when trying to add a .PST file to an Outlook profile" Text="The Microsoft Office Alerts log contains the error 'An unknown error occurred, error code: 0x80070035'. This error occurred because the Personal value in the registry references a folder location '{0}' that was not available at the time you tried to add a .PST file to your profile.&#xA;&#xA;Click the 'Click here ...' link for details on how to change the Personal value in the registry." GUID="534974" SSID="bf79d8c9-c41f-435f-96f4-27844f8ca2d6" Symptoms="PST files,Error message"></Rule>
               </Object>
+              <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="300032" Key5="1" Key7="14" Task="full scan">
+                <Setting Key1="Message" Display="Right">
+                </Setting>
+                <Rule Name="nError300032Count" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'0x8004011D')])"></Rule>
+              </Object>
 						</Object>
 					</Object>
 				</Object>
@@ -5317,6 +5440,20 @@
 				<Object Type="Group" Name="Miscellaneous" GroupingClass="True" Class="Miscellaneous" TrackProgress="TrackProgress" LogText="Collecting other miscellaneous data">
           <Reference Type="OffCATVersionInfo" Name="OffCATVersionInfo" File="common.config.xml">
           </Reference>
+          <Reference Type="GPResult" Name="GPResult" File="common.config.xml">
+          </Reference>
+          <Object Type="Engine">
+            <Setting Key1="StartTime" Display="Hide">
+              <Rule Name="sScanStartTime" Query="$."></Rule>
+            </Setting>
+          </Object>
+          <Object Type="File" Key2="%AppData%\Microsoft\Templates\NormalEmail15Pre.dotm">
+            <Setting Key1="LastModifiedTime">
+              <Rule Name="sRecentNormalEmail15PreDotm" Query="get-days(date-difference($sScanStartTime,$.))&lt;30 and $n2DigitVersion=15 and $fFirstRunOnRtmPol=-1 and $fFirstRunOnRtm=-1" Error="Warning" Title="Quick parts may be missing in Outlook" Text="When you are creating an email message and you click the Quick Parts control, some or all of your quick part items may be missing. When you upgraded to Outlook 2013 the NormalEmail.dotm file was renamed to NormalEmail15Pre.dotm. This file contains any quick part entries you created in earlier versions of Outlook.&#xA;&#xA;Click the 'Click here ...' link for details on how to get back your quick part entries from earlier versions of Outlook." GUID="616036" SSID="2011b22b-d9cd-4923-9ba5-b3a29db8a7dd" Symptoms="Quick Parts,Missing feature"></Rule>
+            </Setting>
+            <Setting Key1="Exists">
+            </Setting>
+          </Object>
 					<!--ABHiddenColumns-->
 					<!--<Object Type="Group" Name="ABHiddenColumns is set in the registry" GroupingClass="True" Class="Miscellaneous" Task="Offline Scan">
 						<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Outlook\Preferences" Display="Right">
@@ -5332,7 +5469,7 @@
 							<Setting Key1="%INSTALLPATH%outlook.exe">
 								<Rule Name="sAppCompatFlags" P0="$." Query="(starts-with(lower-case($.),'win') or starts-with(lower-case($.),'vista') or starts-with(lower-case($.),'nt4'))  and versioncompare(substring($MachineDetails_WindowsVersion,1,3),'5.2')&lt;=0" Error="Error" Title="Outlook will not start because it is configured for Compatibility Mode" Text="When you start Outlook the program does not successfully start. Instead, an error is displayed indicating 'Outlook has encountered a problem and needs to close'. This problem occurs when Outlook is configured to run in Compatibility mode for another version of Windows." GUID="267405" FIXIT="9783670" SSID="1B6C4B98-9F3D-44F7-BB9A-53ABE829A334" Symptoms="Crash,Startup,Error message,Configuration (unsupported or problematic)">
 								</Rule>
-                <Rule Name="sAppCompatFlags15C2RWin8" Query="(starts-with(lower-case($.),'win') or starts-with(lower-case($.),'vista') or starts-with(lower-case($.),'nt4')) and versioncompare(substring($MachineDetails_WindowsVersion,1,3),'6.2')&gt;=0 and $n2DigitVersion=15 and $nInstallType='C2R'" Error="Error" Title="Outlook will not start because it is configured for Compatibility Mode" Text="When you start Outlook 2013 the program does not successfully start. Instead, an error is displayed indicating 'Outlook will need to be closed...' and there is a 'Repair Now' button in the error dialog. This problem occurs when Outlook is configured to run in Compatibility mode for an earlier version of Windows." GUID="398994" SSID="13e7acf4-f9ed-47ab-8174-d1cba8627003" Symptoms="Crash,Startup,Error message,Configuration (unsupported or problematic)"></Rule>
+                <Rule Name="sAppCompatFlags15C2RWin8" Query="(starts-with(lower-case($.),'win') or starts-with(lower-case($.),'vista') or starts-with(lower-case($.),'nt4')) and versioncompare(substring($MachineDetails_WindowsVersion,1,3),'6.2')&gt;=0 and $n2DigitVersion=15 and $nInstallType='ClickToRun'" Error="Error" Title="Outlook will not start because it is configured for Compatibility Mode" Text="When you start Outlook 2013 the program does not successfully start. Instead, an error is displayed indicating 'Outlook will need to be closed...' and there is a 'Repair Now' button in the error dialog. This problem occurs when Outlook is configured to run in Compatibility mode for an earlier version of Windows." GUID="398994" SSID="13e7acf4-f9ed-47ab-8174-d1cba8627003" Symptoms="Crash,Startup,Error message,Configuration (unsupported or problematic)"></Rule>
                 <Rule Name="sAppCompatFlags15MSIWin8" Query="(starts-with(lower-case($.),'win') or starts-with(lower-case($.),'vista') or starts-with(lower-case($.),'nt4')) and versioncompare(substring($MachineDetails_WindowsVersion,1,3),'6.2')&gt;=0 and $n2DigitVersion=15 and $nInstallType='MSI'" Error="Error" Title="Outlook will not start because it is configured for Compatibility Mode" Text="When you start Outlook 2013 the program does not successfully start. Instead, a 'Configuration Progress' dialog box is displayed. This problem occurs when Outlook is configured to run in Compatibility mode for an earlier version of Windows." GUID="398994" SSID="ca7809a4-e5b9-4acd-b49b-17e1632643d6" Symptoms="Crash,Startup,Error message,Configuration (unsupported or problematic)"></Rule>
                 <Rule Name="sAppCompatFlags15C2RMSIWin7" Query="(starts-with(lower-case($.),'win') or starts-with(lower-case($.),'vista') or starts-with(lower-case($.),'nt4')) and versioncompare(substring($MachineDetails_WindowsVersion,1,3),'6.1')=0 and $n2DigitVersion=15" Error="Error" Title="Outlook will not start because it is configured for Compatibility Mode" Text="When you start Outlook 2013 the program does not successfully start. Instead, an error is displayed indicating 'You need to create a Microsoft Outlook profile' followed by another error indicating 'Cannot open the Outlook window'. This problem occurs when Outlook is configured to run in Compatibility mode for an earlier version of Windows." GUID="398994" SSID="e924edaa-f80d-4bc6-9c37-147c5253d34a" Symptoms="Crash,Startup,Error message,Configuration (unsupported or problematic)"></Rule>
                 <Rule Name="sAppCompatFlags14Win7" Query="(starts-with(lower-case($.),'win') or starts-with(lower-case($.),'vista') or starts-with(lower-case($.),'nt4')) and versioncompare(substring($MachineDetails_WindowsVersion,1,3),'6.1')=0 and $n2DigitVersion=14" Error="Error" Title="Outlook will not start because it is configured for Compatibility Mode" Text="When you start Outlook 2010 the program does not successfully start. Instead, an error is displayed indicating 'No Microsoft Outlook profiles have been created.' followed by another error indicating 'Cannot open the Outlook window...'. This problem occurs when Outlook is configured to run in Compatibility mode for an earlier version of Windows." GUID="398994" SSID="d0d425b0-8978-4574-aa91-7a0d06d7bbcb" Symptoms="Crash,Startup,Error message,Configuration (unsupported or problematic)"></Rule>
@@ -5435,7 +5572,7 @@
 							<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_Service" Key4="Name='BITS'">
 								<Setting Key1="StartMode">
 									<Rule Name="fBITSDisable" Query="$.='Disabled'"></Rule>
-									<Rule Name="sBITSServiceDisabled" Query="$fBITSDisable or $fBITSStopped" Error="Warning" Title="BITS service is either stopped or disabled" Text="The Background Intelligent Transfer Service (BITS) is either stopped or disabled and your Offline Address Book may be out of date." GUID="267360" SSID="db798e5d-e0b2-4744-bc65-7b2b00c20c93" Symptoms="Offline Address Book (OAB),Address Book"></Rule>
+									<Rule Name="sBITSServiceDisabled" Query="$fBITSDisable or $fBITSStopped" Error="Warning" Title="BITS service is either stopped or disabled" Text="The Background Intelligent Transfer Service (BITS) is either stopped or disabled and your Offline Address Book may be out of date." GUID="267360" FIXIT="9898719" SSID="db798e5d-e0b2-4744-bc65-7b2b00c20c93" Symptoms="Offline Address Book (OAB),Address Book"></Rule>
 								</Setting>
 								<Setting Key1="Started">
 									<Rule Name="fBITSStopped" Query="$.='False'"></Rule>
@@ -5504,7 +5641,7 @@
             <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\%WOW6432NODE%\Clients\Mail\Microsoft Outlook">
               <Setting Key1="MSIComponentID">
                 <Rule Name="sMismatchedMSIComponentID15" Query="$n2DigitVersion=15 and $.!='{6DB1921F-8B40-4406-A18B-E906DBEEF0C9}'" Error="Warning" Title="Errors sending email from other programs or mail merge due to incorrect registry data" Text="The value of the MSIComponentID in the registry is not correct for Outlook 2013. This configuration can cause 'no default mail client' errors when you start Outlook, try to send email from other applications, or try mail merge from Word. Please repair your Office 2013 installation or click the 'Click here ...' link for details on this issue." GUID="507761" SSID="6222a2f5-a68d-4dba-be05-94f555bc115d" Symptoms="Error message,Email send/receive,Mail Merge,Startup"></Rule>
-                <Rule Name="sMSIComponentID15CalCheckBlock" Query="$n2DigitVersion=15 and $.!='{6DB1921F-8B40-4406-A18B-E906DBEEF0C9}'" Error="Warning" Title="OffCAT was unable to scan your calendar due to incorrect registry data" Text="The value of the MSIComponentID in the registry is not correct for Outlook 2013. This configuration prevents the Calendar Checking Tool (CalCheck) from functioning properly, so OffCAT did not scan your calendar for issues. Please repair your Office 2013 installation or click the 'Click here ...' link for details on this issue." GUID="613755" SSID="38a21169-3031-4966-a845-166ebd2d2d64" Symptoms="_Alert from OffCAT"></Rule>
+                <Rule Name="sMSIComponentID15CalCheckBlock" Query="$sScanType='Full Scan' and $n2DigitVersion=15 and $.!='{6DB1921F-8B40-4406-A18B-E906DBEEF0C9}'" Error="Warning" Title="OffCAT was unable to scan your calendar due to incorrect registry data" Text="The value of the MSIComponentID in the registry is not correct for Outlook 2013. This configuration prevents the Calendar Checking Tool (CalCheck) from functioning properly, so OffCAT did not scan your calendar for issues. Please repair your Office 2013 installation or click the 'Click here ...' link for details on this issue." GUID="613755" SSID="38a21169-3031-4966-a845-166ebd2d2d64" Symptoms="_Alert from OffCAT"></Rule>
               </Setting>
             </Object>
 					</Object>
@@ -5570,6 +5707,15 @@
 						<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\IM Providers" Key5="Subtree">
 							<Setting Key1="__VALUES"></Setting>
 						</Object>
+            <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\15.0\ClickToRun" Display="Hide">
+		          <Setting Key1="PackageFolder" Substitution="C2RPATH15" Display="Hide"></Setting>
+            	<Object Type="File" Key2="%C2RPATH15%\root\office15\ucaddin.dll" Display="Hide">
+                <Setting Key1="Exists" Display="Hide">
+                  <Rule Name="fUcaddinC2rFound" Query="$.=1"></Rule>
+                </Setting>
+                <Rule Name="sOutlook15MsiPlusSfbC2R" Query="$nInstallType='MSI' and $fUcaddinC2rFound" Error="Error" Title="Outlook crashes and errors with Lync/Skype for Business" Text="You have an 'MSI' installation of Outlook 2013 but your Skype for Business (formerly Lync) installation is 'Click-to-run'. This is an unsupported configuration and you can expect to see either crashes in Outlook or errors related to Outlook in Skype for Business.&#xA;&#xA;Click the 'Click here ...' link for details on how to fix this issue." GUID="616888" SSID="cddcd0ce-e1c7-4988-a2b1-51b73807e266" Symptoms="Crash,Configuration (unsupported or problematic),Skype for Business integration"></Rule>
+            </Object>
+           </Object>
 					</Object>
 					<!--/IM keys-->
 					<!--Internet settings-->
@@ -6396,51 +6542,51 @@
 	<!--/ALERTS-->
 	<!--EXTERNALREFS-->
 	<Rule Name="sPpCoreVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>Y6HYSIEtSKuh0gmpAlzicoOzE7E=</DigestValue></Reference></SignedInfo><SignatureValue>
-    WioOh6Ilb2/0iy8FC5TFDmpvmzAqVQKC7qreNdwFDVpiRG0fzeTn9SrVwyIHh6DPGGDSBLwp
-    j0LTQucNA6A5NqBNzLaQFetOcBvv3gTuWd9b+e2iBXsEE8eFSlR7ZLl811KG1RXsq8Rh/OIs
-    U5cj+iWaDe9r8mRr6OL5OV2klL5OpL5+0IuvU/4/809TnHy4np0tFzYzMFMXnQLDtPmTiRGW
-    ezLXjk+Pjx1JbPOIYe5260RYmfaplZ7G1TOwMatrJxZaK2/WO/VFO1TUbtLk02G3LNtx1KOv
-    VB5DlIq81CgJWnvo6obhC1IydHFzScNWcKPY9K0Ci/j6QAiNEKnt8Q==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>KHVNE7IQTMHxpyA2nn7davj5/JQ=</DigestValue></Reference></SignedInfo><SignatureValue>
+    hWC7CILoH9xVT2X6e7dbSPFIZm0sjx/D7s+8nfT6irjLL/v1ijGfKwtTkRFrqB8HsOKQCQEq
+    zivej1NrIPWZeeumvrIb+59sRHqWAYtWYiwGO5j2t3reWyPGtKHGRrWjczZVJclgxHWwkAqo
+    p97IqXyexrSNIc9GWzXSc+dyzhz51MCaZHAGKumvP7SPfz+ZgjzDUj1QI+AQGDTJDXWE/5Bf
+    MlnvEn+hxlOeblHD+6zlUdMZ7PGqmbM5VNB0dHQnNM8p5w8DQYmB8ih9Yjb+8eYXR94Q8f/k
+    7Wg+jznJmU06eJfKNWllfCOY4/HSr8gcoVzq+1VbFxTUIQxO30/XHw==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
           <Modulus>
-            lnFd7QZG+oTLnVu3Rsew4bQROQOtsRVzYJzrp7ZuGjw//2XjNPGmpSFeVplsWOSSoQpcwtPc
-            Ui8MZZogYUBTMZxsjyF9uvn+E1BSYJU6W7lYpXRhQamU4K0mTkyhl3BJJ158Z8pPHnGERrwd
-            S7biD8XGJ8kH5noKpRcAGUxwRTgtgbRQqsVn0fp5vMXMoXKb9CU0mPhU3xI5OBIvpGulmn7H
-            YtHcz+09NPi53zUwuux5MqnhqaxVTUx/TFbDEwt28Qf5zEes+4jVUqUeKPo9Lc/PhJiGcWUR
-            z4XJCUSG4W/nsfysQESlqYsjP4JJndWWWVATWRhz/0MMrSvUfzBAZw==
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
           </Modulus>
           <Exponent>AQAB</Exponent>
         </RSAKeyValue>
       </KeyValue>
       <X509Data>
         <X509Certificate>
-          MIIE7DCCA9SgAwIBAgITMwAAAMps1TISNcThVQABAAAAyjANBgkqhkiG9w0BAQUFADB5MQsw
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
           CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
           A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
-          aWduaW5nIFBDQTAeFw0xNDA0MjIxNzM5MDBaFw0xNTA3MjIxNzM5MDBaMIGDMQswCQYDVQQG
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
           EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
           TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
-          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCWcV3tBkb6
-          hMudW7dGx7DhtBE5A62xFXNgnOuntm4aPD//ZeM08aalIV5WmWxY5JKhClzC09xSLwxlmiBh
-          QFMxnGyPIX26+f4TUFJglTpbuVildGFBqZTgrSZOTKGXcEknXnxnyk8ecYRGvB1LtuIPxcYn
-          yQfmegqlFwAZTHBFOC2BtFCqxWfR+nm8xcyhcpv0JTSY+FTfEjk4Ei+ka6Wafsdi0dzP7T00
-          +LnfNTC67HkyqeGprFVNTH9MVsMTC3bxB/nMR6z7iNVSpR4o+j0tz8+EmIZxZRHPhckJRIbh
-          b+ex/KxARKWpiyM/gkmd1ZZZUBNZGHP/QwytK9R/MEBnAgMBAAGjggFgMIIBXDATBgNVHSUE
-          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUH17iXVCNVoa+SjzPBOinh7XLv4MwUQYDVR0RBEow
-          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1K2I0MjE4ZjEzLTZmY2EtNDkw
-          Zi05YzQ3LTNmYzU1N2RmYzQ0MDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
           BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
           dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
           AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
-          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEAd1zr15E9zb17g9mFqbBDnXN8
-          F8kP7Tbbx7UsG177VAU6g3FAgQmit3EmXtZ9tmw7yapfXQMYKh0nfgfpxWUftc8Nt1THKDha
-          iOd7wRm2VjK64szLk9uvbg9dRPXUsO8b1U7Brw7vIJvy4f4nXejF/2H2GdIoCiKd381wgp4Y
-          ctgjzHosQ+7/6sDg5h2qnpczAFJvB7jTiGzepAY1p8JThmURdwmPNVm52IaoAP74MX0s9IwF
-          ncDB1XdybOlNWSaD8cKyiFeTNQB8UCu8Wfz+HCk4gtPeUpdFKRhOlludul8bo/EnUOoHleht
-          NA04V9w3KDWVOjic1O1qhV0OIhFeew==
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
         </X509Certificate>
       </X509Data>
       <X509Data>
@@ -6506,28 +6652,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHQNgGQOfWd9owAAAAAAdDANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA1WhcNMTYwNjIwMTczMjA1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
-MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEA4NFrifjVvo5YgN/jD+4M6zszXn3GnmZHP9AerBSCDRiftpwnIvG2
-hpREQXSJkW8X9t+Y5jbLX3iS6XJ+S7kExWIUc3HGf2NBW+tk8r1cVWJGzA9ewQnEr9nxvyV94Beg
-UO4lqkXl48Z+vxBZqcGPPtn77GQbY1u1p7jq681X6xtD9WWRv1D1+cEGvH2qzDfnBqmgzLH1M8wN
-ssh1ZgDRbTCTR8+OomdEXhoTf/McHucPncG8SPyBgW1UauJpE8bO9ZdnMmxIyhHCVjrW3Dpi9PwQ
-l2RIC4pc8RbClfDLYBukA5sMyfe7kr8Ac2czHKJ673VKGUZaDH6aW6A6HVQ16wIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFCUsOGYFtEU5DmC29u69PuDdr4wNMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
+7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
+f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
+NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
++7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEEG
-50j6xJHcMBMNInjC0iPTszPL+yYh1978CncY+4Nyzu/ULIaP4xXj1RICZ1xbN9MDe02RW0FTZgn9
-457fLHgJORo2HYqBocllfJx7kbIPSptB3cdEC2EFyUwu8rRrKKoIR+4IrGZUF1aQiMbpddAhEDh5
-yT+7VTDFpjmmU7/NXFbSThcUvGISy+lL8MWR3J2EypjWDttWFGht21OLMM+6J2V1oDFvk6N1EGDq
-qu7uduvljAup0655zzS+SR8i0MT1o+/zrjDcjohGI4ygqjyXrwfbdug2VN+Ls4mewOospGBr8d/D
-thI6rzM4elFxNTXm5AjiUZaC+b7hG4N8e2c=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
+d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
+5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
+lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
+IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
+vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -6554,34 +6700,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQBaKg6HoiVvb/SLLwULlMUOam+bMCpVAoLuqt413AUNWmJEbR/N5Of1KtXDIgeHoM8YYNIE
-vCmPQtNC5w0DoDk2oE3MtpAV605wG+/eBO5Z31v57aIFewQTx4VKVHtkuXzXUobVFeyrxGH84ixT
-lyP6JZoN72vyZGvo4vk5XaSUvk6kvn7Qi69T/j/zT1OcfLienS0XNjMwUxedAsO0+ZOJEZZ7MteO
-T4+PHUls84hh7nbrRFiZ9qmVnsbVM7Axq2snFlorb9Y79UU7VNRu0uTTYbcs23HUo69UHkOUirzU
-KAlae+jqhuELUjJ0cXNJw1Zwo9j0rQKL+PpACI0Qqe3xoIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQCFYLsIgugf3FVPZfp7t1tI8UhmbSyPH8Puz7yd9PqKuMsv+/WKMZ8rC1OREWuoHwew4pAJ
+ASrOK96PU2sg9Zl566a+shv7n2xEepYBi1ZiLAY7mPa3et5bI8a0ocZGtaNzNlUlyWDEdbCQCqin
+3sipfJ7GtI0hz0ZbNdJz53LOHPnUwJpkcAYq6a8/tI9/P5mCPMNSPVAj4BAYNMkNdYT/kF8yWe8S
+f6HGU55uUcP7rOVR0xns8aqZszlU0HR0dCc0zynnDwNBiYHyKH1iNv7x5hdH3hDx/+TtaD6POcmZ
+TTp4l8o1aWV8I5jj8dKvyByhXOr7VVsXFNQhDE7fT9cfoIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAlPdzZMzyO6SV17j1edQd119kEpuggcIwgb+k
+Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANkg8kcwIhgPMjAxNTA2MDkwNTA0
-MDdaGA8yMDE1MDYxMDA1MDQwN1owdDA6BgorBgEEAYRZCgQBMSwwKjAKAgUA2SDyRwIBADAHAgEA
-AgIe7zAHAgEAAgIYMzAKAgUA2SJDxwIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZCgMB
-oAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQB2yToQiy2Wi40/pGrl
-9eVFfs9jRUDAYhc3p2+4vtwhSHQcP8N3N+VBLEr8lnRWIl+1338TEg/Gt15f5Haxv+rgelTsNbiL
-xPEgsRbByEUOQfErnuwzzevEkTMM16xpUjIwn2RgF1g7PqZRi0UFw/ZenKQlmxn177aXzOXUxXyj
-XTYlX1wzIeIaVi0/VaeXr5a6XpFnnqwJ8/ISsOfgNNsVuCfowwwwqWxxIwJZNr4Focb3SrOH3z+X
-5DPLj8Hufqh2UiUoeAPrE3hT5eBrEwsuXVTSof4D+1y6BGAMCr/RypYX2dPz6RpEk1N/gbKsmhtg
-hdbkiIVdX80Sm63yMVX0MYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
-c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
-bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAAAAB0
-MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
-NTA2MDkxMjQ0NDFaMCMGCSqGSIb3DQEJBDEWBBQxRUNcSHvLParTTFluBiDjEASXtjANBgkqhkiG
-9w0BAQUFAASCAQAJ2TrrTcKclWBxzCR9Sb9DQzSvyCFlEqb5GRZZkHFCo9k53+4TJUadUlKl+e3a
-kRivssFd7LzQRxgiL7xuOek3C2LWEhLSnwj5caGvqISvmmHu6wZWKMiU4I5HXBTAA09giObaF4ok
-+vxcSGcgO1OF6xlgVMRSZ4/CpSy+4a34gLZHVHaH8ivdVyg4YzlDR2yXURDIeMZg07XxaXqAa31f
-8JFinkW+Iyi0Liu7GX97y05SG97HlEr26CatsPKq71mB01NIPpggXPSCzr1JD8iHZa+8kTyZLbpQ
-Z25AoDCKbjGHxvFuLUB+lO6T8nu+9cqEbd2/MRJibvIFDV0QYlze</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
+MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
+AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
+CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
+g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
+YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
+jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
+nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
+aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
+AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
+Fw0xNTA3MDkxNDQ3MzBaMCMGCSqGSIb3DQEJBDEWBBSMLIOh/6PLul1eIb0eKglwqjNFcDANBgkq
+hkiG9w0BAQUFAASCAQB5nOzK/xqy0qsbsZD1RIN27i+8i2GY6PT/fng0UKFGNnlil6TJ8zrZ9RWn
+tl4qTUDVW2mZKBDZpXlNVN1Pspi74ZT8LTP/NnPXCCskkkVeKGzotsEezLc0OyvFrL9J5bvluzOq
+ZmxTyOxiTsp1p3a9uf7FjSok1c+d43Rp16d69FrOS6BFaf6VWwgwz28x6QbYMM5CKbhI679EtoFM
+3AZ3ZOB9NtiQDdVinciuzYccvx2JU8TY05/FNO8uhkAUyk2g30zrhDDYVBJ8LSLcxtuyix3+HUQB
+SLStN33qJtnODSJoTJtCc3+Ina/OToi7Qk1B9EWGTVBQr+Xw24SiST41</CounterSignature></Object></Signature></ObjectCollector>

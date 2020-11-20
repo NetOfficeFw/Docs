@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="PowerPoint Configuration" ChangeDescription="2.0.1504.15" ConfigVersion="2.0.1504.15" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,powerpoint.crashes.config.xml" Symptoms="1">
+	<Configuration ConfigName="PowerPoint Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,powerpoint.crashes.config.xml" Symptoms="1">
 		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"/>
@@ -30,26 +30,26 @@
 	</Configuration>
 	<Object Type="Group" Name="PowerPoint Scan" Class="Scan Type" GroupingClass="True">
 		<!--OFFICE DETAILS-->
-		<Object Type="Group" Name="Install details">
-			<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="PowerPoint" Key6="powerpnt" Key7="%MAJORVERSION%">
-				<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
-				</Setting>
-				<Setting Key1="Bitness" Substitution="APPBITNESS">
-					<Rule Name="bitness" Query="$.">
-					</Rule>
-				</Setting>
-				<Setting Key1="FullVersion" Display="Hide">
-					<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))">
-					</Rule>
-					<Rule Name="sFullAppVersion" Query="$.">
-					</Rule>
-				</Setting>
-				<Setting Key1="Name">
-					<Rule Name="appName" Query="$.">
-					</Rule>
-				</Setting>
-				<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
-				</Setting>
+    <Object Type="Group" Name="Install details">
+      <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="PowerPoint" Key6="powerpnt" Key7="%MAJORVERSION%">
+        <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
+        </Setting>
+        <Setting Key1="Bitness" Substitution="APPBITNESS">
+          <Rule Name="bitness" Query="$.">
+          </Rule>
+        </Setting>
+        <Setting Key1="FullVersion" Display="Hide">
+          <Rule Name="n2DigitVersion" Query="number(substring($.,1,2))">
+          </Rule>
+          <Rule Name="sFullAppVersion" Query="$.">
+          </Rule>
+        </Setting>
+        <Setting Key1="Name">
+          <Rule Name="appName" Query="$.">
+          </Rule>
+        </Setting>
+        <Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
+        </Setting>
         <Object Type="File" Key2="%INSTALLPATH%\powerpnt.exe">
           <Setting Key1="Version"></Setting>
         </Object>
@@ -61,157 +61,157 @@
             <Rule Name="sPowerPoint16Scanned" Query="$n2DigitVersion&gt;15" Error="Warning" Title="OffCAT scan results may be inaccurate with PowerPoint %MAJORVERSION%" Text="Your scan results may not be completely accurate as the scanned version of PowerPoint (%MAJORVERSION%) is not yet supported by OffCAT. Please send feedback to the OffCAT team if you discover a rule or configuration setting that is inaccurately reported by OffCAT." SSID="6b8f809f-6046-4a7b-86c9-9c92b06be397" Symptoms="_Alert from OffCAT"></Rule>
           </Setting>
         </Object>
-				<Setting Key1="Version">
-					<Rule Name="n4DigitSKUVersion" Query="$.">
-					</Rule>
-				</Setting>
-				<Rule Name="nInstallType" Query="'%INSTALLTYPE%'"></Rule>
-				<Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
-				<Setting Key1="Type">
-					<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
-				</Setting>
-				<!--SKU-->
-				<Object Type="Group" Name="Office SKU">
-					<Object Type="If" Key1="'%MAJORVERSION%'='11'">
-						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{C86C0B92-63C0-4E35-8605-281275C21F97}">
-							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
-							</Setting>
-							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-								<Setting Key1="ProductName" Display="Right">
-								</Setting>
-							</Object>
-						</Object>
-					</Object>
-					<Object Type="If" Key1="'%MAJORVERSION%'='12'">
-						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{0638C49D-BB8B-4CD1-B191-053E8F325736}">
-							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
-								<Rule Name="SKU2007" Query="substring(string($.),11,4)"></Rule>
-								<Rule Name="ReleaseType2007" Query="substring(string($.),3,1)"></Rule>
-								<Rule Name="sNoIRMPPT2007" Query="$n2DigitVersion=12 and not($SKU2007='0011' or $SKU2007='0018' or $SKU2007='002E' or $SKU2007='0030') and not($SKU2007='')" P0="$SKUName2007" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275709" SSID="4e8f22c6-e059-47b7-9959-c200d39a17b1" Symptoms="Information Rights Management"></Rule>
-							</Setting>
-							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-								<Setting Key1="ProductName" Display="Right">
-									<Rule Name="SKUName2007" Query="$."></Rule>
-								</Setting>
-							</Object>
-						</Object>
-					</Object>
-					<Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x86'">
-						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{E72E0D20-0D63-438B-BC71-92AB9F9E8B54}">
-							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
-								<Rule Name="SKU2010" Query="substring(string($.),11,4)"></Rule>
-								<Rule Name="ReleaseType2010" Query="substring(string($.),3,1)"></Rule>
-								<Rule Name="sNoIRMPPT2010" Query="$n2DigitVersion=14 and not($SKU2010='0011' or $SKU2010='0018') and not($SKU2010='')" P0="$SKUName2010" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275719" SSID="3949f1cf-73f8-4f0b-ac0c-1af48e5a87ab" Symptoms="Information Rights Management"></Rule>
-							</Setting>
-							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-								<Setting Key1="ProductName" Substitution="PN" Display="Right">
-									<Rule Name="SKUName2010" Query="if(contains($.,'Single Image') and $sSingleImageSKU2010!='',$sSingleImageSKU2010,$.)" AlwaysEvaluate="True"></Rule>
-								</Setting>
-								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
-								</Setting>
-								<Object Type="If" Key1="contains('%PN%','Single Image')">
-									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
-										<Setting Key1="ID" Substitution="REGID" Display="Hide">
-										</Setting>
-										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
-											<Setting Key1="ProductName">
-												<Rule Name="sSingleImageSKU2010" Query="$."></Rule>
-											</Setting>
-										</Object>
-									</Object>
-								</Object>
-							</Object>
-						</Object>
-					</Object>
-					<Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x64'">
-						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{EE8D8E0A-D905-401D-9BC3-0D20156D5E30}">
-							<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
-								<Rule Name="SKU201064" Query="substring(string($.),11,4)"></Rule>
-								<Rule Name="ReleaseType201064" Query="substring(string($.),3,1)"></Rule>
-								<Rule Name="sNoIRMPPT201064" Query="$n2DigitVersion=14 and not($SKU201064='0011' or $SKU201064='0018') and not($SKU201064='')" P0="$SKUName201064" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275719" SSID="d9336c96-ff1d-415f-a799-da40af67172f" Symptoms="Information Rights Management"></Rule>
-							</Setting>
-							<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-								<Setting Key1="ProductName" Substitution="PN" Display="Right">
-									<Rule Name="SKUName201064" Query="if(contains($.,'Single Image') and $sSingleImageSKU201064!='',$sSingleImageSKU201064,$.)"></Rule>
-								</Setting>
-								<Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
-								</Setting>
-								<Object Type="If" Key1="contains('%PN%','Single Image')">
-									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
-										<Setting Key1="ID" Substitution="REGID" Display="Hide">
-										</Setting>
-										<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
-											<Setting Key1="ProductName">
-												<Rule Name="sSingleImageSKU201064" Query="$."></Rule>
-											</Setting>
-										</Object>
-									</Object>
-								</Object>
-							</Object>
-						</Object>
-					</Object>
-					<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
-						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{258D5292-6DDA-4B39-B301-58405FA16638}">
-							<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
-							<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
-							<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
-								<Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
-								<Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
-								<Rule Name="sNoIRMPPT2013" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU2013='0011' and ($ReleaseType2013='1' or $ReleaseType2013='0')) or $SKU2013='0018')" P0="$SKUName2013" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="fa7ee97e-ca7c-487a-a0e6-7079e2684670" Symptoms="Information Rights Management"></Rule>
-								<Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
-									<Setting Key1="" Display="Hide"></Setting>
-								</Object>
-								<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-									<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
-										<Setting Key1="ProductVersion" Display="Hide">
-											<Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
-										</Setting>
-									</Object>
-									<Setting Key1="ProductName" Display="Right">
-										<Rule Name="SKUName2013" Query="$."></Rule>
-									</Setting>
-								</Object>
-							</Object>
-						</Object>
-					</Object>
-					<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
-						<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{8C1B8825-A280-4657-A7B8-8172C553A4C4}">
-							<Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
-							<Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
-							<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
-								<Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
-								<Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
-								<Rule Name="sNoIRMPPT201364" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU201364='0011' and ($ReleaseType201364='1' or $ReleaseType201364='0')) or $SKU201364='0018')" P0="$SKUName201364" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="9b29794a-bc66-40b8-9c5b-8eac0c65a2a2" Symptoms="Information Rights Management"></Rule>
-								<Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
-									<Setting Key1="" Display="Hide"></Setting>
-								</Object>
-								<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-									<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
-										<Setting Key1="ProductVersion" Display="Hide">
-											<Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
-										</Setting>
-									</Object>
-									<Setting Key1="ProductName" Display="Right">
-										<Rule Name="SKUName201364" Query="$."></Rule>
-									</Setting>
-								</Object>
-							</Object>
-						</Object>
-					</Object>
-					<Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
-						<Object Type="C2RSKU" Key1="PowerPoint" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
-							<Setting Key1="ProductName">
-								<Rule Name="SKUNameC2R" Query="$."></Rule>
-							</Setting>
-						</Object>
+        <Setting Key1="Version">
+          <Rule Name="n4DigitSKUVersion" Query="$.">
+          </Rule>
+        </Setting>
+        <Rule Name="nInstallType" Query="'%INSTALLTYPE%'"></Rule>
+        <Reference Type="InstalledServicePack" Name="InstalledServicePack" File="common.config.xml"></Reference>
+        <Setting Key1="Type">
+          <Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+        </Setting>
+        <!--SKU-->
+        <Object Type="Group" Name="Office SKU">
+          <Object Type="If" Key1="'%MAJORVERSION%'='11'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{C86C0B92-63C0-4E35-8605-281275C21F97}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+              </Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Display="Right">
+                </Setting>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='12'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{0638C49D-BB8B-4CD1-B191-053E8F325736}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+                <Rule Name="SKU2007" Query="substring(string($.),11,4)"></Rule>
+                <Rule Name="ReleaseType2007" Query="substring(string($.),3,1)"></Rule>
+                <Rule Name="sNoIRMPPT2007" Query="$n2DigitVersion=12 and not($SKU2007='0011' or $SKU2007='0018' or $SKU2007='002E' or $SKU2007='0030') and not($SKU2007='')" P0="$SKUName2007" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275709" SSID="4e8f22c6-e059-47b7-9959-c200d39a17b1" Symptoms="Information Rights Management"></Rule>
+              </Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Display="Right">
+                  <Rule Name="SKUName2007" Query="$."></Rule>
+                </Setting>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x86'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{E72E0D20-0D63-438B-BC71-92AB9F9E8B54}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+                <Rule Name="SKU2010" Query="substring(string($.),11,4)"></Rule>
+                <Rule Name="ReleaseType2010" Query="substring(string($.),3,1)"></Rule>
+                <Rule Name="sNoIRMPPT2010" Query="$n2DigitVersion=14 and not($SKU2010='0011' or $SKU2010='0018') and not($SKU2010='')" P0="$SKUName2010" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275719" SSID="3949f1cf-73f8-4f0b-ac0c-1af48e5a87ab" Symptoms="Information Rights Management"></Rule>
+              </Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Substitution="PN" Display="Right">
+                  <Rule Name="SKUName2010" Query="if(contains($.,'Single Image') and $sSingleImageSKU2010!='',$sSingleImageSKU2010,$.)" AlwaysEvaluate="True"></Rule>
+                </Setting>
+                <Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
+                </Setting>
+                <Object Type="If" Key1="contains('%PN%','Single Image')">
+                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+                    <Setting Key1="ID" Substitution="REGID" Display="Hide">
+                    </Setting>
+                    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
+                      <Setting Key1="ProductName">
+                        <Rule Name="sSingleImageSKU2010" Query="$."></Rule>
+                      </Setting>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x64'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{EE8D8E0A-D905-401D-9BC3-0D20156D5E30}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE">
+                <Rule Name="SKU201064" Query="substring(string($.),11,4)"></Rule>
+                <Rule Name="ReleaseType201064" Query="substring(string($.),3,1)"></Rule>
+                <Rule Name="sNoIRMPPT201064" Query="$n2DigitVersion=14 and not($SKU201064='0011' or $SKU201064='0018') and not($SKU201064='')" P0="$SKUName201064" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="275719" SSID="d9336c96-ff1d-415f-a799-da40af67172f" Symptoms="Information Rights Management"></Rule>
+              </Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Substitution="PN" Display="Right">
+                  <Rule Name="SKUName201064" Query="if(contains($.,'Single Image') and $sSingleImageSKU201064!='',$sSingleImageSKU201064,$.)"></Rule>
+                </Setting>
+                <Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide">
+                </Setting>
+                <Object Type="If" Key1="contains('%PN%','Single Image')">
+                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+                    <Setting Key1="ID" Substitution="REGID" Display="Hide">
+                    </Setting>
+                    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
+                      <Setting Key1="ProductName">
+                        <Rule Name="sSingleImageSKU201064" Query="$."></Rule>
+                      </Setting>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{258D5292-6DDA-4B39-B301-58405FA16638}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+              <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+              <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                <Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                <Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                <Rule Name="sNoIRMPPT2013" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU2013='0011' and ($ReleaseType2013='1' or $ReleaseType2013='0')) or $SKU2013='0018')" P0="$SKUName2013" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="fa7ee97e-ca7c-487a-a0e6-7079e2684670" Symptoms="Information Rights Management"></Rule>
+                <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+                <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                    <Setting Key1="ProductVersion" Display="Hide">
+                      <Rule Name="fOfficeProductVersion15" Query="$." AlwaysEvaluate="True"></Rule>
+                    </Setting>
+                  </Object>
+                  <Setting Key1="ProductName" Display="Right">
+                    <Rule Name="SKUName2013" Query="$."></Rule>
+                  </Setting>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{8C1B8825-A280-4657-A7B8-8172C553A4C4}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
+              <Setting Key1="ProductCode" Substitution="REGPRODUCTCODE" SubstitutionFormat="({)(.*)(})----$2" Display="Hide"></Setting>
+              <Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
+                <Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
+                <Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
+                <Rule Name="sNoIRMPPT201364" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU201364='0011' and ($ReleaseType201364='1' or $ReleaseType201364='0')) or $SKU201364='0018')" P0="$SKUName201364" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="9b29794a-bc66-40b8-9c5b-8eac0c65a2a2" Symptoms="Information Rights Management"></Rule>
+                <Object Type="Group" Name="ProductCode =%PRODUCTCODE%">
+                  <Setting Key1="" Display="Hide"></Setting>
+                </Object>
+                <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\15.0\Common\InstalledPackages\%REGPRODUCTCODE%" Display="Hide">
+                    <Setting Key1="ProductVersion" Display="Hide">
+                      <Rule Name="fOfficeProductVersion15x64" Query="$." AlwaysEvaluate="True"></Rule>
+                    </Setting>
+                  </Object>
+                  <Setting Key1="ProductName" Display="Right">
+                    <Rule Name="SKUName201364" Query="$."></Rule>
+                  </Setting>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
+            <Object Type="C2RSKU" Key1="PowerPoint" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+              <Setting Key1="ProductName">
+                <Rule Name="SKUNameC2R" Query="$."></Rule>
+              </Setting>
+            </Object>
             <Object Type="If" Key1="'%MAJORVERSION%'='15'">
-						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active" Key5="OneLevel" Display="Hide">
-							<Setting Key1="__KEYNAME" Substitution="LIC" Display="Hide"></Setting>
-							<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active\%LIC%\x-none" Key5="Subtree" Display="Hide">
-								<Setting Key1="__KEYNAME" Key2="powerpoint.%APPBITNESS%.x-none.zip" Substitution="C2RAPPFOUND" Display="Hide"></Setting>
-								<Object Type="If" Key1="'%C2RAPPFOUND%'='powerpoint.%APPBITNESS%.x-none.zip'">
-									<Object Type="Group" Name="ClickToRun License Family=%LIC%" Display="Right">
-										<Setting Key1="" Display="Hide"></Setting>
+              <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active" Key5="OneLevel" Display="Hide">
+                <Setting Key1="__KEYNAME" Substitution="LIC" Display="Hide"></Setting>
+                <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\ProductReleaseIDs\Active\%LIC%\x-none" Key5="Subtree" Display="Hide">
+                  <Setting Key1="__KEYNAME" Key2="powerpoint.%APPBITNESS%.x-none.zip" Substitution="C2RAPPFOUND" Display="Hide"></Setting>
+                  <Object Type="If" Key1="'%C2RAPPFOUND%'='powerpoint.%APPBITNESS%.x-none.zip'">
+                    <Object Type="Group" Name="ClickToRun License Family=%LIC%" Display="Right">
+                      <Setting Key1="" Display="Hide"></Setting>
                       <Rule Name="sC2RLicense2013" Query="'%LIC%'"></Rule>
                       <Rule Name="sNoIRMC2RPPT2013" Query="not(contains($sC2RLicense2013,'ProPlus') or contains($sC2RLicense2013,'PowerPoint'))" Error="Warning" P0="$SKUNameC2R" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." GUID="302311" SSID="5090e007-5063-4c50-8c92-5b10df2bdb5f" Symptoms="Information Rights Management"></Rule>
                     </Object>
@@ -230,11 +230,11 @@
                       <!--<Rule Name="sC2RLicense2013" Query="'%LIC%'"></Rule>
                       <Rule Name="sNoIRMC2RPPT2013" Query="not(contains($sC2RLicense2013,'ProPlus') or contains($sC2RLicense2013,'PowerPoint'))" Error="Warning" P0="$SKUNameC2R" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." GUID="302311" SSID="5090e007-5063-4c50-8c92-5b10df2bdb5f" Symptoms="Information Rights Management"></Rule>-->
                     </Object>
-									</Object>
-								</Object>
-							</Object>
-						</Object>
-					</Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
           <Object Type="If" Key1="'%MAJORVERSION%'='16' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
             <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{}">
               <Setting Key1="ProductCode" Substitution="PRODUCTCODE" Display="Hide"></Setting>
@@ -285,35 +285,50 @@
               </Object>
             </Object>
           </Object>
-
         </Object>
-				<!--/SKU-->
-				<!--MSO-->
-				<Reference Type="MSO" Name="MSO" File="common.config.xml">
-				</Reference>
-				<!--/MSO-->
+        <!--/SKU-->
+        <!--MSO-->
+        <Reference Type="MSO" Name="MSO" File="common.config.xml">
+        </Reference>
+        <!--/MSO-->
         <!--MSMapi32-->
         <Reference Type="MSMAPI32" Name="MSMAPI32" File="common.config.xml">
         </Reference>
         <!--/MSMapi32-->
-				<!--OART.dll-->
-				<Reference Type="OART" Name="OART" File="common.config.xml">
-				</Reference>
-				<!--/OART.dll-->
-			</Object>
-			<!--INSTALLED UPDATES-->
-			<Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
-				<Object Type="Group" Name="Installed Updates" Class="Office Update" GroupingClass="True" Display="Right" TrackProgress="TrackProgress" LogText="Collecting Installed Updates">
-					<Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml"/>
-				</Object>
-			</Object>
-			<Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
-				<Object Type="Group" Name="ClickToRun Update Details" GroupingClass="True" Class="Office Update" Display="Right">
-					<Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">            
-					</Reference>
-				</Object>
-			</Object>
-			<!--/INSTALLED UPDATES-->
+        <!--OART.dll-->
+        <Reference Type="OART" Name="OART" File="common.config.xml">
+        </Reference>
+        <!--/OART.dll-->
+      </Object>
+      <!--INSTALLED UPDATES-->
+      <Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
+        <Object Type="Group" Name="Installed Updates" Class="Office Update" GroupingClass="True" Display="Right" TrackProgress="TrackProgress" LogText="Collecting Installed Updates">
+          <Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml"/>
+        </Object>
+      </Object>
+      <Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
+        <Object Type="Group" Name="ClickToRun Update Details" GroupingClass="True" Class="Office Update" Display="Right">
+          <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
+          </Reference>
+        </Object>
+      </Object>
+      <!--/INSTALLED UPDATES-->
+      <!--ADAL updates-->
+      <Object Type="If" Key1="number('%MAJORVERSION%')=15">
+        <Object Type="Group" Name="Office 2013 Modern Authentication support">
+          <Object Type="Group" Name="Prerequisites" Display="Right">
+            <Object Type="Group" Name="%APPNAME%" Display="Right">
+              <Object Type="Group" Name="Hidden">
+                <Rule Name="fKB2965206Installed" Query="versioncompare($sPpCoreVersion,'15.0.4701.1001')" P0="if($fKB2965206Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2965206','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090"></Rule>
+              </Object>
+            </Object>
+            <Reference Type="ADAL" Name="ADAL" File="common.config.xml">
+            </Reference>
+            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($MachineDetails_KB2977629Installed and $fKB2965206Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P1="if($MachineDetails_KB2977629Installed,'Installed','Not Installed')" P2="if($fKB2965206Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;Windows update KB2977629 - {1}&#xA;%APPNAME% 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="ffbb417e-2dbd-4558-9cd8-7368f751615f" Symptoms="Modern Authentication for Office"></Rule>
+          </Object>
+        </Object>
+      </Object>
+      <!--/ADAL updates-->
 		</Object>
 		<!--/OFFICE DETAILS-->
 		<!--USER DETAILS-->
@@ -612,6 +627,8 @@
 		<Object Type="Group" Name="Miscellaneous" GroupingClass="True" Class="Miscellaneous" TrackProgress="TrackProgress" LogText="Collecting Other Miscellaneous Data">
       <Reference Type="OffCATVersionInfo" Name="OffCATVersionInfo" File="common.config.xml">
       </Reference>
+      <Reference Type="GPResult" Name="GPResult" File="common.config.xml">
+      </Reference>
 			<Object Type="Group" Name="PowerPoint Interface Registration" Display="Right">
 				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Interface\{9149349D-5A91-11CF-8700-00AA0060263B}" Display="Right">
 					<Setting Key1="(Default)" Key2=""/>
@@ -666,51 +683,51 @@
   <Rule Name="fLync2013AddinFoundHKCU"></Rule>
   <Rule Name="fLync2013AddinFoundHKLM"></Rule>
   <Rule Name="fLync2013AddinFoundWow"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>zmZ3MryGETXN1Uo1k1H5M3E8wWo=</DigestValue></Reference></SignedInfo><SignatureValue>
-    gnMmADICDKVCJaF4Z8cW2M2cSMb/QMeWQiWCMZClY4BfI+M3x6lpXkiPBTbSmy4+bn2gMV5P
-    68Kf6xbeXQ/UQUbspkdnnkX9MI7dxVVCSJ6N3eKBJ63oBIONPDT3+wN3HAGXE4l87EdMOoQ+
-    VI/RuQTukM67B70JqvEXLXAIUMuFabCIpaCMJS7CZeQGQHP4E/O0G1lBg3bqS6i/+U+khfQM
-    ObpEX0rYp0S467//Kl3WsNluvtaq2gtkX0z+nCZ2zYhCU/mqu59aa9/PLXELP362lKdXcqe5
-    cX6+TOIlAiAfiZZjBW4T66AxPjOpALqQIBOc0IE40drdTLtcyFZYoQ==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>jrzSegNZMU8uwRHi83x7uMEf1RI=</DigestValue></Reference></SignedInfo><SignatureValue>
+    IowLcuMHvG7b64gNHji2V2FHYnTbLX9VsKPcWpP1usRR5WXjWxzc0Ui0YNPVZZTDtb+XjrUe
+    Vf7qeJEAg6Vli9ojHhrhKEDmvjmj2JNd3jhP4SD8si3hBUXJyb7DlYwdrYCmuM8uHvNGiEZf
+    uzjoIOHbvOgVnhl/wGYh4XM+7E/U5nKzW8sPRsSePyW3+a6qpg0phXqmQ5HEyOwwYneLm3T9
+    WWX2o/r3yFY4l924kB5SEr5mFtIilccl6QFJb62ChJgMg+pXxsJXXTJ5Hh8ueWdJ6RkWTH3i
+    FLctUSXap7LwcdB/TkPzc2Ja11/lcRg0BbrxNaWRVyiMwSuePoTXIg==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
           <Modulus>
-            lnFd7QZG+oTLnVu3Rsew4bQROQOtsRVzYJzrp7ZuGjw//2XjNPGmpSFeVplsWOSSoQpcwtPc
-            Ui8MZZogYUBTMZxsjyF9uvn+E1BSYJU6W7lYpXRhQamU4K0mTkyhl3BJJ158Z8pPHnGERrwd
-            S7biD8XGJ8kH5noKpRcAGUxwRTgtgbRQqsVn0fp5vMXMoXKb9CU0mPhU3xI5OBIvpGulmn7H
-            YtHcz+09NPi53zUwuux5MqnhqaxVTUx/TFbDEwt28Qf5zEes+4jVUqUeKPo9Lc/PhJiGcWUR
-            z4XJCUSG4W/nsfysQESlqYsjP4JJndWWWVATWRhz/0MMrSvUfzBAZw==
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
           </Modulus>
           <Exponent>AQAB</Exponent>
         </RSAKeyValue>
       </KeyValue>
       <X509Data>
         <X509Certificate>
-          MIIE7DCCA9SgAwIBAgITMwAAAMps1TISNcThVQABAAAAyjANBgkqhkiG9w0BAQUFADB5MQsw
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
           CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
           A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
-          aWduaW5nIFBDQTAeFw0xNDA0MjIxNzM5MDBaFw0xNTA3MjIxNzM5MDBaMIGDMQswCQYDVQQG
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
           EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
           TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
-          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCWcV3tBkb6
-          hMudW7dGx7DhtBE5A62xFXNgnOuntm4aPD//ZeM08aalIV5WmWxY5JKhClzC09xSLwxlmiBh
-          QFMxnGyPIX26+f4TUFJglTpbuVildGFBqZTgrSZOTKGXcEknXnxnyk8ecYRGvB1LtuIPxcYn
-          yQfmegqlFwAZTHBFOC2BtFCqxWfR+nm8xcyhcpv0JTSY+FTfEjk4Ei+ka6Wafsdi0dzP7T00
-          +LnfNTC67HkyqeGprFVNTH9MVsMTC3bxB/nMR6z7iNVSpR4o+j0tz8+EmIZxZRHPhckJRIbh
-          b+ex/KxARKWpiyM/gkmd1ZZZUBNZGHP/QwytK9R/MEBnAgMBAAGjggFgMIIBXDATBgNVHSUE
-          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUH17iXVCNVoa+SjzPBOinh7XLv4MwUQYDVR0RBEow
-          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1K2I0MjE4ZjEzLTZmY2EtNDkw
-          Zi05YzQ3LTNmYzU1N2RmYzQ0MDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
           BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
           dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
           AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
-          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEAd1zr15E9zb17g9mFqbBDnXN8
-          F8kP7Tbbx7UsG177VAU6g3FAgQmit3EmXtZ9tmw7yapfXQMYKh0nfgfpxWUftc8Nt1THKDha
-          iOd7wRm2VjK64szLk9uvbg9dRPXUsO8b1U7Brw7vIJvy4f4nXejF/2H2GdIoCiKd381wgp4Y
-          ctgjzHosQ+7/6sDg5h2qnpczAFJvB7jTiGzepAY1p8JThmURdwmPNVm52IaoAP74MX0s9IwF
-          ncDB1XdybOlNWSaD8cKyiFeTNQB8UCu8Wfz+HCk4gtPeUpdFKRhOlludul8bo/EnUOoHleht
-          NA04V9w3KDWVOjic1O1qhV0OIhFeew==
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
         </X509Certificate>
       </X509Data>
       <X509Data>
@@ -824,12 +841,12 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQCCcyYAMgIMpUIloXhnxxbYzZxIxv9Ax5ZCJYIxkKVjgF8j4zfHqWleSI8FNtKbLj5ufaAx
-Xk/rwp/rFt5dD9RBRuymR2eeRf0wjt3FVUJIno3d4oEnregEg408NPf7A3ccAZcTiXzsR0w6hD5U
-j9G5BO6QzrsHvQmq8RctcAhQy4VpsIiloIwlLsJl5AZAc/gT87QbWUGDdupLqL/5T6SF9Aw5ukRf
-StinRLjrv/8qXdaw2W6+1qraC2RfTP6cJnbNiEJT+aq7n1pr388tcQs/fraUp1dyp7lxfr5M4iUC
-IB+JlmMFbhProDE+M6kAupAgE5zQgTjR2t1Mu1zIVlihoIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQAijAty4we8btvriA0eOLZXYUdidNstf1Wwo9xak/W6xFHlZeNbHNzRSLRg09VllMO1v5eO
+tR5V/up4kQCDpWWL2iMeGuEoQOa+OaPYk13eOE/hIPyyLeEFRcnJvsOVjB2tgKa4zy4e80aIRl+7
+OOgg4du86BWeGX/AZiHhcz7sT9TmcrNbyw9GxJ4/Jbf5rqqmDSmFeqZDkcTI7DBid4ubdP1ZZfaj
++vfIVjiX3biQHlISvmYW0iKVxyXpAUlvrYKEmAyD6lfGwlddMnkeHy55Z0npGRZMfeIUty1RJdqn
+svBx0H9OQ/NzYlrXX+VxGDQFuvE1pZFXKIzBK54+hNcioIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
 Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
@@ -837,21 +854,21 @@ YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAlPdzZMzyO6SV17j1edQd119kEpuggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANkg8kcwIhgPMjAxNTA2MDkwNTA0
-MDdaGA8yMDE1MDYxMDA1MDQwN1owdDA6BgorBgEEAYRZCgQBMSwwKjAKAgUA2SDyRwIBADAHAgEA
-AgIe7zAHAgEAAgIYMzAKAgUA2SJDxwIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZCgMB
-oAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQB2yToQiy2Wi40/pGrl
-9eVFfs9jRUDAYhc3p2+4vtwhSHQcP8N3N+VBLEr8lnRWIl+1338TEg/Gt15f5Haxv+rgelTsNbiL
-xPEgsRbByEUOQfErnuwzzevEkTMM16xpUjIwn2RgF1g7PqZRi0UFw/ZenKQlmxn177aXzOXUxXyj
-XTYlX1wzIeIaVi0/VaeXr5a6XpFnnqwJ8/ISsOfgNNsVuCfowwwwqWxxIwJZNr4Focb3SrOH3z+X
-5DPLj8Hufqh2UiUoeAPrE3hT5eBrEwsuXVTSof4D+1y6BGAMCr/RypYX2dPz6RpEk1N/gbKsmhtg
-hdbkiIVdX80Sm63yMVX0MYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
-c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
-bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAAAAB0
-MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
-NTA2MDkxMjQ0NDFaMCMGCSqGSIb3DQEJBDEWBBQG/RbfnzlhnSv+36pGEhXfmepjBzANBgkqhkiG
-9w0BAQUFAASCAQBxUTzYHuXp3pBK/AdgQIkR36fxjfG5jjO4PeeVe9+6FAKmsg8TpilP06EV4T3r
-j2ph5d53cRFFVGteWDKFUoNbKzv+AzX72749MtZjaondPHH+Q7xYyJuzAPxrgb7rHCwC61/Ln27f
-+ESAa/985t1IAWJo5G2fgVcBnWaUvHjJRgsgY0XYZ6dKwVGHBIymLPPqGVNU9nB7alhE4gzT6DDd
-AbhF58HZrPQ+f4gq17kXBcizl/xIbSvO6uBtuWdsROeqpukuQicdEjbvHr5RT1yMsx3196mjWcAa
-rhx284ee26AmBKfVpmrEXo8s//uANKHjWutd7/ej0SckOqs04PAm</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlI9JcwIhgPMjAxNTA3MDkxMzI0
+MzlaGA8yMDE1MDcxMDEzMjQzOVowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2Uj0lwIBADAKAgEA
+AgInnwIB/zAHAgEAAgIaYTAKAgUA2UpGFwIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
+CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAJCwGlz7Z2Zd7l
+MmBUfQV4TY7bav1WJ2H9BeqlBMB+v4G1mNTbeCYH+XZkkVM/Acynhl9+9w1MXgx1543Ov2Q9v2M8
+NHlRSu4Au4+Hy2Zx4oIqmJIszWO97bqL/tMtid5x3mKXTt6GPjXx/2HYJESQiVEvEYygbU3tdqFa
+S7h7JnxsBbmh7cfXOdFq/fCL/q8NBly848EpLEOrXZ83rZaIJxfjUhpwrKZH6Wa9SHJks1rV/xwF
+gY50XdXRbmMJPvoCbCtdTSuW3kR9NEe1zZsQYFCKn69hBvZCwnR7tAn14BqbX2aU/PUgWzF2HuMa
+JegBkYRZOm+ZHnGB38s2KDHaMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAA
+AAB0MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
+Fw0xNTA3MDkxNDQ3MjlaMCMGCSqGSIb3DQEJBDEWBBTyuJl6iJLBjpAEuWL+6+0HcxzdATANBgkq
+hkiG9w0BAQUFAASCAQBhsWUHdQpTPIiHLZNFduA97q1RllA+xhG6llBWz3s+vg4yN1n5+YsdUhI2
+yo0ATXfjTmAysZrTeYqNpW5GgYLmghICioImkj1OhkO42IXdczWcjwzn66KbkaHBlF94Wmo9Fb0s
+uxZU6piwn9k6vH6BOXENgxq97EyJax357o+/qeqCBa5vowRSr+46S8XKzcUDnmCjEuZ90I/e8xC8
++whrlkLHQn2pletmMl4HZ9bMq/IKMKGSMhAxoTaB5XHk0iGFC5e6R0i8G551M5dt6OlMEfAWas1W
+gUpgMlzToKdMUkefJPs6K9xmtmqGGMFMSedorKV6ZJbhPaFp4O7dKFzg</CounterSignature></Object></Signature></ObjectCollector>

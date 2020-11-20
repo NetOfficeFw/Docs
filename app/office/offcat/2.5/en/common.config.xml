@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Office Common Configuration" ConfigVersion="2.0.1505.18" ChangeDescription="2.0.1505.18">
-		<ExtFunction Name="versioncompare" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.VersionComparerObjectProcessor" Function="VersionCompare" Returns="Number" Parameters="String,String"></ExtFunction>
+	<Configuration ConfigName="Office Common Configuration" ConfigVersion="2.0.1506.30" ChangeDescription="2.0.1506.30">
+    <ObjectProcessor Name="OFFX" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OffXFileObjectProcessor"/>
+    <ExtFunction Name="versioncompare" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.VersionComparerObjectProcessor" Function="VersionCompare" Returns="Number" Parameters="String,String"></ExtFunction>
 	</Configuration>
 	<Type Name="C2R_Updates">
     <!--O15-->
@@ -11,13 +12,12 @@
 			</Rule>
 		</Object>
 		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\ProductReleaseIDs\Active\culture" Display="Right">
-			<Rule Name="C2RLatestVersionFromWeb15" Query="'15.0.4719.1002'"></Rule>
+			<Rule Name="C2RLatestVersionFromWeb15" Query="'15.0.4727.1002'"></Rule>
 			<Setting Key1="x-none" Display="Right" Substitution="C2RINSTALLEDVERSION">
 				<Rule Name="fInstalledC2RVersion" Query="$."></Rule>
-				<Rule Name="sLatestC2RVersionNotInstalled15" P0="'%C2RINSTALLEDVERSION%'" P1="$C2RLatestVersionFromWeb15" Query="$n2DigitVersion=15 and $sC2RUpdatesReadyToApply=false() and versioncompare('%C2RINSTALLEDVERSION%',$C2RLatestVersionFromWeb15)&lt;0" Error="Warning" Title="Office 2013 Click-to-run is not at the latest version" Text="You have version {0} while the latest available version is {1}. Please click the 'Click here...' link to update your Office installation." GUID="386616" SSID="e395df67-0c72-48aa-8b00-eb44e23aeb2f" Symptoms="Product not updated"></Rule>
+				<Rule Name="sLatestC2RVersionNotInstalled15" P0="'%C2RINSTALLEDVERSION%'" P1="$C2RLatestVersionFromWeb15" Query="$n2DigitVersion=15 and $sC2RUpdatesReadyToApply=false() and versioncompare('%C2RINSTALLEDVERSION%',$C2RLatestVersionFromWeb15)&lt;0" Error="Error" Title="Office 2013 Click-to-run is not at the latest version" Text="You have version {0} while the latest available version is {1}. Please click the 'Click here...' link to update your Office installation." GUID="386616" SSID="e395df67-0c72-48aa-8b00-eb44e23aeb2f" Symptoms="!Application updates missing"></Rule>
 				<Rule Name="sC2RDec2014VersionInstalled15" Query="versioncompare($fInstalledC2RVersion,'15.0.4675.1002')=0"></Rule>
-
-				<Rule Name="sC2RUpdatesReadyToApply" Query="$nC2RUpdateFiles!=0" Error="Warning" Title="Updates for Click-to-Run are ready to be applied to Office" Text="Your Click-to-Run version is %C2RINSTALLEDVERSION% but you have an update ready to be applied to your Click-to-run installation of Office. Click the 'Click here ...' link for details on how to get this update applied." GUID="386619" SSID="c8623e07-20b2-4fe4-b8a9-c8cbd17bb468" Symptoms="Product not updated"></Rule>
+				<Rule Name="sC2RUpdatesReadyToApply" Query="$nC2RUpdateFiles!=0" Error="Error" Title="Updates for Click-to-Run are ready to be applied to Office" Text="Your Click-to-Run version is %C2RINSTALLEDVERSION% but you have an update ready to be applied to your Click-to-run installation of Office. Click the 'Click here ...' link for details on how to get this update applied." GUID="386619" SSID="c8623e07-20b2-4fe4-b8a9-c8cbd17bb468" Symptoms="!Application updates missing"></Rule>
 			</Setting>
 		</Object>
 		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\propertyBag" Display="Right">
@@ -106,6 +106,11 @@
 		<Rule Name="fWin8Installed" Query="(versioncompare($WindowsVersion,'6.2.0.0')&gt;0 and versioncompare($WindowsVersion,'6.3.0.0')&lt;0) and $sOSProductType=1"></Rule>
 		<Rule Name="fWin81Installed" Query="(versioncompare($WindowsVersion,'6.3.0.0')&gt;0 and versioncompare($WindowsVersion,'6.4.0.0')&lt;0) and $sOSProductType=1"></Rule>
 		<Rule Name="fWind8OrAbove" Query="versioncompare($WindowsVersion,'6.2.0.0')&gt;=0"></Rule>
+    <Object Type="WMI" Key3="Win32_QuickFixEngineering" Key4="HotFixID LIKE '%2977629%'" Display="Hide">
+          <Setting Key1="HotFixID" Display="Hide">
+          </Setting>
+          <Rule Name="KB2977629Installed" Query="count(../Instance)&gt;0"></Rule>
+        </Object>
 		<Object Type="Group" Name="VideoCardsList" Display="Hide">
 			<Setting Key1="Devices" Display="Hide">
 				<Rule Name="sVideoCards" Query="'PCI\VEN_1002&amp;DEV_796E;PCI\VEN_1002&amp;DEV_791E;PCI\VEN_1002&amp;DEV_791F;PCI\VEN_1002&amp;DEV_796F;PCI\VEN_1002&amp;DEV_793F;PCI\VEN_1002&amp;DEV_7941;PCI\VEN_1002&amp;DEV_7942;PCI\VEN_1002&amp;DEV_5A61;PCI\VEN_1002&amp;DEV_5A63;PCI\VEN_1002&amp;DEV_5A62;PCI\VEN_1002&amp;DEV_5A41;PCI\VEN_1002&amp;DEV_5A43;PCI\VEN_1002&amp;DEV_5A42;PCI\VEN_1002&amp;DEV_5954;PCI\VEN_1002&amp;DEV_5854;PCI\VEN_1002&amp;DEV_5955;PCI\VEN_1002&amp;DEV_5974;PCI\VEN_1002&amp;DEV_5874;PCI\VEN_1002&amp;DEV_5975;PCI\VEN_1002&amp;DEV_5653;PCI\VEN_1002&amp;DEV_3155;PCI\VEN_1002&amp;DEV_3175;PCI\VEN_1002&amp;DEV_4E54;PCI\VEN_1002&amp;DEV_5464;PCI\VEN_1002&amp;DEV_3154;PCI\VEN_1002&amp;DEV_564A;PCI\VEN_1002&amp;DEV_564B;PCI\VEN_1002&amp;DEV_5D49;PCI\VEN_1002&amp;DEV_71C4;PCI\VEN_1002&amp;DEV_71D4;PCI\VEN_1002&amp;DEV_4E52;PCI\VEN_1002&amp;DEV_4E56;PCI\VEN_1002&amp;DEV_4E50;PCI\VEN_1002&amp;DEV_4A4E;PCI\VEN_1002&amp;DEV_7149;PCI\VEN_1002&amp;DEV_714B;PCI\VEN_1002&amp;DEV_714C;PCI\VEN_1002&amp;DEV_714A;PCI\VEN_1002&amp;DEV_718B;PCI\VEN_1002&amp;DEV_718C;PCI\VEN_1002&amp;DEV_7196;PCI\VEN_1002&amp;DEV_7145;PCI\VEN_1002&amp;DEV_7186;PCI\VEN_1002&amp;DEV_718D;PCI\VEN_1002&amp;DEV_71C5;PCI\VEN_1002&amp;DEV_71D5;PCI\VEN_1002&amp;DEV_71DE;PCI\VEN_1002&amp;DEV_71D6;PCI\VEN_1002&amp;DEV_7102;PCI\VEN_1002&amp;DEV_7101;PCI\VEN_1002&amp;DEV_7284;PCI\VEN_1002&amp;DEV_718A;PCI\VEN_1002&amp;DEV_7188;PCI\VEN_1002&amp;DEV_5461;PCI\VEN_1002&amp;DEV_5460;PCI\VEN_1002&amp;DEV_3152;PCI\VEN_1002&amp;DEV_3150;PCI\VEN_1002&amp;DEV_5462;PCI\VEN_1002&amp;DEV_5652;PCI\VEN_1002&amp;DEV_5653;PCI\VEN_1002&amp;DEV_5673;PCI\VEN_1002&amp;DEV_564F;PCI\VEN_1002&amp;DEV_5D4A;PCI\VEN_1002&amp;DEV_5D48;PCI\VEN_1002&amp;DEV_5D48;PCI\VEN_1002&amp;DEV_7248;PCI\VEN_1002&amp;DEV_7268;PCI\VEN_1002&amp;DEV_554D;PCI\VEN_1002&amp;DEV_556D;PCI\VEN_1002&amp;DEV_5D52;PCI\VEN_1002&amp;DEV_5D72;PCI\VEN_1002&amp;DEV_4154;PCI\VEN_1002&amp;DEV_4174;PCI\VEN_1002&amp;DEV_5B64;PCI\VEN_1002&amp;DEV_5B74;PCI\VEN_1002&amp;DEV_3E54;PCI\VEN_1002&amp;DEV_3E74;PCI\VEN_1002&amp;DEV_7152;PCI\VEN_1002&amp;DEV_7172;PCI\VEN_1002&amp;DEV_7153;PCI\VEN_1002&amp;DEV_7173;PCI\VEN_1002&amp;DEV_71D2;PCI\VEN_1002&amp;DEV_71F2;PCI\VEN_1002&amp;DEV_958D;PCI\VEN_1002&amp;DEV_5E48;PCI\VEN_1002&amp;DEV_5E68;PCI\VEN_1002&amp;DEV_5551;PCI\VEN_1002&amp;DEV_5571;PCI\VEN_1002&amp;DEV_71DA;PCI\VEN_1002&amp;DEV_71FA;PCI\VEN_1002&amp;DEV_7105;PCI\VEN_1002&amp;DEV_7125;PCI\VEN_1002&amp;DEV_5550;PCI\VEN_1002&amp;DEV_5570;PCI\VEN_1002&amp;DEV_5D50;PCI\VEN_1002&amp;DEV_7104;PCI\VEN_1002&amp;DEV_5D70;PCI\VEN_1002&amp;DEV_7124;PCI\VEN_1002&amp;DEV_710E;PCI\VEN_1002&amp;DEV_712E;PCI\VEN_1002&amp;DEV_710F;PCI\VEN_1002&amp;DEV_712F;PCI\VEN_1002&amp;DEV_4E47;PCI\VEN_1002&amp;DEV_4E67;PCI\VEN_1002&amp;DEV_4E4B;PCI\VEN_1002&amp;DEV_4E6B;PCI\VEN_1002&amp;DEV_4A4D;PCI\VEN_1002&amp;DEV_4A6D;PCI\VEN_1002&amp;DEV_4147;PCI\VEN_1002&amp;DEV_4167;PCI\VEN_1002&amp;DEV_5B65;PCI\VEN_1002&amp;DEV_5B75;PCI\VEN_1002&amp;DEV_719B;PCI\VEN_1002&amp;DEV_71BB;PCI\VEN_1002&amp;DEV_3151;PCI\VEN_1002&amp;DEV_3171;PCI\VEN_1002&amp;DEV_724E;PCI\VEN_1002&amp;DEV_726E;PCI\VEN_1002&amp;DEV_4153;PCI\VEN_1002&amp;DEV_4173;PCI\VEN_1002&amp;DEV_4150;PCI\VEN_1002&amp;DEV_4E51;PCI\VEN_1002&amp;DEV_4151;PCI\VEN_1002&amp;DEV_4155;PCI\VEN_1002&amp;DEV_4152;PCI\VEN_1002&amp;DEV_4E71;PCI\VEN_1002&amp;DEV_4171;PCI\VEN_1002&amp;DEV_4170;PCI\VEN_1002&amp;DEV_4175;PCI\VEN_1002&amp;DEV_4172;PCI\VEN_1002&amp;DEV_7288;PCI\VEN_1002&amp;DEV_72A8;PCI\VEN_1002&amp;DEV_554E;PCI\VEN_1002&amp;DEV_556E;PCI\VEN_1002&amp;DEV_554D;PCI\VEN_1002&amp;DEV_556D;PCI\VEN_1002&amp;DEV_4B4B;PCI\VEN_1002&amp;DEV_4B6B;PCI\VEN_1002&amp;DEV_4B4A;PCI\VEN_1002&amp;DEV_4B6A;PCI\VEN_1002&amp;DEV_4B49;PCI\VEN_1002&amp;DEV_4B4C;PCI\VEN_1002&amp;DEV_4B6C;PCI\VEN_1002&amp;DEV_4B69;PCI\VEN_1002&amp;DEV_554C;PCI\VEN_1002&amp;DEV_556C;PCI\VEN_1002&amp;DEV_5D4C;PCI\VEN_1002&amp;DEV_5D6C;PCI\VEN_1002&amp;DEV_4144;PCI\VEN_1002&amp;DEV_4149;PCI\VEN_1002&amp;DEV_4E45;PCI\VEN_1002&amp;DEV_4E65;PCI\VEN_1002&amp;DEV_4164;PCI\VEN_1002&amp;DEV_4169;PCI\VEN_1002&amp;DEV_4E46;PCI\VEN_1002&amp;DEV_4E66;PCI\VEN_1002&amp;DEV_4146;PCI\VEN_1002&amp;DEV_4166;PCI\VEN_1002&amp;DEV_4E44;PCI\VEN_1002&amp;DEV_4E64;PCI\VEN_1002&amp;DEV_4E49;PCI\VEN_1002&amp;DEV_4E48;PCI\VEN_1002&amp;DEV_4E68;PCI\VEN_1002&amp;DEV_4148;PCI\VEN_1002&amp;DEV_4168;PCI\VEN_1002&amp;DEV_4E69;PCI\VEN_1002&amp;DEV_4E4A;PCI\VEN_1002&amp;DEV_4E6A;PCI\VEN_1002&amp;DEV_7146;PCI\VEN_1002&amp;DEV_7166;PCI\VEN_1002&amp;DEV_714E;PCI\VEN_1002&amp;DEV_715E;PCI\VEN_1002&amp;DEV_714D;PCI\VEN_1002&amp;DEV_71C3;PCI\VEN_1002&amp;DEV_718F;PCI\VEN_1002&amp;DEV_716E;PCI\VEN_1002&amp;DEV_717E;PCI\VEN_1002&amp;DEV_716D;PCI\VEN_1002&amp;DEV_71E3;PCI\VEN_1002&amp;DEV_71AF;PCI\VEN_1002&amp;DEV_7142;PCI\VEN_1002&amp;DEV_7180;PCI\VEN_1002&amp;DEV_7183;PCI\VEN_1002&amp;DEV_7187;PCI\VEN_1002&amp;DEV_7162;PCI\VEN_1002&amp;DEV_71A0;PCI\VEN_1002&amp;DEV_71A3;PCI\VEN_1002&amp;DEV_71A7;PCI\VEN_1002&amp;DEV_7147;PCI\VEN_1002&amp;DEV_715F;PCI\VEN_1002&amp;DEV_719F;PCI\VEN_1002&amp;DEV_7167;PCI\VEN_1002&amp;DEV_717F;PCI\VEN_1002&amp;DEV_7143;PCI\VEN_1002&amp;DEV_7193;PCI\VEN_1002&amp;DEV_7163;PCI\VEN_1002&amp;DEV_71B3;PCI\VEN_1002&amp;DEV_71CE;PCI\VEN_1002&amp;DEV_71EE;PCI\VEN_1002&amp;DEV_7140;PCI\VEN_1002&amp;DEV_71C0;PCI\VEN_1002&amp;DEV_71C2;PCI\VEN_1002&amp;DEV_7181;PCI\VEN_1002&amp;DEV_71CD;PCI\VEN_1002&amp;DEV_7160;PCI\VEN_1002&amp;DEV_71E2;PCI\VEN_1002&amp;DEV_71E6;PCI\VEN_1002&amp;DEV_71A1;PCI\VEN_1002&amp;DEV_71ED;PCI\VEN_1002&amp;DEV_71E0;PCI\VEN_1002&amp;DEV_71C6;PCI\VEN_1002&amp;DEV_71C1;PCI\VEN_1002&amp;DEV_7293;PCI\VEN_1002&amp;DEV_7291;PCI\VEN_1002&amp;DEV_71C7;PCI\VEN_1002&amp;DEV_71E1;PCI\VEN_1002&amp;DEV_72B3;PCI\VEN_1002&amp;DEV_72B1;PCI\VEN_1002&amp;DEV_71E7;PCI\VEN_1002&amp;DEV_7100;PCI\VEN_1002&amp;DEV_7108;PCI\VEN_1002&amp;DEV_7109;PCI\VEN_1002&amp;DEV_710A;PCI\VEN_1002&amp;DEV_710B;PCI\VEN_1002&amp;DEV_710C;PCI\VEN_1002&amp;DEV_7120;PCI\VEN_1002&amp;DEV_7128;PCI\VEN_1002&amp;DEV_7129;PCI\VEN_1002&amp;DEV_712A;PCI\VEN_1002&amp;DEV_712B;PCI\VEN_1002&amp;DEV_712C;PCI\VEN_1002&amp;DEV_7243;PCI\VEN_1002&amp;DEV_7245;PCI\VEN_1002&amp;DEV_7246;PCI\VEN_1002&amp;DEV_7247;PCI\VEN_1002&amp;DEV_7248;PCI\VEN_1002&amp;DEV_7249;PCI\VEN_1002&amp;DEV_724A;PCI\VEN_1002&amp;DEV_724B;PCI\VEN_1002&amp;DEV_724C;PCI\VEN_1002&amp;DEV_724D;PCI\VEN_1002&amp;DEV_724F;PCI\VEN_1002&amp;DEV_7263;PCI\VEN_1002&amp;DEV_7265;PCI\VEN_1002&amp;DEV_7266;PCI\VEN_1002&amp;DEV_7267;PCI\VEN_1002&amp;DEV_7268;PCI\VEN_1002&amp;DEV_7269;PCI\VEN_1002&amp;DEV_726A;PCI\VEN_1002&amp;DEV_726B;PCI\VEN_1002&amp;DEV_726C;PCI\VEN_1002&amp;DEV_726D;PCI\VEN_1002&amp;DEV_726F;PCI\VEN_1002&amp;DEV_7240;PCI\VEN_1002&amp;DEV_7244;PCI\VEN_1002&amp;DEV_7280;PCI\VEN_1002&amp;DEV_7260;PCI\VEN_1002&amp;DEV_7264;PCI\VEN_1002&amp;DEV_72A0;PCI\VEN_1002&amp;DEV_5B60;PCI\VEN_1002&amp;DEV_5B63;PCI\VEN_1002&amp;DEV_5B73;PCI\VEN_1002&amp;DEV_5B70;PCI\VEN_1002&amp;DEV_5657;PCI\VEN_1002&amp;DEV_5677;PCI\VEN_1002&amp;DEV_5B62;PCI\VEN_1002&amp;DEV_5B72;PCI\VEN_1002&amp;DEV_3E50;PCI\VEN_1002&amp;DEV_3E70;PCI\VEN_1002&amp;DEV_5E4D;PCI\VEN_1002&amp;DEV_5E4B;PCI\VEN_1002&amp;DEV_5E6B;PCI\VEN_1002&amp;DEV_5E4C;PCI\VEN_1002&amp;DEV_5E6C;PCI\VEN_1002&amp;DEV_5E6D;PCI\VEN_1002&amp;DEV_5E4A;PCI\VEN_1002&amp;DEV_5E6A;PCI\VEN_1002&amp;DEV_5E4F;PCI\VEN_1002&amp;DEV_5E6F;PCI\VEN_1002&amp;DEV_554B;PCI\VEN_1002&amp;DEV_556B;PCI\VEN_1002&amp;DEV_5549;PCI\VEN_1002&amp;DEV_554F;PCI\VEN_1002&amp;DEV_5D4F;PCI\VEN_1002&amp;DEV_5569;PCI\VEN_1002&amp;DEV_556F;PCI\VEN_1002&amp;DEV_5D6F;PCI\VEN_1002&amp;DEV_4A49;PCI\VEN_1002&amp;DEV_4A69;PCI\VEN_1002&amp;DEV_4A4F;PCI\VEN_1002&amp;DEV_4A6F;PCI\VEN_1002&amp;DEV_4A48;PCI\VEN_1002&amp;DEV_4A4A;PCI\VEN_1002&amp;DEV_4A4C;PCI\VEN_1002&amp;DEV_5548;PCI\VEN_1002&amp;DEV_4A68;PCI\VEN_1002&amp;DEV_4A6A;PCI\VEN_1002&amp;DEV_4A6C;PCI\VEN_1002&amp;DEV_5568;PCI\VEN_1002&amp;DEV_4A54;PCI\VEN_1002&amp;DEV_4A74;PCI\VEN_1002&amp;DEV_4A4B;PCI\VEN_1002&amp;DEV_5D57;PCI\VEN_1002&amp;DEV_4A50;PCI\VEN_1002&amp;DEV_554A;PCI\VEN_1002&amp;DEV_4A70;PCI\VEN_1002&amp;DEV_556A;PCI\VEN_1002&amp;DEV_4A6B;PCI\VEN_1002&amp;DEV_5D77;PCI\VEN_1002&amp;DEV_5D52;PCI\VEN_1002&amp;DEV_5D4D;PCI\VEN_1002&amp;DEV_5D6D;PCI\VEN_1002&amp;DEV_5D72;PCI\VEN_1002&amp;DEV_5B66;PCI\VEN_1002&amp;DEV_5B76;PCI\VEN_1002&amp;DEV_5B61;PCI\VEN_1002&amp;DEV_5B71;PCI\VEN_1002&amp;DEV_7141;PCI\VEN_1002&amp;DEV_714F;PCI\VEN_1002&amp;DEV_7151;PCI\VEN_1002&amp;DEV_7161;PCI\VEN_1002&amp;DEV_716F;PCI\VEN_1002&amp;DEV_7171;PCI\VEN_1002&amp;DEV_7290;PCI\VEN_1002&amp;DEV_7297;PCI\VEN_1002&amp;DEV_72B0;PCI\VEN_1002&amp;DEV_72B7;PCI\VEN_1002&amp;DEV_7289;PCI\VEN_1002&amp;DEV_728B;PCI\VEN_1002&amp;DEV_72A9;PCI\VEN_1002&amp;DEV_72AB;PCI\VEN_10DE&amp;DEV_0A6C;'">
@@ -435,6 +440,11 @@
 						<Object Type="File" Key2="%WINDIR%\System32\Drivers\etc\hosts">
 							<Setting Key1="Text"></Setting>
 						</Object>
+            <Object Type="CommandLine" Key2="%WINDIR%\system32\findstr.exe" Key3="/r /i /c:&quot;^[^\#]*autodiscover\.outlook\.com&quot; %WINDIR%\system32\drivers\etc\hosts" Display="Hide">
+              <Setting Key1="Output" Substitution="FINDSTROUTPUT" SubstitutionFormat="(^\s*)(.*autodiscover.outlook.com)(.*)----$2" Display="Hide">
+                <Rule Name="sCloudMbxAutodiscoverInHostsFile" Query="$appName='Outlook' and contains('%FINDSTROUTPUT%','autodiscover.outlook.com')" Error="Error" P0="'%FINDSTROUTPUT%'" Title="Office 365 connection issue because the Hosts file contains an entry for Autodiscover.Outlook.com" Text="The Hosts file in the %WINDIR%\system32\drivers\etc folder contains a hard-coded entry for the Autodiscover server in Office 365.&#xA;&#xA;{0}&#xA;&#xA;After June 26, 2015 you will not be able to connect to Exchange Online with this entry in the Host file. Click the 'Click here ...' link for information on this issue and a link to an article with steps to reset the Hosts file back to the default settings." GUID="615830" SSID="3357f5b6-fdcc-4543-b6a4-cb884fb85d4f" Symptoms="Error message,Office 365"></Rule>
+              </Setting>
+            </Object>
 					</Object>
 					<Object Type="Group" Name="IPv6 registry data">
 						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="System\CurrentControlSet\Services\Tcpip6\Parameters">
@@ -763,7 +773,7 @@
 		<!--Bluetooth: BtOfficeAddin.BtOfficeIntegration.1-->
 		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%APPNAME%\Addins\BtOfficeAddin.BtOfficeIntegration.1">
 			<Setting Key1="LoadBehavior"></Setting>
-			<Rule Name="sBluetoothAddinLoaded" Query="../Instance/Setting[@Key1='LoadBehavior']/Value!=0" Error="Error" Title="The Bluetooth add-in (BtOfficeAddin.BtOfficeIntegration.1) is enabled in the registry" Text="The Bluetooth add-in (ProgID=BtOfficeAddin.BtOfficeIntegration.1) is installed and configured to run with Office programs. This add-in has been known to cause problems with Office programs." GUID="307140" SSID="4e4e9588-ea6b-4dba-903f-2149313045bb" Symptoms="Crash,Add-ins"></Rule>
+			<Rule Name="sBluetoothAddinLoaded" Query="../Instance/Setting[@Key1='LoadBehavior']/Value!=0" Error="Error" P0="if($MachineDetails_fWinVistaInstalled,9846227,if($MachineDetails_fWin7Installed or $MachineDetails_fWin8Installed or $MachineDetails_fWin81Installed,9846219,''))" Title="The Bluetooth add-in (BtOfficeAddin.BtOfficeIntegration.1) is enabled in the registry" Text="The Bluetooth add-in (ProgID=BtOfficeAddin.BtOfficeIntegration.1) is installed and configured to run with Office programs. This add-in has been known to cause problems with Office programs." GUID="307140" FIXIT="{0}" SSID="4e4e9588-ea6b-4dba-903f-2149313045bb" Symptoms="Crash,Add-ins"></Rule>
 		</Object>
 		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\%APPNAME%\Addins\BtOfficeAddin.BtOfficeIntegration.1">
 			<Setting Key1="LoadBehavior"></Setting>
@@ -771,7 +781,7 @@
 		</Object>
 		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\%APPNAME%\Addins\BtOfficeAddin.BtOfficeIntegration.1">
 			<Setting Key1="LoadBehavior"></Setting>
-			<Rule Name="sBluetoothAddinLoadedWow" Query="../Instance/Setting[@Key1='LoadBehavior']/Value!=0" Error="Error" Title="The Bluetooth add-in (BtOfficeAddin.BtOfficeIntegration.1) is enabled under the \Wow6432Node key in the registry" Text="The Bluetooth add-in (ProgID=BtOfficeAddin.BtOfficeIntegration.1) is installed and configured to run with Office programs. This add-in has been known to cause problems with Office programs." GUID="307140" SSID="76f62932-69c2-4f92-ad3b-5cb927a2097c" Symptoms="Crash,Add-ins"></Rule>
+			<Rule Name="sBluetoothAddinLoadedWow" Query="../Instance/Setting[@Key1='LoadBehavior']/Value!=0" Error="Error" P0="if($MachineDetails_fWinVistaInstalled,9846227,if($MachineDetails_fWin7Installed or $MachineDetails_fWin8Installed or $MachineDetails_fWin81Installed,9846219,''))" Title="The Bluetooth add-in (BtOfficeAddin.BtOfficeIntegration.1) is enabled under the \Wow6432Node key in the registry" Text="The Bluetooth add-in (ProgID=BtOfficeAddin.BtOfficeIntegration.1) is installed and configured to run with Office programs. This add-in has been known to cause problems with Office programs." GUID="307140" FIXIT="{0}" SSID="76f62932-69c2-4f92-ad3b-5cb927a2097c" Symptoms="Crash,Add-ins"></Rule>
 		</Object>
 		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\%APPNAME%\Addins\BtOfficeAddin.BtOfficeIntegration.1">
 			<Setting Key1="LoadBehavior"></Setting>
@@ -860,8 +870,8 @@
 							</Setting>
 							<Object Type="Group" Name="OfficeUpdates.config.xml: %OFFICEUPDATESCONFIGVER%" Display="Right">
 								<Setting Key1="" Display="Hide"></Setting>
-				</Object>
-			</Object>
+				      </Object>
+			      </Object>
 						<Object Type="XML" Key2="%EXECDIR%\En\common.config.xml" Key3="//Configuration" Display="Hide">
 							<Setting Key1="@ConfigVersion" Substitution="COMMONCONFIGVER" Display="Hide">
 								<!--Do NOT change the name of the sCommonConfigVersion rule as it is referenced in the binaries-->
@@ -869,7 +879,7 @@
 							</Setting>
 							<Object Type="Group" Name="Common.config.xml: %COMMONCONFIGVER%" Display="Right">
 								<Setting Key1="" Display="Hide"></Setting>
-		</Object>
+		          </Object>
 							<Rule Name="sScannedAppConfigVersion" Query="true()" Text="%APPNAME%.config.xml: {0}" P0="//@ConfigVersion"/>
 						</Object>
 					</Object>
@@ -877,11 +887,26 @@
 			</Object>
 		</Object>
 		<!--/OffCAT version detection -->
-        
 	</Type>
-	
-	<Type Name="CommonMisc">
 
+  <!--GPResult report -->
+  <Type Name="GPResult">
+    <Object Type="Group" Name="Group Policy Result" Display="Hide" TrackProgress="TrackProgress">
+      <Object Type="Engine">
+        <Setting Key1="EnvironmentVariable" Key2="TEMP" Substitution="TMPDIR" Display="Hide">
+        </Setting>
+        <Object Type="CommandLine" Key2="gpresult" Key3="/H &quot;%TMPDIR%\GpResult.htm&quot; /F">
+          <Setting Key1="ReturnValue" Display="Hide">
+          </Setting>
+          <Object Type="OFFX" Key1="%TMPDIR%\GpResult.htm" Key2="GpResult" Key3="text/plain" Key4="ADD" Key5="True">
+          </Object>
+        </Object>
+      </Object>
+    </Object>
+  </Type>
+  <!--/GPResult report -->
+  
+	<Type Name="CommonMisc">
 		<!--Access DB Engine 2010 x64 and Office x86-->
 		<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{2CB572DF-5B05-4392-B123-6141B5398BB1}" Display="Hide">
 			<Setting Key1="ProductCode" Display="Hide"></Setting>
@@ -1459,51 +1484,66 @@
 		<Rule Name="nFaultNtdll0002e41b" Query="count(../Instance[Setting[@Key1='Faulting Module Name' and (lower-case(Value)='ntdll.dll')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0002e41b')]])"></Rule>
 		<Rule Name="sNtdllHeapCrashKB2541119" Query="($MachineDetails_fWinVistaInstalled or $MachineDetails_fWin7Installed or $MachineDetails_fWin2008Installed or $MachineDetails_fWin2008R2Installed) and ($nFaultNtdll0002e3be&gt;0 or $nFaultNtdll0002e41b&gt;0)" Error="Error" P0="$nFaultNtdll0002e3be + $nFaultNtdll0002e41b" Title="%APPNAME% crashing issue with file Ntdll.dll was detected" Text="A known crashing issue that was caused by Ntdll.dll was found {0} times in the Application Event log over the last 14 days. This problem is fixed by an update for Windows that is available in KB article 2541119.&#xA;&#xA;Please click the 'Click here ...' link for details on this crash and to access the download link for the update." GUID="526573" SSID="d277417d-c440-42a7-b4df-694cbd55f7d2" Symptoms="Crash"/>
 	</Type>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>C32ZlppWaAq+clz6DISHxDGrhO8=</DigestValue></Reference></SignedInfo><SignatureValue>
-    aczFvGTWf2KpsfLX47+4mHDxgYdiS5oA1CaRIFIiVOtySnS7Vp8OusVGLJzWgKtMGb2x0jeP
-    r/tPEjQIU0dzVLEjiLnoaKT7gZI9+XvQdCE7yZp3HPnKSDWO64CAWbPVV/u2CmQUJpF67qgF
-    wUk9y6DzIbTTGZqQ214615Tz+18c8Hkf+fj5iCGTYsyPMo3f0cMBSdtHwhx800rK3DKx+hn3
-    f8olv3j765aKLj3OK4qs6UWwIaUHHjbV24QD/WbVAsArbZLxwlPjDPf2hWv8I6o0y8p70ZoA
-    1Oyh8E/Qtm7flcMUC03KAE+xOiK+aujUAseVY3bq45LJiKe6MfaQvw==
+  <Type Name="ADAL">
+    <!--ADAL updates-->
+      <Object Type="Group" Name="Windows" Display="Right">
+        <Object Type="Group" Name="Hidden">
+          <Rule Name="fKB2977629Installed" Query="true()" P0="if($MachineDetails_KB2977629Installed,' ',' not ')" Text="KB2977629 is{0}installed" GUID="615090"></Rule>
+        </Object>
+      </Object>
+      <Object Type="Group" Name="Mso.dll" Display="Right">
+        <Object Type="Group" Name="Hidden">
+          <Rule Name="fKB2956151Installed" Query="versioncompare($MSO_sMso2013Version,'15.0.4701.1000')" P0="if($fKB2956151Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2956151','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090">
+          </Rule>
+        </Object>
+      </Object>
+    <!--/ADAL updates-->
+  </Type>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>wrQVFof44B/rfnH9NOinHUDIH8c=</DigestValue></Reference></SignedInfo><SignatureValue>
+    ktbFguoze62FIJ5j69Q0QzNPYrJdJgHSfTo7DuMMJS2P0ZiK3VIr0BA7lZ+doxlyG3hiwWaP
+    JWib2dGT3IbZRdMB1QynsHvbDjC0mRUriZvJlBZvC1z474zsGzEacxAto9JDYyha+oso7xM4
+    z1L+cPGj4+8p+CyG5GJp8X5Z15cv8xrWpDZJ+6vROlnQefvatPtUFxyMrKBu+evtuF9vFQev
+    W2WRLl1RDftVRebhkpbobtCo8i/NwO+FmyABedB4BmmfFMt32SgXR/n2FNoZrQF5IvNnMTch
+    kt29woyNPGVY6zQ7cDG5SXRbpdmjsPZq49430OFEaWkNxPquNst16w==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
           <Modulus>
-            lnFd7QZG+oTLnVu3Rsew4bQROQOtsRVzYJzrp7ZuGjw//2XjNPGmpSFeVplsWOSSoQpcwtPc
-            Ui8MZZogYUBTMZxsjyF9uvn+E1BSYJU6W7lYpXRhQamU4K0mTkyhl3BJJ158Z8pPHnGERrwd
-            S7biD8XGJ8kH5noKpRcAGUxwRTgtgbRQqsVn0fp5vMXMoXKb9CU0mPhU3xI5OBIvpGulmn7H
-            YtHcz+09NPi53zUwuux5MqnhqaxVTUx/TFbDEwt28Qf5zEes+4jVUqUeKPo9Lc/PhJiGcWUR
-            z4XJCUSG4W/nsfysQESlqYsjP4JJndWWWVATWRhz/0MMrSvUfzBAZw==
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
           </Modulus>
           <Exponent>AQAB</Exponent>
         </RSAKeyValue>
       </KeyValue>
       <X509Data>
         <X509Certificate>
-          MIIE7DCCA9SgAwIBAgITMwAAAMps1TISNcThVQABAAAAyjANBgkqhkiG9w0BAQUFADB5MQsw
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
           CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
           A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
-          aWduaW5nIFBDQTAeFw0xNDA0MjIxNzM5MDBaFw0xNTA3MjIxNzM5MDBaMIGDMQswCQYDVQQG
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
           EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
           TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
-          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCWcV3tBkb6
-          hMudW7dGx7DhtBE5A62xFXNgnOuntm4aPD//ZeM08aalIV5WmWxY5JKhClzC09xSLwxlmiBh
-          QFMxnGyPIX26+f4TUFJglTpbuVildGFBqZTgrSZOTKGXcEknXnxnyk8ecYRGvB1LtuIPxcYn
-          yQfmegqlFwAZTHBFOC2BtFCqxWfR+nm8xcyhcpv0JTSY+FTfEjk4Ei+ka6Wafsdi0dzP7T00
-          +LnfNTC67HkyqeGprFVNTH9MVsMTC3bxB/nMR6z7iNVSpR4o+j0tz8+EmIZxZRHPhckJRIbh
-          b+ex/KxARKWpiyM/gkmd1ZZZUBNZGHP/QwytK9R/MEBnAgMBAAGjggFgMIIBXDATBgNVHSUE
-          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUH17iXVCNVoa+SjzPBOinh7XLv4MwUQYDVR0RBEow
-          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1K2I0MjE4ZjEzLTZmY2EtNDkw
-          Zi05YzQ3LTNmYzU1N2RmYzQ0MDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
           BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
           dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
           AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
-          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEAd1zr15E9zb17g9mFqbBDnXN8
-          F8kP7Tbbx7UsG177VAU6g3FAgQmit3EmXtZ9tmw7yapfXQMYKh0nfgfpxWUftc8Nt1THKDha
-          iOd7wRm2VjK64szLk9uvbg9dRPXUsO8b1U7Brw7vIJvy4f4nXejF/2H2GdIoCiKd381wgp4Y
-          ctgjzHosQ+7/6sDg5h2qnpczAFJvB7jTiGzepAY1p8JThmURdwmPNVm52IaoAP74MX0s9IwF
-          ncDB1XdybOlNWSaD8cKyiFeTNQB8UCu8Wfz+HCk4gtPeUpdFKRhOlludul8bo/EnUOoHleht
-          NA04V9w3KDWVOjic1O1qhV0OIhFeew==
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
         </X509Certificate>
       </X509Data>
       <X509Data>
@@ -1569,28 +1609,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHQNgGQOfWd9owAAAAAAdDANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTUwMzIwMTczMjA1WhcNMTYwNjIwMTczMjA1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
-dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
-MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEA4NFrifjVvo5YgN/jD+4M6zszXn3GnmZHP9AerBSCDRiftpwnIvG2
-hpREQXSJkW8X9t+Y5jbLX3iS6XJ+S7kExWIUc3HGf2NBW+tk8r1cVWJGzA9ewQnEr9nxvyV94Beg
-UO4lqkXl48Z+vxBZqcGPPtn77GQbY1u1p7jq681X6xtD9WWRv1D1+cEGvH2qzDfnBqmgzLH1M8wN
-ssh1ZgDRbTCTR8+OomdEXhoTf/McHucPncG8SPyBgW1UauJpE8bO9ZdnMmxIyhHCVjrW3Dpi9PwQ
-l2RIC4pc8RbClfDLYBukA5sMyfe7kr8Ac2czHKJ673VKGUZaDH6aW6A6HVQ16wIDAQABo4IBCTCC
-AQUwHQYDVR0OBBYEFCUsOGYFtEU5DmC29u69PuDdr4wNMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
+7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
+f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
+NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
++7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
 dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
 Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
 CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
-bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEEG
-50j6xJHcMBMNInjC0iPTszPL+yYh1978CncY+4Nyzu/ULIaP4xXj1RICZ1xbN9MDe02RW0FTZgn9
-457fLHgJORo2HYqBocllfJx7kbIPSptB3cdEC2EFyUwu8rRrKKoIR+4IrGZUF1aQiMbpddAhEDh5
-yT+7VTDFpjmmU7/NXFbSThcUvGISy+lL8MWR3J2EypjWDttWFGht21OLMM+6J2V1oDFvk6N1EGDq
-qu7uduvljAup0655zzS+SR8i0MT1o+/zrjDcjohGI4ygqjyXrwfbdug2VN+Ls4mewOospGBr8d/D
-thI6rzM4elFxNTXm5AjiUZaC+b7hG4N8e2c=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
+d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
+5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
+lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
+IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
+vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -1617,34 +1657,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQBpzMW8ZNZ/Yqmx8tfjv7iYcPGBh2JLmgDUJpEgUiJU63JKdLtWnw66xUYsnNaAq0wZvbHS
-N4+v+08SNAhTR3NUsSOIuehopPuBkj35e9B0ITvJmncc+cpINY7rgIBZs9VX+7YKZBQmkXruqAXB
-ST3LoPMhtNMZmpDbXjrXlPP7XxzweR/5+PmIIZNizI8yjd/RwwFJ20fCHHzTSsrcMrH6Gfd/yiW/
-ePvrloouPc4riqzpRbAhpQceNtXbhAP9ZtUCwCttkvHCU+MM9/aFa/wjqjTLynvRmgDU7KHwT9C2
-bt+VwxQLTcoAT7E6Ir5q6NQCx5VjdurjksmIp7ox9pC/oIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQCS1sWC6jN7rYUgnmPr1DRDM09isl0mAdJ9OjsO4wwlLY/RmIrdUivQEDuVn52jGXIbeGLB
+Zo8laJvZ0ZPchtlF0wHVDKewe9sOMLSZFSuJm8mUFm8LXPjvjOwbMRpzEC2j0kNjKFr6iyjvEzjP
+Uv5w8aPj7yn4LIbkYmnxflnXly/zGtakNkn7q9E6WdB5+9q0+1QXHIysoG756+24X28VB69bZZEu
+XVEN+1VF5uGSluhu0KjyL83A74WbIAF50HgGaZ8Uy3fZKBdH+fYU2hmtAXki82cxNyGS3b3CjI08
+ZVjrNDtwMblJdFul2aOw9mrj3jfQ4URpaQ3E+q42y3XroIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
-Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
-YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAlPdzZMzyO6SV17j1edQd119kEpuggcIwgb+k
+Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANkg8kcwIhgPMjAxNTA2MDkwNTA0
-MDdaGA8yMDE1MDYxMDA1MDQwN1owdDA6BgorBgEEAYRZCgQBMSwwKjAKAgUA2SDyRwIBADAHAgEA
-AgIe7zAHAgEAAgIYMzAKAgUA2SJDxwIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZCgMB
-oAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQB2yToQiy2Wi40/pGrl
-9eVFfs9jRUDAYhc3p2+4vtwhSHQcP8N3N+VBLEr8lnRWIl+1338TEg/Gt15f5Haxv+rgelTsNbiL
-xPEgsRbByEUOQfErnuwzzevEkTMM16xpUjIwn2RgF1g7PqZRi0UFw/ZenKQlmxn177aXzOXUxXyj
-XTYlX1wzIeIaVi0/VaeXr5a6XpFnnqwJ8/ISsOfgNNsVuCfowwwwqWxxIwJZNr4Focb3SrOH3z+X
-5DPLj8Hufqh2UiUoeAPrE3hT5eBrEwsuXVTSof4D+1y6BGAMCr/RypYX2dPz6RpEk1N/gbKsmhtg
-hdbkiIVdX80Sm63yMVX0MYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
-c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
-bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAAAAB0
-MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
-NTA2MDkxMjQ0NDBaMCMGCSqGSIb3DQEJBDEWBBTzOgAeqPiNKIXU+eiNxXsZTWbE1DANBgkqhkiG
-9w0BAQUFAASCAQC9yJWmpSn+HePmALa7Ruy6xl1I2hfdDy/j1gZPePCkwVXa5MFyvc6kpjyy3yCp
-fUssyOYtSA+qRPhDxKLt05P4F4NjvxgT6x1BRNPzVPsV+9P+dzv8SlR10zrH6EPEVjr1VdkzOI+N
-pl/Z1fOox7eHW2e0bzYzdTwG/NGUp51NOF+Xaw1aN8wa5ZnWMZeRfUINVgUw3XViLbMIEuAShBza
-R8u4Sg2gbX30BeURI3/CitlAlNO7nyQXWD2EyyiTQpaoPuIW8yOsvuDgDicPbGEZlJSBhwtdWtSe
-t+ylx3TzXffHFrF7rkzBrVdFUsecBHd7wb6WRh7YuV1h1/Om+VUl</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
+MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
+AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
+CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
+g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
+YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
+jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
+nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
+aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
+AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
+Fw0xNTA3MDkxNDQ3MjhaMCMGCSqGSIb3DQEJBDEWBBSsQLJIoZV6H98x2JUyJ3f4Bw18HTANBgkq
+hkiG9w0BAQUFAASCAQAfamO3MUFa41WX4n5cgpA+uNdgoug0IgTVFd2rkvT6TKpxnV+1Om7tnyZY
+nqjSFlxgSR/XTml8e2Mh7J6GJNvwGlcbSur8FPll9hSddd4n+WAiDWIBrd3FEC+gbK+Ci2HaDiTM
+YMrgi893MOB7nKxKM9WRfNRYpVGBfr2/xfu+xTXL/+3YtBy0P59s4Pp0d0cra7hB+lDzLJFZlzAy
+zRP5q9YlUsVszbo8DaglB3uIECQJ6a7PgVycsN5QBokmGjj2L7+zYMTyUaTRcggmt72bIzirvPdx
+/thDilIDQVVVIhCtVeOW1QVHY2NK43xRln2MRbgb3I0O1GE5oQIUxzxj</CounterSignature></Object></Signature></ObjectCollector>

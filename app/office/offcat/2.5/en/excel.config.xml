@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
 	<!--!!! ONLY MODIFY ChangeDescription AND ConfigVersion, DO NOT TOUCH THE REST OR DO IT AT YOUR OWN RISK!!!-->
-	<Configuration ConfigName="Excel Configuration" ChangeDescription="2.0.1504.18" ConfigVersion="2.0.1504.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,excel.crashes.config.xml" Symptoms="1">
+	<Configuration ConfigName="Excel Configuration" ChangeDescription="2.0.1506.30" ConfigVersion="2.0.1506.30" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,excel.crashes.config.xml" Symptoms="1">
 		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"/>
@@ -315,6 +315,22 @@
 				</Object>
 			</Object>
 			<!--INSTALLED UPDATES-->
+      <!--ADAL updates-->
+      <Object Type="If" Key1="number('%MAJORVERSION%')=15">
+        <Object Type="Group" Name="Office 2013 Modern Authentication support">
+          <Object Type="Group" Name="Prerequisites" Display="Right">
+            <Object Type="Group" Name="%APPNAME%" Display="Right">
+              <Object Type="Group" Name="Hidden">
+                <Rule Name="fKB2956145Installed" Query="versioncompare($sFullAppVersion,'15.0.4701.1001')" P0="if($fKB2956145Installed&gt;=0,' ',' not ')" P1="if($nInstallType='MSI','KB2956145','Click-to-run March 2015 build')" Text="{1} (or later) is{0}installed" GUID="615090"></Rule>
+              </Object>
+            </Object>
+            <Reference Type="ADAL" Name="ADAL" File="common.config.xml">
+            </Reference>
+            <Rule Name="sAdalEnabled" Query="true()" Error="None" P0="if($MachineDetails_KB2977629Installed and $fKB2956145Installed&gt;=0 and $ADAL_fKB2956151Installed&gt;=0,' ',' not ')" P1="if($MachineDetails_KB2977629Installed,'Installed','Not Installed')" P2="if($fKB2956145Installed&gt;=0,'Installed','Not Installed')" P3="if($ADAL_fKB2956151Installed&gt;=0,'Installed','Not Installed')" Title="All prerequisites for ADAL are{0}installed" Text="All prerequisites for ADAL are{0}installed:&#xA;Windows update KB2977629 - {1}&#xA;%APPNAME% 2013 March 2015 update - {2}&#xA;Mso.dll 2013 March 2015 update - {3}" GUID="615090" SSID="ffbb417e-2dbd-4558-9cd8-7368f751615f" Symptoms="Modern Authentication for Office"></Rule>
+          </Object>
+        </Object>
+      </Object>
+      <!--/ADAL updates-->
 		</Object>
 		<!--/OFFICE DETAILS-->
 		<!--USER DETAILS-->
@@ -689,6 +705,8 @@
 		<Object Type="Group" Name="Miscellaneous" Class="Miscellaneous" GroupingClass="True" TrackProgress="TrackProgress">
       <Reference Type="OffCATVersionInfo" Name="OffCATVersionInfo" File="common.config.xml">
       </Reference>
+      <Reference Type="GPResult" Name="GPResult" File="common.config.xml">
+      </Reference>
 			<Reference Type="CommonMisc" Name="CommonMisc" File="common.config.xml">
 			</Reference>
 			<!--DCOM Settings-->
@@ -763,13 +781,10 @@
 						<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
 							<Rule Name="sInstallPath" Query="$."/>
 						</Setting>
-						<Object Type="File" Key2="%INSTALLPATH%\XLStart" Key3="*.xla" Key4="OneLevel">
+						<Object Type="File" Key2="%INSTALLPATH%\XLStart" Key4="OneLevel">
 							<Setting Key1="FullName" Display="Hide"/>
 						</Object>
-						<Object Type="File" Key2="%INSTALLPATH%\XLStart" Key3="*.xls" Key4="OneLevel">
-							<Setting Key1="FullName" Display="Hide"/>
-						</Object>
-						<Rule Name="sFilesInXLStartFolderInstallPath" Query="($n2DigitVersion &gt;= 12) and (../Instance/Object/Instance/Setting[@Key1='FullName'])=true()" Error="None" Title="At least one file with either .XLS or .XLA found in the {0}\XLStart folder" Text="At least one file with either .XLS or .XLA found in the {0}\XLStart folder. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." P0="$sInstallPath" GUID="302032" SSID="793b28c8-760a-420c-96b1-65e8d53f102b" Symptoms="Informational,Slowness"/>
+						<Rule Name="sFilesInXLStartFolderInstallPath" Query="($n2DigitVersion &gt;= 12) and (../Instance/Object/Instance/Setting[@Key1='FullName' and ((lower-case(substring(Value,string-length(Value)-3,4))='.xls') or (lower-case(substring(Value,string-length(Value)-3,4))='.xla'))])=true()" Error="None" Title="At least one file with either .XLS or .XLA found in the {0}\XLStart folder" Text="At least one file with either .XLS or .XLA found in the {0}\XLStart folder. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." P0="$sInstallPath" GUID="302032" SSID="793b28c8-760a-420c-96b1-65e8d53f102b" Symptoms="Informational,Slowness"/>
 					</Object>
 				</Object>
 				<!-- /OffCAT:475 -->
@@ -779,13 +794,10 @@
 						<Setting Key1="EnvironmentVariable" Key2="APPDATA" Substitution="APPDATAPATH" Display="Hide">
 							<Rule Name="sAppDataPath" Query="$."/>
 						</Setting>
-						<Object Type="File" Key2="%APPDATAPATH%\Microsoft\Excel\XLStart" Key3="*.xla" Key4="OneLevel">
+						<Object Type="File" Key2="%APPDATAPATH%\Microsoft\Excel\XLStart" Key4="OneLevel">
 							<Setting Key1="FullName" Display="Hide"/>
 						</Object>
-						<Object Type="File" Key2="%APPDATAPATH%\Microsoft\Excel\XLStart" Key3="*.xls" Key4="OneLevel">
-							<Setting Key1="FullName" Display="Hide"/>
-						</Object>
-						<Rule Name="sFilesInXLFolderAppDataPath" Query="($n2DigitVersion &gt;= 12) and (../Instance/Object/Instance/Setting[@Key1='FullName'])=true()" Error="None" Title="At least one file with either .XLS or .XLA found in the {0}\Microsoft\Excel folder" Text="At least one file with either .XLS or .XLA found in the {0}\Microsoft\Excel folder. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." P0="$sAppDataPath" GUID="302032" SSID="acf97fd7-95de-4e6a-93d3-8b052cec94f9" Symptoms="Informational,Slowness"/>
+            <Rule Name="sFilesInXLFolderAppDataPath" Query="($n2DigitVersion &gt;= 12) and (../Instance/Object/Instance/Setting[@Key1='FullName' and ((lower-case(substring(Value,string-length(Value)-3,4))='.xls') or (lower-case(substring(Value,string-length(Value)-3,4))='.xla'))])=true()" Error="None" Title="At least one file with either .XLS or .XLA found in the {0}\Microsoft\Excel folder" Text="At least one file with either .XLS or .XLA found in the {0}\Microsoft\Excel folder. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." P0="$sAppDataPath" GUID="302032" SSID="acf97fd7-95de-4e6a-93d3-8b052cec94f9" Symptoms="Informational,Slowness"> </Rule>
 					</Object>
 				</Object>
 				<!-- /OffCAT:476 -->
@@ -793,30 +805,24 @@
 				<Object Type="Group" Name="Files in the AltStartup Directory (Group Policy)">
 					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Excel\Options" Display="Hide">
 						<Setting Key1="AltStartup" Substitution="ALTSTARTUPPOLICYPATH" Display="Hide"/>
-						<Object Type="File" Key2="%ALTSTARTUPPOLICYPATH%" Key3="*.xla" Key4="OneLevel">
+						<Object Type="File" Key2="%ALTSTARTUPPOLICYPATH%" Key4="OneLevel">
 							<Setting Key1="FullName" Display="Hide"/>
 						</Object>
-						<Object Type="File" Key2="%ALTSTARTUPPOLICYPATH%" Key3="*.xls" Key4="OneLevel">
-							<Setting Key1="FullName" Display="Hide"/>
-						</Object>
-						<Rule Name="fFilesInAltStartupPolicyPath" Query="(../Instance/Object/Instance/Setting[@Key1='FullName'])=true()"/>
+						<Rule Name="fFilesInAltStartupPolicyPath" Query="(../Instance/Object/Instance/Setting[@Key1='FullName' and ((lower-case(substring(Value,string-length(Value)-3,4))='.xls') or (lower-case(substring(Value,string-length(Value)-3,4))='.xla'))])=true()"/>
 						<Rule Name="AltStartupPathPolicy" Query="if(../Instance/Setting[@Key1='AltStartup']=true(),../Instance/Setting[@Key1='AltStartup']/Value,-1)"/>
 					</Object>
-					<Rule Name="sAltStartupPolicyPath" Error="None" Query="($n2DigitVersion &gt;= 12) and ($AltStartupPathPolicy != -1) and (string-length($AltStartupPathPolicy) &gt; 4) and ($fFilesInAltStartupPolicyPath)" Title="At least one file with either .XLS or .XLA found in the folder specified by the AltStartup policy setting" Text="At least one file with either .XLS or .XLA was found in the folder specified by the AltStartup group policy value in the registry. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." GUID="302032" SSID="dff3ff58-0890-4f1a-9703-e82a92c33f6e" Symptoms="Informational,Slowness"/>
+					<Rule Name="sAltStartupPolicyPath" Error="None" Query="($n2DigitVersion &gt;= 12) and ($AltStartupPathPolicy != -1) and (string-length($AltStartupPathPolicy) &gt; 4) and ($fFilesInAltStartupPolicyPath)" P0="$AltStartupPathPolicy" Title="At least one file with either .XLS or .XLA found in the folder specified by the AltStartup policy setting" Text="At least one file with either .XLS or .XLA was found in the folder ({0}) specified by the AltStartup group policy value in the registry. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." GUID="302032" SSID="dff3ff58-0890-4f1a-9703-e82a92c33f6e" Symptoms="Informational,Slowness"/>
 				</Object>
 				<Object Type="Group" Name="Files in the AltStartup Directory">
 					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Excel\Options" Display="Hide">
 						<Setting Key1="AltStartup" Substitution="ALTSTARTUPPATH" Display="Hide"/>
-						<Object Type="File" Key2="%ALTSTARTUPPATH%" Key3="*.xla" Key4="OneLevel">
+						<Object Type="File" Key2="%ALTSTARTUPPATH%" Key4="OneLevel">
 							<Setting Key1="FullName" Display="Hide"/>
 						</Object>
-						<Object Type="File" Key2="%ALTSTARTUPPATH%" Key3="*.xls" Key4="OneLevel">
-							<Setting Key1="FullName" Display="Hide"/>
-						</Object>
-						<Rule Name="fFilesInAltStartupPath" Query="(../Instance/Object/Instance/Setting[@Key1='FullName'])=true()"/>
+						<Rule Name="fFilesInAltStartupPath" Query="(../Instance/Object/Instance/Setting[@Key1='FullName' and ((lower-case(substring(Value,string-length(Value)-3,4))='.xls') or (lower-case(substring(Value,string-length(Value)-3,4))='.xla'))])=true()"/>
 						<Rule Name="AltStartupPath" Query="if(../Instance/Setting[@Key1='AltStartup']=true(),../Instance/Setting[@Key1='AltStartup']/Value,-1)"/>
 					</Object>
-					<Rule Name="sAltStartupPath" Error="None" Query="($n2DigitVersion &gt;= 12) and ($AltStartupPathPolicy = -1) and ($AltStartupPath != -1) and (string-length($AltStartupPath) &gt; 4) and ($fFilesInAltStartupPath)" Title="At least one file with either .XLS or .XLA found in the folder specified by AltStartup" Text="At least one file with either .XLS or .XLA was found in the folder specified by the AltStartup value in the registry. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." GUID="302032" SSID="755cd13e-b876-46eb-bb65-af67d38f9bd3" Symptoms="Informational,Slowness"/>
+					<Rule Name="sAltStartupPath" Error="None" Query="($n2DigitVersion &gt;= 12) and ($AltStartupPathPolicy = -1) and ($AltStartupPath != -1) and (string-length($AltStartupPath) &gt; 4) and ($fFilesInAltStartupPath)" P0="$AltStartupPath" Title="At least one file with either .XLS or .XLA found in the folder specified by AltStartup" Text="At least one file with either .XLS or .XLA was found in the folder ({0}) specified by the AltStartup value in the registry. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." GUID="302032" SSID="755cd13e-b876-46eb-bb65-af67d38f9bd3" Symptoms="Informational,Slowness"/>
 				</Object>
 				<!-- /OffCAT:477, OffCAT:478 -->
 			</Object>
@@ -835,51 +841,51 @@
   <Rule Name="fLync2013AddinFoundHKCU"></Rule>
   <Rule Name="fLync2013AddinFoundHKLM"></Rule>
   <Rule Name="fLync2013AddinFoundWow"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>c2r3En1XBAyoPEg86EypRI9D9Jw=</DigestValue></Reference></SignedInfo><SignatureValue>
-    HTKwJic8ZtrLeNsYBjpjNGnIDjoGfnYtdR/fvvVK42mgeuaiAWyOjPPjS9xc8KUzd2M5EKZ+
-    S4br5CcV4cskJ8kniB6X8pIaSk3LcVsF/FabLwe/BD9R4q1uadvuiHvUVN0OVmfkXAbBXZql
-    5ab0mMoK0YST4oya1BmIZVTZ3Zj3yic7U5jeT0FcRjwM809Om6HyOhxCJ8MDV9XY2E16bK2D
-    T23T9RqK6ijHxd4RUqTGJIY/WYE0hjtbejOO6JmDksKii/+pUmg1ACkKtrjzChgpmyyXX8oR
-    Iv5ofD7y8Sb0P+vvFaqop12zK9e42GlQ6ksrzD3Va2M4+cJqz8v4KA==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>NXj0eMqjCv7marSKeYCLobKqV2w=</DigestValue></Reference></SignedInfo><SignatureValue>
+    B9X3GPZLCfhczNKr/hvOf+R0EsNpFC5s6BwmjUf+VsJZpFwWb3wnCjARamoYRRIll/zQE5ML
+    7kit9iJf1PdAAZt1EgZ6rj/TQJDMv/B2G+o9Va4wasoSxUKura7xQoVA0xkxu0ivnzFrSv7v
+    DnAJG4NsIdk8SbP+5bAPc1K7oB/+M5KCaeP8/IbmCkJqbN9FeF5XGbwXbBiNPCLqLREd/pxZ
+    QRYLWjDgU4yW2V4fggQAisqouPEs/yIkUWiz4odA7Au+kv8gtV3EjFfDcIeknn5TqcnTOXUD
+    iulGd3a/bbTeCTK+u25SA5QUHyTtsS+wfbAqzAlladP1M7+sLX+WLQ==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
           <Modulus>
-            lnFd7QZG+oTLnVu3Rsew4bQROQOtsRVzYJzrp7ZuGjw//2XjNPGmpSFeVplsWOSSoQpcwtPc
-            Ui8MZZogYUBTMZxsjyF9uvn+E1BSYJU6W7lYpXRhQamU4K0mTkyhl3BJJ158Z8pPHnGERrwd
-            S7biD8XGJ8kH5noKpRcAGUxwRTgtgbRQqsVn0fp5vMXMoXKb9CU0mPhU3xI5OBIvpGulmn7H
-            YtHcz+09NPi53zUwuux5MqnhqaxVTUx/TFbDEwt28Qf5zEes+4jVUqUeKPo9Lc/PhJiGcWUR
-            z4XJCUSG4W/nsfysQESlqYsjP4JJndWWWVATWRhz/0MMrSvUfzBAZw==
+            kvxvNrvhA7ko1kbRomG6pUb7YxY+LvlH0sfs7ceZsSZRdb3azA8GFBGkbBmewF9NVInkTVDY
+            jc2hYaV3E5ocp+0NdPenVnnoKPdT0rF6Y+D1lJe37NlH+Gw98yWIs7wKxQSnjnyFSHYcYUaq
+            GcR6YovBwjWq+1hvxWMLk0kwgRt73398T7RHbV94HK+295YTUu+50U055XPeSE48FKqXDTnM
+            i1HhXNE78I5n6jBgqU1anUO92yO6wA/XSxCdnE3wUaKEquScpz3Wo+8KGEio+rFOpZgOS7/w
+            FPMAyLBI1lv+ONeJES0FukMCTyIAliWtfTVuhGirIBg4KP4cohCxpQ==
           </Modulus>
           <Exponent>AQAB</Exponent>
         </RSAKeyValue>
       </KeyValue>
       <X509Data>
         <X509Certificate>
-          MIIE7DCCA9SgAwIBAgITMwAAAMps1TISNcThVQABAAAAyjANBgkqhkiG9w0BAQUFADB5MQsw
+          MIIE7DCCA9SgAwIBAgITMwAAAQosea7XeXumrAABAAABCjANBgkqhkiG9w0BAQUFADB5MQsw
           CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
           A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
-          aWduaW5nIFBDQTAeFw0xNDA0MjIxNzM5MDBaFw0xNTA3MjIxNzM5MDBaMIGDMQswCQYDVQQG
+          aWduaW5nIFBDQTAeFw0xNTA2MDQxNzQyNDVaFw0xNjA5MDQxNzQyNDVaMIGDMQswCQYDVQQG
           EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
           TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
-          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCWcV3tBkb6
-          hMudW7dGx7DhtBE5A62xFXNgnOuntm4aPD//ZeM08aalIV5WmWxY5JKhClzC09xSLwxlmiBh
-          QFMxnGyPIX26+f4TUFJglTpbuVildGFBqZTgrSZOTKGXcEknXnxnyk8ecYRGvB1LtuIPxcYn
-          yQfmegqlFwAZTHBFOC2BtFCqxWfR+nm8xcyhcpv0JTSY+FTfEjk4Ei+ka6Wafsdi0dzP7T00
-          +LnfNTC67HkyqeGprFVNTH9MVsMTC3bxB/nMR6z7iNVSpR4o+j0tz8+EmIZxZRHPhckJRIbh
-          b+ex/KxARKWpiyM/gkmd1ZZZUBNZGHP/QwytK9R/MEBnAgMBAAGjggFgMIIBXDATBgNVHSUE
-          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUH17iXVCNVoa+SjzPBOinh7XLv4MwUQYDVR0RBEow
-          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1K2I0MjE4ZjEzLTZmY2EtNDkw
-          Zi05YzQ3LTNmYzU1N2RmYzQ0MDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCS/G82u+ED
+          uSjWRtGiYbqlRvtjFj4u+UfSx+ztx5mxJlF1vdrMDwYUEaRsGZ7AX01UieRNUNiNzaFhpXcT
+          mhyn7Q1096dWeego91PSsXpj4PWUl7fs2Uf4bD3zJYizvArFBKeOfIVIdhxhRqoZxHpii8HC
+          Nar7WG/FYwuTSTCBG3vff3xPtEdtX3gcr7b3lhNS77nRTTnlc95ITjwUqpcNOcyLUeFc0Tvw
+          jmfqMGCpTVqdQ73bI7rAD9dLEJ2cTfBRooSq5JynPdaj7woYSKj6sU6lmA5Lv/AU8wDIsEjW
+          W/4414kRLQW6QwJPIgCWJa19NW6EaKsgGDgo/hyiELGlAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUif4KMeomzeZtx5GRuZSMohhhNzQwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1KzA0MDc5MzUwLTE2ZmEtNGM2
+          MC1iNmJmLTlkMmIxY2QwNTk4NDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
           BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
           dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
           AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
-          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEAd1zr15E9zb17g9mFqbBDnXN8
-          F8kP7Tbbx7UsG177VAU6g3FAgQmit3EmXtZ9tmw7yapfXQMYKh0nfgfpxWUftc8Nt1THKDha
-          iOd7wRm2VjK64szLk9uvbg9dRPXUsO8b1U7Brw7vIJvy4f4nXejF/2H2GdIoCiKd381wgp4Y
-          ctgjzHosQ+7/6sDg5h2qnpczAFJvB7jTiGzepAY1p8JThmURdwmPNVm52IaoAP74MX0s9IwF
-          ncDB1XdybOlNWSaD8cKyiFeTNQB8UCu8Wfz+HCk4gtPeUpdFKRhOlludul8bo/EnUOoHleht
-          NA04V9w3KDWVOjic1O1qhV0OIhFeew==
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEApqhTkd87Af5hXQZa62bwDNj3
+          2YTTAFEOENGk0Rco54wzOCvYQ8YDi3XrM5L0qeJn/QLbpR1OQ0VdG0nj4E8W8H6P8IgRyoKt
+          pPumqV/1l2DIe8S/fJtp7R+CwfHNjnhLYvXXDRzXUxLWllLvNb0ZjqBAk6EKpS0WnMJGdAjr
+          2/TYpUk2VBIRVQOzexb7R/77aPzARVziPxJ5M6LvgsXeQBkH7hXFCptZBUGp0JeegZ4DW/xK
+          4xouBaxQRy+M+nnYHiD4BfspaxgU+nIEtwunmmTsEV1PRUmNKRot+9C2CVNfNJTgFsS56nM1
+          6Ffv4esWwxjHBrM7z2GE4rZEiZSjhg==
         </X509Certificate>
       </X509Data>
       <X509Data>
@@ -993,12 +999,12 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQAdMrAmJzxm2st42xgGOmM0acgOOgZ+di11H9++9UrjaaB65qIBbI6M8+NL3FzwpTN3YzkQ
-pn5LhuvkJxXhyyQnySeIHpfykhpKTctxWwX8VpsvB78EP1HirW5p2+6Ie9RU3Q5WZ+RcBsFdmqXl
-pvSYygrRhJPijJrUGYhlVNndmPfKJztTmN5PQVxGPAzzT06bofI6HEInwwNX1djYTXpsrYNPbdP1
-GorqKMfF3hFSpMYkhj9ZgTSGO1t6M47omYOSwqKL/6lSaDUAKQq2uPMKGCmbLJdfyhEi/mh8PvLx
-JvQ/6+8VqqinXbMr17jYaVDqSyvMPdVrYzj5wmrPy/gooIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG1AYJKoZIhvcNAQcCoIIGxTCCBsECAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQAH1fcY9ksJ+FzM0qv+G85/5HQSw2kULmzoHCaNR/5WwlmkXBZvfCcKMBFqahhFEiWX/NAT
+kwvuSK32Il/U90ABm3USBnquP9NAkMy/8HYb6j1VrjBqyhLFQq6trvFChUDTGTG7SK+fMWtK/u8O
+cAkbg2wh2TxJs/7lsA9zUrugH/4zkoJp4/z8huYKQmps30V4XlcZvBdsGI08IuotER3+nFlBFgta
+MOBTjJbZXh+CBACKyqi48Sz/IiRRaLPih0DsC76S/yC1XcSMV8Nwh6SeflOpydM5dQOK6UZ3dr9t
+tN4JMr67blIDlBQfJO2xL7B9sCrMCWVp0/Uzv6wtf5YtoIIDfaGCA3kwggJhAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
 Q2lwaGVyIERTRSBFU046MzFDNS0zMEJBLTdDOTExJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
@@ -1006,21 +1012,21 @@ YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAOcC805irPscG5gj0Eki+jyoSd0CggcIwgb+k
 gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
 MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
 Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
-U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANkg8U4wIhgPMjAxNTA2MDkwNDU5
-NThaGA8yMDE1MDYxMDA0NTk1OFowdDA6BgorBgEEAYRZCgQBMSwwKjAKAgUA2SDxTgIBADAHAgEA
-AgIm3zAHAgEAAgIYUjAKAgUA2SJCzgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZCgMB
-oAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQBsfydNHwUJnb8ZrgfR
-Y5C4dzDhh5D6XPRNlml4t+3yOkKcbgtF19nG+GTzon7uw+cU/RrSTzkHJujlk4W6+q9C1yGrOH9E
-rPDJGoSGd+GIn/rEjfltwJeG313Zi88jENq4vHzUW1KUMwr0EmdWD05ODd7Alb5M//Ds1eG8EVHI
-IbsAlxf9XXiHnnS4hgMssswwKaqHV1HFDAy+qJXRzWw+BroWjeHo6v6en8ZtgLPEXas/pGz0edWZ
-xNjdpjT9/JhjsCp/CaOY4bUEwf7no9YEdpRRgbsdjy5vvEHPg0PFVqG3rXcdLsMDoa76es2vBpgF
-mmhFWiI0RDY82xCqsEJBMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
-c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
-bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAAAABy
-MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
-NTA2MDkxMjQ0NDFaMCMGCSqGSIb3DQEJBDEWBBSu5OoAHJ7uoPbxKRykptyS2/MOSjANBgkqhkiG
-9w0BAQUFAASCAQCP7IqiiP+eptL2JWbM2dlTaXG1vrSIL/qem/+150fc0XxEggcogwXc3oUvS9XT
-1g5l0BJX8442zelmCtO58fwHjNHDz0WRdH1tA8K8iI3Z2pazoYNzEJoiCcs0r3XVPez/baswMzPk
-S/JZbXGlaDYTdTIMv19/WxHl6NwnjtUzHxwxRxkdU62OJc51CRDBfsqLWnZXE6cBpem+SkG3KrkW
-iEdNmCcnPXb1loT97XL9AxvdanfJrBYbMKlg53NH2Ng1UOr/+9ORCAAAnZh25E0vG14AX7pq06N2
-aVs0wyrU47jOEaNknTmZePreXgcye57KOPSAygBpHqolZmabxNi3</CounterSignature></Object></Signature></ObjectCollector>
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANlIGwYwIhgPMjAxNTA3MDgyMTU2
+MjJaGA8yMDE1MDcwOTIxNTYyMlowdzA9BgorBgEEAYRZCgQBMS8wLTAKAgUA2UgbBgIBADAKAgEA
+AgIzAgIB/zAHAgEAAgIZpzAKAgUA2UlshgIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZ
+CgMBoAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQAi8YU+YDGJukAh
+g5bJJJmB7djk7xeE5VNQvIEW0+rBlaAhhN0Le09dpyDZ9GM8NT2LqEQgdI0JNBwQ2RFBljX9JccP
+YuujQEfzHVzGShwlKWs0BVeculQU6JVrBpdSPAE7Qm6Oza2VSEnOFuqF07YfNtcZeKL0sVU6xCNx
+jGEJSx4sZfQCSljqCllyd8gJ/UGHyGkW52+oAEATRgNF/pS2IFx7Ede0+PzM7r8ZDOHKcLzzZa/c
+nhBNP1vnY13blyfwt5GUS5OqivXjM+LY8MbO85lqZwygzue2E1L8a0OJGqtjdZwSjfUZ7sR1NxXy
+aAEpqujRo9Epg2/SnS92B/rgMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAcmn2kMIUO0mhAAAA
+AAByMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEP
+Fw0xNTA3MDkxNDQ3MjlaMCMGCSqGSIb3DQEJBDEWBBTliRbUy6sbXe5CypX5J8AHUHuySTANBgkq
+hkiG9w0BAQUFAASCAQBo/qWPx+VScUvRNnLjtiRiB74cxaZkz4Z+1MGTZUm1Z9ZiV+/rbX1OWkGd
+WZfz+/rJkQYS2fcVwHcWdr73YWmZS4CHJKwDwEiBLEyWxteWYj/pekxkkP/0zMVY39WpLrP559kp
+uj4gS2LEk7t359rRaRIdA3i5yQs/bIKZNLkWmenEB1acuJo+Qi/kBCZjkaj/uFEvKs1ELIjzk79B
+KPsXZRjKhuSoKTY06hn1NH1kvg3dd7JF8G1PSjJ40+TTXplrPFZoJ4JP/RsR0+q9JPPZVsLGxIHZ
+1+xZ9vHL80kQot0EH81g6XKwRTHBXYUvHSzTjVQ+0nwrB/TGqD+0iwgk</CounterSignature></Object></Signature></ObjectCollector>
