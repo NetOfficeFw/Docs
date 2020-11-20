@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+  <Configuration ConfigName="Access Configuration" ChangeDescription="2013/03/01 Access Config File" ConfigVersion="1.0.1303.1" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" DataPrefixAppName="OCAT" ReferencedFiles="common.config.xml">
+    <!--!!! GLOBAL SUBISTUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
+    <Substitution Name="MAJORVERSION"></Substitution>
+    <Substitution Name="INSTALLTYPE"></Substitution>
+    <ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+    <!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
+    <ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
+    <ObjectProcessor Name="Directory" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DirectoryObjectProcessor"/>
+    <ObjectProcessor Name="DsGet" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor"/>
+    <ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+    <ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
+    <ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+    <ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+    <ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
+    <ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+    <ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+    <ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
+    <ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
+    <ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
+    <ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
+    <ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
+    <ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
+    <ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
+    <ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
+  </Configuration>
+  <Object Type="Group" Name="Access Scan" Class="Scan Type" GroupingClass="True">
+    <!--OFFICE DETAILS-->
+    <Object Type="Group" Name="Install details">
+      <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Access" Key6="msaccess" Key7="%MAJORVERSION%">
+        <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide"></Setting>
+        <Setting Key1="Bitness" Substitution="APPBITNESS">
+          <Rule Name="bitness" Query="$."></Rule>
+        </Setting>
+        <Setting Key1="FullVersion">
+          <Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>          
+          <Rule Name="sFullAppVersion" Query="$."></Rule>
+          <Rule Name="sAccessPR" Query="number(substring($.,11,1))=3" Error="None" Title="The build number for Access.exe indicates a Private Release (PR) build" Text="The build number for Access.exe indicates a Private Release (PR) build. PR builds are intended only for testing and not production use." SSID="6cc924fc-94db-45e6-813c-e5e4da1cd0c0"></Rule>
+        </Setting>
+        <Setting Key1="Name">
+          <Rule Name="appName" Query="$."></Rule>
+        </Setting>
+        <Setting Key1="Path"></Setting>
+        <Setting Key1="Version"></Setting>
+        <Setting Key1="Type"></Setting>
+        <!--SKU-->
+        <Object Type="Group" Name="Office SKU">
+          <Object Type="If" Key1="'%MAJORVERSION%'='11'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{F2D782F8-6B14-4FA4-8FBA-565CDDB9B2A8}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Display="Right"></Setting>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='12'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{0638C49D-BB8B-4CD1-B191-054E8F325736}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Display="Right"></Setting>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x86'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{AE393348-E564-4894-B8C5-EBBC5E72EFC6}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Substitution="PN" Display="Right"></Setting>
+                <Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide"></Setting>
+                <Object Type="If" Key1="contains('%PN%','Single Image')">
+                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+                    <Setting Key1="ID" Substitution="REGID" Display="Hide"></Setting>
+                    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
+                      <Setting Key1="ProductName">
+                      </Setting>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='14' and '%APPBITNESS%'='x64'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{02F5CBEC-E7B5-4FC1-BD72-6043152BD1D4}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Substitution="PN" Display="Right"></Setting>
+                <Setting Key1="ProductID" Substitution="PID" SubstitutionFormat="(.....)-(...-......).*----$2" Display="Hide"></Setting>
+                <Object Type="If" Key1="contains('%PN%','Single Image')">
+                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key4="Name LIKE '%Office 14, Office%' AND ProductKeyID LIKE '%%PID%%'" Key5="*" Display="Hide">
+                    <Setting Key1="ID" Substitution="REGID" Display="Hide"></Setting>
+                    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\%WOW6432NODE%\Microsoft\Office\14.0\Registration\{%REGID%}" Display="Hide">
+                      <Setting Key1="ProductName">
+                      </Setting>
+                    </Object>
+                  </Object>
+                </Object>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{A3E12EF0-7C3B-4493-99A3-F92FCD0AA512}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Display="Right"></Setting>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
+            <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{3CE2B4B3-DA38-4113-8DB2-965847CDE94F}">
+              <Setting Key1="ProductCode" Substitution="PRODUCTCODE"></Setting>
+              <Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
+                <Setting Key1="ProductName" Display="Right"></Setting>
+              </Object>
+            </Object>
+          </Object>
+          <Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='ClickToRun'">
+            <Object Type="C2RSKU" Key1="access" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+              <Setting Key1="ProductName"></Setting>
+            </Object>
+          </Object>
+        </Object>
+        <!--/SKU-->
+        <!--MSO-->
+        <Reference Type="MSO" Name="MSO" File="common.config.xml"></Reference>    
+        <!--/MSO-->
+      </Object>
+      <Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
+        <Object Type="Group" Name="Installed Updates" Class="Office Update" GroupingClass="True" Display="Right" TrackProgress="TrackProgress">
+          <Reference Type="Office_Updates" Name="OfficeUpdates" File="common.config.xml"></Reference>
+        </Object>
+      </Object>
+      <Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun'">
+        <Object Type="Group" Name="ClickToRun Updates" GroupingClass="True" Class="Office Update" Display="Right">
+          <Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml"></Reference>
+        </Object>
+      </Object>
+
+      
+    </Object>
+    <!--/OFFICE DETAILS-->
+    <!--USER DETAILS-->
+    <Object Type="Group" Name="User Details" Display="Right">
+      <Reference Type="UserDetails" Name="UserDetails" File="common.config.xml"></Reference>
+    </Object>
+    <!--/USER DETAILS-->
+    <!--MACHINE DETAILS-->    
+    <Object Type="Group" Name="Machine details">
+      <Reference Type="MachineDetails" Name="MachineDetails" File="common.config.xml"></Reference>
+    </Object>
+    <!--/MACHINE DETAILS-->
+    <!--ADD-INS-->
+    <Object Type="Group" Name="Registered add-ins" GroupingClass="True">
+      <!--PDFMaker-->
+      <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Pdfmaker.OfficeAddin\CLSID">
+        <Setting Key1="(Default)" Substitution="PDFMAKERGUID"></Setting>
+        <Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Access" Key6="msaccess" Key7="%MAJORVERSION%" Display="Hide">
+          <Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide"></Setting>
+          <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="%WOW6432NODE%\CLSID\%PDFMAKERGUID%\InprocServer32">
+            <Setting Key1="(Default)" Substitution="PDFMAKERPATH"></Setting>
+            <Object Type="File" Key2="%PDFMAKERPATH%">
+              <Setting Key1="Version">
+                <Rule Name="sPDFMakerAccess" Query="$n2DigitVersion&gt;13 and number(substring($.,1,1))!=1 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version of the PDFMaker add-in installed that is not compatible with Access. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="365b0c98-3918-4f33-9144-239dfc54adb0"></Rule>
+                <Rule Name="sPDFMakerx64" Query="$n2DigitVersion&gt;13 and ((substring($.,1,2)='10' and number(substring($.,4,1))&lt;1) or substring($.,1,1)!='1')  and $bitness='x64'" Error="Warning" Title="Adobe PDFMaker detected on a client with 64-bit Office" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="43f92f91-0f4c-44a6-b410-5ddc6d7270d9"></Rule>
+              </Setting>
+            </Object>
+          </Object>
+        </Object>
+      </Object>
+      <!--/PDFMaker-->
+      <!--HKCU addins-->
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Access\Addins" Key5="Subtree" Display="Right">
+        <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Rule Name="hkcuPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+      </Object>
+      <!--/HKCU addins-->
+      <!--HKLM addins-->
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Access\Addins" Key5="Subtree" Display="Right">
+        <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Rule Name="hklmPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+      </Object>
+      <!--/HKLM addins-->
+      <!--HKLM WOW addins-->
+      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Access\Outlook\Addins" Key5="Subtree" Display="Right">
+        <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Rule Name="hklmWowPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+      </Object>
+      <!--/HKLM WOW addins-->
+    </Object>
+    <!--/ADD-INS-->
+    <!--REG SETTINGS-->
+    <Object Type="Group" Name="Office Registry Settings" Class="Access Settings" GroupingClass="True" TrackProgress="TrackProgress">
+      <Object Type="Group" Name="HKEY_CURRENT_USER" Display="Right">
+        <!--app specific-->
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Access" Key5="Subtree" Display="Right">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Access" Key5="Subtree" Display="Right">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <!--common-->
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common" Key5="Subtree" Display="Right">
+          <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+            <Setting Key1="__VALUES"></Setting>
+          </Object>
+        </Object>
+        <!--curver-->
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Classes\Access.Application\CurVer">
+          <Setting Key1="(Default)"></Setting>
+          <Rule Name="fUserCurVer" Query="if(../Instance/Setting[@Key1='(Default)'],1,0)"></Rule>
+        </Object>
+      </Object>
+      <Object Type="Group" Name="HKEY_LOCAL_MACHINE" Display="Right">
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Access" Key5="Subtree" Display="Right">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Access" Key5="Subtree" Display="Right">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Access" Key5="Subtree" Display="Right">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\%MAJORVERSION%.0\Access" Key5="Subtree" Display="Right">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Access Connectivity Engine" Key5="Subtree" Display="Right">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\%MAJORVERSION%.0\Access Connectivity Engine" Key5="Subtree" Display="Right">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+        <!--curver-->
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Classes\Access.Application\CurVer">
+          <Setting Key1="(Default)"></Setting>
+          <Rule Name="fAdminCurVer" Query="if(../Instance/Setting[@Key1='(Default)'],1,0)"></Rule>
+          <Rule Name="sAccessCurVer" Query="($n2DigitVersion=12 or $n2DigitVersion=14) and $fUserCurVer=1 and $fAdminCurVer=1" Error="Warning" Title="Incorrect Access registry data causes an alert to appear" Text="There is information in the registry that causes Access to display 'Setup is configuring Access' each time it is started. " GUID="275585" SSID="92fd86ad-954c-4f6d-9c6d-7422baada945"></Rule>
+        </Object>
+      </Object>      
+      <!--DAO registration-->
+      <Object Type="Group" Name="ACEDAO registration" Class="Access Settings" Display="Right">
+        <Rule Name="ACEDAOPath" Query="concat(concat('c:\program files\common files\microsoft shared\office','%MAJORVERSION%'),'\acedao.dll')"></Rule>
+        <Rule Name="ACEDAOPathWow" Query="concat(concat('c:\program files (x86)\common files\microsoft shared\office','%MAJORVERSION%'),'\acedao.dll')"></Rule>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="TypeLib\{4AC9E1DA-5BAD-4AC7-86E3-24F4CDCECA28}\c.0\0\win32">
+          <Setting Key1="(Default)"></Setting>
+          <Rule Name="sACEDAOReg32" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')"></Rule>          
+          <Rule Name="sBadACEDAORegWow" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness!=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg32)!=$ACEDAOPathWow" Error="Warning" Title="Registry information related to Acedao.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the '64-bit Windows, 32-bit Office' instructions in article 2019235." GUID="275556" SSID="c5dcb0d7-c600-4ec1-a952-62606ed869e2"></Rule>
+          <Rule Name="sBadACEDAOReg32" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness='x86' and $bitness=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg32)!=$ACEDAOPath" Error="Warning" Title="Registry information related to Acedao.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the instructions for '32-bit Windows, 32-bit Office' in article 2019235." GUID="275556" SSID="5ab210d5-fd48-43aa-a00e-93a92207e75d"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="TypeLib\{4AC9E1DA-5BAD-4AC7-86E3-24F4CDCECA28}\c.0\0\win64">
+          <Setting Key1="(Default)"></Setting>
+          <Rule Name="sACEDAOReg64" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')"></Rule>
+          <Rule Name="sBadACEDAOReg64" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness='x64' and $bitness=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg64)!=$ACEDAOPath" Error="Warning" Title="Registry information related to Acedao.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the instructions for '64-bit Windows, 64-bit Office' in article 2019235." GUID="275556" SSID="aab3435e-cedf-49b9-8db4-f38aab18d2e9"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\REGISTRY\MACHINE\SOFTWARE\Classes\TypeLib\{4AC9E1DA-5BAD-4AC7-86E3-24F4CDCECA28}\c.0\0\win32">
+          <Setting Key1="(Default)"></Setting>
+          <Rule Name="sACEDAOC2RReg32" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')"></Rule>
+          <Rule Name="sBadACEDAO2013C2RReg" Query="$n2DigitVersion=15 and '%INSTALLTYPE%'='ClickToRun' and lower-case($sACEDAOC2RReg32)!=$ACEDAOPathWow" Error="Warning" Title="Registry information related to Acedao.dll is incorrect" Text="To resolve this issue, update the TypeLib registration for Acedao.dll" GUID="275556" SSID="a150dafe-bf53-4715-9775-01eabea2ac4c"></Rule>
+        </Object>
+      </Object>
+      <Object Type="Group" Name="DAO registration" Class="Access Settings" Display="Right">
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="TypeLib\{00025E01-0000-0000-C000-000000000046}\5.0\0\win32">
+          <Setting Key1="(Default)"></Setting>
+          <Rule Name="sDAOReg" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')"></Rule>
+          <Rule Name="sBadDAORegAccess32Win64" Query="$n2DigitVersion!=11 and $bitness='x86' and $MachineDetails_OSArchitecture='x64' and lower-case($sDAOReg)!='%commonprogramfiles%\microsoft shared\dao\dao360.dll' and lower-case($sDAOReg)!='%commonprogramfiles(x86)%\microsoft shared\dao\dao360.dll'" Error="Warning" Title="Registry information related to DAO360.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for DAO360.dll. Please use the '64-bit Windows, 32-bit Office' instructions in article 2019235. To open that article click the first link below" GUID="275556" SSID="3e20105d-42a8-4e75-8f2d-dbbc48a114b8"></Rule>
+          <Rule Name="sBadDAORegMatchingBitness" Query="$n2DigitVersion!=11 and $bitness=$MachineDetails_OSArchitecture and lower-case($sDAOReg)!='%commonprogramfiles%\microsoft shared\dao\dao360.dll' and lower-case($sDAOReg)!='%commonprogramfiles(x86)%\microsoft shared\dao\dao360.dll'" Error="Warning" Title="Registry information related to DAO360.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for DAO360.dll. Please use the (64-bit Windows, 64-bit Office) or (32-bit Windows, 32-bit Office)' instructions in article 2019235. To open that article click the first link below" GUID="275556" SSID="5c61f39d-de48-43c8-a283-b2fd513db3f6"></Rule>
+        </Object>
+      </Object>
+      <!--/DAO registration-->
+      <!--file association-->
+      <Object Type="Group" Name="Access File Associations" Class="Access Settings" Display="Right">
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".accdb" Display="Right">
+          <Setting Key1="(Default)">            
+            <Rule Name="sBadAccdbAssoc" Query="lower-case($.)='accdb_auto_file'" Error="Warning" Title="The (Default) value under the HKEY_CLASSES_ROOT\.accdb key is set to accdb_auto_file" Text="When the (Default) value under HKEY_CLASSES_ROOT\.accdb key is set to accdb_auto_file, ACCDB files do not open in Access when you double-clicking them. You will need to manually update the registry to fix this problem." GUID="275747" SSID="9fec5c70-c150-487f-a45c-a7838b2adf65"></Rule>
+          </Setting>
+          <Rule Name="sDefaultAccdbAssoc" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".accdb" Display="Right" Key5="Subtree">
+          <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+            <Setting Key1="__VALUES"></Setting>
+          </Object>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".accde" Display="Right">
+          <Setting Key1="(Default)"/>
+          <Rule Name="sDefaultAccdeAssoc" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".accde" Display="Right" Key5="Subtree">
+          <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+            <Setting Key1="__VALUES"></Setting>
+          </Object>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".mdb" Display="Right">
+          <Setting Key1="(Default)"/>
+          <Rule Name="sDefaultMdbAssoc" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".mdb" Display="Right" Key5="Subtree">
+          <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+            <Setting Key1="__VALUES"></Setting>
+          </Object>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".mde" Display="Right">          
+          <Setting Key1="(Default)"/>
+          <Rule Name="sDefaultMdeAssoc" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".mde" Display="Right" Key5="Subtree">
+          <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+          <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+            <Setting Key1="__VALUES"></Setting>
+          </Object>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.accdb\UserChoice">
+          <Setting Key1="ProgID"></Setting>
+          <Rule Name="sUserAccdbAssoc" Query="if(../Instance/Setting[@Key1='ProgID'],../Instance/Setting[@Key1='ProgID']/Value,'')"></Rule>
+          <Rule Name="sACCDBFileAssociation" Query="$sUserAccdbAssoc!='' and $sUserAccdbAssoc!=$sDefaultAccdbAssoc" Error="Warning" Title="The default file association for .accdb files is not correct" Text="Access is currently not associated as the default application for the following file association (.accdb)." GUID="275623" SSID="6bd93cdb-2baf-4707-89ab-6a8bd15db671"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.accdb\UserChoice">
+          <Setting Key1="ProgID"></Setting>
+          <Rule Name="sUserAccdeAssoc" Query="if(../Instance/Setting[@Key1='ProgID'],../Instance/Setting[@Key1='ProgID']/Value,'')"></Rule>
+          <Rule Name="sACCDEFileAssociation" Query="$sUserAccdeAssoc!='' and $sUserAccdeAssoc!=$sDefaultAccdeAssoc" Error="Warning" Title="The default file association for .accde files is not correct" Text="Access is currently not associated as the default application for the following file association (.accde)." GUID="275623" SSID="7c426f52-fdfe-4562-9bfd-64bd748ef10b"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.mdb\UserChoice">
+          <Setting Key1="ProgID"></Setting>
+          <Rule Name="sUserMdbAssoc" Query="if(../Instance/Setting[@Key1='ProgID'],../Instance/Setting[@Key1='ProgID']/Value,'')"></Rule>
+          <Rule Name="sMDBFileAssociation" Query="$sUserMdbAssoc!='' and $sUserMdbAssoc!=$sDefaultMdbAssoc" Error="Warning" Title="The default file association for .mdb files is not correct" Text="Access is currently not associated as the default application for the following file association (.mdb)." GUID="275623" SSID="f17c2095-9448-4e7b-a68e-06265ba555e6"></Rule>
+        </Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.mde\UserChoice">
+          <Setting Key1="ProgID"></Setting>
+          <Rule Name="sUserMdeAssoc" Query="if(../Instance/Setting[@Key1='ProgID'],../Instance/Setting[@Key1='ProgID']/Value,'')"></Rule>
+          <Rule Name="sMDEFileAssociation" Query="$sUserMdeAssoc!='' and $sUserMdeAssoc!=$sDefaultMdeAssoc" Error="Warning" Title="The default file association for .mde files is not correct" Text="Access is currently not associated as the default application for the following file association (.mde)." GUID="275623" SSID="0d23d5ff-d685-4b8b-b649-e431c55338e1"></Rule>
+        </Object>
+      </Object>
+      <!--/file association-->
+    </Object>
+    <!--/REG SETTINGS-->
+    <!--OFFICE POLICIES-->
+    <Object Type="Group" Name="Office Policies" Class="Policies" GroupingClass="True" TrackProgress="TrackProgress">
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0" Key5="Subtree" Display="Right">
+        <Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+          <Setting Key1="__VALUES"></Setting>
+        </Object>
+      </Object>
+    </Object>
+    <!--/OFFICE POLICIES-->
+    <!--EVENTLOGS-->
+    <Object Type="Group" Name="Application Event Logs" Class="Event Logs" GroupingClass="True">
+      <Object Type="Group" Name="Application Event Log Entries for Last Access crashes" Class="Application Event Logs" GroupingClass="True" TrackProgress="TrackProgress">
+        <Object Type="EventLog" Key1="Application" Key3="1000" Key4="msaccess.exe" Key7="14" Key8="10000">
+          <Rule Name="nCrashCount" Query="count(../Instance)"></Rule>
+          <Setting Key1="__ALL"></Setting>
+        </Object>
+        <Reference Type="DisplayLinkUMD" Name="DisplayLinkUMD" File="common.config.xml"></Reference>
+      </Object>
+    </Object>
+    <!--/EVENTLOGS-->
+    
+  </Object>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>Mw21UGkHBDzW5V0RLtFDaeJTpjs=</DigestValue></Reference></SignedInfo><SignatureValue>
+    ZfXW7LUmFb5/Xjwe6BJskGKIJW6Ak2loq8FQBYuKW8n8hw8QAHR4XVwsiO6HUikmGVfRp29C
+    HtKkBFq52RqybgAQPlFKsDZt1S2xuliTmug8D+Eioy7XYZxj6DOfoLdC2Z30moZxAliRA31F
+    ZBrxaNLGWWv9MJKQuAPxpd+I3o/oySapTAOxe+tlTwLXkVFEN8w2cJ+wQ+isuECUgHTT0kni
+    motX3iIxcJZqwwWDOjja9xiPY/6xIuWQ6eBb4MEe9T9MI26PofOFX149/wZRHfBw2L7huVCC
+    evCCHgy/UWO5PYDS/OXjgvBBCjuKOgQ8Ti3u3LZDsU6GD2ELQbTIOA==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            s3R00II8h6ea1I6yBEKAlyUu5EHOk2M2XxPytHiYgMYofsyKE+89N4w7CaDYFMVcXtipHX8B
+            wbOYG1B37P7qfEXPf+EhDsWEyp8Pa7MJOLd0xFcevvBIqHla3w6bHJqovMhStQxpj4TOcVV7
+            /wkgv0B3NyEwdFuV33fLoOXBchIGPfLIVWyvwftqFifI9bNh49nOGw8e9OTNTDRsPkcR5wIr
+            XxR6BAf11z2L22d9Vz41622NAUCNGoeW4g93TIm6OJz7jgKR2yIP5dA2qbg3RdAq/JaNwWBx
+            M6WIsfbCBDCHW8PXL7J5EdiLZWKiihFmXX5/BXpzih96heXNKBDRPQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIEqTCCA5GgAwIBAgITMwAAAIhZDjxRH+JqZwABAAAAiDANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xMjA3MjYyMDUwNDFaFw0xMzEwMjYyMDUwNDFaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCzdHTQgjyH
+          p5rUjrIEQoCXJS7kQc6TYzZfE/K0eJiAxih+zIoT7z03jDsJoNgUxVxe2KkdfwHBs5gbUHfs
+          /up8Rc9/4SEOxYTKnw9rswk4t3TEVx6+8EioeVrfDpscmqi8yFK1DGmPhM5xVXv/CSC/QHc3
+          ITB0W5Xfd8ug5cFyEgY98shVbK/B+2oWJ8j1s2Hj2c4bDx705M1MNGw+RxHnAitfFHoEB/XX
+          PYvbZ31XPjXrbY0BQI0ah5biD3dMibo4nPuOApHbIg/l0DapuDdF0Cr8lo3BYHEzpYix9sIE
+          MIdbw9cvsnkR2ItlYqKKEWZdfn8FenOKH3qF5c0oENE9AgMBAAGjggEdMIIBGTATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUJls+W12WX+L3d4h/XkVTWKguW7gwDgYDVR0PAQH/
+          BAQDAgeAMB8GA1UdIwQYMBaAFMsR6MrStBZYAck3LjMWFrlMmgofMFYGA1UdHwRPME0wS6BJ
+          oEeGRWh0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kvY3JsL3Byb2R1Y3RzL01pY0NvZFNp
+          Z1BDQV8wOC0zMS0yMDEwLmNybDBaBggrBgEFBQcBAQROMEwwSgYIKwYBBQUHMAKGPmh0dHA6
+          Ly93d3cubWljcm9zb2Z0LmNvbS9wa2kvY2VydHMvTWljQ29kU2lnUENBXzA4LTMxLTIwMTAu
+          Y3J0MA0GCSqGSIb3DQEBBQUAA4IBAQAP3kBJiJHRMTejRDhpsmor1JH7aIWuWLseDI9W+pnX
+          ypcnTOiFjnlpLOS9lj/lcGaXlTBlKa3Gyqz1D3moZ79p9A+X4woPv+6WdimyItAzxv+LSa2u
+          sv2/JervJ1DA6xn4GmRqoOEXWa/xz+yBqInosdIUBuNqbXRSZNqWlCpcaWsf7QWZGtzoZaqI
+          GxWVGtOkUZb9VZX4Y42fFAyxnn9KBP/DZq0Kr66k3mP68OrDs7Lrh9vFOK22c9J4ZOrsIVtr
+          O9ZEIvSBUqUrQymLDKEqcYJCy6sbftSlp6333vdGms5DOegqU+3PQOR3iEK/RxbgpTZq76ca
+          jTo9MwT2JSAj
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEmjCCA4KgAwIBAgIKYQeDRQAAAAAAEDANBgkqhkiG9w0BAQUFADB5MQswCQYDVQQGEwJVUzET
+MBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0
+IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgVGltZXN0YW1waW5nIFBDQTAeFw0xMjAx
+MDkyMTUzNThaFw0xMzA0MDkyMTUzNThaMIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGlu
+Z3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0w
+CwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAj
+BgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0YW1wIFNlcnZpY2UwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQCqOYA2cofc4+9/ZQha5gI673Dzx2nkBahvpuBs49IQUa15z+kpSG3stuBAeo2C
+0OQD3BxSdymGqfEyYG3DzGMma9OwuKCd1fpO8/V3tcFGbMCYlnHeI1KkD4LA7r+yiVAGNQr5VWKM
+FHnj+y/SqrgTlvsfZ6NfWJ/n8r5sdWBagJmuue/XSQ1phAvE7MsV2jtBvagRgCQO3/M1T8yDpjGx
+2dcL+R71rtKWNtWOfo0Pax6H/sW7ozIwFcA24J5jRVyp8RUgRQgpaKFZko7zXHovcjiZ7O4VBRNv
+Rsuer8Htf9VyrhN/2GP0+xSGLSAK+rl/ZdTFYFpXr/lTiX0l+N77AgMBAAGjgegwgeUwHQYDVR0O
+BBYEFOEbm/0SuFL4h+9hMzzQs+lg4x9FMB8GA1UdIwQYMBaAFG/oTj+XuTSrS4aPvJzqrDtBQ8bQ
+MEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kvY3JsL3Byb2R1
+Y3RzL3RzcGNhLmNybDBIBggrBgEFBQcBAQQ8MDowOAYIKwYBBQUHMAKGLGh0dHA6Ly93d3cubWlj
+cm9zb2Z0LmNvbS9wa2kvY2VydHMvdHNwY2EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqG
+SIb3DQEBBQUAA4IBAQB34v+FOOZIMqubtd4LRX06XFmd3bO2WIvcXQ5fY7Dr2TkkCWJuxXXfLee9
+eg3OJAoBu7URRGMGA7tuMjbxxVPm9AWSNwB6qd4UAWUAREg9Dmh0/b3eZ4Eeg8e3CMJvSVrMW4ew
+yFGuHKjrY408yhUY3JeNdxQmi1AU7euzA/g5udRlXfZCqjqfZFk0k6HfRg3LmsZP284xd/RUwJKa
+HbG3u1oc10VM2MXEdUuXwylPfE5owyW3Vm4SPoAo0rNv8tntKJyap6TyNnE1tn+EInccIzXmstEr
+W8ZKDS7RaZkYQU/o9ZkZ0AE/SMyDbBnomV0Jec/6+aZtfM4kZi23VRKh</X509Certificate></X509Data><X509Data><X509Certificate>MIIEnTCCA4WgAwIBAgIQaguZT8AAJasR20UfWHpnojANBgkqhkiG9w0BAQUFADBwMSswKQYDVQQL
+EyJDb3B5cmlnaHQgKGMpIDE5OTcgTWljcm9zb2Z0IENvcnAuMR4wHAYDVQQLExVNaWNyb3NvZnQg
+Q29ycG9yYXRpb24xITAfBgNVBAMTGE1pY3Jvc29mdCBSb290IEF1dGhvcml0eTAeFw0wNjA5MTYw
+MTA0NDdaFw0xOTA5MTUwNzAwMDBaMHkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9u
+MRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xIzAhBgNV
+BAMTGk1pY3Jvc29mdCBUaW1lc3RhbXBpbmcgUENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEA3Ddu+6/IQkpxGMjOSD5TwPqrFLosMrsST1LIg+0+M9lJMZIotpFk4B9QhLrCS9F/Bfjv
+db6Lx6jVrmlwZngnZui2t++Fuc3uqv0SpAtZIikvz0DZVgQbdrVtZG1KVNvd8d6/n4PHgN9/TAI3
+lPXAnghWHmhHzdnAdlwvfbYlBLRWW2ocY/+AfDzu1QQlTTl3dAddwlzYhjcsdckO6h45CXx2/p1s
+bnrg7D6Pl55xDl8qTxhiYDKe0oNOKyJcaEWL3i+EEFCy+bUajWzuJZsT+MsQ14UO9IJ2czbGlXqi
+zGAG7AWwhjO3+JRbhEGEWIWUbrAfLEjMb5xD4GrofyaOawIDAQABo4IBKDCCASQwEwYDVR0lBAww
+CgYIKwYBBQUHAwgwgaIGA1UdAQSBmjCBl4AQW9Bw72lyniNRfhSyTY7/y6FyMHAxKzApBgNVBAsT
+IkNvcHlyaWdodCAoYykgMTk5NyBNaWNyb3NvZnQgQ29ycC4xHjAcBgNVBAsTFU1pY3Jvc29mdCBD
+b3Jwb3JhdGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFJvb3QgQXV0aG9yaXR5gg8AwQCLPDyIEdE+
+9mPs30AwEAYJKwYBBAGCNxUBBAMCAQAwHQYDVR0OBBYEFG/oTj+XuTSrS4aPvJzqrDtBQ8bQMBkG
+CSsGAQQBgjcUAgQMHgoAUwB1AGIAQwBBMAsGA1UdDwQEAwIBhjAPBgNVHRMBAf8EBTADAQH/MA0G
+CSqGSIb3DQEBBQUAA4IBAQCUTRExwnxQuxGOoWEHAQ6McEWN73NUvT8JBS3/uFFThRztOZG3o1YL
+3oy2OxvR+6ynybexUSEbbwhpfmsDoiJG7Wy0bXwiuEbThPOND74HijbB637pcF1Fn5LSzM7djsDh
+vyrNfOzJrjLVh7nLY8Q20Rghv3beO5qzG3OeIYjYtLQSVIz0nMJlSpooJpxgig87xxNleEi7z62D
+Ok+wYljeMOnpOR3jifLaOYH5EyGMZIBjBgSW8poCQy97Roi6/wLZZflK3toDdJOzBW4MzJ3cKGF8
+SPEXnBEhOAIch6wGxZYyuOVAxlM9vamJ3uhmN430IpaczLB3VFE61nJEsiP2</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

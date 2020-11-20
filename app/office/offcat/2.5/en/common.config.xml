@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+	<Configuration ConfigName="Office Common Configuration" ConfigVersion="1.0.1303.1" ChangeDescription="2013/03/01 Common Config File">
+	</Configuration>
+	<Type Name="Office_Updates">
+		<Object Type="MSI" Key1="UPDATE" Key2="" Key3="OFFICE" Key9="">
+			<Setting Key1="DisplayName">
+				<Rule Name="sPatchDN" Query="if($.='',$sPatchFamily,$.)">
+				</Rule>
+				<Rule Name="sPatch" P0="$sPatchDN" P1="$sInstallDate" P2="$sPatchUninstallable" P3="$sPatchTargets" P4="$sMoreInfo" Query="$sState='MSIPATCHSTATE_APPLIED'" Error="None" Title="{0}" Text="Installed on {1}.&#xA;Uninstallable: {2}.&#xA;Targets: {3}.&#xA;More info: {4}">
+				</Rule>
+			</Setting>
+			<Setting Key1="Targets">
+				<Rule Name="sPatchTargets" Query="$.">
+				</Rule>
+			</Setting>
+			<Setting Key1="Context">
+			</Setting>
+			<Setting Key1="State">
+				<Rule Name="sState" Query="$.">
+				</Rule>
+			</Setting>
+			<Setting Key1="Uninstallable">
+				<Rule Name="sPatchUninstallable" Query="$.">
+				</Rule>
+			</Setting>
+			<Setting Key1="InstallDate">
+				<Rule Name="sInstallDate" Query="$.">
+				</Rule>
+			</Setting>
+			<Setting Key1="MoreInfoUrl">
+				<Rule Name="sMoreInfo" Query="$.">
+				</Rule>
+			</Setting>
+			<Setting Key1="LocalPackage" Substitution="PATCHPATH">
+			</Setting>
+			<Object Type="Group" Name="MsiPatchSequence" Display="Right">
+				<Object Type="MSI" Key1="MSIPATCHSEQUENCETABLE" Key4="%PATCHPATH%" Display="Hide">
+					<Setting Key1="PatchFamily" Display="Right">
+						<Rule Name="sPatchFamily" Query="$.">
+						</Rule>
+					</Setting>
+					<Setting Key1="Sequence" Display="Right">
+					</Setting>
+					<Setting Key1="Attributes" Display="Right">
+					</Setting>
+				</Object>
+			</Object>
+			<Setting Key1="ProductCode">
+			</Setting>
+			<Setting Key1="PatchCode">
+			</Setting>
+			<!--ACCESS Cumulative Updates-->
+			<!--ACCESS 32-bit Cumulative Updates-->
+			<Rule Name="sAccess2003CU" Title="You do not have the most recent files for Access 2003" Error="Warning" Query="(..//Instance[contains(@Name,'977645')])=false() and lower-case($appName)='access' and $n2DigitVersion=11" Text="There are more recent versions of files available for Access 2003 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install this update." GUID="272335" SSID="020255c7-7a93-4266-8d18-7456885bc52d"/>
+			<Rule Name="sAccess2007CU" Title="You do not have the most recent files for Access 2007" Error="Warning" Query="(..//Instance[contains(@Name,'2526086')])=false() and lower-case($appName)='access' and $n2DigitVersion=12" Text="There are more recent versions of files available for Access 2007 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install this update." GUID="272336" SSID="b38d8352-b151-4a41-9af0-1e4610e2de3e"/>
+			<Rule Name="sAcecore2010CU" Title="You do not have the latest update for Acecore.dll for Access 2010 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2589372')])=false() and $bitness='x86' and lower-case($appName)='access' and $n2DigitVersion=14" Text="There is a more recent version of Acecore.dll for Access 2010 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="272499" SSID="7251f07f-94eb-4b47-b7d6-66dc7373c5c7"/>
+			<Rule Name="sAccess2010CU" Title="You do not have the latest update for Access 2010 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2553296')])=false() and $bitness='x86' and lower-case($appName)='access' and $n2DigitVersion=14" Text="There are more recent versions of Access 2010 files available through a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="272337" SSID="404ad3ff-6b87-49d9-a4e7-0fafab575468"/>
+			<Rule Name="sAcewss2010CU" Title="You do not have the latest update for Acewss.dll for Access 2010 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2597943')])=false() and $bitness='x86' and lower-case($appName)='access' and $n2DigitVersion=14" Text="There is a more recent version of Acewss.dll for Access 2010 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="272503" SSID="a81cea51-aae3-4e70-a90e-2bea20d72e68"/>
+			<Rule Name="sAccessStslist2010CU" Title="You do not have the latest update for Stslist.dll for Access 2010 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2589349')])=false() and $bitness='x86' and lower-case($appName)='access' and $n2DigitVersion=14" Text="There is a more recent version of Stslist.dll for Access 2010 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="272502" SSID="88fa144b-2af5-44d9-bd07-487b9459bec9"/>
+			<!--<Rule Name="sAccess2013CU" Title="You do not have the latest update for Access 2013 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2737982')])=false() and $bitness='x86' and lower-case($appName)='access' and $n2DigitVersion=15" Text="There is a more recent version of Access 2013 files available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xD;&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="282194" SSID="be1cb43b-3acb-4455-8a84-76187f8d1b9c" />-->
+			<Rule Name="sAcecore2013CU" Title="You do not have the latest update for Acecore.dll for Access 2013 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760362')])=false() and $bitness='x86' and lower-case($appName)='access' and $n2DigitVersion=15" Text="There is a more recent version of Acecore.dll for Access 2013 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="282304" SSID="bc793b38-887f-435d-a4eb-441e99b121e8"/>
+			<Rule Name="sAccessStslist2013CU" Title="You do not have the latest update for Stslist.dll for Access 2013 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760341')])=false() and $bitness='x86' and lower-case($appName)='access' and $n2DigitVersion=15" Text="There is a more recent version of Stslist.dll for Access 2013 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="282385" SSID="0bcd6385-3a75-4c36-8acf-c9d34f746ca2"/>
+			<!--ACCESS 64-bit Cumulative Updates-->
+			<Rule Name="sAcecore2010CU64" Query="(..//Instance[contains(@Name,'2589372')])=false() and $bitness='x64' and lower-case($appName)='access' and $n2DigitVersion=14" Error="Warning" Title="You do not have the latest update for Acecore.dll for Access 2010 (64-bit)" Text="There is a more recent version of Acecore.dll for Access 2010 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="272499" SSID="f0153f28-3428-42c6-ab65-7fe1f20a7fe3"/>
+			<Rule Name="sAccess2010CU64" Query="(..//Instance[contains(@Name,'2553296')])=false() and $bitness='x64' and lower-case($appName)='access' and $n2DigitVersion=14" Error="Warning" Title="You do not have the latest update for Access 2010 (64-bit)" Text="There are more recent versions of Access 2010 files available through a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="272337" SSID="01a9805a-f801-4195-ba13-3abcd2375e44"/>
+			<Rule Name="sAcewss2010CU64" Query="(..//Instance[contains(@Name,'2597943')])=false() and $bitness='x64' and lower-case($appName)='access' and $n2DigitVersion=14" Error="Warning" Title="You do not have the latest update for Acewss.dll for Access 2010 (64-bit)" Text="There is a more recent version of Acewss.dll for Access 2010 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="272503" SSID="3ec31ad8-95fb-48d8-bef7-785247f33cb9"/>
+			<Rule Name="sAccessStslist2010CU64" Title="You do not have the latest update for Stslist.dll for Access 2010 (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2589349')])=false() and $bitness='x64' and lower-case($appName)='access' and $n2DigitVersion=14" Text="There is a more recent version of Stslist.dll for Access 2010 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="272502" SSID="2016ca34-1e50-4dd7-ab60-2ddc7a328b65"/>
+			<!--<Rule Name="sAccess2013CU64" Title="You do not have the latest update for Access 2013 (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2737982')])=false() and $bitness='x64' and lower-case($appName)='access' and $n2DigitVersion=15" Text="There is a more recent version of Access 2013 files available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xD;&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="282194" SSID="e67f5f4d-45eb-4f29-83f6-d5aaf1965265" />-->
+			<Rule Name="sAcecore2013CU64" Query="(..//Instance[contains(@Name,'2760362')])=false() and $bitness='x64' and lower-case($appName)='access' and $n2DigitVersion=15" Error="Warning" Title="You do not have the latest update for Acecore.dll for Access 2013 (64-bit)" Text="There is a more recent version of Acecore.dll for Access 2013 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="282304" SSID="33884f1f-67fb-450b-9ae9-bb5879cf9040"/>
+			<Rule Name="sAccessStslist2013CU64" Title="You do not have the latest update for Stslist.dll for Access 2013 (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760341')])=false() and $bitness='x64' and lower-case($appName)='access' and $n2DigitVersion=15" Text="There is a more recent version of Stslist.dll for Access 2013 available in a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="282385" SSID="a6ac50c8-842c-4781-9935-03be5d49e6d9"/>
+			<!--/ACCESS Cumulative Updates-->
+			<!--EXCEL Cumulative Updates-->
+			<!--Excel 32-bit Cumulative Updates-->
+			<Rule Name="sExcel2003CU" Title="You do not have the most recent files for Excel 2003" Error="Warning" Query="(..//Instance[contains(@Name,'2687481')])=false() and lower-case($appName)='excel' and $n2DigitVersion=11" Text="You currently have version {0}. There are more recent versions of files available for Excel 2013 either through a public update or a security update. We recommend you update your computer using Microsoft Update, but you can click the “Click here to see possible solutions …” link to download the missing Excel update." GUID="272324" P0="$sFullAppVersion" SSID="2f7e2ee6-3dda-4efd-bd21-8fa13d15cd42"/>
+			<Rule Name="sExcel2007CU" Title="You do not have the most recent files for Excel 2007" Error="Warning" Query="(..//Instance[contains(@Name,'2687307')])=false() and lower-case($appName)='excel' and $n2DigitVersion=12" Text="You currently have version {0}. There are more recent versions of files available for Excel 2013 either through a public update or a security update. We recommend you update your computer using Microsoft Update, but you can click the “Click here to see possible solutions …” link to download the missing Excel update." GUID="272325" P0="$sFullAppVersion" SSID="45b15a34-cad7-49af-98ce-ceb9956c1a3e"/>
+			<Rule Name="sExcel2010CU" Title="You do not have the latest update for Excel 2010 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2597126')])=false() and lower-case($appName)='excel' and $n2DigitVersion=14 and $bitness='x86'" Text="You currently have version {0}. There are more recent versions of files available for Excel 2013 either through a public update or a security update. We recommend you update your computer using Microsoft Update, but you can click the “Click here to see possible solutions …” link to download the missing Excel update." GUID="272326" P0="$sFullAppVersion" SSID="32970391-fe4a-4e7c-9c02-75f984673157"/>
+			<Rule Name="sExcel2013CU" Title="You do not have the most recent files for Excel 2013 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760339')])=false() and lower-case($appName)='excel' and $n2DigitVersion=15 and $bitness='x86'" Text="You currently have version {0}. There are more recent versions of files available for Excel 2013 either through a public update or a security update. We recommend you update your computer using Microsoft Update, but you can click the “Click here to see possible solutions …” link to download the missing Excel update." GUID="282370" P0="$sFullAppVersion" SSID="99b5b032-de37-4680-81c7-cf93458b9ed3"/>
+			<!--Excel 64-bit Cumulative Updates-->
+			<Rule Name="sExcel2010CU64" Title="You do not have the latest update for Excel 2010 (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2597126')])=false() and lower-case($appName)='excel' and $n2DigitVersion=14 and $bitness='x64'" Text="You currently have version {0}. There are more recent versions of Excel 2010 files available through a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="272326" P0="$sFullAppVersion" SSID="428e0c07-dc07-4656-b0de-bafe25790789"/>
+			<Rule Name="sExcel2013CU64" Title="You do not have the most recent files for Excel 2013 (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760339')])=false() and lower-case($appName)='excel' and $n2DigitVersion=15 and $bitness='x64'" Text="You currently have version {0}. There are more recent versions of Excel 2010 files available through a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="282370" P0="$sFullAppVersion" SSID="2085c9c5-e228-41fd-a46c-a4323f26f141"/>
+			<!--/EXCEL Cumulative Updates-->
+			<!--INFOPATH Cumulative Updates-->
+			<!--INFOPATH 32-bit Cumulative Updates-->
+			<!--INFOPATH 64-bit Cumulative Updates-->
+			<!--/INFOPATH Cumulative Updates-->
+			<!--ONENOTE Cumulative Updates-->
+			<!--ONENOTE 32-bit Cumulative Updates-->
+			<!--ONENOTE 64-bit Cumulative Updates-->
+			<!--/ONENOTE Cumulative Updates-->
+			<!--OUTLOOK Cumulative Updates-->
+			<!--OUTLOOK 32-bit Cumulative Updates-->
+			<!--OUTLOOK 64-bit Cumulative Updates-->
+			<!--/OUTLOOK Cumulative Updates-->
+			<!--POWERPOINT Cumulative Updates-->
+			<!--POWERPOINT 32-bit Cumulative Updates-->
+			<Rule Name="sPowerPoint2003CU" Title="You do not have the most recent files for PowerPoint 2003" Error="Warning" Query="(..//Instance[contains(@Name,'2543241')])=false() and lower-case($appName)='powerpoint' and $n2DigitVersion=11" Text="You currently have version {0}. There are more recent versions of files available for PowerPoint 2003 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install this update." GUID="272310" P0="$sFullAppVersion" SSID="7ae33455-8e83-4506-86d6-f6abbf0903de"/>
+			<Rule Name="sPowerPoint2007CU" Title="You do not have the most recent files for PowerPoint 2007" Error="Warning" Query="(..//Instance[contains(@Name,'2687542')])=false() and lower-case($appName)='powerpoint' and $n2DigitVersion=12" Text="You currently have version {0}. There are more recent versions of files available for PowerPoint 2007 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install this update." P0="$sFullAppVersion" GUID="272311" SSID="d927a5db-521c-4e52-ba26-d30e395c8b61"/>
+			<Rule Name="sPowerPoint2010CU" Title="You do not have the latest update for PowerPoint 2010 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2553155')])=false() and lower-case($appName)='powerpoint' and $n2DigitVersion=14 and $bitness='x86'" Text="You currently have version {0}. There are more recent versions of PowerPoint 2010 files available through a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." P0="$sFullAppVersion" GUID="272312" SSID="e5f5a832-08ef-4934-ae3b-ff3c2dac0dac"/>
+			<!--<Rule Name="sPowerPoint2013CU" Title="You do not have the most recent files for PowerPoint 2013 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2726960')])=false() and lower-case($appName)='powerpoint' and $n2DigitVersion=15 and $bitness='x86'" Text="You currently have version {0}. You currently have version {0}. There are more recent versions of files available for PowerPoint 2013 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xD;&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." P0="$sFullAppVersion" GUID="282382" SSID="b3f71d39-2469-4dfc-904e-dd4a9b446284" />-->
+			<!--POWERPOINT 64-bit Cumulative Updates-->
+			<Rule Name="sPowerPoint2010CU64" Title="You do not have the latest update for PowerPoint 2010 (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2553155')])=false() and lower-case($appName)='powerpoint' and $n2DigitVersion=14 and $bitness='x64'" Text="You currently have version {0}. There are more recent versions of PowerPoint 2010 files available through a cumulative update. This update is not available on Microsoft Update, and Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." P0="$sFullAppVersion" GUID="272312" SSID="7a09a957-964a-4f01-a41a-a83d8398a653"/>
+			<!--<Rule Name="sPowerPoint2013CU64" Title="You do not have the most recent files for PowerPoint 2013 (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2726960')])=false() and lower-case($appName)='powerpoint' and $n2DigitVersion=15 and $bitness='x64'" Text="You currently have version {0}. You currently have version {0}. There are more recent versions of files available for PowerPoint 2013 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xD;&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." P0="$sFullAppVersion" GUID="282382" SSID="55eb3435-7bc1-4881-ba17-d56ed4abf953" />-->
+			<!--/POWERPOINT Cumulative Updates-->
+			<!--PROJECT Cumulative Updates-->
+			<!--32-bit-->
+			<!--64-bit-->
+			<!--/PROJECT Cumulative Updates-->
+			<!--PUBLISHER Cumulative Updates-->
+			<!--32-bit-->
+			<!--64-bit-->
+			<!--/PUBLISHER Cumulative Updates-->
+			<!--VISIO Cumulative Updates-->
+			<!--32-bit-->
+			<!--64-bit-->
+			<!--/VISIO Cumulative Updates-->
+			<!--WORD Cumulative Updates-->
+			<!--WORD 32-bit Cumulative Updates-->
+			<Rule Name="sWord2003CU" Title="You do not have the most recent files for Word 2003" Error="Warning" Query="(..//Instance[contains(@Name,'2760497')])=false() and contains(lower-case($appName),'word') and $n2DigitVersion=11" Text="You currently have version {0}. There are more recent versions of files available for Word 2003 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install this update." P0="$sFullAppVersion" GUID="267396" SSID="756bb851-996c-4b77-b053-b27851783808"/>
+			<Rule Name="sWord2007CU" Title="You do not have the most recent files for Word 2007" Error="Warning" Query="(..//Instance[contains(@Name,'2596621')])=false() and contains(lower-case($appName),'word') and $n2DigitVersion=12" Text="You currently have version {0}. There are more recent versions of files available for Word 2007 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install this update." GUID="271705" P0="$sFullAppVersion" SSID="0ef9c7ea-9dbf-4c6c-ad23-4e5855de6631"/>
+			<Rule Name="sWord2010CU" Title="You do not have the most recent files for Word 2010 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760775')])=false() and contains(lower-case($appName),'word') and $n2DigitVersion=14 and $bitness='x86'" Text="You currently have version {0}. There are more recent versions of files available for Word 2010 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="271708" P0="$sFullAppVersion" SSID="62525197-a5a2-4a4b-9c7c-eb149cb91471"/>
+			<Rule Name="sWord2013CU" Title="You do not have the most recent files for Word 2013 (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760375')])=false() and contains(lower-case($appName),'word') and $n2DigitVersion=15 and $bitness='x86'" Text="You currently have version {0}. There are more recent versions of files available for Word 2013 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update." GUID="282138" P0="$sFullAppVersion" SSID="90ad1980-1ad0-4164-b263-1c8881920e9f"/>
+			<!--WORD 64-bit Cumulative Updates-->
+			<Rule Name="sWord2010CU64" Title="You do not have the most recent files for Word 2010 (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760775')])=false() and contains(lower-case($appName),'word') and $n2DigitVersion=14 and $bitness='x64'" Text="You currently have version {0}. There are more recent versions of files available for Word 2010 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="271708" P0="$sFullAppVersion" SSID="43d534f1-26d0-47c4-bac5-9620ec865576"/>
+			<Rule Name="sWord2013CU64" Query="(..//Instance[contains(@Name,'2760375')])=false() and contains(lower-case($appName),'word') and $n2DigitVersion=15 and $bitness='x64'" P0="$sFullAppVersion" Error="Warning" Title="You do not have the most recent files for Word 2013 (64-bit)" Text="You currently have version {0}. There are more recent versions of files available for Word 2013 through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="282138" SSID="4ebbdc3c-ca9a-4667-845a-d46c3347d6f0"/>
+			<!--WORD Cumulative Updates-->
+			<!--COMMON-->
+			<!--MSO-->
+			<!--MSO 32-bit Cumulative Updates-->
+			<Rule Name="sMSO2003CU" Title="You do not have the most recent files for MSO" Error="Warning" Query="(..//Instance[contains(@Name,'2584052')])=false() and $n2DigitVersion=11" Text="You currently have MSO.dll version {0}{1}. There are more recent versions of files available for MSO through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install this update." GUID="267397" P0="$MSO_sMSOVersion" P1="$MSO_sMSOVersionWow" SSID="b064bb1e-9dbd-4bae-a6a2-bdc6161e7f9b"/>
+			<Rule Name="sMSO2007CU" Title="You do not have the most recent files for MSO" Error="Warning" Query="(..//Instance[contains(@Name,'2596676')])=false() and $n2DigitVersion=12" Text="You currently have MSO.dll version {0}{1}. There are more recent versions of files available for MSO through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install this update." GUID="271706" P0="$MSO_sMSOVersion" P1="$MSO_sMSOVersionWow" SSID="5a49b0c5-06f7-4584-b5cb-3fae5dbae90c"/>
+			<Rule Name="sMSO2010CU" Title="You do not have the most recent files for MSO (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760767')])=false() and $n2DigitVersion=14 and $bitness='x86'" Text="You currently have MSO.dll version {0}{1}. There are more recent versions of files available for MSO through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update. " GUID="271709" P0="$MSO_sMSOVersion" P1="$MSO_sMSOVersionWow" SSID="ffcb0ca7-2ce2-42ce-99af-1eb5d545779b"/>
+			<Rule Name="sMSO2013CU" Title="You do not have the most recent files for MSO (32-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760231')])=false() and $n2DigitVersion=15 and $bitness='x86'" Text="You currently have MSO.dll version {0}{1}. There are more recent versions of files available for MSO through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 32-bit version of this update. " GUID="282193" P0="$MSO_sMSOVersion" P1="$MSO_sMSOVersionWow" SSID="12a7ed86-0ca8-44ec-ad73-689018511eb1"/>
+			<!--MSO 64-bit Cumulative Updates-->
+			<Rule Name="sMSO2010CU64" Title="You do not have the most recent files for MSO (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760767')])=false() and $n2DigitVersion=14 and $bitness='x64'" Text="You currently have MSO.dll version {0}{1}. There are more recent versions of files available for MSO through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="271709" P0="$MSO_sMSOVersion" P1="$MSO_sMSOVersionWow" SSID="82143131-f1cd-45a0-b95d-06dc61953523"/>
+			<Rule Name="sMSO2013CU64" Title="You do not have the most recent files for MSO (64-bit)" Error="Warning" Query="(..//Instance[contains(@Name,'2760231')])=false() and $n2DigitVersion=15 and $bitness='x64'" Text="You currently have MSO.dll version {0}{1}. There are more recent versions of files available for MSO through a cumulative update. This update is not available on Microsoft Update, which means Microsoft Update may report there are no updates needed.&#xA;Please click the 'Click here to see possible solutions to this issue' link below and install the 64-bit version of this update." GUID="282193" P0="$MSO_sMSOVersion" P1="$MSO_sMSOVersionWow" SSID="117cfdea-f6a6-4519-b6a2-cbb042006a90"/>
+			<!--/MSO-->
+			<!--Service Packs-->
+			<Rule Name="sOffice2007SP3NotInstalled" Title="Service Pack 3 for Microsoft Office 2007 is not installed" Error="Warning" Query="(..//Instance/Setting[@Key1='PatchCode']/Value='{6E107EB7-8B55-48BF-ACCB-199F86A2CD93}')=false() and $n2DigitVersion=12" Text="Service Pack 2 for Microsoft Office 2007 is out of support on January 8th, 2013. Please see the support lifecycle site for more information: http://support.microsoft.com/lifecycle/?p1=8753" GUID="269550" SSID="c91e7035-41fd-4f08-9ed2-108cbccf0714"/>
+			<Rule Name="sOffice2010SP1NotInstalled" Title="Service Pack 1 for Microsoft Office 2010 is not installed." Error="Error" Query="((..//Instance/Setting[@Key1='PatchCode']/Value='{047B0968-E622-4FAA-9B4B-121FA109EDDE}')=false() and $n2DigitVersion=14 and $bitness='x86') or ((..//Instance/Setting[@Key1='PatchCode']/Value='{7BC9B5EB-125A-4E9B-97E1-8D85B5E960B8}')=false() and $n2DigitVersion=14 and $bitness='x64')" Text="Your Office 2010 installation is out of support because Service Pack 1 (SP1) is not installed. Support for pre-SP1 installations ended on July 10, 2012." GUID="267404" SSID="947ea000-4e21-4cbf-8ced-bc902b678ad9"/>
+			<!--/Service Packs-->
+			<!--Misc-->
+			<Rule Name="sOffice2003" Title="You may be running an out-of-date version of Office" Error="Warning" Query="$n2DigitVersion=11" Text="Office 2003 was detected. Please check the Microsoft Product Lifecycle page for additional information. http://support.microsoft.com/lifecycle. Upgrading to the latest version of Microsoft Office will ensure you stay within mainstream support boundaries." GUID="272841" SSID="cfcf1e39-d684-428a-a51d-77e741d2d554"/>
+			<Rule Name="sOffice12OutOfMainstreamSupport" Title="Office 2007 is out of mainstream support" Error="Warning" Query="$n2DigitVersion=12" Text="Upgrading to Office 2010 or later will give you the most support options. Please see the following link for support options that are no longer available after mainstream support has ended for a product http://support.microsoft.com/gp/lifePolicy." GUID="268797" SSID="6a1e7131-d0d7-4312-b45f-47ffb206b4c3"/>
+		</Object>
+	</Type>
+	<Type Name="C2R_Updates">
+		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\propertyBag" Display="Right">
+			<Setting Key1="UpdatesEnabled" Key2="Exists" Display="Right"/>
+			<Setting Key1="UpdatesEnabled" Display="Right"/>
+			<Rule Name="fUpdatesEnabled" Query="if((../Instance/Setting/@Key1='UpdatesEnabled')=true(),../Instance/Setting[@Key1='UpdatesEnabled']/Value,-1)"/>
+		</Object>
+		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common\Officeupdate" Display="Right">
+			<Setting Key1="EnableAutomaticUpdates" Display="Right"/>
+			<Rule Name="fEnableAutomaticUpdates" Query="if((../Instance/Setting/@Key1='EnableAutomaticUpdates')=true(),../Instance/Setting[@Key1='EnableAutomaticUpdates']/Value,-1)"/>
+			<Rule Name="sC2RUpdatesDisabled" Query="$fEnableAutomaticUpdates=0 or ($fEnableAutomaticUpdates=-1 and $fUpdatesEnabled=0)" Error="Warning" Title="Automatic updates for Click-to-Run are disabled" Text="Automatic updating of your Click-to-Run installation is disabled. It is recommended to enable this feature so Office has the latest updates installed." GUID="271987" SSID="f9e6da83-93a8-4d12-9530-1991f0e4889c"/>
+		</Object>
+	</Type>
+	<Type Name="MachineDetails">
+		<Object Type="Group" Name="VideoCardsList" Display="Hide">
+			<Setting Key1="Devices" Display="Hide">
+				<Rule Name="sVideoCards" Query="string(@Title)" Title="PCI\VEN_1002&amp;DEV_796E;PCI\VEN_1002&amp;DEV_791E;PCI\VEN_1002&amp;DEV_791F;PCI\VEN_1002&amp;DEV_796F;PCI\VEN_1002&amp;DEV_793F;PCI\VEN_1002&amp;DEV_7941;PCI\VEN_1002&amp;DEV_7942;PCI\VEN_1002&amp;DEV_5A61;PCI\VEN_1002&amp;DEV_5A63;PCI\VEN_1002&amp;DEV_5A62;PCI\VEN_1002&amp;DEV_5A41;PCI\VEN_1002&amp;DEV_5A43;PCI\VEN_1002&amp;DEV_5A42;PCI\VEN_1002&amp;DEV_5954;PCI\VEN_1002&amp;DEV_5854;PCI\VEN_1002&amp;DEV_5955;PCI\VEN_1002&amp;DEV_5974;PCI\VEN_1002&amp;DEV_5874;PCI\VEN_1002&amp;DEV_5975;PCI\VEN_1002&amp;DEV_5653;PCI\VEN_1002&amp;DEV_3155;PCI\VEN_1002&amp;DEV_3175;PCI\VEN_1002&amp;DEV_4E54;PCI\VEN_1002&amp;DEV_5464;PCI\VEN_1002&amp;DEV_3154;PCI\VEN_1002&amp;DEV_564A;PCI\VEN_1002&amp;DEV_564B;PCI\VEN_1002&amp;DEV_5D49;PCI\VEN_1002&amp;DEV_71C4;PCI\VEN_1002&amp;DEV_71D4;PCI\VEN_1002&amp;DEV_4E52;PCI\VEN_1002&amp;DEV_4E56;PCI\VEN_1002&amp;DEV_4E50;PCI\VEN_1002&amp;DEV_4A4E;PCI\VEN_1002&amp;DEV_7149;PCI\VEN_1002&amp;DEV_714B;PCI\VEN_1002&amp;DEV_714C;PCI\VEN_1002&amp;DEV_714A;PCI\VEN_1002&amp;DEV_718B;PCI\VEN_1002&amp;DEV_718C;PCI\VEN_1002&amp;DEV_7196;PCI\VEN_1002&amp;DEV_7145;PCI\VEN_1002&amp;DEV_7186;PCI\VEN_1002&amp;DEV_718D;PCI\VEN_1002&amp;DEV_71C5;PCI\VEN_1002&amp;DEV_71D5;PCI\VEN_1002&amp;DEV_71DE;PCI\VEN_1002&amp;DEV_71D6;PCI\VEN_1002&amp;DEV_7102;PCI\VEN_1002&amp;DEV_7101;PCI\VEN_1002&amp;DEV_7284;PCI\VEN_1002&amp;DEV_718A;PCI\VEN_1002&amp;DEV_7188;PCI\VEN_1002&amp;DEV_5461;PCI\VEN_1002&amp;DEV_5460;PCI\VEN_1002&amp;DEV_3152;PCI\VEN_1002&amp;DEV_3150;PCI\VEN_1002&amp;DEV_5462;PCI\VEN_1002&amp;DEV_5652;PCI\VEN_1002&amp;DEV_5653;PCI\VEN_1002&amp;DEV_5673;PCI\VEN_1002&amp;DEV_564F;PCI\VEN_1002&amp;DEV_5D4A;PCI\VEN_1002&amp;DEV_5D48;PCI\VEN_1002&amp;DEV_5D48;PCI\VEN_1002&amp;DEV_7248;PCI\VEN_1002&amp;DEV_7268;PCI\VEN_1002&amp;DEV_554D;PCI\VEN_1002&amp;DEV_556D;PCI\VEN_1002&amp;DEV_5D52;PCI\VEN_1002&amp;DEV_5D72;PCI\VEN_1002&amp;DEV_4154;PCI\VEN_1002&amp;DEV_4174;PCI\VEN_1002&amp;DEV_5B64;PCI\VEN_1002&amp;DEV_5B74;PCI\VEN_1002&amp;DEV_3E54;PCI\VEN_1002&amp;DEV_3E74;PCI\VEN_1002&amp;DEV_7152;PCI\VEN_1002&amp;DEV_7172;PCI\VEN_1002&amp;DEV_7153;PCI\VEN_1002&amp;DEV_7173;PCI\VEN_1002&amp;DEV_71D2;PCI\VEN_1002&amp;DEV_71F2;PCI\VEN_1002&amp;DEV_958D;PCI\VEN_1002&amp;DEV_5E48;PCI\VEN_1002&amp;DEV_5E68;PCI\VEN_1002&amp;DEV_5551;PCI\VEN_1002&amp;DEV_5571;PCI\VEN_1002&amp;DEV_71DA;PCI\VEN_1002&amp;DEV_71FA;PCI\VEN_1002&amp;DEV_7105;PCI\VEN_1002&amp;DEV_7125;PCI\VEN_1002&amp;DEV_5550;PCI\VEN_1002&amp;DEV_5570;PCI\VEN_1002&amp;DEV_5D50;PCI\VEN_1002&amp;DEV_7104;PCI\VEN_1002&amp;DEV_5D70;PCI\VEN_1002&amp;DEV_7124;PCI\VEN_1002&amp;DEV_710E;PCI\VEN_1002&amp;DEV_712E;PCI\VEN_1002&amp;DEV_710F;PCI\VEN_1002&amp;DEV_712F;PCI\VEN_1002&amp;DEV_4E47;PCI\VEN_1002&amp;DEV_4E67;PCI\VEN_1002&amp;DEV_4E4B;PCI\VEN_1002&amp;DEV_4E6B;PCI\VEN_1002&amp;DEV_4A4D;PCI\VEN_1002&amp;DEV_4A6D;PCI\VEN_1002&amp;DEV_4147;PCI\VEN_1002&amp;DEV_4167;PCI\VEN_1002&amp;DEV_5B65;PCI\VEN_1002&amp;DEV_5B75;PCI\VEN_1002&amp;DEV_719B;PCI\VEN_1002&amp;DEV_71BB;PCI\VEN_1002&amp;DEV_3151;PCI\VEN_1002&amp;DEV_3171;PCI\VEN_1002&amp;DEV_724E;PCI\VEN_1002&amp;DEV_726E;PCI\VEN_1002&amp;DEV_4153;PCI\VEN_1002&amp;DEV_4173;PCI\VEN_1002&amp;DEV_4150;PCI\VEN_1002&amp;DEV_4E51;PCI\VEN_1002&amp;DEV_4151;PCI\VEN_1002&amp;DEV_4155;PCI\VEN_1002&amp;DEV_4152;PCI\VEN_1002&amp;DEV_4E71;PCI\VEN_1002&amp;DEV_4171;PCI\VEN_1002&amp;DEV_4170;PCI\VEN_1002&amp;DEV_4175;PCI\VEN_1002&amp;DEV_4172;PCI\VEN_1002&amp;DEV_7288;PCI\VEN_1002&amp;DEV_72A8;PCI\VEN_1002&amp;DEV_554E;PCI\VEN_1002&amp;DEV_556E;PCI\VEN_1002&amp;DEV_554D;PCI\VEN_1002&amp;DEV_556D;PCI\VEN_1002&amp;DEV_4B4B;PCI\VEN_1002&amp;DEV_4B6B;PCI\VEN_1002&amp;DEV_4B4A;PCI\VEN_1002&amp;DEV_4B6A;PCI\VEN_1002&amp;DEV_4B49;PCI\VEN_1002&amp;DEV_4B4C;PCI\VEN_1002&amp;DEV_4B6C;PCI\VEN_1002&amp;DEV_4B69;PCI\VEN_1002&amp;DEV_554C;PCI\VEN_1002&amp;DEV_556C;PCI\VEN_1002&amp;DEV_5D4C;PCI\VEN_1002&amp;DEV_5D6C;PCI\VEN_1002&amp;DEV_4144;PCI\VEN_1002&amp;DEV_4149;PCI\VEN_1002&amp;DEV_4E45;PCI\VEN_1002&amp;DEV_4E65;PCI\VEN_1002&amp;DEV_4164;PCI\VEN_1002&amp;DEV_4169;PCI\VEN_1002&amp;DEV_4E46;PCI\VEN_1002&amp;DEV_4E66;PCI\VEN_1002&amp;DEV_4146;PCI\VEN_1002&amp;DEV_4166;PCI\VEN_1002&amp;DEV_4E44;PCI\VEN_1002&amp;DEV_4E64;PCI\VEN_1002&amp;DEV_4E49;PCI\VEN_1002&amp;DEV_4E48;PCI\VEN_1002&amp;DEV_4E68;PCI\VEN_1002&amp;DEV_4148;PCI\VEN_1002&amp;DEV_4168;PCI\VEN_1002&amp;DEV_4E69;PCI\VEN_1002&amp;DEV_4E4A;PCI\VEN_1002&amp;DEV_4E6A;PCI\VEN_1002&amp;DEV_7146;PCI\VEN_1002&amp;DEV_7166;PCI\VEN_1002&amp;DEV_714E;PCI\VEN_1002&amp;DEV_715E;PCI\VEN_1002&amp;DEV_714D;PCI\VEN_1002&amp;DEV_71C3;PCI\VEN_1002&amp;DEV_718F;PCI\VEN_1002&amp;DEV_716E;PCI\VEN_1002&amp;DEV_717E;PCI\VEN_1002&amp;DEV_716D;PCI\VEN_1002&amp;DEV_71E3;PCI\VEN_1002&amp;DEV_71AF;PCI\VEN_1002&amp;DEV_7142;PCI\VEN_1002&amp;DEV_7180;PCI\VEN_1002&amp;DEV_7183;PCI\VEN_1002&amp;DEV_7187;PCI\VEN_1002&amp;DEV_7162;PCI\VEN_1002&amp;DEV_71A0;PCI\VEN_1002&amp;DEV_71A3;PCI\VEN_1002&amp;DEV_71A7;PCI\VEN_1002&amp;DEV_7147;PCI\VEN_1002&amp;DEV_715F;PCI\VEN_1002&amp;DEV_719F;PCI\VEN_1002&amp;DEV_7167;PCI\VEN_1002&amp;DEV_717F;PCI\VEN_1002&amp;DEV_7143;PCI\VEN_1002&amp;DEV_7193;PCI\VEN_1002&amp;DEV_7163;PCI\VEN_1002&amp;DEV_71B3;PCI\VEN_1002&amp;DEV_71CE;PCI\VEN_1002&amp;DEV_71EE;PCI\VEN_1002&amp;DEV_7140;PCI\VEN_1002&amp;DEV_71C0;PCI\VEN_1002&amp;DEV_71C2;PCI\VEN_1002&amp;DEV_7181;PCI\VEN_1002&amp;DEV_71CD;PCI\VEN_1002&amp;DEV_7160;PCI\VEN_1002&amp;DEV_71E2;PCI\VEN_1002&amp;DEV_71E6;PCI\VEN_1002&amp;DEV_71A1;PCI\VEN_1002&amp;DEV_71ED;PCI\VEN_1002&amp;DEV_71E0;PCI\VEN_1002&amp;DEV_71C6;PCI\VEN_1002&amp;DEV_71C1;PCI\VEN_1002&amp;DEV_7293;PCI\VEN_1002&amp;DEV_7291;PCI\VEN_1002&amp;DEV_71C7;PCI\VEN_1002&amp;DEV_71E1;PCI\VEN_1002&amp;DEV_72B3;PCI\VEN_1002&amp;DEV_72B1;PCI\VEN_1002&amp;DEV_71E7;PCI\VEN_1002&amp;DEV_7100;PCI\VEN_1002&amp;DEV_7108;PCI\VEN_1002&amp;DEV_7109;PCI\VEN_1002&amp;DEV_710A;PCI\VEN_1002&amp;DEV_710B;PCI\VEN_1002&amp;DEV_710C;PCI\VEN_1002&amp;DEV_7120;PCI\VEN_1002&amp;DEV_7128;PCI\VEN_1002&amp;DEV_7129;PCI\VEN_1002&amp;DEV_712A;PCI\VEN_1002&amp;DEV_712B;PCI\VEN_1002&amp;DEV_712C;PCI\VEN_1002&amp;DEV_7243;PCI\VEN_1002&amp;DEV_7245;PCI\VEN_1002&amp;DEV_7246;PCI\VEN_1002&amp;DEV_7247;PCI\VEN_1002&amp;DEV_7248;PCI\VEN_1002&amp;DEV_7249;PCI\VEN_1002&amp;DEV_724A;PCI\VEN_1002&amp;DEV_724B;PCI\VEN_1002&amp;DEV_724C;PCI\VEN_1002&amp;DEV_724D;PCI\VEN_1002&amp;DEV_724F;PCI\VEN_1002&amp;DEV_7263;PCI\VEN_1002&amp;DEV_7265;PCI\VEN_1002&amp;DEV_7266;PCI\VEN_1002&amp;DEV_7267;PCI\VEN_1002&amp;DEV_7268;PCI\VEN_1002&amp;DEV_7269;PCI\VEN_1002&amp;DEV_726A;PCI\VEN_1002&amp;DEV_726B;PCI\VEN_1002&amp;DEV_726C;PCI\VEN_1002&amp;DEV_726D;PCI\VEN_1002&amp;DEV_726F;PCI\VEN_1002&amp;DEV_7240;PCI\VEN_1002&amp;DEV_7244;PCI\VEN_1002&amp;DEV_7280;PCI\VEN_1002&amp;DEV_7260;PCI\VEN_1002&amp;DEV_7264;PCI\VEN_1002&amp;DEV_72A0;PCI\VEN_1002&amp;DEV_5B60;PCI\VEN_1002&amp;DEV_5B63;PCI\VEN_1002&amp;DEV_5B73;PCI\VEN_1002&amp;DEV_5B70;PCI\VEN_1002&amp;DEV_5657;PCI\VEN_1002&amp;DEV_5677;PCI\VEN_1002&amp;DEV_5B62;PCI\VEN_1002&amp;DEV_5B72;PCI\VEN_1002&amp;DEV_3E50;PCI\VEN_1002&amp;DEV_3E70;PCI\VEN_1002&amp;DEV_5E4D;PCI\VEN_1002&amp;DEV_5E4B;PCI\VEN_1002&amp;DEV_5E6B;PCI\VEN_1002&amp;DEV_5E4C;PCI\VEN_1002&amp;DEV_5E6C;PCI\VEN_1002&amp;DEV_5E6D;PCI\VEN_1002&amp;DEV_5E4A;PCI\VEN_1002&amp;DEV_5E6A;PCI\VEN_1002&amp;DEV_5E4F;PCI\VEN_1002&amp;DEV_5E6F;PCI\VEN_1002&amp;DEV_554B;PCI\VEN_1002&amp;DEV_556B;PCI\VEN_1002&amp;DEV_5549;PCI\VEN_1002&amp;DEV_554F;PCI\VEN_1002&amp;DEV_5D4F;PCI\VEN_1002&amp;DEV_5569;PCI\VEN_1002&amp;DEV_556F;PCI\VEN_1002&amp;DEV_5D6F;PCI\VEN_1002&amp;DEV_4A49;PCI\VEN_1002&amp;DEV_4A69;PCI\VEN_1002&amp;DEV_4A4F;PCI\VEN_1002&amp;DEV_4A6F;PCI\VEN_1002&amp;DEV_4A48;PCI\VEN_1002&amp;DEV_4A4A;PCI\VEN_1002&amp;DEV_4A4C;PCI\VEN_1002&amp;DEV_5548;PCI\VEN_1002&amp;DEV_4A68;PCI\VEN_1002&amp;DEV_4A6A;PCI\VEN_1002&amp;DEV_4A6C;PCI\VEN_1002&amp;DEV_5568;PCI\VEN_1002&amp;DEV_4A54;PCI\VEN_1002&amp;DEV_4A74;PCI\VEN_1002&amp;DEV_4A4B;PCI\VEN_1002&amp;DEV_5D57;PCI\VEN_1002&amp;DEV_4A50;PCI\VEN_1002&amp;DEV_554A;PCI\VEN_1002&amp;DEV_4A70;PCI\VEN_1002&amp;DEV_556A;PCI\VEN_1002&amp;DEV_4A6B;PCI\VEN_1002&amp;DEV_5D77;PCI\VEN_1002&amp;DEV_5D52;PCI\VEN_1002&amp;DEV_5D4D;PCI\VEN_1002&amp;DEV_5D6D;PCI\VEN_1002&amp;DEV_5D72;PCI\VEN_1002&amp;DEV_5B66;PCI\VEN_1002&amp;DEV_5B76;PCI\VEN_1002&amp;DEV_5B61;PCI\VEN_1002&amp;DEV_5B71;PCI\VEN_1002&amp;DEV_7141;PCI\VEN_1002&amp;DEV_714F;PCI\VEN_1002&amp;DEV_7151;PCI\VEN_1002&amp;DEV_7161;PCI\VEN_1002&amp;DEV_716F;PCI\VEN_1002&amp;DEV_7171;PCI\VEN_1002&amp;DEV_7290;PCI\VEN_1002&amp;DEV_7297;PCI\VEN_1002&amp;DEV_72B0;PCI\VEN_1002&amp;DEV_72B7;PCI\VEN_1002&amp;DEV_7289;PCI\VEN_1002&amp;DEV_728B;PCI\VEN_1002&amp;DEV_72A9;PCI\VEN_1002&amp;DEV_72AB;PCI\VEN_10DE&amp;DEV_0A6C;">
+				</Rule>
+			</Setting>
+		</Object>
+		<Object Type="GetComputerNameEx">
+			<Setting Key1="ComputerNameNetBIOS" Substitution="MACHINENAME" Display="Hide"/>
+			<Object Type="Group" Name="%MACHINENAME% System and OS Details" Class="System Details" GroupingClass="True" Task="Offline Scan" TrackProgress="TrackProgress">
+				<Object Type="Group" Name="Computer Details" Display="Right">
+					<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_ComputerSystem" Display="Hide">
+						<Setting Key1="__VALUES">
+						</Setting>
+					</Object>
+				</Object>
+				<Object Type="Group" Name="Operating System Details" Display="Right">
+					<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_OperatingSystem" Display="Hide">
+						<Setting Key1="__VALUES"/>
+						<Setting Key1="Version" Substitution="WINDOWSVERSION" Display="Hide">
+							<Rule Name="WindowsVersion" Query="$."/>
+						</Setting>
+						<Object Type="Group" Name="Windows Version =%WINDOWSVERSION%" Display="Right" ShowInSummary="True">
+							<Setting Key1="" Display="Hide"/>
+						</Object>
+						<Setting Key1="ServicePackMajorVersion">
+							<Rule Name="WindowsSP" Query="$."/>
+							<Rule Name="sNotSupported2010Config" Query="$n2DigitVersion=14 and $WindowsVersion='5.1.2600'and $WindowsSP&lt;3 " Error="Warning" Title="Windows XP Service Pack 3 is not installed" Text="Office 2010 is installed on a computer with Windows XP and Service Pack 3 for Windows is not installed. Windows XP SP3 is a system requirement for Office 2010." GUID="275613" SSID="2860307e-ad0d-4107-b7fd-8c6a11bdfd8d">
+							</Rule>
+						</Setting>
+						<Setting Key1="OSArchitecture" Substitution="OSBITNESS" Display="Hide">
+							<Rule Name="OSArchitecture" Query="if($.='64-bit','x64','x86')"/>
+						</Setting>
+						<Object Type="Group" Name="Windows Bitness =%OSBITNESS%" Display="Right" ShowInSummary="True">
+							<Setting Key1="" Display="Hide"/>
+						</Object>
+						<Setting Key1="ProductType" Substitution="OSPRODUCTYPE" Display="Hide">
+							<Rule Name="sOSProductType" Query="$.">
+							</Rule>
+						</Setting>
+						<Object Type="If" Key1="'%OSPRODUCTYPE%'='3'">
+							<Object Type="Group" Name="Server Features" Display="Right">
+								<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_ServerFeature">
+									<Setting Key1="__VALUES"/>
+									<Rule Name="sMissingDesktopXP" Query="../Instance/Setting[@Key1='ID' and Value='35']=false() and $n2DigitVersion&gt;11 and lower-case($appName)='powerpoint'" Error="Warning" Title="Desktop Experience not installed, so some PowerPoint features are unavailable" Text="The Desktop Experience not installed for Windows. In this configuration, you may not be able to insert or edit video when using PowerPoint. If needed, please click the 'Click here to see possible solution ...' link below for instructions." GUID="282480" SSID="1f05d388-5250-4acb-9779-7a1d417d0dc0">
+									</Rule>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+				</Object>
+				<Object Type="Group" Name="Pointing Devices" Display="Right">
+					<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_PointingDevice" Display="Hide">
+						<Setting Key1="PointingType">
+							<Rule Name="sTouchDevice" Error="None" Query="$.=8" P0="$sDeviceName" Title="Touch enabled device." Text="{0} is a touch enabled device.">
+							</Rule>
+						</Setting>
+						<Setting Key1="Name">
+							<Rule Name="sDeviceName" Query="$.">
+							</Rule>
+						</Setting>
+					</Object>
+				</Object>
+				<Object Type="Group" Name="Video Controllers" Display="Right">
+					<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_VideoController" Display="Hide">
+						<Setting Key1="Description">
+						</Setting>
+						<Setting Key1="PNPDeviceID" Format="(PCI\\VEN.*)(\x26SUBSYS.*)----$1">
+							<Rule Name="sPNPDeviceID" Query="$.">
+							</Rule>
+							<Rule Name="sUnsupportVideoDriver" Query="contains($sVideoCards,$sPNPDeviceID) and $n2DigitVersion&gt;14" Error="Warning" Title="Hardware acceleration is disabled by Office" Text="Hardware acceleration is disabled in Office programs because your video configuration is not compatible with Office 2013. Please update your video driver as your vendor may have an updated version that is compatible with Office 2013." GUID="273849" SSID="bfdda70c-a464-4222-afaa-1407a69b3cb8">
+							</Rule>
+						</Setting>
+						<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common\Graphics" Display="Right">
+							<Setting Key1="DisableHardwareAcceleration">
+							</Setting>
+							<Rule Name="fDisableHardwareAcceleration" Query="if((../Instance/Setting/@Key1='DisableHardwareAcceleration')=true(),../Instance/Setting[@Key1='DisableHardwareAcceleration']/Value,-1)">
+							</Rule>
+							<Rule Name="sDisableHardwareAcceleration" Query="$n2DigitVersion&gt;14 and $sUnsupportVideoDriver=false() and (($fDisableHardwareAcceleration=1 and $fDisableHardwareAccelerationPol=-1) or $fDisableHardwareAccelerationPol=1)" Error="Warning" Title="Hardware acceleration is disabled" Text="You have hardware acceleration disabled. If you have been having video-related problems in Office programs, you should check for an updated video driver. If the driver upgrade fixes the problems, it is recommended you re-enable hardware acceleration." GUID="273849" SSID="3e1b6f41-e5a1-425d-b3f4-cbe7a1f6f801">
+							</Rule>
+						</Object>
+						<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common\Graphics" Display="Right">
+							<Setting Key1="DisableHardwareAcceleration">
+							</Setting>
+							<Rule Name="fDisableHardwareAccelerationPol" Query="if((../Instance/Setting/@Key1='DisableHardwareAcceleration')=true(),../Instance/Setting[@Key1='DisableHardwareAcceleration']/Value,-1)">
+							</Rule>
+						</Object>
+					</Object>
+				</Object>
+				<Object Type="Group" Name="Network Adapters" Display="Right" Class="System Details">
+					<Object Type="NICS">
+						<Setting Key1="Description">
+						</Setting>
+						<Setting Key1="NetworkInterfaceType">
+						</Setting>
+						<Setting Key1="OperationalStatus">
+						</Setting>
+						<Setting Key1="Speed">
+						</Setting>
+						<Setting Key1="Support">
+						</Setting>
+						<Setting Key1="DefaultGateway">
+						</Setting>
+						<Setting Key1="DhcpServerAddresses">
+						</Setting>
+						<Setting Key1="DnsAddresses">
+						</Setting>
+						<Setting Key1="DnsSuffix">
+						</Setting>
+						<Setting Key1="IPv4Addresses">
+						</Setting>
+						<Setting Key1="IPv6Addresses">
+						</Setting>
+					</Object>
+				</Object>
+				<Object Type="Group" Name="Current Theme" Display="Right" Class="System Details">
+					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Control Panel\Appearance">
+						<Setting Key1="Current">
+							<Rule Name="sWinXPHCTheme" Query="contains($.,'HighContrast')" AlwaysEvaluate="True">
+							</Rule>
+						</Setting>
+					</Object>
+					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Windows\CurrentVersion\Themes">
+						<Setting Key1="CurrentTheme">
+							<Rule Name="sWinHCTheme" Query="contains($.,'hc1.theme') or contains($.,'hc2.theme') or contains($.,'hcblack.theme') or contains($.,'hcwhite.theme')" AlwaysEvaluate="True">
+							</Rule>
+						</Setting>
+					</Object>
+					<Rule Name="sHighContrastTheme" Query="(starts-with($WindowsVersion,'5') and $sWinXPHCTheme=true()) or (starts-with($WindowsVersion,'6') and $sWinHCTheme=true())" Error="Warning" Title="Windows theme is using a high-contrast setting" Text="Your current Windows theme is using one of the default high-contrast settings. In itself, this is not a problem. However, some high-contrast settings cause problems seeing shapes, drawings, menu items, or other objects in Office programs." GUID="279952" SSID="a2017fea-3edb-405b-9a71-be6516c20739">
+					</Rule>
+				</Object>
+			</Object>
+		</Object>
+	</Type>
+	<Type Name="UserDetails">
+		<Object Type="GetUserNameEx" Display="Right" Timeout="60">
+			<Setting Key1="NameDisplay">
+			</Setting>
+			<Setting Key1="NameCanonical">
+			</Setting>
+			<Setting Key1="NameCanonicalEx">
+			</Setting>
+			<Setting Key1="NameFullyQualifiedDN">
+			</Setting>
+			<Setting Key1="NameUniqueId">
+			</Setting>
+			<Setting Key1="NameUserPrinciple">
+			</Setting>
+		</Object>
+		<Object Type="Group" Name="Cached Credentials (Windows Vista and above)" Class="User Details" GroupingClass="True" Display="Right">
+			<Object Type="CommandLine" Key1="" Key2="cmdkey" Key3="/list">
+				<Setting Key1="Output">
+					<Rule Name="sCachedCreds" Query="$." P0="$." Error="None" Title="Cached Credentials" Text="{0}">
+					</Rule>
+				</Setting>
+			</Object>
+		</Object>
+	</Type>
+	<Type Name="CommonMisc">
+		<!--DCOM-->
+		<Object Type="Group" Name="DCOM Settings" Class="Miscellaneous" GroupingClass="True">
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Ole">
+				<Setting Key1="LegacyAuthenticationLevel">
+				</Setting>
+				<Setting Key1="LegacyImpersonationLevel">
+				</Setting>
+				<Rule Name="legacyAuthLevel" Query="if(../Instance/Setting[@Key1='LegacyAuthenticationLevel'],../Instance/Setting[@Key1='LegacyAuthenticationLevel']/Value,-1)">
+				</Rule>
+				<Rule Name="legacyImpLevel" Query="if(../Instance/Setting[@Key1='LegacyImpersonationLevel'],../Instance/Setting[@Key1='LegacyImpersonationLevel']/Value,-1)">
+				</Rule>
+				<Rule Name="sBadDCOMValues" Query="$legacyAuthLevel&gt;2 or $legacyImpLevel&gt;2" Error="Warning" Title="Machine configuration settings may prevent opening Office document attachments" Text="The DCOM settings on this computer may cause you to receive errors when you open Office documents from email attachments. If you are unable to open email attachments, click the FixIt link below to reconfigure your machine settings." GUID="275607" FIXIT="9787450" SSID="b012fccc-4bf1-4de6-9fff-1d080fb46e95">
+				</Rule>
+			</Object>
+		</Object>
+		<!--/DCOM-->
+		<!--.htm registration-->
+		<Object Type="Group" Name="Htmlfile registration" Class="Miscellaneous" GroupingClass="True">
+			<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".htm">
+				<Setting Key1="(Default)">
+					<Rule Name="fBadHtmregistration" Query="$.!='htmlfile'">
+					</Rule>
+				</Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3=".html">
+				<Setting Key1="(Default)">
+					<Rule Name="fBadHtmlregistration" Query="$.!='htmlfile'">
+					</Rule>
+				</Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="htmlfile\shell\open\command">
+				<Setting Key1="(Default)">
+					<Rule Name="fBadHtmlfileCommand" Query="not(contains(lower-case($.),'iexplore.exe'))">
+					</Rule>
+					<Rule Name="sBrokenHtmRegistration" Query="$fBadHtmregistration or $fBadHtmlregistration or $fBadHtmlfileCommand" Error="Warning" Title="Hyperlinks are not working in Outlook" Text="When you click a hyperlink in Microsoft Outlook, you receive one of the following error messages, depending on your Outlook version:&#xA;&#xA;This operation has been cancelled due to restrictions in effect on this computer. Please contact your system administrator.&#xA;&#xA;Your organization's policies are preventing us from completing this action for you. For more info, please contact your help desk." GUID="272752" FIXIT="9726441" SSID="f7ff20da-7f31-4395-9a2e-24ea91d98160">
+					</Rule>
+				</Setting>
+			</Object>
+		</Object>
+		<!--/.htm registration-->
+		<!--VBA-->
+		<Object Type="Group" Name="VBA" Class="Miscellaneous">
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\VBA" Key5="Subtree">
+				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
+				</Setting>
+				<Rule Name="sMissingVBAKey" Query="$n2DigitVersion=14 and (../Instance/Setting[@Key1='__KEYPATH']/Value='Software\Microsoft\VBA\7.0\Common')=false()" Error="Warning" Title="Registry data for Visual Basic for Applications is missing" Text="The registry is missing data for Visual Basic for Applications (VBA) in Office 2010. In this configuration, you may have some VBA functionality disabled." GUID="275594" FIXIT="" SSID="8a895188-6d23-4606-b640-e82405649f13">
+				</Rule>
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
+					<Setting Key1="__VALUES">
+					</Setting>
+				</Object>
+			</Object>
+		</Object>
+		<!--/VBA-->
+		<!--Windows Installer-->
+		<Object Type="Group" Name="Windows Installer Policy">
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Windows\Installer">
+				<Setting Key1="__VALUES">
+				</Setting>
+				<Setting Key1="Logging">
+					<Rule Name="sMSILoggingXP" Query="starts-with($MachineDetails_WindowsVersion,'5') and contains($.,'voicewarmup')" Error="Warning" Title="Windows Installer logging is enabled in the registry" Text="Verbose logging for the Windows Installer is enabled in the registry. As this logging can generate many log files and disk space, it is recommended that you use this logging only for troubleshooting purposes. Please consider turning off this logging." GUID="275096" FIXIT="9711326" SSID="9487402d-09a5-4c67-9099-d98bc18a224d">
+					</Rule>
+					<Rule Name="sMSILogging" Query="number(substring($MachineDetails_WindowsVersion,1,1))&gt;5 and contains($.,'voicewarmup')" Error="Warning" Title="Windows Installer logging is enabled in the registry" Text="Verbose logging for the Windows Installer is enabled in the registry. As this logging can generate many log files and disk space, it is recommended that you use this logging only for troubleshooting purposes. Please consider turning off this logging." GUID="128265" FIXIT="" SSID="9516c6d1-3c32-4227-984c-6372e94be929">
+					</Rule>
+				</Setting>
+			</Object>
+		</Object>
+		<!--/Windows Installer-->
+	</Type>
+	<Type Name="DisplayLinkUMD">
+		<Object Type="Engine">
+			<Setting Key1="EnvironmentVariable" Key2="WINDIR" Substitution="WINDIR" Display="Hide">
+			</Setting>
+			<Object Type="File" Key2="%WINDIR%\System32\dlumd32.dll" Display="Right">
+				<Setting Key1="Version" Display="Right">
+				</Setting>
+			</Object>
+			<Object Type="File" Key2="%WINDIR%\SysWOW64\dlumd32.dll" Display="Right">
+				<Setting Key1="Version" Display="Right">
+				</Setting>
+			</Object>
+			<Rule Name="dlumd32Version" Query="if(../Instance/Object/Instance/Setting[@Key1='Version'],../Instance/Object/Instance/Setting[@Key1='Version']/Value,'0')">
+			</Rule>
+			<Rule Name="dlumd32VersionOld" Query="$nCrashCount&gt;0 and $n2DigitVersion=15 and number($dlumd32Version)!=0 and substring($dlumd32Version,2,1)='.' and substring($dlumd32Version,4,1)='.' and number(substring($dlumd32Version,1,1))&lt;9 and number(substring($dlumd32Version,3,1))&lt;7" Error="Error" Title="Office programs may be crashing due to an outdated DisplayLink driver" Text="At least one Office 2013 program has crashed in the past 7 days and the DisplayLink user mode driver version on your machine has been known to cause Office programs to crash. Please install the 7.1 M1 update (or later version) for the DisplayLink driver." GUID="280404" SSID="be9a15de-23a5-4464-9497-2a278f0d0d05">
+			</Rule>
+		</Object>
+	</Type>
+	<Type Name="MSO">
+		<Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
+			<Object Type="Engine">
+				<Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES(X86)" Substitution="COMMONPROGRAMFILESX86" Display="Hide"/>
+				<Object Type="File" Key2="%COMMONPROGRAMFILESX86%\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right" ShowInSummary="True">
+					<Setting Key1="Version" Display="Right">
+						<Rule Name="sMSOVersionWow" Query="$." AlwaysEvaluate="True">
+						</Rule>
+						<Rule Name="sMSOPRWow" Query="number(substring($sMSOVersionWow,11,1))=3" Error="None" Title="The build number for Mso.dll indicates a Private Release (PR) build" Text="The build number for Mso.dll indicates a Private Release (PR) build. PR builds are intended only for testing and not production use." SSID="43eae04b-9396-4e20-b983-c878f559160f">
+						</Rule>
+					</Setting>
+				</Object>
+			</Object>
+		</Object>
+		<Object Type="If" Key1="'%WOW6432NODE%'=''">
+			<Object Type="Engine">
+				<Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES" Substitution="COMMONPROGRAMFILES" Display="Hide">
+				</Setting>
+				<Object Type="File" Key2="%COMMONPROGRAMFILES%\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right" ShowInSummary="True">
+					<Setting Key1="Version" Display="Right">
+						<Rule Name="sMSOVersion" Query="$." AlwaysEvaluate="True">
+						</Rule>
+						<Rule Name="sMSOPR" Query="number(substring($sMSOVersion,11,1))=3" Error="None" Title="The build number for Mso.dll indicates a Private Release (PR) build" Text="The build number for Mso.dll indicates a Private Release (PR) build. PR builds are intended only for testing and not production use." SSID="35584122-c250-41d4-9f0d-f5fc9435e2ee">
+						</Rule>
+					</Setting>
+				</Object>
+			</Object>
+		</Object>
+	</Type>
+	<Type Name="OART">
+		<Object Type="File" Key2="%INSTALLPATH%\oart.dll" ShowInSummary="True">
+			<Setting Key1="Version">
+			</Setting>
+		</Object>
+	</Type>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>VkhSrlAl3Sqfieo1v52+k6yWBv8=</DigestValue></Reference></SignedInfo><SignatureValue>
+    b/HgxdssZUvEPHrW4NPRi358tVxdHkKIIWN7c2/accCw46dHgCev6uxPI1FscHv3AXEsKkst
+    IyrJzJEMV8CoM6Vz2lcdKUt7t1Y+xoy5KIDBqpKoqXh/jZ1PzuSMsfY9klgTtQlycckE7ZFD
+    2MwIyA8r1LMQGc8aiUVAiUSmZ9cZgAl23g+0RvXV/WxY/SKpcair/807dNetb4nMhSkTBbGy
+    Gg9UM6eNX+3TV3pApyUXO3fX72uYDg/VGuH4oQuoDSw8xRpM04JXFwwfjzx6Y5F0L7gD19ge
+    2jSohiA+6dcWqMzEn46fHYCSPZwhVnRNKn6E6dKZADjkLVZAKbEkRw==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            s3R00II8h6ea1I6yBEKAlyUu5EHOk2M2XxPytHiYgMYofsyKE+89N4w7CaDYFMVcXtipHX8B
+            wbOYG1B37P7qfEXPf+EhDsWEyp8Pa7MJOLd0xFcevvBIqHla3w6bHJqovMhStQxpj4TOcVV7
+            /wkgv0B3NyEwdFuV33fLoOXBchIGPfLIVWyvwftqFifI9bNh49nOGw8e9OTNTDRsPkcR5wIr
+            XxR6BAf11z2L22d9Vz41622NAUCNGoeW4g93TIm6OJz7jgKR2yIP5dA2qbg3RdAq/JaNwWBx
+            M6WIsfbCBDCHW8PXL7J5EdiLZWKiihFmXX5/BXpzih96heXNKBDRPQ==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIEqTCCA5GgAwIBAgITMwAAAIhZDjxRH+JqZwABAAAAiDANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xMjA3MjYyMDUwNDFaFw0xMzEwMjYyMDUwNDFaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCzdHTQgjyH
+          p5rUjrIEQoCXJS7kQc6TYzZfE/K0eJiAxih+zIoT7z03jDsJoNgUxVxe2KkdfwHBs5gbUHfs
+          /up8Rc9/4SEOxYTKnw9rswk4t3TEVx6+8EioeVrfDpscmqi8yFK1DGmPhM5xVXv/CSC/QHc3
+          ITB0W5Xfd8ug5cFyEgY98shVbK/B+2oWJ8j1s2Hj2c4bDx705M1MNGw+RxHnAitfFHoEB/XX
+          PYvbZ31XPjXrbY0BQI0ah5biD3dMibo4nPuOApHbIg/l0DapuDdF0Cr8lo3BYHEzpYix9sIE
+          MIdbw9cvsnkR2ItlYqKKEWZdfn8FenOKH3qF5c0oENE9AgMBAAGjggEdMIIBGTATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUJls+W12WX+L3d4h/XkVTWKguW7gwDgYDVR0PAQH/
+          BAQDAgeAMB8GA1UdIwQYMBaAFMsR6MrStBZYAck3LjMWFrlMmgofMFYGA1UdHwRPME0wS6BJ
+          oEeGRWh0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kvY3JsL3Byb2R1Y3RzL01pY0NvZFNp
+          Z1BDQV8wOC0zMS0yMDEwLmNybDBaBggrBgEFBQcBAQROMEwwSgYIKwYBBQUHMAKGPmh0dHA6
+          Ly93d3cubWljcm9zb2Z0LmNvbS9wa2kvY2VydHMvTWljQ29kU2lnUENBXzA4LTMxLTIwMTAu
+          Y3J0MA0GCSqGSIb3DQEBBQUAA4IBAQAP3kBJiJHRMTejRDhpsmor1JH7aIWuWLseDI9W+pnX
+          ypcnTOiFjnlpLOS9lj/lcGaXlTBlKa3Gyqz1D3moZ79p9A+X4woPv+6WdimyItAzxv+LSa2u
+          sv2/JervJ1DA6xn4GmRqoOEXWa/xz+yBqInosdIUBuNqbXRSZNqWlCpcaWsf7QWZGtzoZaqI
+          GxWVGtOkUZb9VZX4Y42fFAyxnn9KBP/DZq0Kr66k3mP68OrDs7Lrh9vFOK22c9J4ZOrsIVtr
+          O9ZEIvSBUqUrQymLDKEqcYJCy6sbftSlp6333vdGms5DOegqU+3PQOR3iEK/RxbgpTZq76ca
+          jTo9MwT2JSAj
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEmjCCA4KgAwIBAgIKYQeDRQAAAAAAEDANBgkqhkiG9w0BAQUFADB5MQswCQYDVQQGEwJVUzET
+MBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0
+IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgVGltZXN0YW1waW5nIFBDQTAeFw0xMjAx
+MDkyMTUzNThaFw0xMzA0MDkyMTUzNThaMIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGlu
+Z3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0w
+CwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAj
+BgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0YW1wIFNlcnZpY2UwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQCqOYA2cofc4+9/ZQha5gI673Dzx2nkBahvpuBs49IQUa15z+kpSG3stuBAeo2C
+0OQD3BxSdymGqfEyYG3DzGMma9OwuKCd1fpO8/V3tcFGbMCYlnHeI1KkD4LA7r+yiVAGNQr5VWKM
+FHnj+y/SqrgTlvsfZ6NfWJ/n8r5sdWBagJmuue/XSQ1phAvE7MsV2jtBvagRgCQO3/M1T8yDpjGx
+2dcL+R71rtKWNtWOfo0Pax6H/sW7ozIwFcA24J5jRVyp8RUgRQgpaKFZko7zXHovcjiZ7O4VBRNv
+Rsuer8Htf9VyrhN/2GP0+xSGLSAK+rl/ZdTFYFpXr/lTiX0l+N77AgMBAAGjgegwgeUwHQYDVR0O
+BBYEFOEbm/0SuFL4h+9hMzzQs+lg4x9FMB8GA1UdIwQYMBaAFG/oTj+XuTSrS4aPvJzqrDtBQ8bQ
+MEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kvY3JsL3Byb2R1
+Y3RzL3RzcGNhLmNybDBIBggrBgEFBQcBAQQ8MDowOAYIKwYBBQUHMAKGLGh0dHA6Ly93d3cubWlj
+cm9zb2Z0LmNvbS9wa2kvY2VydHMvdHNwY2EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqG
+SIb3DQEBBQUAA4IBAQB34v+FOOZIMqubtd4LRX06XFmd3bO2WIvcXQ5fY7Dr2TkkCWJuxXXfLee9
+eg3OJAoBu7URRGMGA7tuMjbxxVPm9AWSNwB6qd4UAWUAREg9Dmh0/b3eZ4Eeg8e3CMJvSVrMW4ew
+yFGuHKjrY408yhUY3JeNdxQmi1AU7euzA/g5udRlXfZCqjqfZFk0k6HfRg3LmsZP284xd/RUwJKa
+HbG3u1oc10VM2MXEdUuXwylPfE5owyW3Vm4SPoAo0rNv8tntKJyap6TyNnE1tn+EInccIzXmstEr
+W8ZKDS7RaZkYQU/o9ZkZ0AE/SMyDbBnomV0Jec/6+aZtfM4kZi23VRKh</X509Certificate></X509Data><X509Data><X509Certificate>MIIEnTCCA4WgAwIBAgIQaguZT8AAJasR20UfWHpnojANBgkqhkiG9w0BAQUFADBwMSswKQYDVQQL
+EyJDb3B5cmlnaHQgKGMpIDE5OTcgTWljcm9zb2Z0IENvcnAuMR4wHAYDVQQLExVNaWNyb3NvZnQg
+Q29ycG9yYXRpb24xITAfBgNVBAMTGE1pY3Jvc29mdCBSb290IEF1dGhvcml0eTAeFw0wNjA5MTYw
+MTA0NDdaFw0xOTA5MTUwNzAwMDBaMHkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9u
+MRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xIzAhBgNV
+BAMTGk1pY3Jvc29mdCBUaW1lc3RhbXBpbmcgUENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEA3Ddu+6/IQkpxGMjOSD5TwPqrFLosMrsST1LIg+0+M9lJMZIotpFk4B9QhLrCS9F/Bfjv
+db6Lx6jVrmlwZngnZui2t++Fuc3uqv0SpAtZIikvz0DZVgQbdrVtZG1KVNvd8d6/n4PHgN9/TAI3
+lPXAnghWHmhHzdnAdlwvfbYlBLRWW2ocY/+AfDzu1QQlTTl3dAddwlzYhjcsdckO6h45CXx2/p1s
+bnrg7D6Pl55xDl8qTxhiYDKe0oNOKyJcaEWL3i+EEFCy+bUajWzuJZsT+MsQ14UO9IJ2czbGlXqi
+zGAG7AWwhjO3+JRbhEGEWIWUbrAfLEjMb5xD4GrofyaOawIDAQABo4IBKDCCASQwEwYDVR0lBAww
+CgYIKwYBBQUHAwgwgaIGA1UdAQSBmjCBl4AQW9Bw72lyniNRfhSyTY7/y6FyMHAxKzApBgNVBAsT
+IkNvcHlyaWdodCAoYykgMTk5NyBNaWNyb3NvZnQgQ29ycC4xHjAcBgNVBAsTFU1pY3Jvc29mdCBD
+b3Jwb3JhdGlvbjEhMB8GA1UEAxMYTWljcm9zb2Z0IFJvb3QgQXV0aG9yaXR5gg8AwQCLPDyIEdE+
+9mPs30AwEAYJKwYBBAGCNxUBBAMCAQAwHQYDVR0OBBYEFG/oTj+XuTSrS4aPvJzqrDtBQ8bQMBkG
+CSsGAQQBgjcUAgQMHgoAUwB1AGIAQwBBMAsGA1UdDwQEAwIBhjAPBgNVHRMBAf8EBTADAQH/MA0G
+CSqGSIb3DQEBBQUAA4IBAQCUTRExwnxQuxGOoWEHAQ6McEWN73NUvT8JBS3/uFFThRztOZG3o1YL
+3oy2OxvR+6ynybexUSEbbwhpfmsDoiJG7Wy0bXwiuEbThPOND74HijbB637pcF1Fn5LSzM7djsDh
+vyrNfOzJrjLVh7nLY8Q20Rghv3beO5qzG3OeIYjYtLQSVIz0nMJlSpooJpxgig87xxNleEi7z62D
+Ok+wYljeMOnpOR3jifLaOYH5EyGMZIBjBgSW8poCQy97Roi6/wLZZflK3toDdJOzBW4MzJ3cKGF8
+SPEXnBEhOAIch6wGxZYyuOVAxlM9vamJ3uhmN430IpaczLB3VFE61nJEsiP2</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>
