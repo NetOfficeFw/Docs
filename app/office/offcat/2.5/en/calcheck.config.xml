@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
+  <Configuration ConfigName="CalCheck" ChangeDescription="2.0.1503.28" ConfigVersion="2.0.1503.28" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" Symptoms="1">
+    <Substitution Name="BITNESS"></Substitution>
+    <Substitution Name="CONFIG"></Substitution>
+    <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
+    <ConfigPreprocessor Name="1 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
+    <ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
+    <ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
+    <ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
+    <ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
+    <ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
+    <ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
+    <ObjectProcessor Name="IfThenElse" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfThenElseObjectProcessor"/>
+    <ObjectProcessor Name="CalCheckLog" Assembly="BPA.OutlookCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CalCheckLogObjectProcessor"/>
+    <ObjectProcessor Name="OFFX" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.OffXFileObjectProcessor"/>
+    <Icon Bitmap="89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF610000000467414D410000B18F0BFC6105000000097048597300000EC300000EC301C76FA8640000001674455874536F667477617265007061696E742E6E657420342E303BE8F5690000009149444154384FAD91410A802010453D43D00D82B642DB4EE5613A49DBB65DA86D30FD31059191466DF1E08F7FFE30AA21A24F9C73161C600653D0963D319083E60D10D803AC37F6C4400E9A07708520C37A644F0CA4242166050BB8E39931EE44573D7F0C78AF20991A3040FF881218F07E639CE88B4AEDEB92A9D1BE8EA295FE0D4AA646FB3A8A56FA3728991A4D44E601ACA88F03211916DE0000000049454E44AE426082"></Icon>
+    <Options>
+      <Option Name="OrganizerAddress" DefaultValue="true" Description="Check for Organizer email address (PR_SENT_REPRESENTING_EMAIL_ADDRESS)"></Option>
+      <Option Name="OrganizerName" DefaultValue="true" Description="Check for Organizer display name (PR_SENT_REPRESENTING_NAME)"></Option>
+      <Option Name="SenderAddress" DefaultValue="true" Description="Check for Sender email address (PR_SENDER_EMAIL_ADDRESS)"></Option>
+      <Option Name="SenderName" DefaultValue="true" Description="Check for Sender display name (PR_SENDER_NAME)"></Option>
+      <Option Name="NoSubject" DefaultValue="true" Description="Check for No Subject if in the future or if recurring"></Option>
+      <Option Name="MessageClass" DefaultValue="true" Description="Check the Message Class for non-standard classes"></Option>
+      <Option Name="ConflictItems" DefaultValue="true" Description="Check for Conflict items in the Calendar - can prevent mailbox moves in Exchange"></Option>
+      <Option Name="RecurItemLimit" DefaultValue="true" Description="Check for recurring meetings limit - 1300 is the max allowed"></Option>
+      <Option Name="ItemSize10" DefaultValue="true" Description="Check for items over 10M in size"></Option>
+      <Option Name="ItemSize25" DefaultValue="true" Description="Check for items over 25M in size"></Option>
+      <Option Name="ItemSize50" DefaultValue="true" Description="Check for items over 50M in size"></Option>
+      <Option Name="AttachCount" DefaultValue="true" Description="Check for items with more than 25 attachments"></Option>
+      <Option Name="RecurringProp" DefaultValue="true" Description="Check for dispidRecurring property - if it's missing the item won't display in the calendar"></Option>
+      <Option Name="StartTimeX" DefaultValue="true" Description="Check for dispidApptStartWhole (start time property)"></Option>
+      <Option Name="StartTimeMin" DefaultValue="true" Description="Check for items with Start Time set to 0 (year 1601)"></Option>
+      <Option Name="StartTime1995" DefaultValue="true" Description="Check for items with Start time earlier than year 1995"></Option>
+      <Option Name="StartTime2025" DefaultValue="true" Description="Check for items with Start time later than year 2025"></Option>
+      <Option Name="StartTimeMax" DefaultValue="true" Description="Check for items with Start time greater than Outlook Boundary"></Option>
+      <Option Name="EndTimeX" DefaultValue="true" Description="Check for dispidApptEndWhole (end time property)"></Option>
+      <Option Name="EndTimeMin" DefaultValue="true" Description="Check for items with End Time set to 0 (year 1601)"></Option>
+      <Option Name="EndTime1995" DefaultValue="true" Description="Check for items with End Time earlier than year 1995"></Option>
+      <Option Name="EndTime2025" DefaultValue="true" Description="Check for items with End time later than year 2025"></Option>
+      <Option Name="EndTimeMax" DefaultValue="true" Description="Check for items with End time greater than Outlook Boundary"></Option>
+      <Option Name="RecurStartMin" DefaultValue="true" Description="Check the Recurrence property for start time set to 0 (year 1601)"></Option>
+      <Option Name="RecurStart1995" DefaultValue="true" Description="Check the Recurrence property for start time earlier than year 1995"></Option>
+      <Option Name="RecurStart2025" DefaultValue="true" Description="Check the Recurrence property for start time later than year 2025"></Option>
+      <Option Name="RecurStartMax" DefaultValue="true" Description="Check the Recurrence property for start time greater than Outlook Boundary"></Option>
+      <Option Name="RecurEndMin" DefaultValue="true" Description="Check the Recurrence property for end time set to 0 (year 1601)"></Option>
+      <Option Name="RecurEnd1995" DefaultValue="true" Description="Check the Recurrence property for end time earlier than year 1995"></Option>
+      <Option Name="RecurEnd2025" DefaultValue="true" Description="Check the Recurrence property for end time later than year 2025"></Option>
+      <Option Name="RecurEndMax" DefaultValue="true" Description="Check the Recurrence property for end time greater than Outlook Boundary"></Option>
+      <Option Name="ExceptionBounds" DefaultValue="true" Description="Check the Recurrence property for items that occur outside the series time boundaries"></Option>
+      <Option Name="ExceptionData" DefaultValue="true" Description="Check the Recurrence property for length mismatches on Exception data"></Option>
+      <Option Name="Duplicates" DefaultValue="true" Description="Check for duplicate items"></Option>
+      <Option Name="AttendToOrganizer" DefaultValue="true" Description="Check for items where you are an attendee, and you became the Organizer"></Option>
+      <Option Name="DupGlobalObjectIDs" DefaultValue="true" Description="Check for items with duplicate GlobalObjectIds"></Option>
+      <Option Name="NoGlobalObjectIDs" DefaultValue="true" Description="Check for items with empty/missing GlobalObjectIds"></Option>
+      <Option Name="RTAddressType" DefaultValue="true" Description="Check Email Address Types for recipients in the recipient table"></Option>
+      <Option Name="RTAddress" DefaultValue="true" Description="Check Email Addresses for recipients in the recipient table"></Option>
+      <Option Name="RTDisplayName" DefaultValue="true" Description="Check for valid/existing Display Names for recipients in the recipient table"></Option>
+      <Option Name="RTDuplicates" DefaultValue="true" Description="Check for duplicated recipients in the recipient table"></Option>
+      <Option Name="RTOrganizerAddress" DefaultValue="true" Description="Check for valid Email Address for recipient marked as Organizer in the recipient table"></Option>
+      <Option Name="RTOrganizerIsOrganizer" DefaultValue="true" Description="Check that the recipient marked as Organizer in the recipient table matches the Organizer in SENT_REPRESENTING properties"></Option>
+      <Option Name="HolidayItems" DefaultValue="false" Description="Check and report on Holiday items"></Option>
+      <Option Name="BirthdayItems" DefaultValue="false" Description="Check and report on All Day items with Birthday in the subject (covers additional languages)"></Option>
+      <Option Name="PastItems" DefaultValue="true" Description="Check and report problems for items that ended in the past"></Option>
+      <Option Name="WarningIsError" DefaultValue="false" Description="Treat Warnings like Errors"></Option>
+    </Options>
+  </Configuration>
+  <Object Type="Group" Name="Problems" Class="Calendar Checking Tool" GroupingClass="True" Display="Hide" TrackProgress="TrackProgress">
+    <Object Type="GetComputerNameEx">
+      <Setting Key1="ComputerNameNetBIOS" Display="Hide"/>
+      <Setting Key1="ComputerNameDnsFullyQualified" Display="Hide"/>
+    </Object>
+    <Object Type="Engine" Display="Hide">
+			<Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide">
+			</Setting>
+			<Setting Key1="EnvironmentVariable" Key2="TEMP" Substitution="TMPDIR" Display="Hide">
+			</Setting>
+			<Object Type="CommandLine" Name="Calcheck" Key2="&quot;%EXECDIR%\Tools\%BITNESS%\calcheck.exe&quot;" Key3="-o &quot;%TMPDIR%&quot; -i &quot;%CONFIG%&quot; -e" Display="Hide" MaxTime="ALL,3">
+				<Setting Key1="ReturnValue" Display="Hide">
+				</Setting>
+				<Object Type="OFFX" Key1="%TMPDIR%\CalCheckErr.csv" Key2="CalCheck" Key3="text/plain" Key4="ADD" Key5="True"/>
+				<Object Type="CalCheckLog" Key1="%TMPDIR%\CalCheck.log">
+					<Setting Key1="Errors">
+						<Rule Name="sCalcheckErrors" Error="Error" Query="$. &gt; 0" Title="{0} issues of type 'Error' were found in your meetings and appointments" Text="The CalCheck tool scanned the meetings and appointments in your calendar and found {0} problems classified as an 'Error'.&#xA;&#xA;Click the orange 'Calendar Issues' tile at the top of this page to see how to fix these errors.&#xA;Note: the number of errors on the tile might be lower than the number reported here when two or more errors have been found for the same item" P0="$." Symptoms="Calendar"/>
+					</Setting>
+					<Setting Key1="Warnings">
+						<Rule Name="sCalcheckWarnings" Error="Warning" Query="$. &gt; 0" Title="{0} issues of type 'Warning' were found in your meetings and appointments" Text="The CalCheck tool scanned the meetings and appointments in your calendar and found {0} problems classified as a 'Warning'.&#xA;&#xA;Click the orange 'Calendar Issues' tile at the top of this page to see how to fix these warnings.&#xA;Note: the number of warnings on the tile might be lower than reported here when two or more warnings have been found for the same item." P0="$." Symptoms="Calendar"/>
+					</Setting>
+				</Object>
+        <Object Type="OFFX" Key1="%TMPDIR%\CalCheck.log" Key2="CalCheck" Key3="text/plain" Key4="ADD" Key5="True"/>
+			</Object>
+		</Object>
+	</Object>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>VYNHlX0Yx8H1chCqiVSzQ9kfLCk=</DigestValue></Reference></SignedInfo><SignatureValue>
+    b4qi5cGysQ8xRoFvZix4dI4OvO2evS7LdjR9mSrtFRe6aS8NUjeeI4CmRuvCeMotns74rcR4
+    CEaj/5K/3I/M6b4pknc7IlidaQpDnjYgfEoiTT/4mAjS4FjfzuOnmdnQTv1LRTLw07jqp/6N
+    Rx5H4cp1okbIbmjkOCpNUCO3/Vx+cEmER/fabPxJ+N7uahKE1g7/TtFBgKrVYB8FmViFLmPH
+    hJuoYyCtIOBwrISQS9FWvsFZFkarG20VXduiaBZ6bb1L4W5gX5nKXLNxymnH3pBBion4nr8r
+    r0RwvnDUIG0TZhpjkbKxourpMiYkr2MKqw/P4FCDcfd6kgRZUSLWzw==
+  </SignatureValue><KeyInfo>
+      <KeyValue>
+        <RSAKeyValue>
+          <Modulus>
+            lnFd7QZG+oTLnVu3Rsew4bQROQOtsRVzYJzrp7ZuGjw//2XjNPGmpSFeVplsWOSSoQpcwtPc
+            Ui8MZZogYUBTMZxsjyF9uvn+E1BSYJU6W7lYpXRhQamU4K0mTkyhl3BJJ158Z8pPHnGERrwd
+            S7biD8XGJ8kH5noKpRcAGUxwRTgtgbRQqsVn0fp5vMXMoXKb9CU0mPhU3xI5OBIvpGulmn7H
+            YtHcz+09NPi53zUwuux5MqnhqaxVTUx/TFbDEwt28Qf5zEes+4jVUqUeKPo9Lc/PhJiGcWUR
+            z4XJCUSG4W/nsfysQESlqYsjP4JJndWWWVATWRhz/0MMrSvUfzBAZw==
+          </Modulus>
+          <Exponent>AQAB</Exponent>
+        </RSAKeyValue>
+      </KeyValue>
+      <X509Data>
+        <X509Certificate>
+          MIIE7DCCA9SgAwIBAgITMwAAAMps1TISNcThVQABAAAAyjANBgkqhkiG9w0BAQUFADB5MQsw
+          CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+          A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNyb3NvZnQgQ29kZSBT
+          aWduaW5nIFBDQTAeFw0xNDA0MjIxNzM5MDBaFw0xNTA3MjIxNzM5MDBaMIGDMQswCQYDVQQG
+          EwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+          TWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMR4wHAYDVQQDExVNaWNyb3Nv
+          ZnQgQ29ycG9yYXRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCWcV3tBkb6
+          hMudW7dGx7DhtBE5A62xFXNgnOuntm4aPD//ZeM08aalIV5WmWxY5JKhClzC09xSLwxlmiBh
+          QFMxnGyPIX26+f4TUFJglTpbuVildGFBqZTgrSZOTKGXcEknXnxnyk8ecYRGvB1LtuIPxcYn
+          yQfmegqlFwAZTHBFOC2BtFCqxWfR+nm8xcyhcpv0JTSY+FTfEjk4Ei+ka6Wafsdi0dzP7T00
+          +LnfNTC67HkyqeGprFVNTH9MVsMTC3bxB/nMR6z7iNVSpR4o+j0tz8+EmIZxZRHPhckJRIbh
+          b+ex/KxARKWpiyM/gkmd1ZZZUBNZGHP/QwytK9R/MEBnAgMBAAGjggFgMIIBXDATBgNVHSUE
+          DDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUH17iXVCNVoa+SjzPBOinh7XLv4MwUQYDVR0RBEow
+          SKRGMEQxDTALBgNVBAsTBE1PUFIxMzAxBgNVBAUTKjMxNTk1K2I0MjE4ZjEzLTZmY2EtNDkw
+          Zi05YzQ3LTNmYzU1N2RmYzQ0MDAfBgNVHSMEGDAWgBTLEejK0rQWWAHJNy4zFha5TJoKHzBW
+          BgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
+          dWN0cy9NaWNDb2RTaWdQQ0FfMDgtMzEtMjAxMC5jcmwwWgYIKwYBBQUHAQEETjBMMEoGCCsG
+          AQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY0NvZFNpZ1BD
+          QV8wOC0zMS0yMDEwLmNydDANBgkqhkiG9w0BAQUFAAOCAQEAd1zr15E9zb17g9mFqbBDnXN8
+          F8kP7Tbbx7UsG177VAU6g3FAgQmit3EmXtZ9tmw7yapfXQMYKh0nfgfpxWUftc8Nt1THKDha
+          iOd7wRm2VjK64szLk9uvbg9dRPXUsO8b1U7Brw7vIJvy4f4nXejF/2H2GdIoCiKd381wgp4Y
+          ctgjzHosQ+7/6sDg5h2qnpczAFJvB7jTiGzepAY1p8JThmURdwmPNVm52IaoAP74MX0s9IwF
+          ncDB1XdybOlNWSaD8cKyiFeTNQB8UCu8Wfz+HCk4gtPeUpdFKRhOlludul8bo/EnUOoHleht
+          NA04V9w3KDWVOjic1O1qhV0OIhFeew==
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          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
+        </X509Certificate>
+      </X509Data>
+      <X509Data>
+        <X509Certificate>
+          MIIFvDCCA6SgAwIBAgIKYTMmGgAAAAAAMTANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPy
+          LGQBGRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3Nv
+          ZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMTAwODMxMjIxOTMyWhcNMjAwODMx
+          MjIyOTMyWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+          UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpNaWNy
+          b3NvZnQgQ29kZSBTaWduaW5nIFBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+          ALJyWVwZMGS/HZpgICBCmXZTbD4b1m/My/Hqa/6XFhDg3zp0gxq3L6Ay7P/ewkJOI9VyANs1
+          VwqJyq4gSfTwaKxNS42lvXlLcZtHB9r9Jd+ddYjPqnNEf9eB2/O98jakyVxF3K+tPeAoaJca
+          p6Vyc1bxF5Tk/TWUcqDWdl8ed0WDhTgW0HNbBbpnUo2lsmkv2hkL/pJ0KeJ2L1TdFDBZ+NKN
+          Yv3LyV9GMVC5JxPkQDDPcikQKCLHN049oDI9kM2hOAaFXE5WgigqBTK3S9dPY+fSLWLxRT3n
+          rAgA9kahntFbjCZT6HqqSvJGzzc8OJ60d1ylF56NyxGPVjzBrAlfA9MCAwEAAaOCAV4wggFa
+          MA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMsR6MrStBZYAck3LjMWFrlMmgofMAsGA1Ud
+          DwQEAwIBhjASBgkrBgEEAYI3FQEEBQIDAQABMCMGCSsGAQQBgjcVAgQWBBT90TFO0yaKleGY
+          YDuoMW+mPLzYLTAZBgkrBgEEAYI3FAIEDB4KAFMAdQBiAEMAQTAfBgNVHSMEGDAWgBQOrIJg
+          QFYnl+UlE/wq4QpTlVnkpDBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLm1pY3Jvc29m
+          dC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYIKwYBBQUH
+          AQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRz
+          L01pY3Jvc29mdFJvb3RDZXJ0LmNydDANBgkqhkiG9w0BAQUFAAOCAgEAWTk+fyZGr+tvQLEy
+          tWrrDi9uqEn361917Uw7LddDrQv+y+ktMaMjzHxQmIAhXaw9L0y6oqhWnONwu7i0+Hm1SXL3
+          PupBf8rhDBdpy6WcIC36C1DEVs0t40rSvHDnqA2iA6VW4LiKS1fylUKc8fPv7uOGHzQ8uFaa
+          8FMjhSqkghyT4pQHHfLiTviMocroE6WRTsgb0o9ylSpxbZsa+BzwU9ZnzCL/XB3Nooy9J7J5
+          Y1ZEolHN+emjWFbdmwJFRC9f9Nqu1IIybvyklRPk62nnqaIsvsgrEA5ljpnb9aL6EiYJZTiU
+          8XofSrvR4Vbo0HiWGFzJNRZf3ZMdSY4tvq00RBzuEBUaAF3dNVshzpjHCe6FDoxPbQ4TTj18
+          KUicctHzbMrB7HCjV5JXfZSNoBtIA1r3z6NnCnSlNu0tLxfI5nI3EvRvsTxngvlSso0zFmUe
+          DordEN5k9G/ORtTTF+l5xAS00/ss3x+KnqwK+xMnQK3k+eGpf0a7B2BHZWBATrBC7E7ts3Z5
+          2Ao0CW0cgDEf4g5U3eWh++VHEK1kmP9QFi58vwUheuKVQSdpw5OPlcmN2Jshrg1cnPCiroZo
+          gwxqLbt2awAdlq3yFnv2FoMkuYjPaqhHMS+a3ONxPdcAfmJH0c6IybgY+g5yjcGjPa8CQGr/
+          aZuW4hCoELQ3UAjWwz0=
+        </X509Certificate>
+      </X509Data>
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHPGWcJSl4OjOgAAAAAAczANBgkqhkiG9w0BAQUFADB3MQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
+TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
+HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOkJCRUMtMzBDQS0y
+REJFMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAp0QvcscV762cvJQkN4+yFC55LDaPb7KevwD6jHhhG5S5Uij0cT8H
+GE/y6Je/f3Ow4zVsoSviUbYnqqI1ASnzKaVQ3natkrIUuQ8Mllkya3MeSL9Q877ogSskJFB0fOph
+5o8RAe6yfSD1CkMqVGVAxRwMNFDik+TCDS7gUJlQaAZ9h3v2jQWOR+Xt0ELjY93j7iXPqVCjT4K7
+x5WFfasB4FBCFeBZg8lR4D2gKOh/gnzSuRoCHqhzdFfIf7gJs7pF4EfCdNSp2BLXLxuc1K567c/C
+WXMh3LDjZMMd5i8EvFv9ssV+Nua6VnlcHRWrsaB9FygH8+OpkVg8tkWf1jVh3QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFDUsc4HZ7HD5Sj2P/0fAfApoobgbMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBABhW
+2Lwu5/R0+yuB1kWyYWp9G8CaWAHqZhnXuCn1jzz09iI2d1FUmQud9f7Fg9U7F18kV7sSywfz8omz
+n+eIMTZc0N0QbbGdHG5zeUCA26QRbUwQ6BCVoUNlxEgptx5suXvzd7dgvF0jpzSnWPUVzaasjBvd
+qMfy/L2f24Jaiu9s8vsuw79c0Y2DVhPd4x2T7ReueUVSCxzhK8AzUN271fiW2JRLQ0tRCF8tnA5T
+KJe7RuvGemKndxIklRnPRf1Y2R0getwBvO8Lg3pDeZDUR+AIteZ96oBsSHnsJwxb8T45Ur6alIw5
+sEMholc7XInenHZH5DEg0aJpQ86Btpv5rzg=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
+dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
+A1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFt
+cCBQQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfoWyx39tIkip8ay4Z4b3i48WZ
+USNQrc7dGE4kD+7Rp9FMrXQwIBHrB9VUlRVJlBtCkq6YXDAm2gBr6Hu97IkHD/cOBJjwicwfyzMk
+h53y9GccLPx754gd6udOo6HBI1PKjfpFzwnQXq/QsEIEovmmbJNn1yjcRlOwhtDlKEYuJ6yGT1VS
+DOQDLPtqkJAwbofzWTCd+n7Wl7PoIZd++NIT8wi3U21StEWQn0gASkdmEScpZqiX5NMGgUqi+YSn
+EUcUCYKfhO1VeP4Bmh1QCIUAEDBG7bfeI0a7xC1Un68eeEExd8yb3zuDk6FhArUdDbH895uyAc4i
+S1T/+QXDwiALAgMBAAGjggGrMIIBpzAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQjNPjZUkZw
+Cu1A+3b7syuwwzWzDzALBgNVHQ8EBAMCAYYwEAYJKwYBBAGCNxUBBAMCAQAwgZgGA1UdIwSBkDCB
+jYAUDqyCYEBWJ5flJRP8KuEKU5VZ5KShY6RhMF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJ
+kiaJk/IsZAEZFgltaWNyb3NvZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRl
+IEF1dGhvcml0eYIQea0WoUqgpa1Mc1j0BxMuZTBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3Js
+Lm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9kdWN0cy9taWNyb3NvZnRyb290Y2VydC5jcmwwVAYI
+KwYBBQUHAQEESDBGMEQGCCsGAQUFBzAChjhodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2Nl
+cnRzL01pY3Jvc29mdFJvb3RDZXJ0LmNydDATBgNVHSUEDDAKBggrBgEFBQcDCDANBgkqhkiG9w0B
+AQUFAAOCAgEAEJeKw1wDRDbd6bStd9vOeVFNAbEudHFbbQwTq86+e4+4LtQSooxtYrhXAstOIBNQ
+md16QOJXu69YmhzhHQGGrLt48ovQ7DsB7uK+jwoFyI1I4vBTFd1Pq5Lk541q1YDB5pTyBi+FA+mR
+KiQicPv2/OR4mS4N9wficLwYTp2OawpylbihOZxnLcVRDupiXD8WmIsgP+IHGjL5zDFKdjE9K3IL
+yOpwPf+FChPfwgphjvDXuBfrTot/xTUrXqO/67x9C0J71FNyIe4wyrt4ZVxbARcKFA7S2hSY9Ty5
+ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
+46SodDW4TsVxIxImdgs8UoxxWkZDFLyzs7BNZ8ifQv+AeSGAnhUwZuhCEl4ayJ4iIdBD6Svpu/RI
+zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
+/YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
+Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

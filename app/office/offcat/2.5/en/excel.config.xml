@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
 	<!--!!! ONLY MODIFY ChangeDescription AND ConfigVersion, DO NOT TOUCH THE REST OR DO IT AT YOUR OWN RISK!!!-->
-	<Configuration ConfigName="Excel Configuration" ChangeDescription="1.0.1411.10" ConfigVersion="1.0.1411.10" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,excel.crashes.config.xml" Symptoms="1">
-		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
+	<Configuration ConfigName="Excel Configuration" ChangeDescription="2.0.1504.18" ConfigVersion="2.0.1504.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,excel.crashes.config.xml" Symptoms="1">
+		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"/>
 		<Substitution Name="INSTALLTYPE"/>
@@ -198,7 +198,7 @@
 						</Object>
 					</Object>
 					<Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
-						<Object Type="C2RSKU" Key1="excel" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+						<Object Type="C2RSKU" Key1="Excel" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
 							<Setting Key1="ProductName" Display="Right">
 								<Rule Name="SKUNameC2R" Query="$."></Rule>
 							</Setting>
@@ -343,11 +343,10 @@
 						</Setting>
 						<Object Type="File" Key2="%PDFMAKERPATH%">
 							<Setting Key1="Version">
-								<Rule Name="sPDFMakerExcel" Query="$n2DigitVersion&gt;13 and number(substring($.,1,1))!=1 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version of the PDFMaker add-in installed that is not compatible with Excel. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="7f1871bd-0f9c-488f-a1fa-29d166e16b78" Symptoms="Crash,Add-ins">
-								</Rule>
-								<Rule Name="sPDFMakerx64" Query="$n2DigitVersion&gt;13 and ((substring($.,1,2)='10' and number(substring($.,4,1))&lt;1) or substring($.,1,1)!='1')  and $bitness='x64'" Error="Warning" Title="Adobe PDFMaker detected on a client with 64-bit Office" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="43f92f91-0f4c-44a6-b410-5ddc6d7270d9" Symptoms="Crash,Add-ins">
-								</Rule>
-							</Setting>
+                <Rule Name="sPDFMakerExcel14" Query="$n2DigitVersion=14 and versioncompare($.,'10.0.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with Excel. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="7f1871bd-0f9c-488f-a1fa-29d166e16b78" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerExcel14x64" Query="$n2DigitVersion=14 and $bitness='x64' and versioncompare($.,'10.1.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have ({0}) is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="43f92f91-0f4c-44a6-b410-5ddc6d7270d9" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerExcel15" Query="$n2DigitVersion=15 and versioncompare($.,'11.0.1.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with Excel. Please update the add-in to version 11.0.1 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="d7afe364-b006-4d89-9e87-1811d0152ea9" Symptoms="Crash,Add-ins"></Rule>
+              </Setting>
 						</Object>
 					</Object>
 				</Object>
@@ -357,47 +356,71 @@
 			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Excel\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
 				</Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hkcuPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]">
 				</Rule>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
 					<Setting Key1="__VALUES">
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayHKCU" Query="true()" P0="if($sHKCUAddInLoadTimeFromRegistry&gt;=0,concat($sHKCUAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Excel\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKCUAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
 			</Object>
+      </Object>
 			<!--/HKCU addins-->
 			<!--HKLM addins-->
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Excel\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
 				</Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hklmPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]">
 				</Rule>
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
 					<Setting Key1="__VALUES">
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayHKLM" Query="true()" P0="if($sHKLMAddInLoadTimeFromRegistry&gt;=0,concat($sHKLMAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
           <!--All PowerMap rules deprecated due to change in PG policy-->
           <!--Rule Name="sPowerMapProPlus2013" Query="($fProPlus=true() or $fProPlus64=true() or $fProPlusC2R=true()) and $Alerts_CurrentMonth&lt;6 and $Alerts_CurrentYear=2014 and contains('%KP%','ExcelPlugInShell.Connect') and $n2DigitVersion=15" Error="Warning" Title="The Power Map Preview for Excel 2013 will stop working after May 30, 2014" Text="You have the Power Map Preview for Excel 2013 installed, but it will stop working after May 30, 2014. The non-preview version of Power Map is only available for 'Office 365 ProPlus' installations and you have 'Office Professional Plus 2013' installed." GUID="391208" SSID="cf1442fb-f574-4f8d-9831-b5e3780595f5" Symptoms="Office 365,Power Map" AlwaysEvaluate="True">
 					</Rule-->
           <!--Rule Name="sPowerMapProPlus2013Disabled" Query="($fProPlus=true() or $fProPlus64=true() or $fProPlusC2R=true()) and (($Alerts_CurrentMonth&gt;=6 and $Alerts_CurrentYear=2014)  or $Alerts_CurrentYear&gt;2014) and contains('%KP%','ExcelPlugInShell.Connect') and $n2DigitVersion=15" Error="Warning" Title="The Power Map Preview for Excel 2013 does not function after May 30, 2014" Text="The Power Map Preview for Excel 2013 does not function after May 30, 2014. The non-preview version of Power Map is only available for 'Office 365 ProPlus' installations and you have 'Office Professional Plus 2013' installed.&#xD;&#xA;&#xD;&#xA;We recommend you uninstall Microsoft Power Map Preview for Excel using Control Panel." GUID="391208" SSID="dfe24cd3-efb3-4584-92c3-25eada85a38f" Symptoms="Office 365,Power Map" AlwaysEvaluate="True">
 					</Rule-->
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Excel\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKLMAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
+        </Object>
 			</Object>
 			<!--/HKLM addins-->
 			<!--HKLM WOW addins-->
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Excel\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
 				</Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hklmWowPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]">
 				</Rule>
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
 					<Setting Key1="__VALUES">
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayWow" Query="true()" P0="if($sHKLMWowAddInLoadTimeFromRegistry&gt;=0,concat($sHKLMWowAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
           <!--All PowerMap rules deprecated due to change in PG policy-->
           <!--Rule Name="sPowerMapProPlus2013Wow" Query="($fProPlus=true() or $fProPlus64=true() or $fProPlusC2R=true()) and $Alerts_CurrentMonth&lt;6 and $Alerts_CurrentYear=2014 and contains('%KP%','ExcelPlugInShell.Connect') and $n2DigitVersion=15" Error="Warning" Title="The Power Map Preview for Excel 2013 will stop working after May 30, 2014" Text="You have the Power Map Preview for Excel 2013 installed, but it will stop working after May 30, 2014. The non-preview version of Power Map is only available for 'Office 365 ProPlus' installations and you have 'Office Professional Plus 2013' installed." GUID="391208" SSID="d8c3a9c8-e39a-4dfb-976f-0cdba499113b" Symptoms="Office 365,Power Map" AlwaysEvaluate="True">
 					</Rule-->
           <!--Rule Name="sPowerMapProPlus2013DisabledWow" Query="($fProPlus=true() or $fProPlus64=true() or $fProPlusC2R=true()) and (($Alerts_CurrentMonth&gt;=6 and $Alerts_CurrentYear=2014)  or $Alerts_CurrentYear&gt;2014) and contains('%KP%','ExcelPlugInShell.Connect') and $n2DigitVersion=15" Error="Warning" Title="The Power Map Preview for Excel 2013 does not function after May 30, 2014" Text="The Power Map Preview for Excel 2013 does not function after May 30, 2014. The non-preview version of Power Map is only available for 'Office 365 ProPlus' installations and you have 'Office Professional Plus 2013' installed.&#xD;&#xA;&#xD;&#xA;We recommend you uninstall Microsoft Power Map Preview for Excel using Control Panel." GUID="391208" SSID="583d9cfa-88ab-4042-b462-4b163dff1158" Symptoms="Office 365,Power Map" AlwaysEvaluate="True">
 					</Rule-->
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Excel\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKLMWowAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
 			</Object>
+      </Object>
 			<!--/HKLM WOW addins-->
 			<!--RESILIENCY-->
 			<Object Type="Group" Name="Resiliency" Class="Add-ins" Display="Right">
@@ -425,8 +448,8 @@
 					</Object>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Excel\Resiliency\DoNotDisableAddinList" Display="Right">
-					<Setting Key1="__VALUES"></Setting>
-          <Rule Name="nReEnabledAddins" Query="count(../Instance)"></Rule>
+          <Setting Key1="__VALUES" Key2="^((?!OffCATv2_Addin.Connect).)*$"></Setting>
+          <Rule Name="nReEnabledAddins" Query="count(../Instance/Setting)"></Rule>
           <Rule Name="sUserReenabledAddins" Query="$nReEnabledAddins&gt;0 and $nRestrictToList&lt;1" Error="Warning" P0="$nReEnabledAddins" Title="Problematic add-in(s) re-enabled by the user" Text="{0} add-in(s) disabled by Excel because of performance or stability issues was/were re-enabled by the user. To see the list of disabled add-ins that were re-enabled by the user, click the Configuration Details tile (above) and then search for 'DoNotDisableAddinList' using the Find feature." GUID="272802" SSID="ef246095-2682-4470-b917-53e2d718a2b2" Symptoms="Slowness,Error message,Add-ins"></Rule>
         </Object>
 				<!--O15 resiliency policy-->
@@ -587,7 +610,7 @@
               </Setting>
               <Object Type="Group" Name="User Experience Virtualization (UE-V) BundleVersion =%UEVBUNDLEVERSION%" Display="Right">
                 <Setting Key1="" Display="Hide"></Setting>
-                <Rule Name="sFileOpenBlankWindow" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare('%UEVBUNDLEVERSION%','2.0.319.2')&lt;0" Error="Error" Title="Excel files do not open when double-clicked (error: 'There was a problem sending the command to the program.')" Text="When you double-click an Excel file to open it, Microsoft Excel starts but the file does not open. In addition, you receive the error 'There was a problem sending the command to the program.'. Please click the 'Click here ...' link below and then install the update provided in the article." GUID="511423" SSID="ac375b08-ccbe-45fb-8551-6e018f3604da" Symptoms="Startup,File Open error"></Rule>
+                <Rule Name="sFileOpenBlankWindow" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare('%UEVBUNDLEVERSION%','2.0.319.2')&lt;0" Error="Error" Title="Excel files do not open when double-clicked (error: 'There was a problem sending the command to the program.')" Text="When you double-click an Excel file to open it, Microsoft Excel starts but the file does not open. In addition, you receive the error 'There was a problem sending the command to the program.'. Please click the 'Click here ...' link and then install the update provided in the article." GUID="511423" SSID="ac375b08-ccbe-45fb-8551-6e018f3604da" Symptoms="Startup,File Open error"></Rule>
               </Object>
             </Object>
           </Object>
@@ -746,7 +769,7 @@
 						<Object Type="File" Key2="%INSTALLPATH%\XLStart" Key3="*.xls" Key4="OneLevel">
 							<Setting Key1="FullName" Display="Hide"/>
 						</Object>
-						<Rule Name="sFilesInXLStartFolderInstallPath" Query="($n2DigitVersion &gt;= 12) and (../Instance/Object/Instance/Setting[@Key1='FullName'])=true()" Error="None" Title="At least one file with either .XLS or .XLA found in the {0}\XLStart folder" Text="At least one file with either .XLS or .XLA found in the {0}\XLStart folder. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." P0="$sInstallPath" GUID="302032" SSID="793b28c8-760a-420c-96b1-65e8d53f102b" Symptoms="Informational"/>
+						<Rule Name="sFilesInXLStartFolderInstallPath" Query="($n2DigitVersion &gt;= 12) and (../Instance/Object/Instance/Setting[@Key1='FullName'])=true()" Error="None" Title="At least one file with either .XLS or .XLA found in the {0}\XLStart folder" Text="At least one file with either .XLS or .XLA found in the {0}\XLStart folder. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." P0="$sInstallPath" GUID="302032" SSID="793b28c8-760a-420c-96b1-65e8d53f102b" Symptoms="Informational,Slowness"/>
 					</Object>
 				</Object>
 				<!-- /OffCAT:475 -->
@@ -762,7 +785,7 @@
 						<Object Type="File" Key2="%APPDATAPATH%\Microsoft\Excel\XLStart" Key3="*.xls" Key4="OneLevel">
 							<Setting Key1="FullName" Display="Hide"/>
 						</Object>
-						<Rule Name="sFilesInXLFolderAppDataPath" Query="($n2DigitVersion &gt;= 12) and (../Instance/Object/Instance/Setting[@Key1='FullName'])=true()" Error="None" Title="At least one file with either .XLS or .XLA found in the {0}\Microsoft\Excel folder" Text="At least one file with either .XLS or .XLA found in the {0}\Microsoft\Excel folder. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." P0="$sAppDataPath" GUID="302032" SSID="acf97fd7-95de-4e6a-93d3-8b052cec94f9" Symptoms="Informational"/>
+						<Rule Name="sFilesInXLFolderAppDataPath" Query="($n2DigitVersion &gt;= 12) and (../Instance/Object/Instance/Setting[@Key1='FullName'])=true()" Error="None" Title="At least one file with either .XLS or .XLA found in the {0}\Microsoft\Excel folder" Text="At least one file with either .XLS or .XLA found in the {0}\Microsoft\Excel folder. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." P0="$sAppDataPath" GUID="302032" SSID="acf97fd7-95de-4e6a-93d3-8b052cec94f9" Symptoms="Informational,Slowness"/>
 					</Object>
 				</Object>
 				<!-- /OffCAT:476 -->
@@ -779,7 +802,7 @@
 						<Rule Name="fFilesInAltStartupPolicyPath" Query="(../Instance/Object/Instance/Setting[@Key1='FullName'])=true()"/>
 						<Rule Name="AltStartupPathPolicy" Query="if(../Instance/Setting[@Key1='AltStartup']=true(),../Instance/Setting[@Key1='AltStartup']/Value,-1)"/>
 					</Object>
-					<Rule Name="sAltStartupPolicyPath" Error="None" Query="($n2DigitVersion &gt;= 12) and ($AltStartupPathPolicy != -1) and (string-length($AltStartupPathPolicy) &gt; 4) and ($fFilesInAltStartupPolicyPath)" Title="At least one file with either .XLS or .XLA found in the folder specified by the AltStartup policy setting" Text="At least one file with either .XLS or .XLA was found in the folder specified by the AltStartup group policy value in the registry. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." GUID="302032" SSID="dff3ff58-0890-4f1a-9703-e82a92c33f6e" Symptoms="Informational"/>
+					<Rule Name="sAltStartupPolicyPath" Error="None" Query="($n2DigitVersion &gt;= 12) and ($AltStartupPathPolicy != -1) and (string-length($AltStartupPathPolicy) &gt; 4) and ($fFilesInAltStartupPolicyPath)" Title="At least one file with either .XLS or .XLA found in the folder specified by the AltStartup policy setting" Text="At least one file with either .XLS or .XLA was found in the folder specified by the AltStartup group policy value in the registry. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." GUID="302032" SSID="dff3ff58-0890-4f1a-9703-e82a92c33f6e" Symptoms="Informational,Slowness"/>
 				</Object>
 				<Object Type="Group" Name="Files in the AltStartup Directory">
 					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Excel\Options" Display="Hide">
@@ -793,7 +816,7 @@
 						<Rule Name="fFilesInAltStartupPath" Query="(../Instance/Object/Instance/Setting[@Key1='FullName'])=true()"/>
 						<Rule Name="AltStartupPath" Query="if(../Instance/Setting[@Key1='AltStartup']=true(),../Instance/Setting[@Key1='AltStartup']/Value,-1)"/>
 					</Object>
-					<Rule Name="sAltStartupPath" Error="None" Query="($n2DigitVersion &gt;= 12) and ($AltStartupPathPolicy = -1) and ($AltStartupPath != -1) and (string-length($AltStartupPath) &gt; 4) and ($fFilesInAltStartupPath)" Title="At least one file with either .XLS or .XLA found in the folder specified by AltStartup" Text="At least one file with either .XLS or .XLA was found in the folder specified by the AltStartup value in the registry. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." GUID="302032" SSID="755cd13e-b876-46eb-bb65-af67d38f9bd3" Symptoms="Informational"/>
+					<Rule Name="sAltStartupPath" Error="None" Query="($n2DigitVersion &gt;= 12) and ($AltStartupPathPolicy = -1) and ($AltStartupPath != -1) and (string-length($AltStartupPath) &gt; 4) and ($fFilesInAltStartupPath)" Title="At least one file with either .XLS or .XLA found in the folder specified by AltStartup" Text="At least one file with either .XLS or .XLA was found in the folder specified by the AltStartup value in the registry. This can cause performance issues in Excel if these files have not been opened and saved in Excel 2007 or later." GUID="302032" SSID="755cd13e-b876-46eb-bb65-af67d38f9bd3" Symptoms="Informational,Slowness"/>
 				</Object>
 				<!-- /OffCAT:477, OffCAT:478 -->
 			</Object>
@@ -809,12 +832,15 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
 	<Rule Name="sWordVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>6iRnYRvRRH7i2+rX5sdgsKn/XtU=</DigestValue></Reference></SignedInfo><SignatureValue>
-    O5iNTLG8Ua9dyWcVjwWdQTD+Irhjmt7jIz7f4Zoz4q+Cs8xTgo6+Ko18AYli6PlESA5bqnjF
-    wsfh1uk3zf5M5KUVOdeqX4l4eZ9j78veSNtqsef84udIadl0GvDDJkUtoQaEARTaeq/worpy
-    OUzxcnxDFNBAry3UasZlJVD/uHr3jSUXSuqkymiQyNLpio6v7YhFb+9ywjEOUm1Zg+C63g84
-    sO594feQ+f7Jd6oVkjcD1U1hMwLUOgvb/dgpgm24Aq14ga/2t8L6rEZzbDA8QQ5PnIAYPm/N
-    5/W0/g8MgfBQ8q/z3fZtdo0fUp0XmelE6VemC5q7YPoKNRi9emtwEA==
+  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="fLync2013AddinFoundWow"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>c2r3En1XBAyoPEg86EypRI9D9Jw=</DigestValue></Reference></SignedInfo><SignatureValue>
+    HTKwJic8ZtrLeNsYBjpjNGnIDjoGfnYtdR/fvvVK42mgeuaiAWyOjPPjS9xc8KUzd2M5EKZ+
+    S4br5CcV4cskJ8kniB6X8pIaSk3LcVsF/FabLwe/BD9R4q1uadvuiHvUVN0OVmfkXAbBXZql
+    5ab0mMoK0YST4oya1BmIZVTZ3Zj3yic7U5jeT0FcRjwM809Om6HyOhxCJ8MDV9XY2E16bK2D
+    T23T9RqK6ijHxd4RUqTGJIY/WYE0hjtbejOO6JmDksKii/+pUmg1ACkKtrjzChgpmyyXX8oR
+    Iv5ofD7y8Sb0P+vvFaqop12zK9e42GlQ6ksrzD3Va2M4+cJqz8v4KA==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -919,28 +945,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEuzCCA6OgAwIBAgITMwAAAFwJq3ADEfxcFQAAAAAAXDANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHJp9pDCFDtJoQAAAAAAcjANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTQwNTIzMTcxMzE2WhcNMTUwODIzMTcxMzE2WjCBqzELMAkGA1UEBhMCVVMxCzAJBgNVBAgT
-AldBMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTAL
-BgNVBAsTBE1PUFIxJzAlBgNVBAsTHm5DaXBoZXIgRFNFIEVTTjpCQkVDLTMwQ0EtMkRCRTElMCMG
-A1UEAxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-ADCCAQoCggEBANYJa/7h+ToIHrYOs0PLI95ObOJZcc75TxmjL8QLy/H1Xyl5ielMpmU8xUtMXQHp
-/i9QvCCDC5hHW5nqTZ/eqcsjlYzk07XcemMgs/L/r8dp/5K7jQpF7punPfdkmj6O6rRaABbNqeXV
-TJUmQH8DmFyk6dBH1jblvqVRQb9b9uyuNN9K8gXa/fw9YY6yEa11unZrY2JOJSHPpz88ub9uBEMk
-HrvplbnGydEgydhVI1Xnsr+vLVxathcwcTMQJH5xnrFl4ma2BdMyV0nEYhPYkoyBkY8zQ5EZbBL0
-eRTm5Z/F5anhM0C22y9X05U2It3yQqmUtGTTgSMUlMPZRhdm3r0CAwEAAaOCAQkwggEFMB0GA1Ud
-DgQWBBR/kUhDg4fJeBzpVcW521b4F9FHBDAfBgNVHSMEGDAWgBQjNPjZUkZwCu1A+3b7syuwwzWz
-DzBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
-dWN0cy9NaWNyb3NvZnRUaW1lU3RhbXBQQ0EuY3JsMFgGCCsGAQUFBwEBBEwwSjBIBggrBgEFBQcw
-AoY8aHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraS9jZXJ0cy9NaWNyb3NvZnRUaW1lU3RhbXBQ
-Q0EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBBQUAA4IBAQCCCVb4b+5GzEwp
-9r7Tx2pf+V2EABkXgYloZBU/wUQ2OxhtBMusE7eOlOMt66P0QnxE0QnsWr7nk9OEcuKP1R3VOVP7
-ciILZpI7ysqr+s/MZE7GRGyv4IOOFBG4sJBJn8OmlM+D4BFiWqtYo7hhlyR2rG1D947qHfOI/ipL
-7h/0HW2sIEyIAEAutLlI2tHEbsGt9DOFYQuJLF5rygNjUkox7r1VwxCnUaiSrxJgxZxdRmPTzOqf
-NcatCSB0hTUbRRKzllHhye2bgOV25fdWhesgnCiRVPtoulaFg1Vh/4hAXLENJgejxVfsFXkPlvSO
-dqGKZ1qNf05i9H7fEKDWFLqX</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjMxQzUtMzBCQS03
+QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAoxPVJ2iBlQVEsJuqKGMDs9En3ra2ZyP2mieV2SfpWI7AXCdUfRHZ
+7B+712Ff5z/jWtu5iNakH+ywOsPZy911xkYMU2T9mm1IXZcHoKEMvj6SL5H3q2dq0SX5n3iqXJcx
+f4wwjDu9cKit5v8t+rrQxeVIuseUK34MXOH/NYpAv1H0FU0vm0MjOh7ltNRzua86yAgrQBSj7gML
+NybNLvq+M9b3JBVF6cFLmII8syS9LSf7drlwWzPRJ71Q/6+TVq59UtTQO217Juvk9BdtStzFmMyR
++7VdVxybCwxPr6dW/2U7oouf4UxtszHDMtHw7XEnA2jg2iq6ODkZfrNXUQCMhQIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFND9obr0IhS4jv6FL059LwBCpwFTMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBACJE
+d3U6Z3Bw2w+djrTKkrwYGl8Ys2vdoryZDDm9ybp6jjCkQCKLBGssgmRVJcEaYjUTkqGomLk5Mt4r
+5X6S+Zf1lgF3IKX9tqVbNlX1qMmRZUQ44Xfg7Ml8SuB1UqFU0DvuoIoQndg51sX2yA4Tahq0xD/i
+lyga1NHQ3jgbw5QKBZDtVbGGwfUgcNCwbZGDZCQtrRTcRmr4B7/tK4xFFOfvrKLEA8MByHdzmAYl
+IMsPM/fXYCl95S60wLsCjC5aJHBzM5NN2ZRQSLYLg0RKtrBoR5Zq+RlIBXKsS0hKgRbk9WAjuB5M
+vW3T/tl40KdnBlT9lCGh677+NM8EykDf1UI=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -967,34 +993,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIGzAYJKoZIhvcNAQcCoIIGvTCCBrkCAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQA7mI1MsbxRr13JZxWPBZ1BMP4iuGOa3uMjPt/hmjPir4KzzFOCjr4qjXwBiWLo+URIDluq
-eMXCx+HW6TfN/kzkpRU516pfiXh5n2Pvy95I22qx5/zi50hp2XQa8MMmRS2hBoQBFNp6r/CiunI5
-TPFyfEMU0ECvLdRqxmUlUP+4eveNJRdK6qTKaJDI0umKjq/tiEVv73LCMQ5SbVmD4LreDziw7n3h
-95D5/sl3qhWSNwPVTWEzAtQ6C9v92CmCbbgCrXiBr/a3wvqsRnNsMDxBDk+cgBg+b83n9bT+DwyB
-8FDyr/Pd9m12jR9SnReZ6UTpV6YLmrtg+go1GL16a3AQoIIDdaGCA3EwggJZAgEBMIHboYGxpIGu
-MIGrMQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0ExEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoT
-FU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBE
-U0UgRVNOOkJCRUMtMzBDQS0yREJFMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2
-aWNloiUKAQEwCQYFKw4DAhoFAAMVAMzPJzSA2L82tIXhvLtB9rgR4suooIHCMIG/pIG8MIG5MQsw
-CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
-ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVy
-IE5UUyBFU046NTdGNi1DMUUwLTU1NEMxKzApBgNVBAMTIk1pY3Jvc29mdCBUaW1lIFNvdXJjZSBN
-YXN0ZXIgQ2xvY2swDQYJKoZIhvcNAQEFBQACBQDYDhFKMCIYDzIwMTQxMTEyMTcwMzA2WhgPMjAx
-NDExMTMxNzAzMDZaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFANgOEUoCAQAwCgIBAAICI3UCAf8w
-BwIBAAICGG8wCgIFANgPYsoCAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGEWQoDAaAKMAgC
-AQACAxbjYKEKMAgCAQACAwehIDANBgkqhkiG9w0BAQUFAAOCAQEASGgZcuno3g2PQ19TFR314o1y
-RSD+GZEcSU4azH7nUK2Z0bHH7h7N8b4QZJ870wKK3nri11fO9G9afA4HgvGkNx/xdTaYJ/2UNGuH
-QqT/NtKgq68l09oiqTBPjB6rgiUbXRDVbgQNnxMrhKDVkbDsRBysU0rDxv5LIfi4934zSlWzD/jl
-16pLdpmGbc9+8lNs462XvoOZLUlDUFXxi4BRZRL16Cn4ges8MBGd6CHDJMs1jpb/9OrPetHLCALB
-X9mNrdqQ9jsDm1aXszz+BbwPIbEE4HdGdnUZ5rUVer6A+6u5+6MBGAZPvzvOp2ykoWiLXN+u9PpE
-IZ/LwZMJIjn/xDGCAhUwggIRAgEBMIGOMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
-dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xITAf
-BgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQQITMwAAAFwJq3ADEfxcFQAAAAAAXDAJBgUr
-DgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTQxMTEy
-MjM0NzM5WjAjBgkqhkiG9w0BCQQxFgQUgxXSRvIuTztgx8j4Er2XHC60eEswDQYJKoZIhvcNAQEF
-BQAEggEAUqcKnamaZdzObxKf5yPeNqWY9rNYeWzVfw/5hQxCT1JmzhbNvgdDIGURjX58DtdroMqA
-LttoR8Hl5ZvpcwYZEJdY/LXDHZH7dgoWPBBZyK8b6WLjiy5WwLYRSlNZ4Nw+ibghh6tg7A4pdz5N
-HC+9BYhGHcblEuqtk10PegzJoBB2/QfgP5p47GrUZvrY2ZyaMc2NJWUzGbijx3xiSMMECmZ8LOJ/
-/+F8F5iCTtZSjwv2g1y4f9I6Wi5WA4hAZehgLxm1cN1bXOFo9mMEzT8HEEulxr5zTqg8cD567SO3
-cOQJhTvAO2jXV47nOMIR1dN8FFXhFSD+OSc39c0dYDxKXQ==</CounterSignature></Object></Signature></ObjectCollector>
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

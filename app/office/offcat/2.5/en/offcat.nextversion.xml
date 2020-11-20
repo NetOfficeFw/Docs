@@ -1,136 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Visio Crashes" ChangeDescription="2.0.1504.21" ConfigVersion="2.0.1504.21" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
-		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
-		<Substitution Name="MAJORVERSION"></Substitution>
-		<Substitution Name="INSTALLTYPE"></Substitution>
-		<Substitution Name="APPNAME">Visio</Substitution>
-    <Substitution Name="DAYS"></Substitution>
-    <Substitution Name="MAXEVENTS"></Substitution>
-		<ConfigPreprocessor Name="0 Type Preprocessor" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.TypeConfigPreprocessor"/>
-		<!-- HERE YOU CAN ADD WHATEVER ObjectProcessor YOU WANT-->
-		<ObjectProcessor Name="CommandLine" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.CommandLineObjectProcessor"/>
-		<ObjectProcessor Name="Directory" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DirectoryObjectProcessor"/>
-		<ObjectProcessor Name="DsGet" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DsGetObjectProcessor"/>
-		<ObjectProcessor Name="Engine" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.EngineObjectProcessor"/>
-		<ObjectProcessor Name="EventLog" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.EvLog"/>
-		<ObjectProcessor Name="File" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.FileObjectProcessor"/>
-		<ObjectProcessor Name="GetComputerNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetComputerNameExObjectProcessor"/>
-		<ObjectProcessor Name="GetUserNameEx" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.GetUserNameExObjectProcessor"/>
-		<ObjectProcessor Name="Group" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.GroupObjectProcessor"/>
-		<ObjectProcessor Name="If" Assembly="BPA.Common.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.IfObjectProcessor"/>
-		<ObjectProcessor Name="MSI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.MSI"/>
-		<ObjectProcessor Name="Registry" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.RegistryObjectProcessor"/>
-		<ObjectProcessor Name="XML" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.XmlObjectProcessor"/>
-		<ObjectProcessor Name="WMI" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.WMIObjectProcessor"/>
-		<ObjectProcessor Name="NICS" Assembly="BPA.NetworkCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.NetworkInterfaceObjectProcessor"/>
-		<ObjectProcessor Name="DisabledItems" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.DisabledItemsObjectProcessor"/>
-		<ObjectProcessor Name="C2RSKU" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.C2RSKUObjectProcessor"/>
-		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"></ExtFormat>
-	</Configuration>
-
-	<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="Visio" Key6="visio" Key7="%MAJORVERSION%">
-		<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
-		</Setting>
-		<Setting Key1="Bitness" Substitution="APPBITNESS">
-			<Rule Name="bitness" Query="$."></Rule>
-		</Setting>
-		<Setting Key1="FullVersion">
-			<Rule Name="n2DigitVersion" Query="number(substring($.,1,2))"></Rule>
-			<Rule Name="nBuild" Query="substring-before(substring-after(string($.),concat($n2DigitVersion,'.0.')),'.')"></Rule>
-			<Rule Name="sFullAppVersion" Query="$.">
-			</Rule>
-		</Setting>
-		<Setting Key1="Name">
-			<Rule Name="appName" Query="$."></Rule>
-		</Setting>
-		<Setting Key1="Path"></Setting>
-		<Setting Key1="InstallPath" Substitution="INSTALLPATH" Display="Hide">
-		</Setting>
-		<Setting Key1="Version">
-			<Rule Name="n4DigitSKUVersion" Query="$."></Rule>
-		</Setting>
-		<Setting Key1="Type">
-			<Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
-      <Rule Name="nInstallType" Query="$."></Rule>
-		</Setting>
-	</Object>
-	<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
-		<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{5D502092-1543-4D9B-89FE-7B4364417CC6}">
-			<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
-				<Rule Name="SKU2013" Query="substring(string($.),11,4)"></Rule>
-				<Rule Name="ReleaseType2013" Query="substring(string($.),3,1)"></Rule>
-			</Setting>
-			<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-				<Setting Key1="ProductName" Display="Hide">
-				</Setting>
-			</Object>
-		</Object>
-	</Object>
-	<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x64'">
-		<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{7069FF90-1D63-4F85-A2AB-6F0D01C78D83}">
-			<Setting Key1="ProductCode" Substitution="PRODUCTCODE">
-				<Rule Name="SKU201364" Query="substring(string($.),11,4)"></Rule>
-				<Rule Name="ReleaseType201364" Query="substring(string($.),3,1)"></Rule>
-			</Setting>
-			<Object Type="MSI" Key1="MSIGETPRODUCTINFO" Key2="%PRODUCTCODE%">
-				<Setting Key1="ProductName" Display="Hide">
-				</Setting>
-			</Object>
-		</Object>
-	</Object>
-  
-  <Type Name="VisioCrashes">
-
-		<!--EVENTLOGS-->
-		<Object Type="EventLog" Key1="Application" Key3="1000" Key4="visio.exe" Key5="%MAXEVENTS%" Key7="%DAYS%" Key8="10000">
-			<Setting Key1="__ALL"></Setting>
-      <Setting Key1="Faulting Application Name" Display="Right"></Setting>
-      <Setting Key1="Faulting Application Version" Display="Right">
-        <Rule Name="nFaultingAppVersion" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Faulting Application Timestamp" Display="Right">
-        <Rule Name="faultAppTimeStamp" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Faulting Module Name" Display="Right">
-        <Rule Name="faultModuleName" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Faulting Module Version" Display="Right">
-        <Rule Name="nFaultingModuleVersion" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Faulting Module Timestamp" Display="Right">
-        <Rule Name="faultModuleTimestamp" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Exception code" Display="Right"></Setting>
-      <Setting Key1="Fault offset" Display="Right">
-        <Rule Name="faultOffset" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Timegenerated" Display="Hide">
-        <Rule Name="TimeOfCrash" Query="$."></Rule>
-      </Setting>
-    </Object>
-		<!--/EVENTLOGS-->
-    
-  </Type>
-
-  <Reference Type="VisioCrashes" Name="VisioCrashes" File="visio.crashes.config.xml">
-  </Reference>
-	<Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml">
-	</Reference>
-	<Reference Type="MSO" Name="MSO" File="common.config.xml">
-	</Reference>
-	<Reference Type="C2R_Updates" Name="C2R_Updates" File="common.config.xml">
-	</Reference>	
-
-	<!--EXTERNALREFS-->
-	<Rule Name="effectiveSlowBitrate"></Rule>
-	<Rule Name="sWordVersion"></Rule>
-  <Rule Name="sPpCoreVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>OiSibGS/qH9JqkOmazyABsH2P4s=</DigestValue></Reference></SignedInfo><SignatureValue>
-    jRdLjoshV9Z6K2bWU8RchhWBjUWDQ7OPup/Z52BR/zcPFRy/FVO23zqSxTbK3gxdVM0OmDW6
-    0qLNIXWHWUsYwmsoJpTHbOBAmFy70pHbvS0/Bu/ewzXiuXY67oT/BH4PiFgrwP+ycRV6z5ao
-    mmCtyq1WXm4HueFQATP+nxeDHcLpvN68H73SFqBzZ3rssP953zwB1fWBWRJAvR7vcPMRAp3j
-    gdU9nZVC3N4h/2wVdG1ADf9d/jwIo0Li/bHmptMAb6DFg4FxFjII6hJWcqdAZBoIsLztIhu9
-    DoZ4pnaBhU41r8BOYD4vpwMIbF4q+Lad+E+D/hc+NFaA8ASoFRtu/w==
+<NextVersion AppVersion="2.0.5004.0609">
+  <Description>Microsoft Office Configuration Analyzer Tool 2.0</Description>
+  <AutoMSI>http://download.microsoft.com/download/5/F/D/5FD540BF-5AC6-4261-895F-676B38AA8406/OffCAT.msi</AutoMSI>
+  <ManualMSI>http://www.microsoft.com/en-us/download/details.aspx?id=36852</ManualMSI>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>VXuTpippmbnHvYp2t9zlMq6/4sM=</DigestValue></Reference></SignedInfo><SignatureValue>
+    NsJO1dy79U9+kjZxkpbw1ImYitIwnSPp1iCz39DQEwOwP0a9UFqEeqjsi33aGSq5lq0KPPuc
+    0UX+fYnpgxXGLFU+hgho5KqR0O42XArW98YLMWFGE4qOqu37E/XGN9TXet+FHkJ551Pd0aiZ
+    pa9Tnbjg3BPVn38jBWeSR0Ajt8DnVT/CkxE9vvZwByzmAk9TuiaD/vbi1tSI+FHgYzx+Dorn
+    Rwe4plAWKUyIX8mnBcexhzyFm2plvfFjA1SlXGB/mN6NoLwC5NQkquq0LbcFaAXc8IpgFHNn
+    IDOTuP7A409QGVMf+FULkThjGNUbN9mbIj49bashtE2fFF0TW34sKg==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -284,11 +161,11 @@ zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
 LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQCNF0uOiyFX1norZtZTxFyGFYGNRYNDs4+6n9nnYFH/Nw8VHL8VU7bfOpLFNsreDF1UzQ6Y
-NbrSos0hdYdZSxjCaygmlMds4ECYXLvSkdu9LT8G797DNeK5djruhP8Efg+IWCvA/7JxFXrPlqia
-YK3KrVZebge54VABM/6fF4Mdwum83rwfvdIWoHNneuyw/3nfPAHV9YFZEkC9Hu9w8xECneOB1T2d
-lULc3iH/bBV0bUAN/13+PAijQuL9seam0wBvoMWDgXEWMgjqElZyp0BkGgiwvO0iG70OhnimdoGF
-TjWvwE5gPi+nAwhsXir4tp34T4P+Fz40VoDwBKgVG27/oIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+BASCAQA2wk7V3Lv1T36SNnGSlvDUiZiK0jCdI+nWILPf0NATA7A/Rr1QWoR6qOyLfdoZKrmWrQo8
++5zRRf59iemDFcYsVT6GCGjkqpHQ7jZcCtb3xgsxYUYTio6q7fsT9cY31Nd634UeQnnnU93RqJml
+r1OduODcE9WffyMFZ5JHQCO3wOdVP8KTET2+9nAHLOYCT1O6JoP+9uLW1Ij4UeBjPH4OiudHB7im
+UBYpTIhfyacFx7GHPIWbamW98WMDVKVcYH+Y3o2gvALk1CSq6rQttwVoBdzwimAUc2cgM5O4/sDj
+T1AZUx/4VQuROGMY1Rs32ZsiPj1tqyG0TZ8UXRNbfiwqoIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
 Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
@@ -308,9 +185,9 @@ hdbkiIVdX80Sm63yMVX0MYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
 c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
 bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAAAAB0
 MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
-NTA2MDkxMjQ0NDFaMCMGCSqGSIb3DQEJBDEWBBSGH2KEldjUc+9xB7Q9nmA/lbkqvzANBgkqhkiG
-9w0BAQUFAASCAQBblLDJA48pMtEK1a9faXA74HXfeOpP3DVOwM37xYrqxWCQX8D/8iuuB70eMrmf
-o625eOasfmQpYMlaTXiIciUXbx5NSWRzBBrTbI1YerwfqBbOwiyAEUzBanPrGXIyxVS0nuHPyZu9
-tbIxmNnkJtA6mC4cZS00WzpunK1Yl2McIBMMlfwt6KBzD8DM1OHrnS98rgDD4LvsPzglpzwtc0xy
-6QMBOzmDlhxAtfQseSd9UzQz/bckyf4OMEVk0OdHmZSxsBxVVckvE6npj6k0wt+QehQDeCLSLdeU
-8eO7Dt7ZtOR7pxRpl+FvPQfUaQ0hgD/AQNDKwdF7otLTIG1gu6Q3</CounterSignature></Object></Signature></ObjectCollector>
+NTA2MDkxMjQ0NDRaMCMGCSqGSIb3DQEJBDEWBBRN0QNCLKiQEOdWbB3dOPWqeaKZUjANBgkqhkiG
+9w0BAQUFAASCAQCJXFI2gP/VRJsh/53A/qG5yRna3uNJ1yX1NE2QJxs6/FE/D6jhP3FtfjvFV121
+Jd7LY2YG8ofa1E9SCq7W6OBqdfoeYMTxSuzlt58ryCDe8K2h4rGKrtj/4IrZ+nnl8YUhzWHK226j
+RMuxxgWjStZ8dVvwtdqJz8pmAmP1HXu04WOD0cqs2yn7xf8CXZNKRKwC43PdMAIeHMlFhkokXCZZ
+qbHyYd6+tD/LnUkgnUvDWnWj+VP9z1bcyKzS77ppNWlEf/RVdE0bqK08XChF4kSyycOmUAlsyUtl
+P5BwqOFOAprUw9Kq/laRrlBXMONdVXoM0XGC0m1P5UvxhB8h/cgH</CounterSignature></Object></Signature></NextVersion>

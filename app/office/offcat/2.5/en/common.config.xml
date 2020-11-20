@@ -1,95 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Office Common Configuration" ConfigVersion="2.0.1411.12" ChangeDescription="2.0.1411.12">
-    <ExtFunction Name="versioncompare" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.VersionComparerObjectProcessor" Function="VersionCompare" Returns="Number" Parameters="String,String"></ExtFunction>
-  </Configuration>
+	<Configuration ConfigName="Office Common Configuration" ConfigVersion="2.0.1505.18" ChangeDescription="2.0.1505.18">
+		<ExtFunction Name="versioncompare" Assembly="BPA.ConfigCollector.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Extensions.VersionComparerObjectProcessor" Function="VersionCompare" Returns="Number" Parameters="String,String"></ExtFunction>
+	</Configuration>
 	<Type Name="C2R_Updates">
-    <Object Type="If" Key1="'%MAJORVERSION%'='15'">
-    <Object Type="File" Key1="" Key2="%PROGRAMFILES%\Microsoft Office 15\Data\Updates\Apply\PackageFiles\packagemanifests" Key3="*.xml" Count="*" Display="Hide">
-      <Setting Key1="Files" Display="Hide"></Setting>
-      <Rule Name="nC2RUpdateFiles" Query="if((../Instance/Setting/@Key1='*')=true(),../Instance/Setting[@Key1='*']/Value,0)">
-      </Rule>
-    </Object>
-    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\ProductReleaseIDs\Active\culture" Display="Right">
-			<Rule Name="C2RLatestVersionFromWeb15" Query="'15.0.4667.1002'"></Rule>
-			<Setting Key1="x-none" Display="Right" Substitution="C2RINSTALLEDVERSION">
-        <Rule Name="fInstalledC2RVersion" Query="$."></Rule>
-				<Rule Name="sLatestC2RVersionNotInstalled15" P0="'%C2RINSTALLEDVERSION%'" P1="$C2RLatestVersionFromWeb15" Query="$n2DigitVersion=15 and $sC2RUpdatesReadyToApply=false() and versioncompare('%C2RINSTALLEDVERSION%',$C2RLatestVersionFromWeb15)&lt;0" Error="Warning" Title="Office 2013 Click-to-run is not at the latest version" Text="You have version {0} while the latest available version is {1}. Please click the 'Click here...' link below to update your Office installation." GUID="386616" SSID="e395df67-0c72-48aa-8b00-eb44e23aeb2f" Symptoms="Product not updated"></Rule>
-        <Rule Name="sC2RUpdatesReadyToApply" Query="$nC2RUpdateFiles!=0" Error="Warning" Title="Updates for Click-to-Run are ready to be applied to Office" Text="Your Click-to-Run version is %C2RINSTALLEDVERSION% but you have an update ready to be applied to your Click-to-run installation of Office. Click the 'Click here ...' link below for details on how to get this update applied." GUID="386619" SSID="c8623e07-20b2-4fe4-b8a9-c8cbd17bb468" Symptoms="Product not updated"></Rule>
-      </Setting>
+    <!--O15-->
+		<Object Type="If" Key1="'%MAJORVERSION%'='15'">
+		<Object Type="File" Key1="" Key2="%PROGRAMFILES%\Microsoft Office 15\Data\Updates\Apply\PackageFiles\packagemanifests" Key3="*.xml" Count="*" Display="Hide">
+			<Setting Key1="Files" Display="Hide"></Setting>
+			<Rule Name="nC2RUpdateFiles" Query="if((../Instance/Setting/@Key1='*')=true(),../Instance/Setting[@Key1='*']/Value,0)">
+			</Rule>
 		</Object>
-    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\propertyBag" Display="Right">
-      <Setting Key1="UpdatesEnabled" Display="Right"></Setting>
-      <Rule Name="fUpdatesEnabledPreSP1" Query="if((../Instance/Setting/@Key1='UpdatesEnabled')=true() and not($MSO_fC2R2013SP1UpdateInstalled),../Instance/Setting[@Key1='UpdatesEnabled']/Value,-1)" AlwaysEvaluate="True"/>
-      <Setting Key1="baseurl" Display="Right">
-        <Rule Name="sCustomBaseUrlPreSP1" Error="None" Query="not($MSO_fC2R2013SP1UpdateInstalled) and starts-with($.,'http://officecdn.microsoft.com')=false()" Title="Custom baseurl value for Click-to-run specified in the registry" Text="The baseurl value (referring to the Office installation location) points to a custom location in the registry. Please check with your administrator to verify this location is correct." SSID="46fbcf47-04eb-45bc-b4c6-d6757b00b36c" Symptoms="Informational"></Rule>
-      </Setting>
-      <Setting Key1="updatebaseurl" Display="Right">
-        <Rule Name="sCustomUpdateBaseUrlPreSP1" Error="None" Query="not($MSO_fC2R2013SP1UpdateInstalled) and starts-with($.,'http://officecdn.microsoft.com')=false()" Title="Custom updatebaseurl for Click-to-run specified in the registry" Text="The updatebaseurl value (referring to the Office Click-to-run update location) points to a custom location in the registry. Please check with your administrator to verify this location is correct." SSID="03eadad5-1c6d-47a7-bcdd-bd818ae3c878" Symptoms="Informational"></Rule>
-      </Setting>
-    </Object>
-    <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\Configuration" Display="Right">
-      <Setting Key1="UpdatesEnabled" Display="Right"></Setting>
-      <Rule Name="fUpdatesEnabledPostSP1" Query="if((../Instance/Setting/@Key1='UpdatesEnabled')=true() and $MSO_fC2R2013SP1UpdateInstalled,../Instance/Setting[@Key1='UpdatesEnabled']/Value,-1)" AlwaysEvaluate="True"/>
-      <Setting Key1="updateurl" Display="Right">
-        <Rule Name="sCustomUpdateUrlPostSP1" Error="None" Query="$MSO_fC2R2013SP1UpdateInstalled and starts-with($.,'http://officecdn.microsoft.com')=false()" Title="Custom Update URL value for Click-to-run specified in the registry" Text="The UpdateURL value (referring to the Office Click-to-run update location) points to a custom location in the registry. Please check with your administrator to verify this location is correct." SSID="4005d104-f4fd-43cc-8215-341746de7267" Symptoms="Informational"></Rule>
-      </Setting>
-    </Object>
+		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\ProductReleaseIDs\Active\culture" Display="Right">
+			<Rule Name="C2RLatestVersionFromWeb15" Query="'15.0.4719.1002'"></Rule>
+			<Setting Key1="x-none" Display="Right" Substitution="C2RINSTALLEDVERSION">
+				<Rule Name="fInstalledC2RVersion" Query="$."></Rule>
+				<Rule Name="sLatestC2RVersionNotInstalled15" P0="'%C2RINSTALLEDVERSION%'" P1="$C2RLatestVersionFromWeb15" Query="$n2DigitVersion=15 and $sC2RUpdatesReadyToApply=false() and versioncompare('%C2RINSTALLEDVERSION%',$C2RLatestVersionFromWeb15)&lt;0" Error="Warning" Title="Office 2013 Click-to-run is not at the latest version" Text="You have version {0} while the latest available version is {1}. Please click the 'Click here...' link to update your Office installation." GUID="386616" SSID="e395df67-0c72-48aa-8b00-eb44e23aeb2f" Symptoms="Product not updated"></Rule>
+				<Rule Name="sC2RDec2014VersionInstalled15" Query="versioncompare($fInstalledC2RVersion,'15.0.4675.1002')=0"></Rule>
+
+				<Rule Name="sC2RUpdatesReadyToApply" Query="$nC2RUpdateFiles!=0" Error="Warning" Title="Updates for Click-to-Run are ready to be applied to Office" Text="Your Click-to-Run version is %C2RINSTALLEDVERSION% but you have an update ready to be applied to your Click-to-run installation of Office. Click the 'Click here ...' link for details on how to get this update applied." GUID="386619" SSID="c8623e07-20b2-4fe4-b8a9-c8cbd17bb468" Symptoms="Product not updated"></Rule>
+			</Setting>
+		</Object>
+		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\propertyBag" Display="Right">
+			<Setting Key1="UpdatesEnabled" Display="Right"></Setting>
+			<Rule Name="fUpdatesEnabledPreSP1" Query="if((../Instance/Setting/@Key1='UpdatesEnabled')=true() and not($MSO_fC2R2013SP1UpdateInstalled),../Instance/Setting[@Key1='UpdatesEnabled']/Value,-1)" AlwaysEvaluate="True"/>
+			<Setting Key1="baseurl" Display="Right">
+				<Rule Name="sCustomBaseUrlPreSP1" Error="None" Query="not($MSO_fC2R2013SP1UpdateInstalled) and starts-with($.,'http://officecdn.microsoft.com')=false()" Title="Custom baseurl value for Click-to-run specified in the registry" Text="The baseurl value (referring to the Office installation location) points to a custom location in the registry. Please check with your administrator to verify this location is correct." SSID="46fbcf47-04eb-45bc-b4c6-d6757b00b36c" Symptoms="Informational"></Rule>
+			</Setting>
+			<Setting Key1="updatebaseurl" Display="Right">
+				<Rule Name="sCustomUpdateBaseUrlPreSP1" Error="None" Query="not($MSO_fC2R2013SP1UpdateInstalled) and starts-with($.,'http://officecdn.microsoft.com')=false()" Title="Custom updatebaseurl for Click-to-run specified in the registry" Text="The updatebaseurl value (referring to the Office Click-to-run update location) points to a custom location in the registry. Please check with your administrator to verify this location is correct." SSID="03eadad5-1c6d-47a7-bcdd-bd818ae3c878" Symptoms="Informational"></Rule>
+			</Setting>
+		</Object>
+		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\ClickToRun\Configuration" Display="Right">
+			<Setting Key1="UpdatesEnabled" Display="Right"></Setting>
+			<Rule Name="fUpdatesEnabledPostSP1" Query="if((../Instance/Setting/@Key1='UpdatesEnabled')=true() and $MSO_fC2R2013SP1UpdateInstalled,../Instance/Setting[@Key1='UpdatesEnabled']/Value,-1)" AlwaysEvaluate="True"/>
+			<Setting Key1="updateurl" Display="Right">
+				<Rule Name="sCustomUpdateUrlPostSP1" Error="None" Query="$MSO_fC2R2013SP1UpdateInstalled and starts-with($.,'http://officecdn.microsoft.com')=false()" Title="Custom Update URL value for Click-to-run specified in the registry" Text="The UpdateURL value (referring to the Office Click-to-run update location) points to a custom location in the registry. Please check with your administrator to verify this location is correct." SSID="4005d104-f4fd-43cc-8215-341746de7267" Symptoms="Informational"></Rule>
+			</Setting>
+		</Object>
 		<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common\Officeupdate" Display="Right">
 			<Setting Key1="EnableAutomaticUpdates" Display="Right"/>
 			<Setting Key1="HideEnableDisableUpdates" Display="Right"></Setting>
 			<Rule Name="fEnableAutomaticUpdates" Query="if((../Instance/Setting/@Key1='EnableAutomaticUpdates')=true(),../Instance/Setting[@Key1='EnableAutomaticUpdates']/Value,-1)"/>
-      <Rule Name="sC2RUpdatesDisabled" Title="Automatic updates for Click-to-Run are disabled" Error="Warning" Query="$fEnableAutomaticUpdates=-1 and ($fUpdatesEnabledPreSP1=0 or $fUpdatesEnabledPostSP1='False')" Text="Automatic updating of your Click-to-Run installation is disabled. It is recommended to enable this feature so Office has the latest updates installed." GUID="271987" SSID="f9e6da83-93a8-4d12-9530-1991f0e4889c" Symptoms="Product not updated,Administration"/>
-      <Rule Name="sC2RUpdatesDisabledPol" Title="Automatic updates for Click-to-Run are disabled by group policy" Error="Warning" Query="$fEnableAutomaticUpdates=0" Text="Automatic updating of your Click-to-Run installation is disabled by policy. It is recommended to enable this feature so Office has the latest updates installed. See your administrator if you need to change this policy." GUID="271987" SSID="cdb98fa5-5697-4322-9137-9ecf91557203" Symptoms="Product not updated,Administration,Group Policy"/>
+			<Rule Name="sC2RUpdatesDisabled" Title="Automatic updates for Click-to-Run are disabled" Error="Warning" Query="$fEnableAutomaticUpdates=-1 and ($fUpdatesEnabledPreSP1=0 or $fUpdatesEnabledPostSP1='False')" Text="Automatic updating of your Click-to-Run installation is disabled. It is recommended to enable this feature so Office has the latest updates installed." GUID="271987" SSID="f9e6da83-93a8-4d12-9530-1991f0e4889c" Symptoms="Product not updated,Administration"/>
+			<Rule Name="sC2RUpdatesDisabledPol" Title="Automatic updates for Click-to-Run are disabled by group policy" Error="Warning" Query="$fEnableAutomaticUpdates=0" Text="Automatic updating of your Click-to-Run installation is disabled by policy. It is recommended to enable this feature so Office has the latest updates installed. See your administrator if you need to change this policy." GUID="271987" SSID="cdb98fa5-5697-4322-9137-9ecf91557203" Symptoms="Product not updated,Administration,Group Policy"/>
 		</Object>		
-    </Object>
-    <!--NOT Dogfood friendly-->
-    <Object Type="If" Key1="number('%MAJORVERSION%')&gt;15">
-      <Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
-        <Object Type="File" Key1="" Key2="%PROGRAMFILES (x86)%\Microsoft Office\Updates\Apply\PackageFiles\packagemanifests" Key3="*.xml" Count="*" Display="Hide">
-          <Setting Key1="Files" Display="Hide"></Setting>
-          <Rule Name="nC2RUpdateFilesWoW16+" Query="if((../Instance/Setting/@Key1='*')=true(),../Instance/Setting[@Key1='*']/Value,0)">
-          </Rule>
-        </Object>
-      </Object>
-      <Object Type="If" Key1="'%WOW6432NODE%'=''">
-        <Object Type="File" Key1="" Key2="%PROGRAMFILES (x86)%\Microsoft Office\Updates\Apply\PackageFiles\packagemanifests" Key3="*.xml" Count="*" Display="Hide">
-          <Setting Key1="Files" Display="Hide"></Setting>
-          <Rule Name="nC2RUpdateFiles16+" Query="if((../Instance/Setting/@Key1='*')=true(),../Instance/Setting[@Key1='*']/Value,0)">
-          </Rule>
-        </Object>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\ClickToRun\ProductReleaseIDs\Active\culture" Display="Right">
-        <Setting Key1="x-none" Display="Right" Substitution="C2RINSTALLEDVERSION"/>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\ClickToRun\propertyBag" Display="Right">
-        <Setting Key1="UpdatesEnabled" Display="Right"></Setting>
-        <Setting Key1="baseurl" Display="Right"></Setting>
-        <Setting Key1="updatebaseurl" Display="Right"></Setting>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\ClickToRun\Configuration" Display="Right">
-        <Setting Key1="UpdatesEnabled" Display="Right"></Setting>
-        <Setting Key1="updateurl" Display="Right"></Setting>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common\Officeupdate" Display="Right">
-        <Setting Key1="EnableAutomaticUpdates" Display="Right"/>
-        <Setting Key1="HideEnableDisableUpdates" Display="Right"></Setting>
-      </Object>
-    </Object>
+		</Object>
+    <!--O16+-->
+		<Object Type="If" Key1="number('%MAJORVERSION%')&gt;15">
+			<Rule Name="C2RLatestVersionFromWeb16+" Query="'16.0.0000.0000'"></Rule>
+			<Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
+				<Object Type="File" Key1="" Key2="%PROGRAMFILES (x86)%\Microsoft Office\Updates\Apply\PackageFiles\packagemanifests" Key3="*.xml" Count="*" Display="Hide">
+					<Setting Key1="Files" Display="Hide"></Setting>
+					<Rule Name="nC2RUpdateFilesWoW16+" Query="if((../Instance/Setting/@Key1='*')=true(),../Instance/Setting[@Key1='*']/Value,0)">
+					</Rule>
+				</Object>
+			</Object>
+			<Object Type="If" Key1="'%WOW6432NODE%'=''">
+				<Object Type="File" Key1="" Key2="%PROGRAMFILES (x86)%\Microsoft Office\Updates\Apply\PackageFiles\packagemanifests" Key3="*.xml" Count="*" Display="Hide">
+					<Setting Key1="Files" Display="Hide"></Setting>
+					<Rule Name="nC2RUpdateFiles16+" Query="if((../Instance/Setting/@Key1='*')=true(),../Instance/Setting[@Key1='*']/Value,0)">
+					</Rule>
+				</Object>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\ClickToRun\ProductReleaseIDs" Display="Right">
+				<Setting Key1="ActiveConfiguration" Display="Right" Substitution="ACTIVECONFIG"></Setting>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\ClickToRun\ProductReleaseIDs\%ACTIVECONFIG%\culture\x-none.%MAJORVERSION%" Display="Right">
+          <Setting Key1="Version" Display="Right" Substitution="C2RINSTALLEDVERSION">
+						<!--PUT C2R UPDATES 16+ RULES HERE-->
+					</Setting>
+			</Object>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\ClickToRun\propertyBag" Display="Right">
+				<Setting Key1="UpdatesEnabled" Display="Right"></Setting>
+				<Setting Key1="baseurl" Display="Right"></Setting>
+				<Setting Key1="updatebaseurl" Display="Right"></Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\ClickToRun\Configuration" Display="Right">
+				<Setting Key1="UpdatesEnabled" Display="Right"></Setting>
+				<Setting Key1="updateurl" Display="Right"></Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common\Officeupdate" Display="Right">
+				<Setting Key1="EnableAutomaticUpdates" Display="Right"/>
+				<Setting Key1="HideEnableDisableUpdates" Display="Right"></Setting>
+			</Object>
+		</Object>
 	</Type>
-  <Type Name="InstalledServicePack">
-    <Object Type="Group" Name="Service Pack installed">
-	    <Object Type="Group" Name="hidden">
-        <Rule Name="sOffice14NoServicePack" Query="$n2DigitVersion=14 and $OfficeUpdates_sOffice2010SP1NotInstalled=true() and $OfficeUpdates_sOffice2010SP2NotInstalled=true()" Text="No service pack installed"></Rule>
-        <Rule Name="sOffice14SP1Installed" Query="$n2DigitVersion=14 and $OfficeUpdates_sOffice2010SP2NotInstalled=true() and $OfficeUpdates_sOffice2010SP1NotInstalled=false()" Text="Office 2010 Service Pack 1 (SP1) is installed"></Rule>
-        <Rule Name="sOffice14SP2Installed" Query="$n2DigitVersion=14 and $OfficeUpdates_sOffice2010SP2NotInstalled=false()" Text="Office 2010 Service Pack 2 (SP2) is installed"></Rule>
-        <Rule Name="sOffice15SP1Installed" Query="$nInstallType!='ClickToRun' and $n2DigitVersion=15 and $OfficeUpdates_sOffice2013SP1NotInstalled=false()" Text="Office 2013 Service Pack 1 (SP1) is installed"></Rule>
-        <Rule Name="sOffice15SP1SlipstreamInstalled" Query="$nInstallType!='ClickToRun' and $n2DigitVersion=15 and $OfficeUpdates_fOffice2013SP1Slipstream=true()" Text="Office 2013 has SP1 slipstreamed into the installation"></Rule>
-        <Rule Name="sOffice15NoServicePack" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $OfficeUpdates_sOffice2013SP1NotInstalled=true()" Text="No service pack installed"></Rule>
-        <Rule Name="sOffice16NoServicePack" Query="$nInstallType='MSI' and $n2DigitVersion=16" Text="No service packs available yet"></Rule>
-      </Object>
-    </Object>
-  </Type>
+	<Type Name="InstalledServicePack">
+		<Object Type="Group" Name="Service Pack installed">
+			<Object Type="Group" Name="hidden">
+				<Rule Name="sOffice14NoServicePack" Query="$n2DigitVersion=14 and $OfficeUpdates_sOffice2010SP1NotInstalled=true() and $OfficeUpdates_sOffice2010SP2NotInstalled=true()" Text="No service pack installed"></Rule>
+				<Rule Name="sOffice14SP1Installed" Query="$n2DigitVersion=14 and $OfficeUpdates_sOffice2010SP2NotInstalled=true() and $OfficeUpdates_sOffice2010SP1NotInstalled=false()" Text="Office 2010 Service Pack 1 (SP1) is installed"></Rule>
+				<Rule Name="sOffice14SP2Installed" Query="$n2DigitVersion=14 and $OfficeUpdates_sOffice2010SP2NotInstalled=false()" Text="Office 2010 Service Pack 2 (SP2) is installed"></Rule>
+				<Rule Name="sOffice15SP1Installed" Query="$nInstallType!='ClickToRun' and $n2DigitVersion=15 and $OfficeUpdates_sOffice2013SP1NotInstalled=false()" Text="Office 2013 Service Pack 1 (SP1) is installed"></Rule>
+				<Rule Name="sOffice15SP1SlipstreamInstalled" Query="$nInstallType!='ClickToRun' and $n2DigitVersion=15 and $OfficeUpdates_fOffice2013SP1Slipstream=true()" Text="Office 2013 has SP1 slipstreamed into the installation"></Rule>
+				<Rule Name="sOffice15NoServicePack" Query="$n2DigitVersion=15 and $nInstallType='MSI' and $OfficeUpdates_sOffice2013SP1NotInstalled=true()" Text="No service pack installed"></Rule>
+				<Rule Name="sOffice16NoServicePack" Query="$nInstallType='MSI' and $n2DigitVersion=16" Text="No service packs available yet"></Rule>
+			</Object>
+		</Object>
+	</Type>
 	<Type Name="MachineDetails">
+		<Rule Name="fWinVistaInstalled" Query="(versioncompare($WindowsVersion,'6.0.0.0')&gt;=0 and versioncompare($WindowsVersion,'6.1.0.0')&lt;0) and $sOSProductType=1"></Rule>
+		<Rule Name="fWin7Installed" Query="(versioncompare($WindowsVersion,'6.1.0.0')&gt;=0 and versioncompare($WindowsVersion,'6.2.0.0')&lt;0) and $sOSProductType=1"></Rule>
+		<Rule Name="fWin2008Installed" Query="(versioncompare($WindowsVersion,'6.0.0.0')&gt;=0 and versioncompare($WindowsVersion,'6.1.0.0')&lt;0) and $sOSProductType&gt;1"></Rule>
+		<Rule Name="fWin2008R2Installed" Query="(versioncompare($WindowsVersion,'6.1.0.0')&gt;=0 and versioncompare($WindowsVersion,'6.2.0.0')&lt;0) and $sOSProductType&gt;1"></Rule>
+		<Rule Name="fWin8Installed" Query="(versioncompare($WindowsVersion,'6.2.0.0')&gt;0 and versioncompare($WindowsVersion,'6.3.0.0')&lt;0) and $sOSProductType=1"></Rule>
+		<Rule Name="fWin81Installed" Query="(versioncompare($WindowsVersion,'6.3.0.0')&gt;0 and versioncompare($WindowsVersion,'6.4.0.0')&lt;0) and $sOSProductType=1"></Rule>
+		<Rule Name="fWind8OrAbove" Query="versioncompare($WindowsVersion,'6.2.0.0')&gt;=0"></Rule>
 		<Object Type="Group" Name="VideoCardsList" Display="Hide">
 			<Setting Key1="Devices" Display="Hide">
 				<Rule Name="sVideoCards" Query="'PCI\VEN_1002&amp;DEV_796E;PCI\VEN_1002&amp;DEV_791E;PCI\VEN_1002&amp;DEV_791F;PCI\VEN_1002&amp;DEV_796F;PCI\VEN_1002&amp;DEV_793F;PCI\VEN_1002&amp;DEV_7941;PCI\VEN_1002&amp;DEV_7942;PCI\VEN_1002&amp;DEV_5A61;PCI\VEN_1002&amp;DEV_5A63;PCI\VEN_1002&amp;DEV_5A62;PCI\VEN_1002&amp;DEV_5A41;PCI\VEN_1002&amp;DEV_5A43;PCI\VEN_1002&amp;DEV_5A42;PCI\VEN_1002&amp;DEV_5954;PCI\VEN_1002&amp;DEV_5854;PCI\VEN_1002&amp;DEV_5955;PCI\VEN_1002&amp;DEV_5974;PCI\VEN_1002&amp;DEV_5874;PCI\VEN_1002&amp;DEV_5975;PCI\VEN_1002&amp;DEV_5653;PCI\VEN_1002&amp;DEV_3155;PCI\VEN_1002&amp;DEV_3175;PCI\VEN_1002&amp;DEV_4E54;PCI\VEN_1002&amp;DEV_5464;PCI\VEN_1002&amp;DEV_3154;PCI\VEN_1002&amp;DEV_564A;PCI\VEN_1002&amp;DEV_564B;PCI\VEN_1002&amp;DEV_5D49;PCI\VEN_1002&amp;DEV_71C4;PCI\VEN_1002&amp;DEV_71D4;PCI\VEN_1002&amp;DEV_4E52;PCI\VEN_1002&amp;DEV_4E56;PCI\VEN_1002&amp;DEV_4E50;PCI\VEN_1002&amp;DEV_4A4E;PCI\VEN_1002&amp;DEV_7149;PCI\VEN_1002&amp;DEV_714B;PCI\VEN_1002&amp;DEV_714C;PCI\VEN_1002&amp;DEV_714A;PCI\VEN_1002&amp;DEV_718B;PCI\VEN_1002&amp;DEV_718C;PCI\VEN_1002&amp;DEV_7196;PCI\VEN_1002&amp;DEV_7145;PCI\VEN_1002&amp;DEV_7186;PCI\VEN_1002&amp;DEV_718D;PCI\VEN_1002&amp;DEV_71C5;PCI\VEN_1002&amp;DEV_71D5;PCI\VEN_1002&amp;DEV_71DE;PCI\VEN_1002&amp;DEV_71D6;PCI\VEN_1002&amp;DEV_7102;PCI\VEN_1002&amp;DEV_7101;PCI\VEN_1002&amp;DEV_7284;PCI\VEN_1002&amp;DEV_718A;PCI\VEN_1002&amp;DEV_7188;PCI\VEN_1002&amp;DEV_5461;PCI\VEN_1002&amp;DEV_5460;PCI\VEN_1002&amp;DEV_3152;PCI\VEN_1002&amp;DEV_3150;PCI\VEN_1002&amp;DEV_5462;PCI\VEN_1002&amp;DEV_5652;PCI\VEN_1002&amp;DEV_5653;PCI\VEN_1002&amp;DEV_5673;PCI\VEN_1002&amp;DEV_564F;PCI\VEN_1002&amp;DEV_5D4A;PCI\VEN_1002&amp;DEV_5D48;PCI\VEN_1002&amp;DEV_5D48;PCI\VEN_1002&amp;DEV_7248;PCI\VEN_1002&amp;DEV_7268;PCI\VEN_1002&amp;DEV_554D;PCI\VEN_1002&amp;DEV_556D;PCI\VEN_1002&amp;DEV_5D52;PCI\VEN_1002&amp;DEV_5D72;PCI\VEN_1002&amp;DEV_4154;PCI\VEN_1002&amp;DEV_4174;PCI\VEN_1002&amp;DEV_5B64;PCI\VEN_1002&amp;DEV_5B74;PCI\VEN_1002&amp;DEV_3E54;PCI\VEN_1002&amp;DEV_3E74;PCI\VEN_1002&amp;DEV_7152;PCI\VEN_1002&amp;DEV_7172;PCI\VEN_1002&amp;DEV_7153;PCI\VEN_1002&amp;DEV_7173;PCI\VEN_1002&amp;DEV_71D2;PCI\VEN_1002&amp;DEV_71F2;PCI\VEN_1002&amp;DEV_958D;PCI\VEN_1002&amp;DEV_5E48;PCI\VEN_1002&amp;DEV_5E68;PCI\VEN_1002&amp;DEV_5551;PCI\VEN_1002&amp;DEV_5571;PCI\VEN_1002&amp;DEV_71DA;PCI\VEN_1002&amp;DEV_71FA;PCI\VEN_1002&amp;DEV_7105;PCI\VEN_1002&amp;DEV_7125;PCI\VEN_1002&amp;DEV_5550;PCI\VEN_1002&amp;DEV_5570;PCI\VEN_1002&amp;DEV_5D50;PCI\VEN_1002&amp;DEV_7104;PCI\VEN_1002&amp;DEV_5D70;PCI\VEN_1002&amp;DEV_7124;PCI\VEN_1002&amp;DEV_710E;PCI\VEN_1002&amp;DEV_712E;PCI\VEN_1002&amp;DEV_710F;PCI\VEN_1002&amp;DEV_712F;PCI\VEN_1002&amp;DEV_4E47;PCI\VEN_1002&amp;DEV_4E67;PCI\VEN_1002&amp;DEV_4E4B;PCI\VEN_1002&amp;DEV_4E6B;PCI\VEN_1002&amp;DEV_4A4D;PCI\VEN_1002&amp;DEV_4A6D;PCI\VEN_1002&amp;DEV_4147;PCI\VEN_1002&amp;DEV_4167;PCI\VEN_1002&amp;DEV_5B65;PCI\VEN_1002&amp;DEV_5B75;PCI\VEN_1002&amp;DEV_719B;PCI\VEN_1002&amp;DEV_71BB;PCI\VEN_1002&amp;DEV_3151;PCI\VEN_1002&amp;DEV_3171;PCI\VEN_1002&amp;DEV_724E;PCI\VEN_1002&amp;DEV_726E;PCI\VEN_1002&amp;DEV_4153;PCI\VEN_1002&amp;DEV_4173;PCI\VEN_1002&amp;DEV_4150;PCI\VEN_1002&amp;DEV_4E51;PCI\VEN_1002&amp;DEV_4151;PCI\VEN_1002&amp;DEV_4155;PCI\VEN_1002&amp;DEV_4152;PCI\VEN_1002&amp;DEV_4E71;PCI\VEN_1002&amp;DEV_4171;PCI\VEN_1002&amp;DEV_4170;PCI\VEN_1002&amp;DEV_4175;PCI\VEN_1002&amp;DEV_4172;PCI\VEN_1002&amp;DEV_7288;PCI\VEN_1002&amp;DEV_72A8;PCI\VEN_1002&amp;DEV_554E;PCI\VEN_1002&amp;DEV_556E;PCI\VEN_1002&amp;DEV_554D;PCI\VEN_1002&amp;DEV_556D;PCI\VEN_1002&amp;DEV_4B4B;PCI\VEN_1002&amp;DEV_4B6B;PCI\VEN_1002&amp;DEV_4B4A;PCI\VEN_1002&amp;DEV_4B6A;PCI\VEN_1002&amp;DEV_4B49;PCI\VEN_1002&amp;DEV_4B4C;PCI\VEN_1002&amp;DEV_4B6C;PCI\VEN_1002&amp;DEV_4B69;PCI\VEN_1002&amp;DEV_554C;PCI\VEN_1002&amp;DEV_556C;PCI\VEN_1002&amp;DEV_5D4C;PCI\VEN_1002&amp;DEV_5D6C;PCI\VEN_1002&amp;DEV_4144;PCI\VEN_1002&amp;DEV_4149;PCI\VEN_1002&amp;DEV_4E45;PCI\VEN_1002&amp;DEV_4E65;PCI\VEN_1002&amp;DEV_4164;PCI\VEN_1002&amp;DEV_4169;PCI\VEN_1002&amp;DEV_4E46;PCI\VEN_1002&amp;DEV_4E66;PCI\VEN_1002&amp;DEV_4146;PCI\VEN_1002&amp;DEV_4166;PCI\VEN_1002&amp;DEV_4E44;PCI\VEN_1002&amp;DEV_4E64;PCI\VEN_1002&amp;DEV_4E49;PCI\VEN_1002&amp;DEV_4E48;PCI\VEN_1002&amp;DEV_4E68;PCI\VEN_1002&amp;DEV_4148;PCI\VEN_1002&amp;DEV_4168;PCI\VEN_1002&amp;DEV_4E69;PCI\VEN_1002&amp;DEV_4E4A;PCI\VEN_1002&amp;DEV_4E6A;PCI\VEN_1002&amp;DEV_7146;PCI\VEN_1002&amp;DEV_7166;PCI\VEN_1002&amp;DEV_714E;PCI\VEN_1002&amp;DEV_715E;PCI\VEN_1002&amp;DEV_714D;PCI\VEN_1002&amp;DEV_71C3;PCI\VEN_1002&amp;DEV_718F;PCI\VEN_1002&amp;DEV_716E;PCI\VEN_1002&amp;DEV_717E;PCI\VEN_1002&amp;DEV_716D;PCI\VEN_1002&amp;DEV_71E3;PCI\VEN_1002&amp;DEV_71AF;PCI\VEN_1002&amp;DEV_7142;PCI\VEN_1002&amp;DEV_7180;PCI\VEN_1002&amp;DEV_7183;PCI\VEN_1002&amp;DEV_7187;PCI\VEN_1002&amp;DEV_7162;PCI\VEN_1002&amp;DEV_71A0;PCI\VEN_1002&amp;DEV_71A3;PCI\VEN_1002&amp;DEV_71A7;PCI\VEN_1002&amp;DEV_7147;PCI\VEN_1002&amp;DEV_715F;PCI\VEN_1002&amp;DEV_719F;PCI\VEN_1002&amp;DEV_7167;PCI\VEN_1002&amp;DEV_717F;PCI\VEN_1002&amp;DEV_7143;PCI\VEN_1002&amp;DEV_7193;PCI\VEN_1002&amp;DEV_7163;PCI\VEN_1002&amp;DEV_71B3;PCI\VEN_1002&amp;DEV_71CE;PCI\VEN_1002&amp;DEV_71EE;PCI\VEN_1002&amp;DEV_7140;PCI\VEN_1002&amp;DEV_71C0;PCI\VEN_1002&amp;DEV_71C2;PCI\VEN_1002&amp;DEV_7181;PCI\VEN_1002&amp;DEV_71CD;PCI\VEN_1002&amp;DEV_7160;PCI\VEN_1002&amp;DEV_71E2;PCI\VEN_1002&amp;DEV_71E6;PCI\VEN_1002&amp;DEV_71A1;PCI\VEN_1002&amp;DEV_71ED;PCI\VEN_1002&amp;DEV_71E0;PCI\VEN_1002&amp;DEV_71C6;PCI\VEN_1002&amp;DEV_71C1;PCI\VEN_1002&amp;DEV_7293;PCI\VEN_1002&amp;DEV_7291;PCI\VEN_1002&amp;DEV_71C7;PCI\VEN_1002&amp;DEV_71E1;PCI\VEN_1002&amp;DEV_72B3;PCI\VEN_1002&amp;DEV_72B1;PCI\VEN_1002&amp;DEV_71E7;PCI\VEN_1002&amp;DEV_7100;PCI\VEN_1002&amp;DEV_7108;PCI\VEN_1002&amp;DEV_7109;PCI\VEN_1002&amp;DEV_710A;PCI\VEN_1002&amp;DEV_710B;PCI\VEN_1002&amp;DEV_710C;PCI\VEN_1002&amp;DEV_7120;PCI\VEN_1002&amp;DEV_7128;PCI\VEN_1002&amp;DEV_7129;PCI\VEN_1002&amp;DEV_712A;PCI\VEN_1002&amp;DEV_712B;PCI\VEN_1002&amp;DEV_712C;PCI\VEN_1002&amp;DEV_7243;PCI\VEN_1002&amp;DEV_7245;PCI\VEN_1002&amp;DEV_7246;PCI\VEN_1002&amp;DEV_7247;PCI\VEN_1002&amp;DEV_7248;PCI\VEN_1002&amp;DEV_7249;PCI\VEN_1002&amp;DEV_724A;PCI\VEN_1002&amp;DEV_724B;PCI\VEN_1002&amp;DEV_724C;PCI\VEN_1002&amp;DEV_724D;PCI\VEN_1002&amp;DEV_724F;PCI\VEN_1002&amp;DEV_7263;PCI\VEN_1002&amp;DEV_7265;PCI\VEN_1002&amp;DEV_7266;PCI\VEN_1002&amp;DEV_7267;PCI\VEN_1002&amp;DEV_7268;PCI\VEN_1002&amp;DEV_7269;PCI\VEN_1002&amp;DEV_726A;PCI\VEN_1002&amp;DEV_726B;PCI\VEN_1002&amp;DEV_726C;PCI\VEN_1002&amp;DEV_726D;PCI\VEN_1002&amp;DEV_726F;PCI\VEN_1002&amp;DEV_7240;PCI\VEN_1002&amp;DEV_7244;PCI\VEN_1002&amp;DEV_7280;PCI\VEN_1002&amp;DEV_7260;PCI\VEN_1002&amp;DEV_7264;PCI\VEN_1002&amp;DEV_72A0;PCI\VEN_1002&amp;DEV_5B60;PCI\VEN_1002&amp;DEV_5B63;PCI\VEN_1002&amp;DEV_5B73;PCI\VEN_1002&amp;DEV_5B70;PCI\VEN_1002&amp;DEV_5657;PCI\VEN_1002&amp;DEV_5677;PCI\VEN_1002&amp;DEV_5B62;PCI\VEN_1002&amp;DEV_5B72;PCI\VEN_1002&amp;DEV_3E50;PCI\VEN_1002&amp;DEV_3E70;PCI\VEN_1002&amp;DEV_5E4D;PCI\VEN_1002&amp;DEV_5E4B;PCI\VEN_1002&amp;DEV_5E6B;PCI\VEN_1002&amp;DEV_5E4C;PCI\VEN_1002&amp;DEV_5E6C;PCI\VEN_1002&amp;DEV_5E6D;PCI\VEN_1002&amp;DEV_5E4A;PCI\VEN_1002&amp;DEV_5E6A;PCI\VEN_1002&amp;DEV_5E4F;PCI\VEN_1002&amp;DEV_5E6F;PCI\VEN_1002&amp;DEV_554B;PCI\VEN_1002&amp;DEV_556B;PCI\VEN_1002&amp;DEV_5549;PCI\VEN_1002&amp;DEV_554F;PCI\VEN_1002&amp;DEV_5D4F;PCI\VEN_1002&amp;DEV_5569;PCI\VEN_1002&amp;DEV_556F;PCI\VEN_1002&amp;DEV_5D6F;PCI\VEN_1002&amp;DEV_4A49;PCI\VEN_1002&amp;DEV_4A69;PCI\VEN_1002&amp;DEV_4A4F;PCI\VEN_1002&amp;DEV_4A6F;PCI\VEN_1002&amp;DEV_4A48;PCI\VEN_1002&amp;DEV_4A4A;PCI\VEN_1002&amp;DEV_4A4C;PCI\VEN_1002&amp;DEV_5548;PCI\VEN_1002&amp;DEV_4A68;PCI\VEN_1002&amp;DEV_4A6A;PCI\VEN_1002&amp;DEV_4A6C;PCI\VEN_1002&amp;DEV_5568;PCI\VEN_1002&amp;DEV_4A54;PCI\VEN_1002&amp;DEV_4A74;PCI\VEN_1002&amp;DEV_4A4B;PCI\VEN_1002&amp;DEV_5D57;PCI\VEN_1002&amp;DEV_4A50;PCI\VEN_1002&amp;DEV_554A;PCI\VEN_1002&amp;DEV_4A70;PCI\VEN_1002&amp;DEV_556A;PCI\VEN_1002&amp;DEV_4A6B;PCI\VEN_1002&amp;DEV_5D77;PCI\VEN_1002&amp;DEV_5D52;PCI\VEN_1002&amp;DEV_5D4D;PCI\VEN_1002&amp;DEV_5D6D;PCI\VEN_1002&amp;DEV_5D72;PCI\VEN_1002&amp;DEV_5B66;PCI\VEN_1002&amp;DEV_5B76;PCI\VEN_1002&amp;DEV_5B61;PCI\VEN_1002&amp;DEV_5B71;PCI\VEN_1002&amp;DEV_7141;PCI\VEN_1002&amp;DEV_714F;PCI\VEN_1002&amp;DEV_7151;PCI\VEN_1002&amp;DEV_7161;PCI\VEN_1002&amp;DEV_716F;PCI\VEN_1002&amp;DEV_7171;PCI\VEN_1002&amp;DEV_7290;PCI\VEN_1002&amp;DEV_7297;PCI\VEN_1002&amp;DEV_72B0;PCI\VEN_1002&amp;DEV_72B7;PCI\VEN_1002&amp;DEV_7289;PCI\VEN_1002&amp;DEV_728B;PCI\VEN_1002&amp;DEV_72A9;PCI\VEN_1002&amp;DEV_72AB;PCI\VEN_10DE&amp;DEV_0A6C;'">
@@ -126,9 +142,9 @@
 							<Rule Name="sVMWare" Query="$.='VMware, Inc.'" Error="None" Text="Office for Windows is running on VMware" Title="The configuration information indicates Office is running on virtualized hardware where the manufacturer is 'VMware, Inc.'." SSID="4bc09125-52eb-41fb-98e1-a2be26a4d269" Symptoms="Informational"></Rule>
 							<Rule Name="sApple" Query="$.='Apple Inc.' or contains($.,'Parallels')" Error="None" Text="Office for Windows is running on a Macintosh computer" Title="The computer manufacturer has been found to be either 'Apple, Inc' or 'Parallels Software International Inc.'. This indicates Office for Windows is running on a Macintosh computer." SSID="017a7368-0a90-4249-8f73-ed1ca1aa02c9" Symptoms="Informational"></Rule>
 						</Setting>
-            <Setting Key1="Model">
-              <Rule Name="sMicrosoftVM" Query="lower-case($.)='virtual machine' and lower-case($computerManufacturer)='microsoft corporation'" Error="None" Text="Microsoft Virtual Machine detected" Symptoms="Informational"></Rule>
-            </Setting>
+						<Setting Key1="Model">
+							<Rule Name="sMicrosoftVM" Query="lower-case($.)='virtual machine' and lower-case($computerManufacturer)='microsoft corporation'" Error="None" Text="Microsoft Virtual Machine detected" Symptoms="Informational"></Rule>
+						</Setting>
 						<Setting Key1="Name" NotForExport="True"/>
 						<Setting Key1="NetworkServerModeEnabled"/>
 						<Setting Key1="NumberOfLogicalProcessors"/>
@@ -164,8 +180,8 @@
 					<Object Type="Group" Name="Operating System Details">
 						<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_OperatingSystem" Display="Hide">
 							<Setting Key1="__VALUES" ShowInSummary="False"/>
-              <Setting Key1="RegisteredUser" NotForExport="True"/>
-              <Setting Key1="CSName" NotForExport="True"/>
+							<Setting Key1="RegisteredUser" NotForExport="True"/>
+							<Setting Key1="CSName" NotForExport="True"/>
 							<Setting Key1="Caption" Substitution="WINDOWSNAME" Display="Hide"></Setting>
 							<Setting Key1="Version" Substitution="WINDOWSVERSION" Display="Hide">
 								<Rule Name="WindowsVersion" Query="$."/>
@@ -194,33 +210,33 @@
 									<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_ServerFeature">
 										<Setting Key1="__VALUES"/>
 										<Rule Name="fMissingDesktopXP" Query="../Instance/Setting[@Key1='ID' and Value='35']=false()"></Rule>
-										<Rule Name="sMissingDesktopXP" Query="../Instance/Setting[@Key1='ID' and Value='35']=false() and $n2DigitVersion&gt;11 and lower-case($appName)='powerpoint'" Error="Warning" Title="Desktop Experience not installed, so some PowerPoint features are unavailable" Text="The Desktop Experience not installed for Windows. In this configuration, you may not be able to insert or edit video when using PowerPoint. If needed, please click the 'Click here to see possible solution ...' link below for instructions." GUID="282480" SSID="1f05d388-5250-4acb-9779-7a1d417d0dc0" Symptoms="Video,Audio">
+										<Rule Name="sMissingDesktopXP" Query="../Instance/Setting[@Key1='ID' and Value='35']=false() and $n2DigitVersion&gt;11 and lower-case($appName)='powerpoint'" Error="Warning" Title="Desktop Experience not installed, so some PowerPoint features are unavailable" Text="The Desktop Experience not installed for Windows. In this configuration, you may not be able to insert or edit video when using PowerPoint. If needed, please click the 'Click here to see possible solution ...' link for instructions." GUID="282480" SSID="1f05d388-5250-4acb-9779-7a1d417d0dc0" Symptoms="Video,Audio">
 										</Rule>
 									</Object>
 								</Object>
 							</Object>
-              <!--Office2013License-->
-              <Object Type="Group" Name="Software Licenses">
-                <!--check for Windows 7-->
-                <Object Type="If" Key1="'%MAJORVERSION%'='15' and (versioncompare('%WINDOWSVERSION%','6.1.0.0')&gt;0 and versioncompare('%WINDOWSVERSION%','6.2.0.0')&lt;0) and '%OSPRODUCTYPE%'='1'">
-                  <Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key5="*" Display="Hide">
-                    <Setting Key1="Description"></Setting>
-                    <Setting Key1="LicenseFamily"></Setting>
-                    <Setting Key1="LicenseStatus"></Setting>
-                  </Object>
-                </Object>
-                <!--check for Windows 8 or 8.1-->
-                <Object Type="If" Key1="'%MAJORVERSION%'='15' and (versioncompare('%WINDOWSVERSION%','6.2.0.0')&gt;0 and versioncompare('%WINDOWSVERSION%','6.4.0.0')&lt;0) and '%OSPRODUCTYPE%'='1'">
-                  <Object Type="WMI" Key3="SoftwareLicensingProduct" Key5="*" Display="Hide">
-                    <Setting Key1="Description"></Setting>
-                    <Setting Key1="LicenseFamily"></Setting>
-                    <Setting Key1="LicenseStatus"></Setting>
-                  </Object>
-                </Object>
-                <Rule Name="nNoGPOSKULicenseCount" Query="count(../Instance/Object/Instance/Object/Instance[(Setting[@Key1='LicenseFamily' and (contains(Value,'HomeBusiness')or contains(Value,'HomeStudent') or contains(Value,'O365Business') or contains(Value,'O365Home') or contains(Value,'O365SmallBus') or contains(Value,'Personal') or contains(Value,'Professional') or contains(Value,'StandardMSDN') or contains(Value,'StandardR'))]) and (Setting[@Key1='LicenseStatus' and Value=1])])"></Rule>
-                <Rule Name="sNoGPOSKULicense" Query="$fPolicies and $nNoGPOSKULicenseCount&gt;0" Error="None" Title="Group policy settings for Office 2013 were found but the Office 2013 license does not support group policies" Text="Group policy settings for Office 2013 were found in the registry but the Office 2013 license does not support group policies. To see the active Office 2013 license, click Find in Configuration Details and then search for 'Software Licenses'. Then, review the list of licences for the 'Office 15' SKU where LicenseStatus=1." GUID="303840" SSID="d800c47e-4a41-4afb-8161-e959e7385f95" Symptoms="Informational"></Rule>
-              </Object>
-              <!--/Office2013License-->
+							<!--Office2013License-->
+							<Object Type="Group" Name="Software Licenses">
+								<!--check for Windows 7-->
+								<Object Type="If" Key1="'%MAJORVERSION%'='15' and (versioncompare('%WINDOWSVERSION%','6.1.0.0')&gt;0 and versioncompare('%WINDOWSVERSION%','6.2.0.0')&lt;0) and '%OSPRODUCTYPE%'='1'">
+									<Object Type="WMI" Key3="OfficeSoftwareProtectionProduct" Key5="*" Display="Hide">
+										<Setting Key1="Description"></Setting>
+										<Setting Key1="LicenseFamily"></Setting>
+										<Setting Key1="LicenseStatus"></Setting>
+									</Object>
+								</Object>
+								<!--check for Windows 8 or 8.1-->
+								<Object Type="If" Key1="'%MAJORVERSION%'='15' and (versioncompare('%WINDOWSVERSION%','6.2.0.0')&gt;0 and versioncompare('%WINDOWSVERSION%','6.4.0.0')&lt;0) and '%OSPRODUCTYPE%'='1'">
+									<Object Type="WMI" Key3="SoftwareLicensingProduct" Key5="*" Display="Hide">
+										<Setting Key1="Description"></Setting>
+										<Setting Key1="LicenseFamily"></Setting>
+										<Setting Key1="LicenseStatus"></Setting>
+									</Object>
+								</Object>
+								<Rule Name="nNoGPOSKULicenseCount" Query="count(../Instance/Object/Instance/Object/Instance[(Setting[@Key1='LicenseFamily' and (contains(Value,'HomeBusiness')or contains(Value,'HomeStudent') or contains(Value,'O365Business') or contains(Value,'O365Home') or contains(Value,'O365SmallBus') or contains(Value,'Personal') or contains(Value,'Professional') or contains(Value,'StandardMSDN') or contains(Value,'StandardR'))]) and (Setting[@Key1='LicenseStatus' and Value=1])])"></Rule>
+								<Rule Name="sNoGPOSKULicense" Query="$fPolicies and $nNoGPOSKULicenseCount&gt;0" Error="None" Title="Group policy settings for Office 2013 were found but the Office 2013 license does not support group policies" Text="Group policy settings for Office 2013 were found in the registry but the Office 2013 license does not support group policies. To see the active Office 2013 license, click Find in Configuration Details and then search for 'Software Licenses'. Then, review the list of licences for the 'Office 15' SKU where LicenseStatus=1." GUID="303840" SSID="d800c47e-4a41-4afb-8161-e959e7385f95" Symptoms="Informational"></Rule>
+							</Object>
+							<!--/Office2013License-->
 							<Object Type="Group" Name="Windows Info" Display="Right" ShowInSummary="True">
 								<Object Type="Group" Name="Windows Name = %WINDOWSNAME%" Display="Right">
 									<Setting Key1="" Display="Hide"></Setting>
@@ -292,8 +308,9 @@
 									<Setting Display="Hide"/>
 								</Object>
 							</Object>
+							<Rule Name="fAppSenseServiceFound" Query="count(../Instance/Setting[@Key1='DisplayName' and starts-with(lower-case(Value),'appsense')=true()])&gt;0 and $appName='Outlook'" Error="None" Title="AppSense service found" Text="One or more services from AppSense running. This indicates AppSense is installed on this client." Symptoms="Informational"/>
 							<Rule Name="fAvastServiceFound" Query="count(../Instance/Setting[@Key1='DisplayName' and starts-with(lower-case(Value),'avast')=true()])"/>
-							<Rule Name="fWindowsFirewallServiceNotRunning" Query="count(../Instance/Setting[@Key1='DisplayName' and starts-with(lower-case(Value),'windows firewall')=true()])"/>
+							<Rule Name="fWindowsFirewallServiceNotRunning" Query="count(../Instance/Setting[@Key1='Name' and lower-case(Value)='mpssvc'])"/>
 							<Rule Name="sOfficePreviewersDisabled" Error="Error" Query="$n2DigitVersion&gt;=15 and $fWindowsFirewallServiceNotRunning=0 and (number(substring($MachineDetails_WindowsVersion,1,3))&gt;=6.2)" Title="Office previewer disabled because the Windows Firewall service is not running" Text="You will receive an error in Outlook if you try to preview an Office file attached to an email message. This occurs because the Windows Firewall service is not running." GUID="335813" SSID="27b8c83b-b85c-416e-bea5-7b7c847ad1bc" Symptoms="Email attachments,File error"></Rule>
 						</Object>
 					</Object>
@@ -311,8 +328,8 @@
 							<Setting Key1="onAccessScanningEnabled">
 								<Rule Name="AVScanningEnabledXP" P0="$displayNameXP" Query="$.='False'" Text="Your antivirus software ({0}) real-time scanning is not enabled."/>
 							</Setting>
-              <Rule Name="nAVRunningXP" Query="count(../Instance/Setting[@Key1='onAccessScanningEnabled' and Value='True'])"></Rule>
-              <Rule Name="sNoAVRunningXP" Query="$nAVRunningXP=0" Error="Error" Title="No antivirus scanning enabled" Text="Real-time antivirus software scanning is not enabled." Symptoms="Antivirus,Security"></Rule>
+							<Rule Name="nAVRunningXP" Query="count(../Instance/Setting[@Key1='onAccessScanningEnabled' and Value='True'])"></Rule>
+							<Rule Name="sNoAVRunningXP" Query="$nAVRunningXP=0" Error="Error" Title="No antivirus scanning enabled" Text="Real-time antivirus software scanning is not enabled." Symptoms="Antivirus,Security"></Rule>
 							<Setting Key1="productUptoDate">
 								<Rule Name="AVOutOfDateXP" P0="$displayNameXP" Title="Your antivirus software definitions are out of date" Error="Warning" Query="$.='False'" Text="Please check your antivirus software '{0}' as the definitions appear to be out of date." Symptoms="Antivirus,Security"/>
 							</Setting>
@@ -320,7 +337,7 @@
 					</Object>
 				</Object>
 				<!--Vista SP2 and above -->
-				<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_OperatingSystem" Key4="Version LIKE '%6.%'" Display="Hide">
+				<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_OperatingSystem" Key4="(NOT Version LIKE '%5.%') AND (ProductType='1')" Display="Hide">
 					<Setting Key1="Version" Substitution="WINDOWSVERSION" Display="Hide">
 					</Setting>
 					<Object Type="Group" Name="Antivirus software">
@@ -334,9 +351,9 @@
 								<Rule Name="AVRunning" Query="bitwise-and($.,4096) = 4096" Text="Your antivirus software '{0}' real-time scanning is enabled." P0="$displayName" SSID="8b683a42-7e91-4a06-8e84-aeba4966e9b1"/>
 								<Rule Name="AVNotRunning" Query="bitwise-and($.,4096) != 4096" Text="Your antivirus software '{0}' real-time scanning is not enabled." P0="$displayName" SSID="5e73bd47-edc5-4138-8a19-7387f8eb2347"/>
 							</Setting>
-              <Rule Name="nAVRunning" Query="count(../Instance/Setting[@Key1='productstate' and bitwise-and(Value,4096)=4096])"></Rule>
-              <Rule Name="sNoAVRunning" Query="$nAVRunning=0" Error="Error" Title="No antivirus scanning enabled" Text="Real-time antivirus software scanning is not enabled." Symptoms="Antivirus,Security"></Rule>
-            </Object>
+							<Rule Name="nAVRunning" Query="count(../Instance/Setting[@Key1='productstate' and bitwise-and(Value,4096)=4096])"></Rule>
+							<Rule Name="sNoAVRunning" Query="$nAVRunning=0" Error="Error" Title="No antivirus scanning enabled" Text="Real-time antivirus software scanning is not enabled." Symptoms="Antivirus,Security"></Rule>
+						</Object>
 					</Object>
 				</Object>
 				<Object Type="Group" Name="Pointing Devices" Display="Right">
@@ -356,20 +373,20 @@
 						<Setting Key1="Description">
 						</Setting>
 						<Setting Key1="PNPDeviceID" Format="(PCI\\VEN.*)(\x26SUBSYS.*)----$1">
-							<Rule Name="sVideoCardCrashesOutlook15" Query="($.='PCI\VEN_1002&amp;DEV_6740') and $n2DigitVersion=15" Error="Error" Title="Video card configuration may crash Outlook 2013" Text="Your video card has been known to crash Outlook 2013. If an updated video driver does not reduce crashes in Outlook, we recommend you disable Hardware Acceleration in Office programs. Please click the 'Click here ...' link below for details." GUID="273849" SSID="f82a8728-44ee-4bfe-b0c1-036c9067ade8" Symptoms="Crash,Display"></Rule>
-              <Rule Name="sPNPDeviceID" Query="$.">
+							<Rule Name="sVideoCardCrashesOutlook15" Query="($.='PCI\VEN_1002&amp;DEV_6740') and $n2DigitVersion=15" Error="Error" Title="Video card configuration may crash Outlook 2013" Text="Your video card has been known to crash Outlook 2013. If an updated video driver does not reduce crashes in Outlook, we recommend you disable Hardware Acceleration in Office programs. Please click the 'Click here ...' link for details." GUID="273849" SSID="f82a8728-44ee-4bfe-b0c1-036c9067ade8" Symptoms="Crash,Display"></Rule>
+							<Rule Name="sPNPDeviceID" Query="$.">
 							</Rule>
 							<Rule Name="sUnsupportVideoDriver" Query="contains($sVideoCards,$sPNPDeviceID) and $n2DigitVersion&gt;14" Error="Warning" Title="Hardware acceleration is disabled by Office" Text="Hardware acceleration is disabled in Office programs because your video configuration is not compatible with Office 2013. Please update your video driver as your vendor may have an updated version that is compatible with Office 2013." GUID="273849" SSID="bfdda70c-a464-4222-afaa-1407a69b3cb8" Symptoms="Display">
 							</Rule>
 						</Setting>
-            <Setting Key1="DriverVersion">
-            </Setting>
-            <Rule Name="sIntelVideoCard0166" Query="(../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0166']]) and $n2DigitVersion=15 and versioncompare($MSO_sMso2013Version,'15.0.4641.1001')&lt;=0" Error="Error" P0="../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0166']]/Setting[@Key1='Description']/Value" P1="../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0166']]/Setting[@Key1='DriverVersion']/Value" Title="Video card configuration known to cause display issues in Office programs" Text="The configuration of your video card '{0}' has been known to cause video display problems in Office 2013 programs. To resolve this issue we recommend you update your video driver (version '{1}') to a newer version. Please click the 'Click here ...' link below for details." GUID="510076" SSID="fc819134-a481-490c-91e9-9ac5355645d3" Symptoms="Display,Video"></Rule>
-            <Rule Name="sIntelVideoCard0162" Query="(../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0162']]) and $n2DigitVersion=15 and versioncompare($MSO_sMso2013Version,'15.0.4641.1001')&lt;=0" Error="Error" P0="../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0162']]/Setting[@Key1='Description']/Value" P1="../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0162']]/Setting[@Key1='DriverVersion']/Value" Title="Video card configuration known to cause display issues in Office programs" Text="The configuration of your video card '{0}' has been known to cause video display problems in Office 2013 programs. To resolve this issue we recommend you update your video driver (version '{1}') to a newer version. Please click the 'Click here ...' link below for details." GUID="510076" SSID="0b57daf2-36b2-4764-b47b-c0f606c0667b" Symptoms="Display,Video"></Rule>
-            <Rule Name="fIntelHDGraphics4000" Query="count(../Instance/Setting[@Key1='Description' and contains(Value,'HD Graphics 4000')])&gt;0"></Rule>
-            <Rule Name="fNVIDIACard" Query="count(../Instance/Setting[@Key1='Description' and contains(Value,'NVIDIA')])&gt;0"></Rule>
-            <Rule Name="sMultipleVideoCardsPlusHWAccelEnabled" Query="$n2DigitVersion=15 and $appName='Outlook' and $MSO_fC2R2013SP1UpdateInstalled and $fIntelHDGraphics4000 and $fNVIDIACard and not($sDisableHardwareAcceleration)" Error="Error" Title="Outlook stops at 'Loading Profile' due to video hardware conflict" Text="When you start Outlook 2013 the program stops at the 'Loading Profile' step. This problem occurs when the hardware acceleration feature in Office conflicts with video cards that need to have updated drivers installed.&#xA;&#xA;Please click the 'Click here ...' link below for complete details and solutions." GUID="394979" SSID="30780dcd-df87-4525-8008-393d79ba621c" Symptoms="Crash,Freeze,Startup"></Rule>
-          </Object>
+						<Setting Key1="DriverVersion">
+						</Setting>
+						<Rule Name="sIntelVideoCard0166" Query="(../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0166']]) and $n2DigitVersion=15 and versioncompare($MSO_sMso2013Version,'15.0.4641.1001')&lt;=0" Error="Error" P0="../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0166']]/Setting[@Key1='Description']/Value" P1="../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0166']]/Setting[@Key1='DriverVersion']/Value" Title="Video card configuration known to cause display issues in Office programs" Text="The configuration of your video card '{0}' has been known to cause video display problems in Office 2013 programs. To resolve this issue we recommend you update your video driver (version '{1}') to a newer version. Please click the 'Click here ...' link for details." GUID="510076" SSID="fc819134-a481-490c-91e9-9ac5355645d3" Symptoms="Display,Video"></Rule>
+						<Rule Name="sIntelVideoCard0162" Query="(../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0162']]) and $n2DigitVersion=15 and versioncompare($MSO_sMso2013Version,'15.0.4641.1001')&lt;=0" Error="Error" P0="../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0162']]/Setting[@Key1='Description']/Value" P1="../Instance[Setting[@Key1='DriverVersion' and Value='10.18.0010.3621'] and Setting[@Key1='PNPDeviceID' and Value='PCI\VEN_8086&amp;DEV_0162']]/Setting[@Key1='DriverVersion']/Value" Title="Video card configuration known to cause display issues in Office programs" Text="The configuration of your video card '{0}' has been known to cause video display problems in Office 2013 programs. To resolve this issue we recommend you update your video driver (version '{1}') to a newer version. Please click the 'Click here ...' link for details." GUID="510076" SSID="0b57daf2-36b2-4764-b47b-c0f606c0667b" Symptoms="Display,Video"></Rule>
+						<Rule Name="fIntelHDGraphics4000" Query="count(../Instance/Setting[@Key1='Description' and contains(Value,'HD Graphics 4000')])&gt;0"></Rule>
+						<Rule Name="fNVIDIACard" Query="count(../Instance/Setting[@Key1='Description' and contains(Value,'NVIDIA')])&gt;0"></Rule>
+						<Rule Name="sMultipleVideoCardsPlusHWAccelEnabled" Query="$n2DigitVersion=15 and $appName='Outlook' and $MSO_fC2R2013SP1UpdateInstalled and $fIntelHDGraphics4000 and $fNVIDIACard and not($sDisableHardwareAcceleration)" Error="Error" Title="Outlook stops at 'Loading Profile' due to video hardware conflict" Text="When you start Outlook 2013 the program stops at the 'Loading Profile' step. This problem occurs when the hardware acceleration feature in Office conflicts with video cards that need to have updated drivers installed.&#xA;&#xA;Please click the 'Click here ...' link for complete details and solutions." GUID="394979" SSID="30780dcd-df87-4525-8008-393d79ba621c" Symptoms="Crash,Freeze,Startup"></Rule>
+					</Object>
 					<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Common\Graphics" Display="Right">
 						<Setting Key1="DisableHardwareAcceleration">
 						</Setting>
@@ -396,7 +413,7 @@
 						</Setting>
 						<Setting Key1="Speed">
 							<Rule Name="nicSpeed" Query="$."></Rule>
-							<Rule Name="sSlowConnection" Query="$n2DigitVersion=14 and lower-case($appName)='outlook' and $nicSpeed&lt;number($effectiveSlowBitrate+1)" P0="$nicDesc" Error="Warning" Title="Slow connection detected: {0}" Text="The network adapter speed is considered &quot;slow&quot; so, Outlook will use different behavior for some functions." GUID="282071" SSID="8f11e99f-674d-4996-a091-9cfdd7b70ca6" Symptoms="Delay,Exchange connection,Slowness" AlwaysEvaluate="True"></Rule>
+							<Rule Name="sSlowConnection" Query="$n2DigitVersion=14 and lower-case($appName)='outlook' and $nicSpeed&lt;number($effectiveSlowBitrate+1)" P0="$nicDesc" Error="Warning" Title="Slow connection detected: {0}" Text="The network adapter speed is considered &quot;slow&quot;, so Outlook will use different behavior for some functions." GUID="282071" SSID="8f11e99f-674d-4996-a091-9cfdd7b70ca6" Symptoms="Delay,Exchange connection,Slowness" AlwaysEvaluate="True"></Rule>
 						</Setting>
 						<Setting Key1="Support">
 						</Setting>
@@ -419,23 +436,23 @@
 							<Setting Key1="Text"></Setting>
 						</Object>
 					</Object>
-          <Object Type="Group" Name="IPv6 registry data">
-            <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="System\CurrentControlSet\Services\Tcpip6\Parameters">
-              <Setting Key1="DisabledComponents">
-                <Rule Name="sIPV6DisabledAll" Query="$.=4294967295" Error="None" P0="$." Title="All IPv6 components are disabled except for the IPv6 loopback interface" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, all IPv6 components are disabled except for the IPv6 loopback interface." GUID="392781" SSID="be3fca2d-d2de-4ce4-8f84-4a29fcae8407" Symptoms="Configuration (unsupported or problematic),Informational">
-                </Rule>
-                <Rule Name="sPreferIPv4OverIPv6" Query="$.=32" Error="None" P0="$." Title="IPv4 preferred over IPv6" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, IPv4 is preferred over IPv6." GUID="392781" SSID="402a1b9a-df94-4ceb-aee0-25fa0eb8500f" Symptoms="Configuration (unsupported or problematic),Informational">
-                </Rule>
-                <Rule Name="sIPV6DisabledOnNonTunnelInterfaces" Query="$.=16" P0="$." Error="None" Title="IPv6 disabled on all non-tunnel interfaces" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, IPv6 is disabled on all non-tunnel interfaces." GUID="392781" SSID="cda638bf-57e3-42cf-ab3d-67be3f056149" Symptoms="Configuration (unsupported or problematic),Informational">
-                </Rule>
-                <Rule Name="sIPV6DisabledOnAllTunnelInterfaces" Query="$.=1" P0="$." Error="None" Title="IPv6 disabled on all tunnel interfaces" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, IPv6 is disabled on all tunnel interfaces." GUID="392781" SSID="60f64d1c-482d-4fd4-a459-d5988e5eac5a" Symptoms="Configuration (unsupported or problematic),Informational">
-                </Rule>
-                <Rule Name="sIPV6InterfacesDisabledNotIPV6Loopback" Query="$.=17" P0="$." Error="None" Title="IPv6 disabled on all interfaces except for the IPv6 loopback interface" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, IPv6 is disabled on all interfaces except for the IPv6 loopback interface." GUID="392781" SSID="3cb109c7-6448-4650-9123-33636a8de0a9" Symptoms="Configuration (unsupported or problematic),Informational">
-                </Rule>
-              </Setting>
-              <Rule Name="fDisabledComponentsNotFound" Query="not(../Instance[Setting/@Key1='DisabledComponents'])" Text="DisabledComponents DWORD not found"></Rule>
-            </Object>
-          </Object>
+					<Object Type="Group" Name="IPv6 registry data">
+						<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="System\CurrentControlSet\Services\Tcpip6\Parameters">
+							<Setting Key1="DisabledComponents">
+								<Rule Name="sIPV6DisabledAll" Query="$.=4294967295" Error="None" P0="$." Title="All IPv6 components are disabled except for the IPv6 loopback interface" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, all IPv6 components are disabled except for the IPv6 loopback interface." GUID="392781" SSID="be3fca2d-d2de-4ce4-8f84-4a29fcae8407" Symptoms="Informational">
+								</Rule>
+								<Rule Name="sPreferIPv4OverIPv6" Query="$.=32" Error="None" P0="$." Title="IPv4 preferred over IPv6" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, IPv4 is preferred over IPv6." GUID="392781" SSID="402a1b9a-df94-4ceb-aee0-25fa0eb8500f" Symptoms="Informational">
+								</Rule>
+								<Rule Name="sIPV6DisabledOnNonTunnelInterfaces" Query="$.=16" P0="$." Error="None" Title="IPv6 disabled on all non-tunnel interfaces" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, IPv6 is disabled on all non-tunnel interfaces." GUID="392781" SSID="cda638bf-57e3-42cf-ab3d-67be3f056149" Symptoms="Informational">
+								</Rule>
+								<Rule Name="sIPV6DisabledOnAllTunnelInterfaces" Query="$.=1" P0="$." Error="None" Title="IPv6 disabled on all tunnel interfaces" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, IPv6 is disabled on all tunnel interfaces." GUID="392781" SSID="60f64d1c-482d-4fd4-a459-d5988e5eac5a" Symptoms="Informational">
+								</Rule>
+								<Rule Name="sIPV6InterfacesDisabledNotIPV6Loopback" Query="$.=17" P0="$." Error="None" Title="IPv6 disabled on all interfaces except for the IPv6 loopback interface" Text="DisabledComponents={0} (decimal value) in the registry. In this configuration, IPv6 is disabled on all interfaces except for the IPv6 loopback interface." GUID="392781" SSID="3cb109c7-6448-4650-9123-33636a8de0a9" Symptoms="Informational">
+								</Rule>
+							</Setting>
+							<Rule Name="fDisabledComponentsNotFound" Query="not(../Instance[Setting/@Key1='DisabledComponents'])" Text="DisabledComponents DWORD not found"></Rule>
+						</Object>
+					</Object>
 			</Object>
 				<Object Type="Group" Name="Network Drive Details" Display="Right">
 					<Object Type="Group" Name="Mapped Network Drives (reachable)" Class="Network Drive Details" GroupingClass="True" Display="Right">
@@ -458,49 +475,49 @@
 				</Object>
 				<Object Type="Group" Name="Printers" Display="Right" Class="System Details">
 					<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_Printer" Key5="*" Display="Hide">
-            <Setting Key1="Name" Substitution="PRINTERNAME" Display="Hide" NotForExport="True"/>
-            <Setting Key1="Caption" Substitution="PRINTERCAPTION" Display="Hide" NotForExport="True"/>
-            <Setting Key1="Location" Substitution="PRINTERLOCATION" Display="Hide" NotForExport="True"/>
-            <Setting Key1="Local" Substitution="PRINTERLOCAL" Display="Hide"/>
-            <Setting Key1="Default" Substitution="PRINTERDEFAULT" Display="Hide"/>
-            <Setting Key1="DeviceID" Substitution="PRINTERID" Display="Hide" NotForExport="True"/>
-            <Setting Key1="Comment" Substitution="PRINTERCOMMENT" Display="Hide" NotForExport="True"/>
-            <Setting Key1="DriverName" Substitution="PRINTERDRIVER" Display="Hide"/>
-            <Setting Key1="ServerName" Substitution="PRINTERSERVER" Display="Hide" NotForExport="True"/>
-            <Setting Key1="ShareName" Substitution="PRINTERSHARE" Display="Hide" NotForExport="True"/>
-            <Setting Key1="Status" Substitution="PRINTERSTATUS" Display="Hide"/>
-            <Object Type="Group" Name="%PRINTERNAME%">
-              <Object Type="Group" Name="Caption =%PRINTERCAPTION%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Location =%PRINTERLOCATION%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Is local =%PRINTERLOCAL%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Default printer =%PRINTERDEFAULT%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Device ID =%PRINTERID%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Comment =%PRINTERCOMMENT%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Driver =%PRINTERDRIVER%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Print server =%PRINTERSERVER%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Share name =%PRINTERSHARE%">
-                <Setting Display="Hide"/>
-              </Object>
-              <Object Type="Group" Name="Status =%PRINTERSTATUS%">
-                <Setting Display="Hide"/>
-              </Object>
-            </Object>
+						<Setting Key1="Name" Substitution="PRINTERNAME" Display="Hide" NotForExport="True"/>
+						<Setting Key1="Caption" Substitution="PRINTERCAPTION" Display="Hide" NotForExport="True"/>
+						<Setting Key1="Location" Substitution="PRINTERLOCATION" Display="Hide" NotForExport="True"/>
+						<Setting Key1="Local" Substitution="PRINTERLOCAL" Display="Hide"/>
+						<Setting Key1="Default" Substitution="PRINTERDEFAULT" Display="Hide"/>
+						<Setting Key1="DeviceID" Substitution="PRINTERID" Display="Hide" NotForExport="True"/>
+						<Setting Key1="Comment" Substitution="PRINTERCOMMENT" Display="Hide" NotForExport="True"/>
+						<Setting Key1="DriverName" Substitution="PRINTERDRIVER" Display="Hide"/>
+						<Setting Key1="ServerName" Substitution="PRINTERSERVER" Display="Hide" NotForExport="True"/>
+						<Setting Key1="ShareName" Substitution="PRINTERSHARE" Display="Hide" NotForExport="True"/>
+						<Setting Key1="Status" Substitution="PRINTERSTATUS" Display="Hide"/>
+						<Object Type="Group" Name="%PRINTERNAME%">
+							<Object Type="Group" Name="Caption =%PRINTERCAPTION%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Location =%PRINTERLOCATION%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Is local =%PRINTERLOCAL%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Default printer =%PRINTERDEFAULT%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Device ID =%PRINTERID%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Comment =%PRINTERCOMMENT%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Driver =%PRINTERDRIVER%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Print server =%PRINTERSERVER%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Share name =%PRINTERSHARE%">
+								<Setting Display="Hide"/>
+							</Object>
+							<Object Type="Group" Name="Status =%PRINTERSTATUS%">
+								<Setting Display="Hide"/>
+							</Object>
+						</Object>
 					</Object>
 				</Object>
 				<Object Type="Group" Name="Current Theme" Display="Right" Class="System Details">
@@ -616,61 +633,61 @@
 		</Object>
 	</Type>
 	<Type Name="UserDetails">
-    <Object Type="If" Key1="'%APPNAME%'='Outlook'">
-      <Object Type="Namespace" Task="Outlook" Display="Hide">
-        <Setting Key1="currentuser" Substitution="CURRENTUSER" Display="Right" NotForExport="True"></Setting>
-        <Object Type="DsGet" Key1="DcName" Key2="" Key3="" Key5="DS_DIRECTORY_SERVICE_PREFERRED" SecurityContext="ADLOGON" Display="Hide">
-          <Setting Key1="DomainControllerName" Substitution="DC" Display="Hide" NotForExport="True"/>
-          <Object Type="Directory" Key1="" Key2="%DC%" Key3="cn=%CURRENTUSER%" Key4="Subtree" SecurityContext="ADLOGON" Display="Hide">
-            <Setting Key1="distinguishedName" Display="Right" NotForExport="True">
-              <Rule Name="sSlashInUserDNTest" Query="contains($.,'/') and $n2DigitVersion=14 and $appName='Outlook' and (substring-before(substring-after(string($sFullAppVersion),concat($n2DigitVersion,'.0.')),'.')&lt;6123)" Error="Warning" Title="Your distinguished name contains a slash mark (/)" Text="When your distinguished name contains a slash mark (/) character, you cannot configure Outlook profiles by using the Account Settings wizard." GUID="267341" SSID="61e4a548-2e86-481b-a33b-5adc6c863c00" Symptoms="Outlook Profile,Startup"></Rule>
-            </Setting>
-            <Setting Key1="mail" Display="Right" NotForExport="True"></Setting>
-            <Setting Key1="mailNickName" Display="Right" NotForExport="True"></Setting>
-            <Setting Key1="userPrincipalName" Display="Right" NotForExport="True"></Setting>
-            <Setting Key1="proxyAddresses" Display="Right" NotForExport="True"></Setting>
-            <Setting Key1="homeMDB" Display="Right" NotForExport="True"></Setting>
-            <Setting Key1="legacyExchangeDN" Substitution="ORG" SubstitutionFormat="(/(?i:o)=)(.*)(/(?i:ou)=.*)----$2" Display="Right" NotForExport="True"></Setting>
-            <Object Type="Group" Name="Exchange Organization =%ORG%" Display="Right">
-              <Object Type="Directory" Key1="LDAP://" Key4="Base" SecurityContext="ADLOGON" Display="Right">
-                <Setting Key1="configurationNamingContext" Substitution="CONFIGNAMINGCONTEXT" Display="Right" NotForExport="True"></Setting>
-                <Object Type="Directory" Key1="" Key2="cn=%ORG%,CN=Microsoft Exchange,CN=Services,%CONFIGNAMINGCONTEXT%" Key4="Base" SecurityContext="ADLOGON" Display="Right">
-                  <Setting Key1="distinguishedName" Display="Right" NotForExport="True"></Setting>
-                  <Setting Key1="msExchProvisioningFlags" Display="Right">
-                    <Rule Name="sAppsForOfficeEnabled" Query="bitwise-and($.,512)=512 and $n2DigitVersion&gt;14" Error="Warning" Title="Apps for Outlook are disabled in your organization." Text="Your administrator has globally disabled all Apps for Outlook in your Exchange organization. Therefore, Apps for Outlook will not be displayed in Outlook or Outlook Web App (OWA)." GUID="273851" SSID="69a1917b-8120-41b2-87eb-5bae98beabab" Symptoms="Add-ins,Administration"></Rule>
-                  </Setting>
-                </Object>
-              </Object>
-            </Object>
-            <Setting Key1="msExchHomeServerName" Display="Right" NotForExport="True"></Setting>
-          </Object>
-        </Object>
-      </Object>
-      <Object Type="GetUserNameEx" Display="Right" Timeout="60">
-        <Setting Key1="NameCanonical" NotForExport="True">
-        </Setting>
-        <Setting Key1="NameCanonicalEx" NotForExport="True">
-        </Setting>
-        <Setting Key1="NameUniqueId">
-        </Setting>
-      </Object>
-    </Object>
-      <Object Type="If" Key1="'%APPNAME%'!='Outlook'">
-        <Object Type="GetUserNameEx" Display="Right" Timeout="60">
-          <Setting Key1="NameDisplay" NotForExport="True">
-          </Setting>
-          <Setting Key1="NameCanonical" NotForExport="True">
-          </Setting>
-          <Setting Key1="NameCanonicalEx" NotForExport="True">
-          </Setting>
-          <Setting Key1="NameFullyQualifiedDN" NotForExport="True">
-           </Setting>
-          <Setting Key1="NameUniqueId">
-          </Setting>
-          <Setting Key1="NameUserPrinciple" NotForExport="True">
-          </Setting>
-        </Object>
-      </Object>
+		<Object Type="If" Key1="'%APPNAME%'='Outlook'">
+			<Object Type="Namespace" Task="Outlook" Display="Hide">
+				<Setting Key1="currentuser" Substitution="CURRENTUSER" Display="Right" NotForExport="True"></Setting>
+				<Object Type="DsGet" Key1="DcName" Key2="" Key3="" Key5="DS_DIRECTORY_SERVICE_PREFERRED" SecurityContext="ADLOGON" Display="Hide">
+					<Setting Key1="DomainControllerName" Substitution="DC" Display="Hide" NotForExport="True"/>
+					<Object Type="Directory" Key1="" Key2="%DC%" Key3="cn=%CURRENTUSER%" Key4="Subtree" SecurityContext="ADLOGON" Display="Hide">
+						<Setting Key1="distinguishedName" Display="Right" NotForExport="True">
+							<Rule Name="sSlashInUserDNTest" Query="contains($.,'/') and $n2DigitVersion=14 and $appName='Outlook' and (substring-before(substring-after(string($sFullAppVersion),concat($n2DigitVersion,'.0.')),'.')&lt;6123)" Error="Warning" Title="Your distinguished name contains a slash mark (/)" Text="When your distinguished name contains a slash mark (/) character, you cannot configure Outlook profiles by using the Account Settings wizard." GUID="267341" SSID="61e4a548-2e86-481b-a33b-5adc6c863c00" Symptoms="Outlook Profile,Startup"></Rule>
+						</Setting>
+						<Setting Key1="mail" Display="Right" NotForExport="True"></Setting>
+						<Setting Key1="mailNickName" Display="Right" NotForExport="True"></Setting>
+						<Setting Key1="userPrincipalName" Display="Right" NotForExport="True"></Setting>
+						<Setting Key1="proxyAddresses" Display="Right" NotForExport="True"></Setting>
+						<Setting Key1="homeMDB" Display="Right" NotForExport="True"></Setting>
+						<Setting Key1="legacyExchangeDN" Substitution="ORG" SubstitutionFormat="(/(?i:o)=)(.*)(/(?i:ou)=.*)----$2" Display="Right" NotForExport="True"></Setting>
+						<Object Type="Group" Name="Exchange Organization =%ORG%" Display="Right">
+							<Object Type="Directory" Key1="LDAP://" Key4="Base" SecurityContext="ADLOGON" Display="Right">
+								<Setting Key1="configurationNamingContext" Substitution="CONFIGNAMINGCONTEXT" Display="Right" NotForExport="True"></Setting>
+								<Object Type="Directory" Key1="" Key2="cn=%ORG%,CN=Microsoft Exchange,CN=Services,%CONFIGNAMINGCONTEXT%" Key4="Base" SecurityContext="ADLOGON" Display="Right">
+									<Setting Key1="distinguishedName" Display="Right" NotForExport="True"></Setting>
+									<Setting Key1="msExchProvisioningFlags" Display="Right">
+										<Rule Name="sAppsForOfficeEnabled" Query="bitwise-and($.,512)=512 and $n2DigitVersion&gt;14" Error="Warning" Title="Apps for Outlook are disabled in your organization." Text="Your administrator has globally disabled all Apps for Outlook in your Exchange organization. Therefore, Apps for Outlook will not be displayed in Outlook or Outlook Web App (OWA)." GUID="273851" SSID="69a1917b-8120-41b2-87eb-5bae98beabab" Symptoms="Add-ins,Administration"></Rule>
+									</Setting>
+								</Object>
+							</Object>
+						</Object>
+						<Setting Key1="msExchHomeServerName" Display="Right" NotForExport="True"></Setting>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="GetUserNameEx" Display="Right" Timeout="60">
+				<Setting Key1="NameCanonical" NotForExport="True">
+				</Setting>
+				<Setting Key1="NameCanonicalEx" NotForExport="True">
+				</Setting>
+				<Setting Key1="NameUniqueId">
+				</Setting>
+			</Object>
+		</Object>
+			<Object Type="If" Key1="'%APPNAME%'!='Outlook'">
+				<Object Type="GetUserNameEx" Display="Right" Timeout="60">
+					<Setting Key1="NameDisplay" NotForExport="True">
+					</Setting>
+					<Setting Key1="NameCanonical" NotForExport="True">
+					</Setting>
+					<Setting Key1="NameCanonicalEx" NotForExport="True">
+					</Setting>
+					<Setting Key1="NameFullyQualifiedDN" NotForExport="True">
+					 </Setting>
+					<Setting Key1="NameUniqueId">
+					</Setting>
+					<Setting Key1="NameUserPrinciple" NotForExport="True">
+					</Setting>
+				</Object>
+			</Object>
 		<Object Type="Group" Name="Cached Credentials (Windows Vista and above)" Class="User Details" GroupingClass="True" Display="Right">
 			<Object Type="CommandLine" Key1="" Key2="cmdkey" Key3="/list">
 				<Setting Key1="Output">
@@ -699,9 +716,9 @@
 						</Object>
 					</Object>
 				</Object>
-				<Rule Name="sRedirectedDesktopFolderUNC" Query="$fRedirectedDesktopFolderUNC=true()" Error="None" Title="The Desktop folder is being redirected to a non-local location on the network." Text="The Desktop string value in the registry refers to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link below for details." GUID="321703" SSID="45d0909e-9ae8-4aff-b2d3-5305534a2e01" Symptoms="Informational"></Rule>
-				<Rule Name="sMappedNetworkDriveDesktopFolder" Query="$fMappedNetworkDriveDesktopFolder&gt;0" Error="None" Title="The Desktop folder is being redirected to a non-local location on the network." Text="The Desktop string value in the registry refers to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link below for details." GUID="321703" SSID="dd219162-9b0e-4520-b6d2-60dad03b7c6c" Symptoms="Informational"></Rule>
-				<Rule Name="sNetworkDriveDesktopFolderFromEnvVar" Query="$fNetworkDriveDesktopFolderFromEnvVar&gt;0" Error="None" Title="The Desktop folder is being redirected to a non-local location on the network." Text="The Desktop string value in the registry refers to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link below for details." GUID="321703" SSID="a50766b4-a8ff-40a0-a25b-856181aa81c5" Symptoms="Informational"></Rule>
+				<Rule Name="sRedirectedDesktopFolderUNC" Query="$fRedirectedDesktopFolderUNC=true()" Error="None" Title="The Desktop folder is being redirected to a non-local location on the network." Text="The Desktop string value in the registry refers to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link for details." GUID="321703" SSID="45d0909e-9ae8-4aff-b2d3-5305534a2e01" Symptoms="Informational"></Rule>
+				<Rule Name="sMappedNetworkDriveDesktopFolder" Query="$fMappedNetworkDriveDesktopFolder&gt;0" Error="None" Title="The Desktop folder is being redirected to a non-local location on the network." Text="The Desktop string value in the registry refers to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link for details." GUID="321703" SSID="dd219162-9b0e-4520-b6d2-60dad03b7c6c" Symptoms="Informational"></Rule>
+				<Rule Name="sNetworkDriveDesktopFolderFromEnvVar" Query="$fNetworkDriveDesktopFolderFromEnvVar&gt;0" Error="None" Title="The Desktop folder is being redirected to a non-local location on the network." Text="The Desktop string value in the registry refers to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link for details." GUID="321703" SSID="a50766b4-a8ff-40a0-a25b-856181aa81c5" Symptoms="Informational"></Rule>
 				<Setting Key1="Personal" Substitution="PERSONALPATH">
 					<Rule Name="fRedirectedDocumentFolderUNC" Query="starts-with('%PERSONALPATH%','\\')=true()"></Rule>
 				</Setting>
@@ -721,19 +738,25 @@
 						</Object>
 					</Object>
 				</Object>
-				<Rule Name="sRedirectedDocumentsFolderUNC" Query="$fRedirectedDocumentFolderUNC=true()" Error="None" Title="The Documents folder is being redirected to a non-local location on the network." Text="The Personal string value in the registry refers to the location of your Documents folder and it points to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link below for details." GUID="321703" SSID="e1ebfef1-64dc-4f1e-b5dd-06c3197e7ac4" Symptoms="Informational"></Rule>
-				<Rule Name="sMappedNetworkDocumentsFolder" Query="$fMappedNetworkDocumentsFolder&gt;0" Error="None" Title="The Documents folder is being redirected to a non-local location on the network." Text="The Personal string value in the registry refers to the location of your Documents folder and it points to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link below for details." GUID="321703" SSID="c949ef55-8101-4099-bc5e-3aba63ad34e9" Symptoms="Informational"></Rule>
-				<Rule Name="sNetworkDriveDocumentsFolderFromEnvVar" Query="$fNetworkDriveDocumentsFolderFromEnvVar&gt;0" Error="None" Title="The Documents folder is being redirected to a non-local location on the network." Text="The Personal string value in the registry refers to the location of your Documents folder and it points to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link below for details." GUID="321703" SSID="ba7e3199-c84a-4da8-bdde-3808a8eb30d8" Symptoms="Informational"></Rule>
+				<Rule Name="sRedirectedDocumentsFolderUNC" Query="$fRedirectedDocumentFolderUNC=true()" Error="None" Title="The Documents folder is being redirected to a non-local location on the network." Text="The Personal string value in the registry refers to the location of your Documents folder and it points to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link for details." GUID="321703" SSID="e1ebfef1-64dc-4f1e-b5dd-06c3197e7ac4" Symptoms="Informational"></Rule>
+				<Rule Name="sMappedNetworkDocumentsFolder" Query="$fMappedNetworkDocumentsFolder&gt;0" Error="None" Title="The Documents folder is being redirected to a non-local location on the network." Text="The Personal string value in the registry refers to the location of your Documents folder and it points to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link for details." GUID="321703" SSID="c949ef55-8101-4099-bc5e-3aba63ad34e9" Symptoms="Informational"></Rule>
+				<Rule Name="sNetworkDriveDocumentsFolderFromEnvVar" Query="$fNetworkDriveDocumentsFolderFromEnvVar&gt;0" Error="None" Title="The Documents folder is being redirected to a non-local location on the network." Text="The Personal string value in the registry refers to the location of your Documents folder and it points to a network folder. This configuration has been known to cause problems in Office programs, but only if other conditions also exist in the environment. Click the 'Tell me more ...' link for details." GUID="321703" SSID="ba7e3199-c84a-4da8-bdde-3808a8eb30d8" Symptoms="Informational"></Rule>
 			</Object>
 		</Object>
-    <Object Type="Engine" Display="Hide">
-      <Setting Key1="EnvironmentVariable" Key2="USERPROFILE" Substitution="USERPROFILEPATH" Display="Hide">
-      </Setting>
-      <Object Type="Group" Name="User profile path =%USERPROFILEPATH%" Display="Right">
-        <Setting Key1="" Display="Hide">
-        </Setting>
-      </Object>
-    </Object>
+		<Object Type="Engine" Display="Hide">
+			<Setting Key1="EnvironmentVariable" Key2="USERPROFILE" Substitution="USERPROFILEPATH" Display="Hide">
+			</Setting>
+			<Object Type="Group" Name="User profile path (local) =%USERPROFILEPATH%" Display="Right">
+				<Setting Key1="" Display="Hide">
+				</Setting>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList" Key5="Subtree" Display="Hide">
+          <Setting Key1="ProfileImagePath" Display="Hide"></Setting>
+          <Setting Key1="CentralProfile" Display="Hide"></Setting>
+          <Rule Name="fRoamingProfile" Query="if(count(../Instance[Setting[@Key1='ProfileImagePath']/Value='%USERPROFILEPATH%' and Setting[@Key1='CentralProfile']/Value=true()])&gt;0,true(),false())"></Rule>
+          <Rule Name="fProfileType" Query="true()" Error="None" P0="if($fRoamingProfile,'Profile type =Roaming, Network profile location: ','Profile type =Local')" P1="if($fRoamingProfile,../Instance[Setting[@Key1='ProfileImagePath']/Value='%USERPROFILEPATH%' and Setting[@Key1='CentralProfile']/Value=true()]/Setting[@Key1='CentralProfile']/Value,false())" Text="{0}{1}" Symptoms="Informational"></Rule>
+        </Object>
+			</Object>
+		</Object>
 	</Type>
 	<!--PROBLEM_ADDINS-->
 	<Type Name="CommonProbAddins">
@@ -772,113 +795,172 @@
 			<Rule Name="sBtmOfficeDllCrashWow" Query="$n2DigitVersion&gt;=14 and $fBtmOfficeDllWow and $fFaultModuleBtmoffice&gt;0" Error="Warning" P1="concat((upper-case(substring($appName,1,1))),substring-after($appName,substring($appName,1,1)),'.exe')" Title="'Send to Bluetooth' add-in has caused one or more crashes in {1}" Text="A third-party add-in called 'Send to Bluetooth' is installed (registered under HKLM\Software\Wow6432Node) and has caused at least one crash in the last 14 days in {1}. Please click the 'Click here to see possible solutions...' link for details on how to disable this add-in." GUID="301494" SSID="f2b93f36-3337-48d1-8047-e477178df7db" Symptoms="Crash,Add-ins"></Rule>
 		</Object>
 		<!--/Btmoffice.dll or Btmofficea.dll crashes-->
-    <!--SP1 disabled add-ins re-enabled by user-->
-    <Object Type="If" Key1="%MAJORVERSION%=15">
-        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%APPNAME%\Addins" Key5="Subtree" Display="Hide">
-          <Setting Key1="__KEYNAME" Substitution="PROGID" Display="Hide"></Setting>
-          <Object Type="If" Key1="starts-with('%PROGID%','FineReader') or starts-with('%PROGID%','FRComAdd') or starts-with('%PROGID%','FRHEAdd') or starts-with('%PROGID%','btmoffice') or starts-with('%PROGID%','Evernote')">
-            <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%APPNAME%\Addins\%PROGID%\" Display="Right">
-              <Setting Key1="OverrideDefaultDisable" Display="Right">
-                <Rule Name="fOverrideDefaultDisable" Query="$.=1"></Rule>
-                <Rule Name="fAddinReEnabledPostSP1" Query="$.=1 and $fLoadBehavior3!=true()" Text="This add-in was re-enabled by the user after SP1 was installed. This is OK as long as LoadBehavior is not 3."></Rule>
-              </Setting>
-              <Setting Key1="LoadBehavior" Display="Right">
-                <Rule Name="fLoadBehavior3" Query="$.=3"></Rule>
-                <Rule Name="sOverrideDefaultDisableFR" Query="$MSO_fC2R2013SP1UpdateInstalled=true() and (starts-with('%PROGID%','FineReader') or starts-with('%PROGID%','FRComAdd') or starts-with('%PROGID%','FRHEAdd')) and $fOverrideDefaultDisable and $fLoadBehavior3" Error="Warning" Title="The FineReader add-in that is known to cause crashing problems has been re-enabled" Text="You have a version of the FineReader add-in installed that has been known to crash Office 2013 programs. This version of the add-in is disabled in Office 2013 SP1, but you have re-enabled it. We recommend you disable this add-in until you install the most recent version." GUID="391442" SSID="9eb73a61-aa32-4f58-a00a-e26b7236a89c" Symptoms="Add-ins,Crash,Event Log"></Rule>
-                <Rule Name="sOverrideDefaultDisableBT" Query="$MSO_fC2R2013SP1UpdateInstalled=true()and starts-with('%PROGID%','btmoffice') and $fOverrideDefaultDisable and $fLoadBehavior3" Error="Warning" Title="The 'Send to Bluetooth' add-in that is known to cause crashing problems has been re-enabled" Text="You have a version of the 'Send to Bluetooth' add-in installed that has been known to crash Office 2013 programs. This version of the add-in is disabled in Office 2013 SP1, but you have re-enabled it. We recommend you disable this add-in until you install the most recent version." GUID="392784" SSID="e35db263-07e9-4e5a-a6a5-d79163ac0644" Symptoms="Add-ins,Crash,Event Log"></Rule>
-                <Rule Name="sOverrideDefaultDisableEN" Query="$MSO_fC2R2013SP1UpdateInstalled=true() and starts-with('%PROGID%','Evernote') and $fOverrideDefaultDisable and $fLoadBehavior3" Error="Warning" Title="The Evernote.Connect add-in that is known to cause crashing problems has been re-enabled" Text="You have a version of the Evernote.Connect add-in installed that has been known to crash Office 2013 programs. This version of the add-in is disabled in Office 2013 SP1, but you have re-enabled it. We recommend you disable this add-in until you install the most recent version." GUID="392785" SSID="3c27d46d-6624-4109-accc-35693b3c8b98" Symptoms="Add-ins,Crash,Event Log"></Rule>
-              </Setting>
-            </Object>
-          </Object>
-        </Object>
-    </Object>
-    <!--/SP1 disabled add-ins re-enabled by user-->
+		<!--SP1 disabled add-ins re-enabled by user-->
+		<Object Type="If" Key1="%MAJORVERSION%=15">
+				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%APPNAME%\Addins" Key5="Subtree" Display="Hide">
+					<Setting Key1="__KEYNAME" Substitution="PROGID" Display="Hide"></Setting>
+					<Object Type="If" Key1="starts-with('%PROGID%','FineReader') or starts-with('%PROGID%','FRComAdd') or starts-with('%PROGID%','FRHEAdd') or starts-with('%PROGID%','btmoffice') or starts-with('%PROGID%','Evernote')">
+						<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%APPNAME%\Addins\%PROGID%\" Display="Right">
+							<Setting Key1="OverrideDefaultDisable" Display="Right">
+								<Rule Name="fOverrideDefaultDisable" Query="$.=1"></Rule>
+								<Rule Name="fAddinReEnabledPostSP1" Query="$.=1 and $fLoadBehavior3!=true()" Text="This add-in was re-enabled by the user after SP1 was installed. This is OK as long as LoadBehavior is not 3."></Rule>
+							</Setting>
+							<Setting Key1="LoadBehavior" Display="Right">
+								<Rule Name="fLoadBehavior3" Query="$.=3"></Rule>
+								<Rule Name="sOverrideDefaultDisableFR" Query="$MSO_fC2R2013SP1UpdateInstalled=true() and (starts-with('%PROGID%','FineReader') or starts-with('%PROGID%','FRComAdd') or starts-with('%PROGID%','FRHEAdd')) and $fOverrideDefaultDisable and $fLoadBehavior3" Error="Warning" Title="The FineReader add-in that is known to cause crashing problems has been re-enabled" Text="You have a version of the FineReader add-in installed that has been known to crash Office 2013 programs. This version of the add-in is disabled in Office 2013 SP1, but you have re-enabled it. We recommend you disable this add-in until you install the most recent version." GUID="391442" SSID="9eb73a61-aa32-4f58-a00a-e26b7236a89c" Symptoms="Add-ins,Crash,Event Log"></Rule>
+								<Rule Name="sOverrideDefaultDisableBT" Query="$MSO_fC2R2013SP1UpdateInstalled=true()and starts-with('%PROGID%','btmoffice') and $fOverrideDefaultDisable and $fLoadBehavior3" Error="Warning" Title="The 'Send to Bluetooth' add-in that is known to cause crashing problems has been re-enabled" Text="You have a version of the 'Send to Bluetooth' add-in installed that has been known to crash Office 2013 programs. This version of the add-in is disabled in Office 2013 SP1, but you have re-enabled it. We recommend you disable this add-in until you install the most recent version." GUID="392784" SSID="e35db263-07e9-4e5a-a6a5-d79163ac0644" Symptoms="Add-ins,Crash,Event Log"></Rule>
+								<Rule Name="sOverrideDefaultDisableEN" Query="$MSO_fC2R2013SP1UpdateInstalled=true() and starts-with('%PROGID%','Evernote') and $fOverrideDefaultDisable and $fLoadBehavior3" Error="Warning" Title="The Evernote.Connect add-in that is known to cause crashing problems has been re-enabled" Text="You have a version of the Evernote.Connect add-in installed that has been known to crash Office 2013 programs. This version of the add-in is disabled in Office 2013 SP1, but you have re-enabled it. We recommend you disable this add-in until you install the most recent version." GUID="392785" SSID="3c27d46d-6624-4109-accc-35693b3c8b98" Symptoms="Add-ins,Crash,Event Log"></Rule>
+							</Setting>
+						</Object>
+					</Object>
+				</Object>
+		</Object>
+		<!--/SP1 disabled add-ins re-enabled by user-->
 	</Type>
 	<!--/PROBLEM_ADDINS-->
 	<!--SDPRules-->
 	<Rule Name="SDPBluetoothAddinLoaded" Query="$sBluetoothAddinLoaded or $sBluetoothAddinLoadedWow or $sBluetoothAddinLoadedVisio or $sBluetoothAddinLoadedVisioWow" SSID="86075952-49af-4c00-9106-1220084024eb" AlwaysEvaluate="True"></Rule>
 	<!--/SDPRules-->
 	<!--Alerts-->
-  <!-- Do NOT delete the Alerts section even after v1.2 ships with its Alerts feature. This is because some rules use CurrentMonth and CurrentYear-->
+	<!-- Do NOT delete the Alerts section even after v1.2 ships with its Alerts feature. This is because some rules use CurrentMonth and CurrentYear-->
 	<Type Name="Alerts">
 		<Object Type="WMI" Key3="Win32_CurrentTime" Display="Hide">
-      <Setting Key1="Month" Display="Hide">
-        <Rule Name="CurrentMonth" Query="$."></Rule>
-      </Setting>
-      <Setting Key1="Year" Display="Hide">
-        <Rule Name="CurrentYear" Query="$."></Rule>
-      </Setting>
-    </Object>
+			<Setting Key1="Month" Display="Hide">
+				<Rule Name="CurrentMonth" Query="$."></Rule>
+			</Setting>
+			<Setting Key1="Year" Display="Hide">
+				<Rule Name="CurrentYear" Query="$."></Rule>
+			</Setting>
+		</Object>
 	</Type>
-  <!-- Do NOT delete the Alerts section even after v1.2 ships with its Alerts feature. This is because some rules use CurrentMonth and CurrentYear-->
+	<!-- Do NOT delete the Alerts section even after v1.2 ships with its Alerts feature. This is because some rules use CurrentMonth and CurrentYear-->
 	<!--/Alerts-->
-  
-  <Type Name="OffCATVersionInfo">
-    
-    <!-- OffCAT version detection -->
-    <Object Type="Group" Name="OffCAT program details">
-      <Object Type="Engine" Display="Hide">
-        <Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide"></Setting>
-        <Object Type="File" Key2="%EXECDIR%\OffCAT.exe" Display="Hide">
-          <Setting Key1="Version" Substitution="OFFCATVERSION" Display="Hide"/>
-          <Object Type="Group" Name="OffCAT.exe was run from %EXECDIR%" Display="Right">
-            <Setting Key1="" Display="Hide"/>
-            <Object Type="Group" Name="OffCAT version =%OFFCATVERSION%">
-              <Setting Key1="" Display="Hide"/>
-            </Object>
-          </Object>
-        </Object>
-      </Object>
-    </Object>
-    <!--/OffCAT version detection -->
-  </Type>
-  
+	
+	<Type Name="OffCATVersionInfo">
+		
+		<!-- OffCAT version detection -->
+		<Object Type="Group" Name="OffCAT program details">
+			<Object Type="Engine" Display="Hide">
+				<Setting Key1="ExecutionDirectory" Substitution="EXECDIR" Display="Hide"></Setting>
+				<Object Type="File" Key2="%EXECDIR%\OffCAT.exe" Display="Hide">
+					<Setting Key1="Version" Substitution="OFFCATVERSION" Display="Hide">
+						<Rule Name="sOffCATVersion" Query="$."></Rule>
+					</Setting>
+					<Object Type="Group" Name="OffCAT.exe was run from %EXECDIR%" Display="Right">
+						<Setting Key1="" Display="Hide"/>
+						<Object Type="Group" Name="OffCAT version =%OFFCATVERSION%">
+							<Setting Key1="" Display="Hide"/>
+						</Object>
+					</Object>
+					<Object Type="Group" Name="Configuration File versions" Display="Right">
+						<Object Type="XML" Key2="%EXECDIR%\En\officeupdates.config.xml" Key3="//Configuration" Display="Hide">
+							<Setting Key1="@ConfigVersion" Substitution="OFFICEUPDATESCONFIGVER" Display="Hide">
+								<!--Do NOT change the name of the sOfficeUpdatesConfigVersion rule as it is referenced in the binaries-->
+								<Rule Name="sOfficeUpdatesConfigVersion" Query="$."></Rule>
+							</Setting>
+							<Object Type="Group" Name="OfficeUpdates.config.xml: %OFFICEUPDATESCONFIGVER%" Display="Right">
+								<Setting Key1="" Display="Hide"></Setting>
+				</Object>
+			</Object>
+						<Object Type="XML" Key2="%EXECDIR%\En\common.config.xml" Key3="//Configuration" Display="Hide">
+							<Setting Key1="@ConfigVersion" Substitution="COMMONCONFIGVER" Display="Hide">
+								<!--Do NOT change the name of the sCommonConfigVersion rule as it is referenced in the binaries-->
+								<Rule Name="sCommonConfigVersion" Query="$."></Rule>
+							</Setting>
+							<Object Type="Group" Name="Common.config.xml: %COMMONCONFIGVER%" Display="Right">
+								<Setting Key1="" Display="Hide"></Setting>
+		</Object>
+							<Rule Name="sScannedAppConfigVersion" Query="true()" Text="%APPNAME%.config.xml: {0}" P0="//@ConfigVersion"/>
+						</Object>
+					</Object>
+				</Object>
+			</Object>
+		</Object>
+		<!--/OffCAT version detection -->
+        
+	</Type>
+	
 	<Type Name="CommonMisc">
 
-    <!--Access DB Engine 2010 x64 and Office x86-->
-    <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{2CB572DF-5B05-4392-B123-6141B5398BB1}" Display="Hide">
-      <Setting Key1="ProductCode" Display="Hide"></Setting>
-      <Rule Name="fAccessDBEngineX64" Query="count(../Instance/Setting[@Key1='ProductCode' and (Value='{90140000-00D1-0409-1000-0000000FF1CE}')])&gt;0"></Rule>
-    </Object>
-    <Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{398E906A-826B-48DD-9791-549C649CACE5}" Display="Hide">
-      <Setting Key1="ProductCode" Display="Hide"></Setting>
-      <Rule Name="fMsoComponentIDx86" Query="count(../Instance/Setting[@Key1='ProductCode' and (substring(Value,21,1)='0')])&gt;0"></Rule>
-    </Object>
-    <!--/Access DB Engine 2010 x64 and Office x86-->
-    <!--Office Alerts-->
-    <Object Type="If" Key1="number('%MAJORVERSION%')&gt;12">
-      <Object Type="Group" Name="Microsoft Office Alerts - Common" Class="Application Event Logs" GroupingClass="True">
-        <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="701910" Key5="1" Key7="14" Task="Offline scan">
-          <Setting Key1="Message"></Setting>
-          <Rule Name="n80070005_701910" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'0x80070005')])" AlwaysEvaluate="True"></Rule>
-          <Rule Name="s80070005NotActivated" Query="$n80070005_701910&gt;0 and $n2DigitVersion=15" Error="Warning" Title="Office Activation error 0x80070005 detected" Text="The activation error 0x80070005 was found in the Office Alerts log. This indicates your Office installation may not be activated. Please click the 'Click here ...' link below for details on resolving this problem." GUID="397866" SSID="b7f7f51e-7b7d-484b-81a0-f0c227690a93" Symptoms="Activation,Error message,Setup"></Rule>
-        </Object>
-        <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="702040" Key5="1" Key7="7" Task="Offline scan">
-          <Setting Key1="Message"></Setting>
-          <Rule Name="n80041015_702040" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'0x80041015')])" AlwaysEvaluate="True"></Rule>
-          <Rule Name="s80041015May2014UpdateIssue" Query="$n80041015_702040&gt;0 and $n2DigitVersion=15" Error="Warning" Title="System error: 0x80041015 displayed launching Office 2013 programs" Text="The error 0x80041015 was found in the Office Alerts log. If you are unable to start Office 2013 programs because you receive an error message containing 'System error: 0x80041015', please click the 'Click here ...' link below to get the hotfix that resolves this problem." GUID="399026" SSID="a6216304-a8c9-445a-97f9-490ec61408e2" Symptoms="Crash,Error message,Setup"></Rule>
-        </Object>
-        <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="200724" Key5="1" Key7="7" Task="Offline scan">
-          <Setting Key1="Message"></Setting>
-          <Rule Name="n200724WordError" Query="count(../Instance/Setting)" AlwaysEvaluate="True"></Rule>
-        </Object>
-        <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="100796" Key5="1" Key7="7" Task="Offline scan">
-          <Setting Key1="Message"></Setting>
-          <Rule Name="n100796ExcelError" Query="count(../Instance/Setting)" AlwaysEvaluate="True"></Rule>
-        </Object>
-        <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="400274" Key5="1" Key7="7" Task="Offline scan">
-          <Setting Key1="Message"></Setting>
-          <Rule Name="n400274PPTError" Query="count(../Instance/Setting)" AlwaysEvaluate="True"></Rule>
-        </Object>
-        <Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="Apps for Office" Key5="1" Key7="7" Task="Offline scan">
-          <Setting Key1="Message" Display="Right">
-            <Rule Name="sAppsForOfficeError" Query="$nOfficeAppsAlertCount&gt;0 and $n2DigitVersion=15 and ($appName='Outlook' or $appName='Word' or $appName='PowerPoint' or $appName='Excel')" Error="Warning" Title="Error starting an 'App for Office' detected" Text="At least one error was found in the Microsoft Office Alerts log (in the Event Viewer) indicating there was a problem starting an 'App for Office'. Please click the 'Click here ...' link below for details on resolving this problem." GUID="468521" SSID="9233a78c-ee12-435e-8162-21a3b7b9965e" Symptoms="Error message"></Rule>
-          </Setting>
-          <Rule Name="nOfficeAppsAlertCount" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'could not be started')])&gt;0"></Rule>
-        </Object>
-      </Object>
-    </Object>
-    <!--/Office Alerts-->
+		<!--Access DB Engine 2010 x64 and Office x86-->
+		<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{2CB572DF-5B05-4392-B123-6141B5398BB1}" Display="Hide">
+			<Setting Key1="ProductCode" Display="Hide"></Setting>
+			<Rule Name="fAccessDBEngineX64" Query="count(../Instance/Setting[@Key1='ProductCode' and (Value='{90140000-00D1-0409-1000-0000000FF1CE}')])&gt;0"></Rule>
+		</Object>
+		<Object Type="MSI" Key1="MSIENUMCLIENTS" Key2="{398E906A-826B-48DD-9791-549C649CACE5}" Display="Hide">
+			<Setting Key1="ProductCode" Display="Hide"></Setting>
+			<Rule Name="fMsoComponentIDx86" Query="count(../Instance/Setting[@Key1='ProductCode' and (substring(Value,21,1)='0')])&gt;0"></Rule>
+		</Object>
+		<!--/Access DB Engine 2010 x64 and Office x86-->
+		<!--AppCompat -->
+		<Object Type="Group" Name="Windows Compatibility Settings">
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="System\CurrentControlSet\Control\Session Manager\Environment">
+				<Setting Key1="__COMPAT_LAYER">
+				</Setting>
+				<Rule Name="fDisableThemesInCompatLayer" Query="if((../Instance/Setting/@Key1='__COMPAT_LAYER')=true(),../Instance/Setting[@Key1='__COMPAT_LAYER']/Value,-1)"></Rule>
+				<Rule Name="sDisableThemesInCompatLayerNotOutlook" Query="lower-case($appName)!='outlook' and contains($fDisableThemesInCompatLayer,'DisableThemes')" Error="Warning" Title="The 'File-Open', 'File-Save As' and other commands do nothing" Text="When you click some menus/controls in an Office program, nothing happens. This has been seen with menus/controls that display a dialog box where you open or save to the file system. This includes, but is not limited to File - Open, File - Save As, Insert - Picture. This occurs because you have data in your Windows registry that prevents certain dialog boxes from working properly.&#xA;&#xA;Click the 'Click here ...' link for information on how to change this setting." GUID="523802" SSID="b135655e-2811-4ef3-af31-1a19c80498cd" Symptoms="Configuration (unsupported or problematic),File Open,File Save"></Rule>
+				<Rule Name="sDisableThemesInCompatLayerOutlook" Query="lower-case($appName)='outlook' and contains($fDisableThemesInCompatLayer,'DisableThemes')" Error="Warning" Title="Cannot attach files to messages or import/open pst files" Text="In Outlook, nothing happens when you click 'Attach File', or you get the error 'Not implemented' when you try to import/open pst files. This occurs because you have data in your Windows registry that prevents certain dialog boxes from working properly.&#xA;&#xA;Click the 'Click here ...' link for information on how to change this setting." GUID="523802" SSID="79e7b23c-345a-4614-ba35-c353ea0163f2" Symptoms="Configuration (unsupported or problematic),Email attachments,Error message,File Open error"></Rule>        
+			</Object>
+		</Object>
+		<!--/AppCompat -->
+		<!--Office Alerts-->
+		<Object Type="If" Key1="number('%MAJORVERSION%')&gt;12">
+			<Object Type="Group" Name="Microsoft Office Alerts - Common" Class="Application Event Logs" GroupingClass="True">
+				<Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="701910" Key5="1" Key7="14" Task="Offline scan">
+					<Setting Key1="Message"></Setting>
+					<Rule Name="n80070005_701910" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'0x80070005')])" AlwaysEvaluate="True"></Rule>
+					<Rule Name="s80070005NotActivated" Query="$n80070005_701910&gt;0 and $n2DigitVersion=15" Error="Warning" Title="Office Activation error 0x80070005 detected" Text="The activation error 0x80070005 was found in the Office Alerts log. This indicates your Office installation may not be activated. Please click the 'Click here ...' link for details on resolving this problem." GUID="397866" SSID="b7f7f51e-7b7d-484b-81a0-f0c227690a93" Symptoms="Activation,Error message,Setup"></Rule>
+				</Object>
+				<Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="702040" Key5="1" Key7="7" Task="Offline scan">
+					<Setting Key1="Message"></Setting>
+					<Rule Name="n80041015_702040" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'0x80041015')])" AlwaysEvaluate="True"></Rule>
+					<Rule Name="s80041015May2014UpdateIssue" Query="$n80041015_702040&gt;0 and $n2DigitVersion=15" Error="Warning" Title="System error: 0x80041015 displayed launching Office 2013 programs" Text="The error 0x80041015 was found in the Office Alerts log. If you are unable to start Office 2013 programs because you receive an error message containing 'System error: 0x80041015', please click the 'Click here ...' link to get the hotfix that resolves this problem." GUID="399026" SSID="a6216304-a8c9-445a-97f9-490ec61408e2" Symptoms="Crash,Error message,Setup"></Rule>
+				</Object>
+				<Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="200724" Key5="1" Key7="7" Task="Offline scan">
+					<Setting Key1="Message"></Setting>
+					<Rule Name="n200724WordError" Query="count(../Instance/Setting)" AlwaysEvaluate="True"></Rule>
+				</Object>
+				<Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="100796" Key5="1" Key7="7" Task="Offline scan">
+					<Setting Key1="Message"></Setting>
+					<Rule Name="n100796ExcelError" Query="count(../Instance/Setting)" AlwaysEvaluate="True"></Rule>
+				</Object>
+				<Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="400274" Key5="1" Key7="7" Task="Offline scan">
+					<Setting Key1="Message"></Setting>
+					<Rule Name="n400274PPTError" Query="count(../Instance/Setting)" AlwaysEvaluate="True"></Rule>
+				</Object>
+				<Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="Apps for Office" Key5="1" Key7="7" Task="Offline scan">
+					<Setting Key1="Message" Display="Right">
+						<Rule Name="sAppsForOfficeError" Query="(($nInstallType='MSI' and not($OfficeUpdates_sKB2986156Installed)) or ($nInstallType='ClickToRun' and versioncompare($C2R_Updates_fInstalledC2RVersion,'15.0.4719.1002')&lt;0)) and $nOfficeAppsAlertCount&gt;0 and $n2DigitVersion=15 and ($appName='Outlook' or $appName='Word' or $appName='PowerPoint' or $appName='Excel')" Error="Warning" Title="Error starting an 'App for Office' detected" Text="At least one error was found in the Microsoft Office Alerts log (in the Event Viewer) indicating there was a problem starting an 'App for Office'. Please click the 'Click here ...' link for details on resolving this problem." GUID="468521" SSID="9233a78c-ee12-435e-8162-21a3b7b9965e" Symptoms="Error message"></Rule>
+					</Setting>
+					<Rule Name="nOfficeAppsAlertCount" Query="count(../Instance/Setting[@Key1='Message' and contains(Value,'could not be started')])&gt;0"></Rule>
+				</Object>
+				<Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="201110" Key5="1" Key7="7" Task="Offline scan">
+					<Setting Key1="Message"></Setting>
+					<Rule Name="n201110WordError" Query="count(../Instance/Setting)" AlwaysEvaluate="True"></Rule>
+					<Setting Key1="TimeGenerated">
+						<Rule Name="sDaysDiffError201110AndKB2726958Install" Query="get-days(date-difference($.,$OfficeUpdates_sKB2726958InstallDate))"></Rule>
+						<Rule Name="sDaysDiffError201110AndKB2553154Install" Query="get-days(date-difference($.,$OfficeUpdates_sKB2553154InstallDate))"></Rule>
+					</Setting>
+				</Object>
+				<Object Type="EventLog" Key1="OAlerts" Key2="" Key3="300" Key4="100191" Key5="1" Key7="7" Task="Offline scan">
+					<Setting Key1="Message"></Setting>
+					<Rule Name="n100191ExcelError" Query="count(../Instance/Setting)" AlwaysEvaluate="True"></Rule>
+					<Setting Key1="TimeGenerated">
+						<Rule Name="sDaysDiffError100191AndKB2726958Install" Query="get-days(date-difference($.,$OfficeUpdates_sKB2726958InstallDate))"></Rule>
+						<Rule Name="sDaysDiffError100191AndKB2553154Install" Query="get-days(date-difference($.,$OfficeUpdates_sKB2553154InstallDate))"></Rule>
+					</Setting>
+				</Object>
+				
+				<Rule Name="sMS14_082ControlErrorXL15" Query="$n2DigitVersion=15 and $nInstallType='MSI' and lower-case($appName)='excel' and $sDaysDiffError100191AndKB2726958Install&gt;=0" Error="Warning" Title="'Cannot insert object' error found after installing the MS14-082 security update" Text="The 'Cannot insert object' error was found in the Microsoft Office Alerts log and the log entry date was on or after the date you installed the security udpate from KB 2726958. This may indicate you are experiencing the problem described in KB 3025036." GUID="522514" SSID="cacf0519-60ed-435c-b22b-773413f104ea" Symptoms="Error message"></Rule>
+				<Rule Name="sMS14_082ControlErrorWD15" Query="$n2DigitVersion=15 and $nInstallType='MSI' and lower-case($appName)='word' and $sDaysDiffError201110AndKB2726958Install&gt;=0" Error="Warning" Title="'Forms' error found after installing the MS14-082 security update" Text="The 'The program used to create this object is Forms ...' error was found in the Microsoft Office Alerts log and the log entry date was on or after the date you installed the security udpate from KB 2726958. This may indicate you are experiencing the problem described in KB 3025036." GUID="522514" SSID="7090c81f-b2a4-4d7d-a12e-c662997dae44" Symptoms="Error message"></Rule>
+				<Rule Name="sMS14_082ControlErrorXL14" Query="$n2DigitVersion=14 and $nInstallType='MSI' and lower-case($appName)='excel' and $sDaysDiffError100191AndKB2553154Install&gt;=0" Error="Warning" Title="'Cannot insert object' error found after installing the MS14-082 security update" Text="The 'Cannot insert object' error was found in the Microsoft Office Alerts log and the log entry date was on or after the date you installed the security udpate from KB 2553154. This may indicate you are experiencing the problem described in KB 3025036." GUID="522514" SSID="35eca51a-b94c-41ca-b595-ccccbb58ad3e" Symptoms="Error message"></Rule>
+				<Rule Name="sMS14_082ControlErrorWD14" Query="$n2DigitVersion=14 and $nInstallType='MSI' and lower-case($appName)='word' and $sDaysDiffError201110AndKB2553154Install&gt;=0" Error="Warning" Title="'Forms' error found after installing the MS14-082 security update" Text="The 'The program used to create this object is Forms ...' error was found in the Microsoft Office Alerts log and the log entry date was on or after the date you installed the security udpate from KB 2553154. This may indicate you are experiencing the problem described in KB 3025036." GUID="522514" SSID="48bc739d-9175-4382-b1ab-1bc9f99c15b1" Symptoms="Error message"></Rule>
+				<Rule Name="sMS14_082ControlErrorC2RXL15" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and $C2R_Updates_sC2RDec2014VersionInstalled15 and lower-case($appName)='excel' and $n100191ExcelError&gt;0" Error="Warning" Title="'Cannot insert object' error found after installing the MS14-082 security update" Text="The 'Cannot insert object' error was found in the Microsoft Office Alerts log and the log entry date was on or after the date you installed the Office 2013 Click-to-run update for December 9, 2014. This may indicate you are experiencing the problem described in KB 3025036." GUID="522514" SSID="0b617343-b27a-46c3-b810-ed47503f7c2e" Symptoms="Error message"></Rule>
+				<Rule Name="sMS14_082ControlErrorC2RWD15" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and $C2R_Updates_sC2RDec2014VersionInstalled15 and lower-case($appName)='word' and $n201110WordError&gt;0" Error="Warning" Title="'Forms' error found after installing the MS14-082 security update" Text="The 'The program used to create this object is Forms ...' error was found in the Microsoft Office Alerts log and the log entry date was on or after the date you installed the Office 2013 Click-to-run update for December 9, 2014. This may indicate you are experiencing the problem described in KB 3025036." GUID="522514" SSID="8d8e24ff-3623-48a8-9dac-d9fcbaeb0fd8" Symptoms="Error message"></Rule>
+
+			</Object>
+		</Object>
+		<!--/Office Alerts-->
 		<!--DCOM-->
 		<Object Type="Group" Name="DCOM Settings" Class="Miscellaneous" GroupingClass="True">
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Ole">
@@ -890,7 +972,7 @@
 				</Rule>
 				<Rule Name="legacyImpLevel" Query="if(../Instance/Setting[@Key1='LegacyImpersonationLevel'],../Instance/Setting[@Key1='LegacyImpersonationLevel']/Value,-1)">
 				</Rule>
-				<Rule Name="sBadDCOMValues" Query="$n2DigitVersion&gt;=14 and $legacyAuthLevel&gt;2 or $legacyImpLevel&gt;2" Error="Warning" Title="Machine configuration settings may prevent opening Office document attachments" Text="The DCOM settings on this computer may cause you to receive errors when you open Office documents from email attachments. If you are unable to open email attachments, click the FixIt link below to reconfigure your machine settings." GUID="275607" FIXIT="9787450" SSID="b012fccc-4bf1-4de6-9fff-1d080fb46e95" Symptoms="Email attachments,File error">
+				<Rule Name="sBadDCOMValues" Query="$n2DigitVersion&gt;=14 and $legacyAuthLevel&gt;2 or $legacyImpLevel&gt;2" Error="Warning" Title="Machine configuration settings may prevent opening Office document attachments" Text="The DCOM settings on this computer may cause you to receive errors when you open Office documents from email attachments. If you are unable to open email attachments, click the FixIt link to reconfigure your machine settings." GUID="275607" FIXIT="9787450" SSID="b012fccc-4bf1-4de6-9fff-1d080fb46e95" Symptoms="Email attachments,File error">
 				</Rule>
 			</Object>
 		</Object>
@@ -920,181 +1002,187 @@
 			</Object>
 		</Object>
 		<!--/.htm registration-->
-    <!--Installed .Net Framework versions-->
-    <Object Type="Group" Name="Installed .Net Runtimes" Class="Miscellaneous" GroupingClass="True">
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Client" Display="Hide">
-        <Setting Key1="Version" Substitution="V4RUNTIME" Display="Hide"></Setting>
-        <Object Type="Group" Name=".Net 4.0 Client Runtime: %V4RUNTIME%">
-          <Setting Key1="" Display="Hide"/>
-        </Object>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" Display="Hide">
-        <Setting Key1="Version" Substitution="V4FULLRUNTIME" Display="Hide"></Setting>
-        <Object Type="Group" Name=".Net 4.0 Full Runtime: %V4FULLRUNTIME%">
-          <Setting Key1="" Display="Hide"/>
-        </Object>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5" Display="Hide">
-        <Setting Key1="Version" Substitution="V35RUNTIME" Display="Hide"></Setting>
-        <Setting Key1="SP" Substitution="V35SP" Display="Hide"></Setting>
-        <Setting Key1="SP" Key2="Exists" Substitution="V35SPEXISTS" Display="Hide"></Setting>
-        <Object Type="If" Key1="'%V35SPEXISTS%'='True'">
-          <Object Type="Group" Name=".Net 3.5 Runtime: %V35RUNTIME%  Service Pack %V35SP%">
-            <Setting Key1="" Display="Hide"/>
-          </Object>
-        </Object>
-        <Object Type="If" Key1="'%V35SPEXISTS%'='False'">
-          <Object Type="Group" Name=".Net 3.5 Runtime: %V35RUNTIME%  (No Service Pack)">
-            <Setting Key1="" Display="Hide"/>
-          </Object>
-        </Object>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0" Display="Hide">
-        <Setting Key1="Version" Substitution="V30RUNTIME" Display="Hide"></Setting>
-        <Setting Key1="SP" Substitution="V30SP" Display="Hide"></Setting>
-        <Setting Key1="SP" Key2="Exists" Substitution="V30SPEXISTS" Display="Hide"></Setting>
-        <Object Type="If" Key1="'%V30SPEXISTS%'='True'">
-          <Object Type="Group" Name=".Net 3.0 Runtime: %V30RUNTIME% Service Pack %V30SP%">
-            <Setting Key1="" Display="Hide"/>
-          </Object>
-        </Object>
-        <Object Type="If" Key1="'%V30SPEXISTS%'='False'">
-          <Object Type="Group" Name=".Net 3.0 Runtime: %V30RUNTIME% Service Pack (No Service Pack)">
-            <Setting Key1="" Display="Hide"/>
-          </Object>
-        </Object>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727" Display="Hide">
-        <Setting Key1="Version" Substitution="V20RUNTIME" Display="Hide"></Setting>
-        <Setting Key1="SP" Substitution="V20SP" Display="Hide"></Setting>
-        <Setting Key1="SP" Key2="Exists" Substitution="V20SPEXISTS" Display="Hide"></Setting>
-        <Object Type="If" Key1="'%V20SPEXISTS%'='True'">
-          <Object Type="Group" Name=".Net 2.0 Runtime: %V20RUNTIME% Service Pack %V20SP%">
-            <Setting Key1="" Display="Hide"/>
-          </Object>
-        </Object>
-        <Object Type="If" Key1="'%V20SPEXISTS%'='False'">
-          <Object Type="Group" Name=".Net 2.0 Runtime: %V20RUNTIME% Service Pack (No Service Pack)">
-            <Setting Key1="" Display="Hide"/>
-          </Object>
-        </Object>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v1.1.4322" Display="Hide">
-        <Setting Key1="Version" Substitution="V11RUNTIME" Display="Hide"></Setting>
-        <Setting Key1="SP" Substitution="V11SP" Display="Hide"></Setting>
-        <Setting Key1="SP" Key2="Exists" Substitution="V11SPEXISTS" Display="Hide"></Setting>
-        <Object Type="If" Key1="'%V11SPEXISTS%'='True'">
-          <Object Type="Group" Name=".Net 1.1 Runtime: %V11RUNTIME% Service Pack %V11SP%">
-            <Setting Key1="" Display="Hide"/>
-          </Object>
-        </Object>
-        <Object Type="If" Key1="'%V11SPEXISTS%'='False'">
-          <Object Type="Group" Name=".Net 1.1 Runtime: %V11RUNTIME% Service Pack (No Service Pack)">
-            <Setting Key1="" Display="Hide"/>
-          </Object>
-        </Object>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Active Setup\Installed Components\{78705f0d-e8db-4b2d-8193-982bdda15ecd}" Display="Hide">
-        <Setting Key1="Version" Substitution="V10RUNTIME" Display="Hide"></Setting>
-        <Object Type="Group" Name=".Net 1.0 Runtime: %V10RUNTIME%">
-          <Setting Key1="" Display="Hide"/>
-        </Object>
-      </Object>
-    </Object>
-    <!--/Installed .Net Framework versions-->
-    <!--Errors detected by OffCAT RTS-->
-    <Object Type="Engine">
-      <Setting Key1="EnvironmentVariable" Key2="APPDATA" Substitution="APPDATAPATH" Display="Hide"></Setting>
-      <Object Type="File" Key2="%APPDATAPATH%\Microsoft\OffCAT\ErrorsDetected.xml" Display="Hide">
-        <Setting Key1="Exists" Substitution="ERRORSCACHEFOUND" Display="Hide"></Setting>
-        <Object Type="If" Key1="%ERRORSCACHEFOUND%=1">
-          <Object Type="Group" Name="Errors detected in %APPNAME% by the OffCAT service">
-            <Object Type="XML" Key1="&lt;V v15='2013' v14='2010' v12='2007' v11='2003'/&gt;" Key3="V" Key4="STRING" Display="Hide">
-              <Setting Key1="@v%MAJORVERSION%" Substitution="DISPLAYVERSION" Display="Hide"></Setting>
-              <Object Type="XML" Key2="%APPDATAPATH%\Microsoft\OffCAT\ErrorsDetected.xml" Key3="//ErrorMatch[not(Query/SolutionSourceId=preceding-sibling::ErrorMatch/Query/SolutionSourceId and translate(ProcessName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=translate(preceding-sibling::ErrorMatch/ProcessName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') and ProcessDisplayVersion=preceding-sibling::ErrorMatch/ProcessDisplayVersion) and ProcessDisplayVersion='%DISPLAYVERSION%' and translate(ProcessName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=translate('%APPNAME%', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')]" Display="Hide">
-                <Setting Key1="Query/SolutionSourceId/text()" Substitution="ERRSSID" Display="Hide"/>
-                <Setting Key1="MatchingPattern/MatchingErrorText/text()" Substitution="ERRTXT" Display="Hide"/>
-                <Setting Key1="Query/LinkId/text()" Substitution="ERRLINKID" Display="Hide"/>
-                <Setting Key1="Query/KBID/text()" Substitution="KBID" Display="Hide"/>
-                <Setting Key1="Query/Symptoms/text()" Substitution="ERRORSYMPTOMS" Display="Hide"/>
-                <Object Type="XML" Key2="%APPDATAPATH%\Microsoft\OffCAT\ErrorsDetected.xml" Key3="//ErrorMatch[Query/SolutionSourceId='%ERRSSID%' and ProcessDisplayVersion='%DISPLAYVERSION%' and translate(ProcessName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=translate('%APPNAME%', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')]">
-                  <Rule Name="sErrorDetected" Error="Warning" Query="count(..//Instance)&gt;0" P0="count(..//Instance)" Title="The error from KB article %KBID% fired {0} times while you were using %APPNAME%" Text="Full error text = '%ERRTXT%'" GUID="%ERRLINKID%" SSID="%ERRSSID%" Symptoms="%ERRORSYMPTOMS%"/>
-                </Object>
-              </Object>
-            </Object>
-          </Object>
-        </Object>
-      </Object>
-    </Object>
-    <!--Installed PIAs-->
-    <Object Type="Group" Name="Installed Primary Interop Assemblies">
-      <Object Type="Group" Name="Office 2013">
-        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Installer\Assemblies\Global">
-          <Setting Key1="__VALUES" Key2="^Microsoft.Office.Interop.*15.0*"> </Setting>
-        </Object>
-      </Object>
-      <Object Type="Group" Name="Office 2010">
-        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Installer\Assemblies\Global">
-          <Setting Key1="__VALUES" Key2="^Microsoft.Office.Interop.*14.0*"> </Setting>
-        </Object>
-      </Object>
-      <Object Type="Group" Name="Office 2007">
-        <Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Installer\Assemblies\Global">
-          <Setting Key1="__VALUES" Key2="^Microsoft.Office.Interop.*12.0*"> </Setting>
-        </Object>
-      </Object>
-    </Object>
-    <!--/Installed PIAs-->
-    <!--Installed VSTO runtimes-->
-    <Object Type="Group" Name="Installed VSTO Runtimes">
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\VSTO Runtime Setup" Key5="Subtree">
-        <Setting Key1="__VALUES"> </Setting>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432node\Microsoft\VSTO Runtime Setup" Key5="Subtree">
-        <Setting Key1="__VALUES"> </Setting>
-      </Object>
-    </Object>
-    <!--/Installed PIAs-->
-    <!--IM Providers-->
-    <Object Type="Group" Name="Instant Messaging settings" Class="Miscellaneous" GroupingClass="True">
-      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Microsoft\Office\%MAJORVERSION%.0\Common">
-        <Setting Key1="TurnOffPhotograph"></Setting>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Microsoft\Office\%MAJORVERSION%.0\Common\IM">
-        <Setting Key1="__VALUES"></Setting>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Policies\Microsoft\Office\%MAJORVERSION%.0\Common\IM">
-        <Setting Key1="__VALUES"></Setting>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\IM Providers">
-        <Setting Key1="__VALUES"></Setting>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\IM Providers" Key5="Subtree">
-        <Setting Key1="__VALUES"></Setting>
-      </Object>
-    </Object>
-    <!--/IM Providers-->
-    <!--Internet 'cache' folder attributes-->
-    <Object Type="Group" Name="Internet Cache folder attributes" Display="Right">
-      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders">
-        <Setting Key1="Cache" Substitution="USERSHELLCACHE" NotForExport="True"/>
-        <Object Type="CommandLine" Key2="cmd" Key3=" /c echo %USERSHELLCACHE%">
-          <Setting Key1="Output" Key2="stdout" Substitution="EXPANDEDTEMPPATH" Format="(\r\n)----">
-            <Rule Name="sTempIntFilesPath" Query="$."></Rule>
-          </Setting>
-          <Object Type="XML" Key1="&lt;s path='%EXPANDEDTEMPPATH%'/&gt;" Key3="//s" Key4="STRING" Display="Hide">
-            <Setting Key1="@path" SubstitutionFormat="\\----\\" Substitution="EXPANDEDTEMPPATH2" Display="Hide" NotForExport="True"/>
-            <Object Type="WMI" Key3="Win32_Directory" Key4="Name='%EXPANDEDTEMPPATH2%'" Key5="*" Display="Hide">
-              <Setting Key1="Encrypted" Display="Hide">
-              </Setting>
-            </Object>
-            <Rule Name="sTempIntFilesFolderEncrypted" Query="../Instance/Object/Instance/Setting[@Key1='Encrypted']/Value='True' and (lower-case($appName)='excel' or lower-case($appName)='word' or lower-case($appName)='powerpoint' or lower-case($appName)='outlook') and versioncompare($MachineDetails_WindowsVersion,'6.2.0.0')&lt;0" P0="$sTempIntFilesPath" P1="$appName" Error="Warning" Title="Files may save more slowly because the Temporary Internet Files folder is encrypted." Text="The Temporary Internet Files folder 'Path = {0}' is encrypted. This configuration may cause files from {1} to save more slowly to network folder locations." GUID="397968" SSID="0aa908d2-ad35-448e-bf5d-dc25ae4f821b" Symptoms="File Save error,Slowness"></Rule>
-            <Rule Name="sINetCacheFolderEncrypted" Query="../Instance/Object/Instance/Setting[@Key1='Encrypted']/Value='True' and (lower-case($appName)='excel' or lower-case($appName)='word' or lower-case($appName)='powerpoint' or lower-case($appName)='outlook') and versioncompare($MachineDetails_WindowsVersion,'6.2.0.0')&gt;=0" P0="$sTempIntFilesPath" P1="$appName" Error="Warning" Title="Files may save more slowly because the INetCache folder is encrypted." Text="The INetCache folder 'Path = {0}' is encrypted. This configuration may cause files from {1} to save more slowly to network folder locations." GUID="397968" SSID="87825c93-12a2-4f85-93a6-0ea5fc13665c" Symptoms="File Save error,Slowness"></Rule>
-          </Object>
-        </Object>
-      </Object>
-    </Object>
-    <!--/Internet 'cache' folder attributes-->
+		<!--Installed .Net Framework versions-->
+		<Object Type="Group" Name="Installed .Net Runtimes" Class="Miscellaneous" GroupingClass="True">
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Client" Display="Hide">
+				<Setting Key1="Version" Substitution="V4RUNTIME" Display="Hide"></Setting>
+				<Object Type="Group" Name=".Net 4.0 Client Runtime: %V4RUNTIME%">
+					<Setting Key1="" Display="Hide"/>
+				</Object>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" Display="Hide">
+				<Setting Key1="KeyExists" Substitution="FULLEXISTS" Display="Hide">
+					<Rule Name="fFullExists" Query="$.='True'"></Rule>
+				</Setting>
+				<Setting Key1="Release" Display="Hide"></Setting>
+				<Setting Key1="Version" Substitution="V4FULLRUNTIME" Display="Hide"></Setting>
+				<Object Type="Group" Name=".Net 4.0 Full Runtime: %V4FULLRUNTIME%">
+					<Setting Key1="" Display="Hide"/>
+				</Object>
+				<Rule Name="fReleaseExists" Query="../Instance/Setting[@Key1='Release']=true()"/>
+				<Rule Name="sNetFramework45NotInstalled" Query="versioncompare($OffCATVersionInfo_sOffCATVersion,'1.9.0.0')&lt;0 and (not($fReleaseExists) or not($fFullExists)) and versioncompare($MachineDetails_WindowsVersion,'6.2.0.0')&lt;0" Error="Warning" Title="System requirements for the next OffCAT version not met" Text="The next version of OffCAT requires .NET Framework 4.5 (or later) and your computer does not have this version of .NET Framework installed. To prepare your computer for the next OffCAT version, we recommend you install .NET Framework 4.5.2.&#xA;&#xA;Click the 'Click here ...' link for information on how to install .NET Framework 4.5.2" GUID="525531" SSID="3f4a161e-bdd3-46cc-878d-e1eb204264a1" Symptoms="_Alert from OffCAT"></Rule>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5" Display="Hide">
+				<Setting Key1="Version" Substitution="V35RUNTIME" Display="Hide"></Setting>
+				<Setting Key1="SP" Substitution="V35SP" Display="Hide"></Setting>
+				<Setting Key1="SP" Key2="Exists" Substitution="V35SPEXISTS" Display="Hide"></Setting>
+				<Object Type="If" Key1="'%V35SPEXISTS%'='True'">
+					<Object Type="Group" Name=".Net 3.5 Runtime: %V35RUNTIME%  Service Pack %V35SP%">
+						<Setting Key1="" Display="Hide"/>
+					</Object>
+				</Object>
+				<Object Type="If" Key1="'%V35SPEXISTS%'='False'">
+					<Object Type="Group" Name=".Net 3.5 Runtime: %V35RUNTIME%  (No Service Pack)">
+						<Setting Key1="" Display="Hide"/>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0" Display="Hide">
+				<Setting Key1="Version" Substitution="V30RUNTIME" Display="Hide"></Setting>
+				<Setting Key1="SP" Substitution="V30SP" Display="Hide"></Setting>
+				<Setting Key1="SP" Key2="Exists" Substitution="V30SPEXISTS" Display="Hide"></Setting>
+				<Object Type="If" Key1="'%V30SPEXISTS%'='True'">
+					<Object Type="Group" Name=".Net 3.0 Runtime: %V30RUNTIME% Service Pack %V30SP%">
+						<Setting Key1="" Display="Hide"/>
+					</Object>
+				</Object>
+				<Object Type="If" Key1="'%V30SPEXISTS%'='False'">
+					<Object Type="Group" Name=".Net 3.0 Runtime: %V30RUNTIME% Service Pack (No Service Pack)">
+						<Setting Key1="" Display="Hide"/>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727" Display="Hide">
+				<Setting Key1="Version" Substitution="V20RUNTIME" Display="Hide"></Setting>
+				<Setting Key1="SP" Substitution="V20SP" Display="Hide"></Setting>
+				<Setting Key1="SP" Key2="Exists" Substitution="V20SPEXISTS" Display="Hide"></Setting>
+				<Object Type="If" Key1="'%V20SPEXISTS%'='True'">
+					<Object Type="Group" Name=".Net 2.0 Runtime: %V20RUNTIME% Service Pack %V20SP%">
+						<Setting Key1="" Display="Hide"/>
+					</Object>
+				</Object>
+				<Object Type="If" Key1="'%V20SPEXISTS%'='False'">
+					<Object Type="Group" Name=".Net 2.0 Runtime: %V20RUNTIME% Service Pack (No Service Pack)">
+						<Setting Key1="" Display="Hide"/>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\NET Framework Setup\NDP\v1.1.4322" Display="Hide">
+				<Setting Key1="Version" Substitution="V11RUNTIME" Display="Hide"></Setting>
+				<Setting Key1="SP" Substitution="V11SP" Display="Hide"></Setting>
+				<Setting Key1="SP" Key2="Exists" Substitution="V11SPEXISTS" Display="Hide"></Setting>
+				<Object Type="If" Key1="'%V11SPEXISTS%'='True'">
+					<Object Type="Group" Name=".Net 1.1 Runtime: %V11RUNTIME% Service Pack %V11SP%">
+						<Setting Key1="" Display="Hide"/>
+					</Object>
+				</Object>
+				<Object Type="If" Key1="'%V11SPEXISTS%'='False'">
+					<Object Type="Group" Name=".Net 1.1 Runtime: %V11RUNTIME% Service Pack (No Service Pack)">
+						<Setting Key1="" Display="Hide"/>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Active Setup\Installed Components\{78705f0d-e8db-4b2d-8193-982bdda15ecd}" Display="Hide">
+				<Setting Key1="Version" Substitution="V10RUNTIME" Display="Hide"></Setting>
+				<Object Type="Group" Name=".Net 1.0 Runtime: %V10RUNTIME%">
+					<Setting Key1="" Display="Hide"/>
+				</Object>
+			</Object>
+		</Object>
+		<!--/Installed .Net Framework versions-->
+		<!--Errors detected by OffCAT RTS-->
+		<Object Type="Engine">
+			<Setting Key1="EnvironmentVariable" Key2="APPDATA" Substitution="APPDATAPATH" Display="Hide"></Setting>
+			<Object Type="File" Key2="%APPDATAPATH%\Microsoft\OffCAT\ErrorsDetected.xml" Display="Hide">
+				<Setting Key1="Exists" Substitution="ERRORSCACHEFOUND" Display="Hide"></Setting>
+				<Object Type="If" Key1="%ERRORSCACHEFOUND%=1">
+					<Object Type="Group" Name="Errors detected in %APPNAME% by the OffCAT service">
+						<Object Type="XML" Key1="&lt;V v15='2013' v14='2010' v12='2007' v11='2003'/&gt;" Key3="V" Key4="STRING" Display="Hide">
+							<Setting Key1="@v%MAJORVERSION%" Substitution="DISPLAYVERSION" Display="Hide"></Setting>
+							<Object Type="XML" Key2="%APPDATAPATH%\Microsoft\OffCAT\ErrorsDetected.xml" Key3="//ErrorMatch[not(Query/SolutionSourceId=preceding-sibling::ErrorMatch/Query/SolutionSourceId and translate(ProcessName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=translate(preceding-sibling::ErrorMatch/ProcessName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') and ProcessDisplayVersion=preceding-sibling::ErrorMatch/ProcessDisplayVersion) and ProcessDisplayVersion='%DISPLAYVERSION%' and translate(ProcessName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=translate('%APPNAME%', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')]" Display="Hide">
+								<Setting Key1="Query/SolutionSourceId/text()" Substitution="ERRSSID" Display="Hide"/>
+								<Setting Key1="MatchingPattern/MatchingErrorText/text()" Substitution="ERRTXT" Display="Hide"/>
+								<Setting Key1="Query/LinkId/text()" Substitution="ERRLINKID" Display="Hide"/>
+								<Setting Key1="Query/KnowledgeBaseId/text()" Substitution="KBID" Display="Hide"/>
+								<Setting Key1="Query/Symptoms/text()" Substitution="ERRORSYMPTOMS" Display="Hide"/>
+								<Object Type="XML" Key2="%APPDATAPATH%\Microsoft\OffCAT\ErrorsDetected.xml" Key3="//ErrorMatch[Query/SolutionSourceId='%ERRSSID%' and ProcessDisplayVersion='%DISPLAYVERSION%' and translate(ProcessName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=translate('%APPNAME%', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')]">
+									<Rule Name="sErrorDetected" Error="Warning" Query="count(..//Instance)&gt;0" P0="count(..//Instance)" Title="The error from KB article %KBID% fired {0} times while you were using %APPNAME%" Text="Full error text = '%ERRTXT%'" GUID="%ERRLINKID%" SSID="%ERRSSID%" Symptoms="%ERRORSYMPTOMS%"/>
+								</Object>
+							</Object>
+						</Object>
+					</Object>
+				</Object>
+			</Object>
+		</Object>
+		<!--Installed PIAs-->
+		<Object Type="Group" Name="Installed Primary Interop Assemblies">
+			<Object Type="Group" Name="Office 2013">
+				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Installer\Assemblies\Global">
+					<Setting Key1="__VALUES" Key2="^Microsoft.Office.Interop.*15.0*"> </Setting>
+				</Object>
+			</Object>
+			<Object Type="Group" Name="Office 2010">
+				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Installer\Assemblies\Global">
+					<Setting Key1="__VALUES" Key2="^Microsoft.Office.Interop.*14.0*"> </Setting>
+				</Object>
+			</Object>
+			<Object Type="Group" Name="Office 2007">
+				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="Installer\Assemblies\Global">
+					<Setting Key1="__VALUES" Key2="^Microsoft.Office.Interop.*12.0*"> </Setting>
+				</Object>
+			</Object>
+		</Object>
+		<!--/Installed PIAs-->
+		<!--Installed VSTO runtimes-->
+		<Object Type="Group" Name="Installed VSTO Runtimes">
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\VSTO Runtime Setup" Key5="Subtree">
+				<Setting Key1="__VALUES"> </Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432node\Microsoft\VSTO Runtime Setup" Key5="Subtree">
+				<Setting Key1="__VALUES"> </Setting>
+			</Object>
+		</Object>
+		<!--/Installed PIAs-->
+		<!--IM Providers-->
+		<Object Type="Group" Name="Instant Messaging settings" Class="Miscellaneous" GroupingClass="True">
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Microsoft\Office\%MAJORVERSION%.0\Common">
+				<Setting Key1="TurnOffPhotograph"></Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Microsoft\Office\%MAJORVERSION%.0\Common\IM">
+				<Setting Key1="__VALUES"></Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\Policies\Microsoft\Office\%MAJORVERSION%.0\Common\IM">
+				<Setting Key1="__VALUES"></Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\IM Providers">
+				<Setting Key1="__VALUES"></Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="SOFTWARE\IM Providers" Key5="Subtree">
+				<Setting Key1="__VALUES"></Setting>
+			</Object>
+		</Object>
+		<!--/IM Providers-->
+		<!--Internet 'cache' folder attributes-->
+		<Object Type="Group" Name="Internet Cache folder attributes" Display="Right">
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders">
+				<Setting Key1="Cache" Substitution="USERSHELLCACHE" NotForExport="True"/>
+				<Object Type="CommandLine" Key2="cmd" Key3=" /c echo %USERSHELLCACHE%">
+					<Setting Key1="Output" Key2="stdout" Substitution="EXPANDEDTEMPPATH" Format="(\r\n)----">
+						<Rule Name="sTempIntFilesPath" Query="$."></Rule>
+					</Setting>
+					<Object Type="XML" Key1="&lt;s path='%EXPANDEDTEMPPATH%'/&gt;" Key3="//s" Key4="STRING" Display="Hide">
+						<Setting Key1="@path" SubstitutionFormat="\\----\\" Substitution="EXPANDEDTEMPPATH2" Display="Hide" NotForExport="True"/>
+						<Object Type="WMI" Key3="Win32_Directory" Key4="Name='%EXPANDEDTEMPPATH2%'" Key5="*" Display="Hide">
+							<Setting Key1="Encrypted" Display="Hide">
+							</Setting>
+						</Object>
+						<Rule Name="sTempIntFilesFolderEncrypted" Query="../Instance/Object/Instance/Setting[@Key1='Encrypted']/Value='True' and (lower-case($appName)='excel' or lower-case($appName)='word' or lower-case($appName)='powerpoint' or lower-case($appName)='outlook') and versioncompare($MachineDetails_WindowsVersion,'6.2.0.0')&lt;0" P0="$sTempIntFilesPath" P1="$appName" Error="Warning" Title="Files may save more slowly because the Temporary Internet Files folder is encrypted." Text="The Temporary Internet Files folder 'Path = {0}' is encrypted. This configuration may cause files from {1} to save more slowly to network folder locations." GUID="397968" SSID="0aa908d2-ad35-448e-bf5d-dc25ae4f821b" Symptoms="File Save error,Slowness"></Rule>
+						<Rule Name="sINetCacheFolderEncrypted" Query="../Instance/Object/Instance/Setting[@Key1='Encrypted']/Value='True' and (lower-case($appName)='excel' or lower-case($appName)='word' or lower-case($appName)='powerpoint' or lower-case($appName)='outlook') and versioncompare($MachineDetails_WindowsVersion,'6.2.0.0')&gt;=0" P0="$sTempIntFilesPath" P1="$appName" Error="Warning" Title="Files may save more slowly because the INetCache folder is encrypted." Text="The INetCache folder 'Path = {0}' is encrypted. This configuration may cause files from {1} to save more slowly to network folder locations." GUID="397968" SSID="87825c93-12a2-4f85-93a6-0ea5fc13665c" Symptoms="File Save error,Slowness"></Rule>
+					</Object>
+				</Object>
+			</Object>
+		</Object>
+		<!--/Internet 'cache' folder attributes-->
 		<!--MSMapiApps-->
 		<Object Type="Group" Name="MSMapiApps" Class="Miscellaneous" Display="Right" GroupingClass="True">
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Windows Messaging Subsystem\MSMapiApps">
@@ -1111,18 +1199,18 @@
 			</Object>
 		</Object>
 		<!--/MSMapiApps-->
-    <!--Telemetry-->
-    <Object Type="Group" Name="Office Telemetry" Class="Miscellaneous" GroupingClass="True">
-      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Common\ClientTelemetry">
-        <Setting Key1="__VALUES" Display="Right">
-        </Setting>
-      </Object>
-      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Common\ClientTelemetry" Key5="Subtree">
-        <Setting Key1="__VALUES">
-        </Setting>
-      </Object>
-    </Object>
-    <!--/Telemetry-->
+		<!--Telemetry-->
+		<Object Type="Group" Name="Office Telemetry" Class="Miscellaneous" GroupingClass="True">
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Common\ClientTelemetry">
+				<Setting Key1="__VALUES" Display="Right">
+				</Setting>
+			</Object>
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Common\ClientTelemetry" Key5="Subtree">
+				<Setting Key1="__VALUES">
+				</Setting>
+			</Object>
+		</Object>
+		<!--/Telemetry-->
 		<!--VBA-->
 		<Object Type="Group" Name="VBA" Class="Miscellaneous">
 			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\VBA" Key5="Subtree">
@@ -1187,9 +1275,9 @@
 						</Setting>
 						<Rule Name="fE64" Query="../Instance/Setting[@Key1='00005109E60090400100000000F01FEC']=false()"></Rule>
 					</Object>
-					<Rule Name="sBadVBARegC2RWow" Query="($fA32 or $fB32 or $fCWow or $fD32 or $fE32) and $bitness!=$MachineDetails_OSArchitecture" Error="Error" Title="Office 2013 configuration prevents VBA from running" Text="There is incorrect/missing registry data that is preventing VBA from running. Please click the 'Click here to see possible solutions to this issue' link below for information on how to correct this issue." GUID="299203" SSID="498334fc-1b35-4e91-9ee8-9cfe3867592c" Symptoms="VBA"></Rule>
-					<Rule Name="sBadVBARegC2R32" Query="($fA32 or $fB32 or $fC or $fD32 or $fE32) and $bitness='x86' and $bitness=$MachineDetails_OSArchitecture" Error="Error" Title="Office 2013 configuration prevents VBA from running" Text="There is incorrect/missing registry data that is preventing VBA from running. Please click the 'Click here to see possible solutions to this issue' link below for information on how to correct this issue." GUID="299203" SSID="a14e8cfb-db97-441e-a35f-97cc32777d3e" Symptoms="VBA"></Rule>
-					<Rule Name="sBadVBARegC2R64" Query="($fA64 or $fB64 or $fC or $fD64 or $fE64) and $bitness='x64'" Error="Error" Title="Office 2013 configuration prevents VBA from running" Text="There is incorrect/missing registry data that is preventing VBA from running. Please click the 'Click here to see possible solutions to this issue' link below for information on how to correct this issue." GUID="299203" SSID="a084e0ac-e331-4f9f-8412-275b3a366b2d" Symptoms="VBA"></Rule>
+					<Rule Name="sBadVBARegC2RWow" Query="($fA32 or $fB32 or $fCWow or $fD32 or $fE32) and $bitness!=$MachineDetails_OSArchitecture" Error="Error" Title="Office 2013 configuration prevents VBA from running" Text="There is incorrect/missing registry data that is preventing VBA from running. Please click the 'Click here to see possible solutions to this issue' link for information on how to correct this issue." GUID="299203" SSID="498334fc-1b35-4e91-9ee8-9cfe3867592c" Symptoms="VBA"></Rule>
+					<Rule Name="sBadVBARegC2R32" Query="($fA32 or $fB32 or $fC or $fD32 or $fE32) and $bitness='x86' and $bitness=$MachineDetails_OSArchitecture" Error="Error" Title="Office 2013 configuration prevents VBA from running" Text="There is incorrect/missing registry data that is preventing VBA from running. Please click the 'Click here to see possible solutions to this issue' link for information on how to correct this issue." GUID="299203" SSID="a14e8cfb-db97-441e-a35f-97cc32777d3e" Symptoms="VBA"></Rule>
+					<Rule Name="sBadVBARegC2R64" Query="($fA64 or $fB64 or $fC or $fD64 or $fE64) and $bitness='x64'" Error="Error" Title="Office 2013 configuration prevents VBA from running" Text="There is incorrect/missing registry data that is preventing VBA from running. Please click the 'Click here to see possible solutions to this issue' link for information on how to correct this issue." GUID="299203" SSID="a084e0ac-e331-4f9f-8412-275b3a366b2d" Symptoms="VBA"></Rule>
 				</Object>
 			</Object>
 		</Object>
@@ -1201,14 +1289,14 @@
 				<Object Type="WMI" Key1="%MACHINENAME%" Key3="Win32_Service" Key4="Name='WebClient'" Display="Hide">
 					<Setting Key1="Started">
 						<Rule Name="fWebClientStopped" Query="$.='False'"></Rule>
-						<Rule Name="sWebClientStoppedOrDisabled" Query="($fWebClientStopped or $fWebClientDisabled) and ($n2DigitVersion=12 or $n2DigitVersion=14) and (lower-case($appName)='excel' or lower-case($appName)='onenote' or lower-case($appName)='powerpoint' or lower-case($appName)='publisher' or lower-case($appName)='visio' or lower-case($appName)='word')" Error="Warning" Title="The WebClient service is not running" Text="The WebClient service is not running and this will cause problems opening or saving Office documents from a SharePoint site. Please start the WebClient service using the Services.msc snap-in." GUID="276852" SSID="07e737ad-dba3-4ef3-a1d5-228bd882f319" Symptoms="File error"></Rule>
+						<Rule Name="sWebClientStoppedOrDisabled" Query="($fWebClientStopped or $fWebClientDisabled) and ($n2DigitVersion=12 or $n2DigitVersion=14) and (lower-case($appName)='excel' or lower-case($appName)='onenote' or lower-case($appName)='powerpoint' or lower-case($appName)='publisher' or lower-case($appName)='visio' or lower-case($appName)='word')" Error="None" Title="The WebClient service is not running" Text="The WebClient service is not running and this will cause problems opening or saving Office documents from a SharePoint site. Please start the WebClient service using the Services.msc snap-in." GUID="276852" SSID="07e737ad-dba3-4ef3-a1d5-228bd882f319" Symptoms="File error"></Rule>
 					</Setting>
 					<Setting Key1="StartMode">
 						<Rule Name="fWebClientDisabled" Query="$.='Disabled'"></Rule>
 					</Setting>
 					<Rule Name="fWindows2008OrAbove" Query="$MachineDetails_fOSServer and starts-with($MachineDetails_WindowsVersion,'6')"></Rule>
 					<Rule Name="fWebClientInstalled" Query="../Instance=true()"></Rule>
-					<Rule Name="sWebClientStoppedOrDisabledOnServer" Query="$fWindows2008OrAbove and ($fWebClientStopped or $fWebClientDisabled or not($fWebClientInstalled)) and ($n2DigitVersion=12 or $n2DigitVersion=14) and (lower-case($appName)='excel' or lower-case($appName)='onenote' or lower-case($appName)='powerpoint' or lower-case($appName)='publisher' or lower-case($appName)='visio' or lower-case($appName)='word')" Error="Warning" Title="The WebClient service is not running on Windows Server" Text="The WebClient service is not running on Windows Server and this will cause problems opening or saving Office documents from a SharePoint site. Please start the WebClient service. If the WebClient service is not available, you will have to install the Desktop Experience first." GUID="276852" SSID="170cd8fb-1c67-46f2-9050-f39229effdb1" AlwaysEvaluate="True" Symptoms="File error"></Rule>
+					<Rule Name="sWebClientStoppedOrDisabledOnServer" Query="$fWindows2008OrAbove and ($fWebClientStopped or $fWebClientDisabled or not($fWebClientInstalled)) and ($n2DigitVersion=12 or $n2DigitVersion=14) and (lower-case($appName)='excel' or lower-case($appName)='onenote' or lower-case($appName)='powerpoint' or lower-case($appName)='publisher' or lower-case($appName)='visio' or lower-case($appName)='word')" Error="None" Title="The WebClient service is not running on Windows Server" Text="The WebClient service is not running on Windows Server and this will cause problems opening or saving Office documents from a SharePoint site. Please start the WebClient service. If the WebClient service is not available, you will have to install the Desktop Experience first." GUID="276852" SSID="170cd8fb-1c67-46f2-9050-f39229effdb1" AlwaysEvaluate="True" Symptoms="File error"></Rule>
 				</Object>
 			</Object>
 		</Object>
@@ -1246,131 +1334,137 @@
 			</Rule>
 		</Object>
 	</Type>
-  <Type Name="MSMAPI32">
-    <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="software\microsoft\office\%MAJORVERSION%.0\Common\LanguageResources" Display="Hide">
-      <Setting Key1="UILanguage" Substitution="UILANGUAGECODE" Display="Hide">
-      </Setting>
-      <Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
-        <Object Type="Engine">
-          <Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES(X86)" Substitution="COMMONPROGRAMFILESX86" Display="Hide"/>
-          <Object Type="File" Key2="%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%\MSMapi32.dll" Display="Right">
-            <Setting Key1="Version" Display="Right">
-            <Rule Name="sMisMatchedMsmapi32VersionWordWow" Query="lower-case($appName)='word' and $n2DigitVersion&lt;15 and $CommonMisc_n200724WordError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Word document through email" Text="At least one error attempting to send a Word document through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link below for steps to fix this problem." GUID="404117" SSID="3361a57e-f323-4005-8ebd-a4845fc12fc3" Symptoms="Error message,Email send/receive"></Rule>
-            <Rule Name="sMisMatchedMsmapi32VersionExcelWow" Query="lower-case($appName)='excel' and $n2DigitVersion&lt;15 and $CommonMisc_n400274PPTError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Excel workbook through email" Text="At least one error attempting to send an Excel workbook through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link below for steps to fix this problem." GUID="404117" SSID="e2c79d0c-dce2-4ac1-9943-821f0330df6e" Symptoms="Error message,Email send/receive"></Rule>
-            <Rule Name="sMisMatchedMsmapi32VersionPPTWow" Query="lower-case($appName)='powerpoint' and $n2DigitVersion&lt;15 and $CommonMisc_n100796ExcelError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send PowerPoint file through email" Text="At least one error attempting to send a PowerPoint file through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link below for steps to fix this problem." GUID="404117" SSID="a4bd1cab-f3b8-4d4d-913f-050112865e7a" Symptoms="Error message,Email send/receive"></Rule>
-            <Rule Name="sMisMatchedMsmapi32VersionOutlookWow" Query="lower-case($appName)='outlook' and $n2DigitVersion&lt;15 and ($CommonMisc_n200724WordError&gt;0 or $CommonMisc_n400274PPTError&gt;0 or $CommonMisc_n100796ExcelError&gt;0) and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Office files through emai" Text="At least one error attempting to send an Office file thorugh email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link below for steps to fix this problem." GUID="404117" SSID="ee090dd1-19d4-4f47-ab2d-9393e95a52be" Symptoms="Error message,Email send/receive"></Rule>
-            </Setting>
-          </Object>
-        </Object>
-      </Object>
-      <Object Type="If" Key1="'%WOW6432NODE%'=''">
-        <Object Type="Engine">
-          <Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES" Substitution="COMMONPROGRAMFILES" Display="Hide">
-          </Setting>
-          <Object Type="File" Key2="%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%\MSMapi32.dll" Display="Right">
-            <Setting Key1="Version" Display="Right">
-              <Rule Name="sMisMatchedMsmapi32VersionWord" Query="lower-case($appName)='word' and $n2DigitVersion&lt;15 and $CommonMisc_n200724WordError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Word document through email" Text="At least one error attempting to send a Word document through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link below for steps to fix this problem." GUID="404117" SSID="468c6f48-b9aa-4892-940f-90fa9abf3d9d" Symptoms="Error message,Email send/receive"></Rule>
-              <Rule Name="sMisMatchedMsmapi32VersionExcel" Query="lower-case($appName)='excel' and $n2DigitVersion&lt;15 and $CommonMisc_n400274PPTError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Excel workbook through email" Text="At least one error attempting to send an Excel workbook through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link below for steps to fix this problem." GUID="404117" SSID="ee951a36-172a-4e0f-9b17-ca2d9535c775" Symptoms="Error message,Email send/receive"></Rule>
-              <Rule Name="sMisMatchedMsmapi32VersionPPT" Query="lower-case($appName)='powerpoint' and $n2DigitVersion&lt;15 and $CommonMisc_n100796ExcelError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send PowerPoint file through email" Text="At least one error attempting to send a PowerPoint file through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link below for steps to fix this problem." GUID="404117" SSID="6723dfec-6503-4ec4-b509-516ce2b6fd84" Symptoms="Error message,Email send/receive"></Rule>
-              <Rule Name="sMisMatchedMsmapi32VersionOutlook" Query="lower-case($appName)='outlook' and $n2DigitVersion&lt;15 and ($CommonMisc_n200724WordError&gt;0 or $CommonMisc_n400274PPTError&gt;0 or $CommonMisc_n100796ExcelError&gt;0) and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Office files through email" Text="At least one error attempting to send an Office file thorugh email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link below for steps to fix this problem." GUID="404117" SSID="0f5598ec-cd84-40c7-8d20-13386593b863" Symptoms="Error message,Email send/receive"></Rule>
-            </Setting>
-          </Object>
-        </Object>
-      </Object>
-    </Object>
-  </Type>
+	<Type Name="MSMAPI32">
+		<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="software\microsoft\office\%MAJORVERSION%.0\Common\LanguageResources" Display="Hide">
+			<Setting Key1="UILanguage" Substitution="UILANGUAGECODE" Display="Hide">
+			</Setting>
+			<Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
+				<Object Type="Engine">
+					<Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES(X86)" Substitution="COMMONPROGRAMFILESX86" Display="Hide"/>
+					<Object Type="File" Key2="%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%\MSMapi32.dll" Display="Right">
+						<Setting Key1="Version" Display="Right">
+						<Rule Name="sMisMatchedMsmapi32VersionWordWow" Query="lower-case($appName)='word' and $n2DigitVersion&lt;15 and $CommonMisc_n200724WordError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Word document through email" Text="At least one error attempting to send a Word document through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link for steps to fix this problem." GUID="404117" SSID="3361a57e-f323-4005-8ebd-a4845fc12fc3" Symptoms="Error message,Email send/receive"></Rule>
+						<Rule Name="sMisMatchedMsmapi32VersionExcelWow" Query="lower-case($appName)='excel' and $n2DigitVersion&lt;15 and $CommonMisc_n400274PPTError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Excel workbook through email" Text="At least one error attempting to send an Excel workbook through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link for steps to fix this problem." GUID="404117" SSID="e2c79d0c-dce2-4ac1-9943-821f0330df6e" Symptoms="Error message,Email send/receive"></Rule>
+						<Rule Name="sMisMatchedMsmapi32VersionPPTWow" Query="lower-case($appName)='powerpoint' and $n2DigitVersion&lt;15 and $CommonMisc_n100796ExcelError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send PowerPoint file through email" Text="At least one error attempting to send a PowerPoint file through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link for steps to fix this problem." GUID="404117" SSID="a4bd1cab-f3b8-4d4d-913f-050112865e7a" Symptoms="Error message,Email send/receive"></Rule>
+						<Rule Name="sMisMatchedMsmapi32VersionOutlookWow" Query="lower-case($appName)='outlook' and $n2DigitVersion&lt;15 and ($CommonMisc_n200724WordError&gt;0 or $CommonMisc_n400274PPTError&gt;0 or $CommonMisc_n100796ExcelError&gt;0) and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Office files through email" Text="At least one error attempting to send an Office file thorugh email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILESX86%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link for steps to fix this problem." GUID="404117" SSID="ee090dd1-19d4-4f47-ab2d-9393e95a52be" Symptoms="Error message,Email send/receive"></Rule>
+						</Setting>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="If" Key1="'%WOW6432NODE%'=''">
+				<Object Type="Engine">
+					<Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES" Substitution="COMMONPROGRAMFILES" Display="Hide">
+					</Setting>
+					<Object Type="File" Key2="%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%\MSMapi32.dll" Display="Right">
+						<Setting Key1="Version" Display="Right">
+							<Rule Name="sMisMatchedMsmapi32VersionWord" Query="lower-case($appName)='word' and $n2DigitVersion&lt;15 and $CommonMisc_n200724WordError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Word document through email" Text="At least one error attempting to send a Word document through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link for steps to fix this problem." GUID="404117" SSID="468c6f48-b9aa-4892-940f-90fa9abf3d9d" Symptoms="Error message,Email send/receive"></Rule>
+							<Rule Name="sMisMatchedMsmapi32VersionExcel" Query="lower-case($appName)='excel' and $n2DigitVersion&lt;15 and $CommonMisc_n400274PPTError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Excel workbook through email" Text="At least one error attempting to send an Excel workbook through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link for steps to fix this problem." GUID="404117" SSID="ee951a36-172a-4e0f-9b17-ca2d9535c775" Symptoms="Error message,Email send/receive"></Rule>
+							<Rule Name="sMisMatchedMsmapi32VersionPPT" Query="lower-case($appName)='powerpoint' and $n2DigitVersion&lt;15 and $CommonMisc_n100796ExcelError&gt;0 and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send PowerPoint file through email" Text="At least one error attempting to send a PowerPoint file through email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link for steps to fix this problem." GUID="404117" SSID="6723dfec-6503-4ec4-b509-516ce2b6fd84" Symptoms="Error message,Email send/receive"></Rule>
+							<Rule Name="sMisMatchedMsmapi32VersionOutlook" Query="lower-case($appName)='outlook' and $n2DigitVersion&lt;15 and ($CommonMisc_n200724WordError&gt;0 or $CommonMisc_n400274PPTError&gt;0 or $CommonMisc_n100796ExcelError&gt;0) and $n2DigitVersion&lt;number(substring($.,1,2))" Error="Warning" Title="Error attempting to send Office files through email" Text="At least one error attempting to send an Office file thorugh email has been detected. This is due to a later version of Msmapi32.dll being installed by an Office Language Pack in the '%COMMONPROGRAMFILES%\System\MSMAPI\%UILANGUAGECODE%' folder. Please click the 'Click here ...' link for steps to fix this problem." GUID="404117" SSID="0f5598ec-cd84-40c7-8d20-13386593b863" Symptoms="Error message,Email send/receive"></Rule>
+						</Setting>
+					</Object>
+				</Object>
+			</Object>
+		</Object>
+	</Type>
 	<Type Name="MSO">
-    <Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
-      <Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
-        <Object Type="Engine">
-          <Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES(X86)" Substitution="COMMONPROGRAMFILESX86" Display="Hide"/>
-          <Object Type="File" Key2="%COMMONPROGRAMFILESX86%\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
-            <Setting Key1="Version" Display="Right">
-              <Rule Name="sMSOVersionWow" Query="$." AlwaysEvaluate="True">
-              </Rule>
-              <Rule Name="sMSOPRWow" Query="number(substring($sMSOVersionWow,11,1))=3" Error="Error" P0="$sMSOVersionWow" Title="The build number for Mso.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Mso.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available update for Mso.dll listed in the article." GUID="518087" SSID="43eae04b-9396-4e20-b983-c878f559160f" Symptoms="Configuration (unsupported or problematic)">
-              </Rule>
-            </Setting>
-          </Object>
-        </Object>
-      </Object>
-      <Object Type="If" Key1="'%WOW6432NODE%'=''">
-        <Object Type="Engine">
-          <Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES" Substitution="COMMONPROGRAMFILES" Display="Hide">
-          </Setting>
-          <Object Type="File" Key2="%COMMONPROGRAMFILES%\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
-            <Setting Key1="Version" Display="Right">
-              <Rule Name="sMSOVersion" Query="$." AlwaysEvaluate="True">
-              </Rule>
-              <Rule Name="sMSOPR" Query="number(substring($sMSOVersion,11,1))=3" Error="Error" P0="sMSOVersion" Title="The build number for Mso.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Mso.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available update for Mso.dll listed in the article." GUID="518087" SSID="35584122-c250-41d4-9f0d-f5fc9435e2ee" Symptoms="Configuration (unsupported or problematic)">
-              </Rule>
-            </Setting>
-          </Object>
-        </Object>
-      </Object>
-    </Object>
-    <Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun' and '%MAJORVERSION%'='15'">
-      <Object Type="If" Key1="'%APPBITNESS%'='x64'">
-      <Object Type="File" Key2="%PROGRAMFILES%\Microsoft Office %MAJORVERSION%\root\vfs\ProgramFilesCommonX64\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
-        <Setting Key1="Version" Display="Right">
-          <Rule Name="sMSOVersionC2R64" Query="$." AlwaysEvaluate="True">
-          </Rule>
-          <Rule Name="sMSOPRC2R64" Query="number(substring($sMSOVersionC2R64,11,1))=3" Error="Error" P0="sMSOVersionC2R64" Title="The build number for Mso.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Mso.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available Click-to-run update listed in the article." GUID="386616" SSID="057bd7a9-11ec-480f-99c3-0a9f293fecf6" Symptoms="Configuration (unsupported or problematic)">
-          </Rule>
-        </Setting>
-      </Object>
-    </Object>
-      <Object Type="If" Key1="'%APPBITNESS%'='x86'">
-        <Object Type="File" Key2="%PROGRAMFILES%\Microsoft Office %MAJORVERSION%\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
-          <Setting Key1="Version" Display="Right">
-            <Rule Name="sMSOVersionC2R" Query="$." AlwaysEvaluate="True">
-            </Rule>
-            <Rule Name="sMSOPRC2R" Query="number(substring($sMSOVersionC2R,11,1))=3" Error="Error" P0="sMSOVersionC2R" Title="The build number for Mso.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Mso.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available Click-to-run update listed in the article." GUID="386616" SSID="8f34b32b-40bb-4f13-9a3b-7b0c83acb260" Symptoms="Configuration (unsupported or problematic)">
-            </Rule>
-          </Setting>
-        </Object>
-      </Object>
-    </Object>
-    <!--NOT Dogfood friendly-->
-    <Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun' and number('%MAJORVERSION%')&gt;15">
-      <Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
-        <Object Type="File" Key2="%PROGRAMFILES(x86)%\Microsoft Office\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
-          <Setting Key1="Version" Display="Right"/>
-        </Object>
-      </Object>
-      <Object Type="If" Key1="'%WOW6432NODE%'=''">
-          <Object Type="File" Key2="%PROGRAMFILES%\Microsoft Office\root\vfs\ProgramFilesCommon%APPBITNESS%\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
-            <Setting Key1="Version" Display="Right"/>
-        </Object>
-      </Object>
-    </Object>
-    <Rule Name="sMso2010Version" Query="if($n2DigitVersion=14,if($sMSOVersion=true(),$sMSOVersion,if($sMSOVersionWow=true(),$sMSOVersionWow,-1)),-1)" AlwaysEvaluate="True"></Rule>
-    <Rule Name="sMso2013Version" Query="if($n2DigitVersion=15,(if($sMSOVersion=true(),$sMSOVersion,if($sMSOVersionC2R=true(),$sMSOVersionC2R,if($sMSOVersionWow=true(),$sMSOVersionWow,if($sMSOVersionC2R64=true(),$sMSOVersionC2R64,-1))))),-1)" AlwaysEvaluate="True"></Rule>
-    <Rule Name="sMsoVersionSuperRule" Query="if($sMso2010Version=-1,if($sMso2013Version=-1,-1,$sMso2013Version),$sMso2010Version)"></Rule>
+		<Object Type="If" Key1="'%INSTALLTYPE%'='MSI'">
+			<Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
+				<Object Type="Engine">
+					<Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES(X86)" Substitution="COMMONPROGRAMFILESX86" Display="Hide"/>
+					<Object Type="File" Key2="%COMMONPROGRAMFILESX86%\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
+						<Setting Key1="Version" Display="Right">
+							<Rule Name="sMSOVersionWow" Query="$." AlwaysEvaluate="True">
+							</Rule>
+							<Rule Name="sMSOPRWow" Query="number(substring($sMSOVersionWow,11,1))=3" Error="Error" P0="$sMSOVersionWow" Title="The build number for Mso.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Mso.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available update for Mso.dll listed in the article." GUID="518087" SSID="43eae04b-9396-4e20-b983-c878f559160f" Symptoms="Configuration (unsupported or problematic)">
+							</Rule>
+						</Setting>
+					</Object>
+				</Object>
+			</Object>
+			<Object Type="If" Key1="'%WOW6432NODE%'=''">
+				<Object Type="Engine">
+					<Setting Key1="EnvironmentVariable" Key2="COMMONPROGRAMFILES" Substitution="COMMONPROGRAMFILES" Display="Hide">
+					</Setting>
+					<Object Type="File" Key2="%COMMONPROGRAMFILES%\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
+						<Setting Key1="Version" Display="Right">
+							<Rule Name="sMSOVersion" Query="$." AlwaysEvaluate="True">
+							</Rule>
+							<Rule Name="sMSOPR" Query="number(substring($sMSOVersion,11,1))=3" Error="Error" P0="sMSOVersion" Title="The build number for Mso.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Mso.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available update for Mso.dll listed in the article." GUID="518087" SSID="35584122-c250-41d4-9f0d-f5fc9435e2ee" Symptoms="Configuration (unsupported or problematic)">
+							</Rule>
+						</Setting>
+					</Object>
+				</Object>
+			</Object>
+		</Object>
+		<Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun' and '%MAJORVERSION%'='15'">
+			<Object Type="If" Key1="'%APPBITNESS%'='x64'">
+			<Object Type="File" Key2="%PROGRAMFILES%\Microsoft Office %MAJORVERSION%\root\vfs\ProgramFilesCommonX64\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
+				<Setting Key1="Version" Display="Right">
+					<Rule Name="sMSOVersionC2R64" Query="$." AlwaysEvaluate="True">
+					</Rule>
+					<Rule Name="sMSOPRC2R64" Query="number(substring($sMSOVersionC2R64,11,1))=3" Error="Error" P0="sMSOVersionC2R64" Title="The build number for Mso.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Mso.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available Click-to-run update listed in the article." GUID="386616" SSID="057bd7a9-11ec-480f-99c3-0a9f293fecf6" Symptoms="Configuration (unsupported or problematic)">
+					</Rule>
+				</Setting>
+			</Object>
+		</Object>
+			<Object Type="If" Key1="'%APPBITNESS%'='x86'">
+				<Object Type="File" Key2="%PROGRAMFILES%\Microsoft Office %MAJORVERSION%\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
+					<Setting Key1="Version" Display="Right">
+						<Rule Name="sMSOVersionC2R" Query="$." AlwaysEvaluate="True">
+						</Rule>
+						<Rule Name="sMSOPRC2R" Query="number(substring($sMSOVersionC2R,11,1))=3" Error="Error" P0="sMSOVersionC2R" Title="The build number for Mso.dll indicates a Private Release (PR) build and this is an unsupported configuration" Text="The build number for Mso.dll '{0}' indicates a Private Release (PR) build. PR builds are intended only for testing and not production use. Please click the 'Click here ...' link and then install the latest publicly available Click-to-run update listed in the article." GUID="386616" SSID="8f34b32b-40bb-4f13-9a3b-7b0c83acb260" Symptoms="Configuration (unsupported or problematic)">
+						</Rule>
+					</Setting>
+				</Object>
+			</Object>
+		</Object>
+		<!--NOT Dogfood friendly-->
+		<Object Type="If" Key1="'%INSTALLTYPE%'='ClickToRun' and number('%MAJORVERSION%')&gt;15">
+			<Object Type="If" Key1="'%WOW6432NODE%'='Wow6432Node'">
+				<Object Type="File" Key2="%PROGRAMFILES(x86)%\Microsoft Office\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
+					<Setting Key1="Version" Display="Right"/>
+				</Object>
+			</Object>
+			<Object Type="If" Key1="'%WOW6432NODE%'=''">
+					<Object Type="File" Key2="%PROGRAMFILES%\Microsoft Office\root\vfs\ProgramFilesCommon%APPBITNESS%\Microsoft Shared\OFFICE%MAJORVERSION%\mso.dll" Display="Right">
+						<Setting Key1="Version" Display="Right"/>
+				</Object>
+			</Object>
+		</Object>
+		<Rule Name="sMso2010Version" Query="if($n2DigitVersion=14,if($sMSOVersion=true(),$sMSOVersion,if($sMSOVersionWow=true(),$sMSOVersionWow,-1)),-1)" AlwaysEvaluate="True"></Rule>
+		<Rule Name="sMso2013Version" Query="if($n2DigitVersion=15,(if($sMSOVersion=true(),$sMSOVersion,if($sMSOVersionC2R=true(),$sMSOVersionC2R,if($sMSOVersionWow=true(),$sMSOVersionWow,if($sMSOVersionC2R64=true(),$sMSOVersionC2R64,-1))))),-1)" AlwaysEvaluate="True"></Rule>
+		<Rule Name="sMsoVersionSuperRule" Query="if($sMso2010Version=-1,if($sMso2013Version=-1,-1,$sMso2013Version),$sMso2010Version)"></Rule>
 
-    <!--detect Mso.dll version SP1 updates-->
-    <Rule Name="f2013SP1UpdateInstalledMsiWow" Query="$sMSOVersionWow=true() and versioncompare($sMSOVersionWow,'15.0.4569.1504')&gt;=0" AlwaysEvaluate="True"></Rule>
-    <Rule Name="f2013SP1UpdateInstalledMsi" Query="$sMSOVersion=true() and versioncompare($sMSOVersion,'15.0.4569.1504')&gt;=0" AlwaysEvaluate="True"></Rule>
-    <Rule Name="f2013SP1UpdateInstalledC2R64" Query="$sMSOVersionC2R64=true() and versioncompare($sMSOVersionC2R64,'15.0.4569.1504')&gt;=0" AlwaysEvaluate="True"></Rule>
-    <Rule Name="f2013SP1UpdateInstalledC2R" Query="$sMSOVersionC2R=true() and versioncompare($sMSOVersionC2R,'15.0.4569.1504')&gt;=0" AlwaysEvaluate="True"></Rule>
-    <Rule Name="fC2R2013SP1UpdateInstalled" Query="$n2DigitVersion=15 and ($f2013SP1UpdateInstalledMsiWow or $f2013SP1UpdateInstalledMsi or $f2013SP1UpdateInstalledC2R64 or $f2013SP1UpdateInstalledC2R)"></Rule>
+		<!--detect Mso.dll version SP1 updates-->
+		<Rule Name="f2013SP1UpdateInstalledMsiWow" Query="$sMSOVersionWow=true() and versioncompare($sMSOVersionWow,'15.0.4569.1504')&gt;=0" AlwaysEvaluate="True"></Rule>
+		<Rule Name="f2013SP1UpdateInstalledMsi" Query="$sMSOVersion=true() and versioncompare($sMSOVersion,'15.0.4569.1504')&gt;=0" AlwaysEvaluate="True"></Rule>
+		<Rule Name="f2013SP1UpdateInstalledC2R64" Query="$sMSOVersionC2R64=true() and versioncompare($sMSOVersionC2R64,'15.0.4569.1504')&gt;=0" AlwaysEvaluate="True"></Rule>
+		<Rule Name="f2013SP1UpdateInstalledC2R" Query="$sMSOVersionC2R=true() and versioncompare($sMSOVersionC2R,'15.0.4569.1504')&gt;=0" AlwaysEvaluate="True"></Rule>
+		<Rule Name="fC2R2013SP1UpdateInstalled" Query="$n2DigitVersion=15 and ($f2013SP1UpdateInstalledMsiWow or $f2013SP1UpdateInstalledMsi or $f2013SP1UpdateInstalledC2R64 or $f2013SP1UpdateInstalledC2R)"></Rule>
 
-    <!--detect Mso.dll version from August 2014 updates-->
-    <Rule Name="fMsoAug2014UpdateInstalled" Query="$n2DigitVersion=15 and versioncompare($sMso2013Version,'15.0.4641.1001')&gt;=0"></Rule>
-    
-  </Type>
+		<!--detect Mso.dll version from August 2014 updates-->
+		<Rule Name="fMsoAug2014UpdateInstalled" Query="$n2DigitVersion=15 and versioncompare($sMso2013Version,'15.0.4641.1001')&gt;=0"></Rule>
+		
+	</Type>
 	<Type Name="OART">
 		<Object Type="File" Key2="%INSTALLPATH%\oart.dll">
 			<Setting Key1="Version">
+        <Rule Name="sOartDllVersion" Query="$."></Rule>
 			</Setting>
 		</Object>
 	</Type>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>px7U0J2snqeNSlF9Q7PZny8hcdM=</DigestValue></Reference></SignedInfo><SignatureValue>
-    L//LQmycaYvac1mhW569nF3SFTA8Cnxv1UByzgUEPH39kEBFGToFbNmojAxpc4kFNtikVZ+F
-    bzIUQDlQfaxQu2QMzl8dlwDTFRVNS4a3y5Dn0EicGZ53bL0KzayUVro9LqYPuQnLmf7UpHyK
-    USL1maCwr8NIy9Un542OlncBxgSW/upn5EWmZM1+TFuYurQkNEz0HkU/GcBFCUC3j2IsJWAq
-    cc+QxxRCzUmtP9SqOrFoXWKph4OXNay7QPbZQwJpDDcpAZzphmxhemX6nxkiWyK99xaa9Q6C
-    2eDacY9vLNH+DmaMI2ufMohpqHBB2MTAAV8Pco15ASKgwe9Si/rSoQ==
+	<Type Name="CommonCrashes">
+		<Rule Name="nFaultNtdll0002e3be" Query="count(../Instance[Setting[@Key1='Faulting Module Name' and (lower-case(Value)='ntdll.dll')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0002e3be')]])"></Rule>
+		<Rule Name="nFaultNtdll0002e41b" Query="count(../Instance[Setting[@Key1='Faulting Module Name' and (lower-case(Value)='ntdll.dll')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0002e41b')]])"></Rule>
+		<Rule Name="sNtdllHeapCrashKB2541119" Query="($MachineDetails_fWinVistaInstalled or $MachineDetails_fWin7Installed or $MachineDetails_fWin2008Installed or $MachineDetails_fWin2008R2Installed) and ($nFaultNtdll0002e3be&gt;0 or $nFaultNtdll0002e41b&gt;0)" Error="Error" P0="$nFaultNtdll0002e3be + $nFaultNtdll0002e41b" Title="%APPNAME% crashing issue with file Ntdll.dll was detected" Text="A known crashing issue that was caused by Ntdll.dll was found {0} times in the Application Event log over the last 14 days. This problem is fixed by an update for Windows that is available in KB article 2541119.&#xA;&#xA;Please click the 'Click here ...' link for details on this crash and to access the download link for the update." GUID="526573" SSID="d277417d-c440-42a7-b4df-694cbd55f7d2" Symptoms="Crash"/>
+	</Type>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>C32ZlppWaAq+clz6DISHxDGrhO8=</DigestValue></Reference></SignedInfo><SignatureValue>
+    aczFvGTWf2KpsfLX47+4mHDxgYdiS5oA1CaRIFIiVOtySnS7Vp8OusVGLJzWgKtMGb2x0jeP
+    r/tPEjQIU0dzVLEjiLnoaKT7gZI9+XvQdCE7yZp3HPnKSDWO64CAWbPVV/u2CmQUJpF67qgF
+    wUk9y6DzIbTTGZqQ214615Tz+18c8Hkf+fj5iCGTYsyPMo3f0cMBSdtHwhx800rK3DKx+hn3
+    f8olv3j765aKLj3OK4qs6UWwIaUHHjbV24QD/WbVAsArbZLxwlPjDPf2hWv8I6o0y8p70ZoA
+    1Oyh8E/Qtm7flcMUC03KAE+xOiK+aujUAseVY3bq45LJiKe6MfaQvw==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -1475,28 +1569,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEuzCCA6OgAwIBAgITMwAAAFtDPHJBxWzA7gAAAAAAWzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHQNgGQOfWd9owAAAAAAdDANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTQwNTIzMTcxMzE2WhcNMTUwODIzMTcxMzE2WjCBqzELMAkGA1UEBhMCVVMxCzAJBgNVBAgT
-AldBMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTAL
-BgNVBAsTBE1PUFIxJzAlBgNVBAsTHm5DaXBoZXIgRFNFIEVTTjozMUM1LTMwQkEtN0M5MTElMCMG
-A1UEAxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-ADCCAQoCggEBAJO2gxkc4ZlPSL6curaAqyM+cxMZpbyNUkEWY49+BhzsvpPybh2Hv1guJrhjk9Nm
-Y/SqrbCrUWX//TK650z4tkWiM7sUcRG8kpYzmfF61YdzcGDC+7phlMOg5nGmLtwTGbFq2hpkVe0U
-sh1SGEaJ7zeulRzx7RxaNj7W8O3EZU3vI0rjTMSQiWu01MqBr8x2Ubfgk6HU/n9P4aVT0jCY1/N3
-TEy+ijg5n2xyysvD32VFFsXQY0OnVRp45SEltH/EJ6gzunUPvJJyxhUdMzwvFSxnnr04pWcMkevA
-7zlstOXaidfEdn+xR/0FQABh70OHGnfHVlQCpqaNtV7rdHPfv0cCAwEAAaOCAQkwggEFMB0GA1Ud
-DgQWBBTNDGkkqFEi29Hu02Wg+BiCdff1IzAfBgNVHSMEGDAWgBQjNPjZUkZwCu1A+3b7syuwwzWz
-DzBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
-dWN0cy9NaWNyb3NvZnRUaW1lU3RhbXBQQ0EuY3JsMFgGCCsGAQUFBwEBBEwwSjBIBggrBgEFBQcw
-AoY8aHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraS9jZXJ0cy9NaWNyb3NvZnRUaW1lU3RhbXBQ
-Q0EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBBQUAA4IBAQCFZLbdqiTl4Pvp
-aqSQwDnvTfrzf5LEB3/xqY832xz49neml+bIRHEIRH0KcJfJx68MK2DEhExOTZgsfvzoFn1H2ygK
-ORzb7OKHfCItu//Rl22AQK3v3SgzzkHZ53xu+bjJKyDaeDclxQR6COuUvJomC/QqzUG9/fyImMQZ
-HFcFElrogLzIiSei6vcVUY7azSrz5fs8ySz9spMa2vyM2Tc6t1R+HekTNMUfxQPaD1qVrCmFszlM
-z58CWcVSKd28O1SByMdZS+2LpzDPTLWVnyZVp2tnhF24jf+5oV+NLk82eOsbX8zMctyL36eb+8n+
-1flHpAnDRDpch5aHPlRovDSv</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+HhcNMTUwMzIwMTczMjA1WhcNMTYwNjIwMTczMjA1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEA4NFrifjVvo5YgN/jD+4M6zszXn3GnmZHP9AerBSCDRiftpwnIvG2
+hpREQXSJkW8X9t+Y5jbLX3iS6XJ+S7kExWIUc3HGf2NBW+tk8r1cVWJGzA9ewQnEr9nxvyV94Beg
+UO4lqkXl48Z+vxBZqcGPPtn77GQbY1u1p7jq681X6xtD9WWRv1D1+cEGvH2qzDfnBqmgzLH1M8wN
+ssh1ZgDRbTCTR8+OomdEXhoTf/McHucPncG8SPyBgW1UauJpE8bO9ZdnMmxIyhHCVjrW3Dpi9PwQ
+l2RIC4pc8RbClfDLYBukA5sMyfe7kr8Ac2czHKJ673VKGUZaDH6aW6A6HVQ16wIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFCUsOGYFtEU5DmC29u69PuDdr4wNMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEEG
+50j6xJHcMBMNInjC0iPTszPL+yYh1978CncY+4Nyzu/ULIaP4xXj1RICZ1xbN9MDe02RW0FTZgn9
+457fLHgJORo2HYqBocllfJx7kbIPSptB3cdEC2EFyUwu8rRrKKoIR+4IrGZUF1aQiMbpddAhEDh5
+yT+7VTDFpjmmU7/NXFbSThcUvGISy+lL8MWR3J2EypjWDttWFGht21OLMM+6J2V1oDFvk6N1EGDq
+qu7uduvljAup0655zzS+SR8i0MT1o+/zrjDcjohGI4ygqjyXrwfbdug2VN+Ls4mewOospGBr8d/D
+thI6rzM4elFxNTXm5AjiUZaC+b7hG4N8e2c=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -1523,34 +1617,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIGzAYJKoZIhvcNAQcCoIIGvTCCBrkCAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQAv/8tCbJxpi9pzWaFbnr2cXdIVMDwKfG/VQHLOBQQ8ff2QQEUZOgVs2aiMDGlziQU22KRV
-n4VvMhRAOVB9rFC7ZAzOXx2XANMVFU1LhrfLkOfQSJwZnndsvQrNrJRWuj0upg+5CcuZ/tSkfIpR
-IvWZoLCvw0jL1SfnjY6WdwHGBJb+6mfkRaZkzX5MW5i6tCQ0TPQeRT8ZwEUJQLePYiwlYCpxz5DH
-FELNSa0/1Ko6sWhdYqmHg5c1rLtA9tlDAmkMNykBnOmGbGF6ZfqfGSJbIr33Fpr1DoLZ4Npxj28s
-0f4OZowja58yiGmocEHYxMABXw9yjXkBIqDB71KL+tKhoIIDdaGCA3EwggJZAgEBMIHboYGxpIGu
-MIGrMQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0ExEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoT
-FU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBE
-U0UgRVNOOjMxQzUtMzBCQS03QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2
-aWNloiUKAQEwCQYFKw4DAhoFAAMVACgI5jPW6+ucStSwO6kgUfU5Rg5DoIHCMIG/pIG8MIG5MQsw
-CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
-ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVy
-IE5UUyBFU046NTdGNi1DMUUwLTU1NEMxKzApBgNVBAMTIk1pY3Jvc29mdCBUaW1lIFNvdXJjZSBN
-YXN0ZXIgQ2xvY2swDQYJKoZIhvcNAQEFBQACBQDYDhCOMCIYDzIwMTQxMTEyMTY1OTU4WhgPMjAx
-NDExMTMxNjU5NThaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFANgOEI4CAQAwCgIBAAICJxQCAf8w
-BwIBAAICGJIwCgIFANgPYg4CAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGEWQoDAaAKMAgC
-AQACAxbjYKEKMAgCAQACAwehIDANBgkqhkiG9w0BAQUFAAOCAQEAJRPmxNWqpkDJePCUruHGED6C
-dMHfZxEXaKdsUu1Gx2Hgg8g2Syau6D5q1LZ8OIUDgHLvtFIhJgkgvSvBJwMLzNkzCRnAb8hdZR1O
-FYMqQ0gi8LFT481Z4nDzr8hWNu/gH3qB4UvaU/qQPNmVndJQiSzXas5/2T6C7u5z2a1DQNR4W12E
-1S03z4O/OhU8IwpZPDv/L1QLagYzcA4qvMYyRsJ0qGDE6ptWcbXjPr9BQDiFYf0gAfaA1hde8ra6
-FLQoshKROdlD6lh+WfO1YbpIvTeubYDnCULlHh1lhaCJ68tpByafPBEgjbM0JrbIVY+Wro2ELEt/
-nZYrZFrT15MslTGCAhUwggIRAgEBMIGOMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
-dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xITAf
-BgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQQITMwAAAFtDPHJBxWzA7gAAAAAAWzAJBgUr
-DgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTQxMTEy
-MjM0NzM5WjAjBgkqhkiG9w0BCQQxFgQUvt/Hpq1oCGMzmKEN9IUgffgO7wAwDQYJKoZIhvcNAQEF
-BQAEggEAfqwsoefD6X2CxNEtL18ftt45m6yS6m2U5VbshIg/Le50/t9YozVjRmtFWQnEWGRYKxeN
-FjbcV/lSGMCjTfdV6nv9DCZh1UbjM+4bjvybOiRuFV7lp/umR+7wBqsY0bHesFP9f86eaFsMP508
-qIt4hKSRA6T7632gwACN/9+UhTQH+fWKWsMlbbbA9TlzA1offft/J6DgGhDl5tJ3qYJVXr4YnzZr
-6bVs/HQyHk0xnHy8ykWsrXAAm7Pds08+q8tlrGXx47noD90z7e7KPmNrM4U2GbBw8xVDbgc4J0af
-h42rsCcDvsxl+BLRIxjls2RvOpoKbyiplUKGYHoKFg7Kmg==</CounterSignature></Object></Signature></ObjectCollector>
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQBpzMW8ZNZ/Yqmx8tfjv7iYcPGBh2JLmgDUJpEgUiJU63JKdLtWnw66xUYsnNaAq0wZvbHS
+N4+v+08SNAhTR3NUsSOIuehopPuBkj35e9B0ITvJmncc+cpINY7rgIBZs9VX+7YKZBQmkXruqAXB
+ST3LoPMhtNMZmpDbXjrXlPP7XxzweR/5+PmIIZNizI8yjd/RwwFJ20fCHHzTSsrcMrH6Gfd/yiW/
+ePvrloouPc4riqzpRbAhpQceNtXbhAP9ZtUCwCttkvHCU+MM9/aFa/wjqjTLynvRmgDU7KHwT9C2
+bt+VwxQLTcoAT7E6Ir5q6NQCx5VjdurjksmIp7ox9pC/oIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
+MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
+Q2lwaGVyIERTRSBFU046N0QyRS0zNzgyLUIwRjcxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAlPdzZMzyO6SV17j1edQd119kEpuggcIwgb+k
+gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
+MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
+Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANkg8kcwIhgPMjAxNTA2MDkwNTA0
+MDdaGA8yMDE1MDYxMDA1MDQwN1owdDA6BgorBgEEAYRZCgQBMSwwKjAKAgUA2SDyRwIBADAHAgEA
+AgIe7zAHAgEAAgIYMzAKAgUA2SJDxwIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZCgMB
+oAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQB2yToQiy2Wi40/pGrl
+9eVFfs9jRUDAYhc3p2+4vtwhSHQcP8N3N+VBLEr8lnRWIl+1338TEg/Gt15f5Haxv+rgelTsNbiL
+xPEgsRbByEUOQfErnuwzzevEkTMM16xpUjIwn2RgF1g7PqZRi0UFw/ZenKQlmxn177aXzOXUxXyj
+XTYlX1wzIeIaVi0/VaeXr5a6XpFnnqwJ8/ISsOfgNNsVuCfowwwwqWxxIwJZNr4Focb3SrOH3z+X
+5DPLj8Hufqh2UiUoeAPrE3hT5eBrEwsuXVTSof4D+1y6BGAMCr/RypYX2dPz6RpEk1N/gbKsmhtg
+hdbkiIVdX80Sm63yMVX0MYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
+c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
+bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAdA2AZA59Z32jAAAAAAB0
+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
+NTA2MDkxMjQ0NDBaMCMGCSqGSIb3DQEJBDEWBBTzOgAeqPiNKIXU+eiNxXsZTWbE1DANBgkqhkiG
+9w0BAQUFAASCAQC9yJWmpSn+HePmALa7Ruy6xl1I2hfdDy/j1gZPePCkwVXa5MFyvc6kpjyy3yCp
+fUssyOYtSA+qRPhDxKLt05P4F4NjvxgT6x1BRNPzVPsV+9P+dzv8SlR10zrH6EPEVjr1VdkzOI+N
+pl/Z1fOox7eHW2e0bzYzdTwG/NGUp51NOF+Xaw1aN8wa5ZnWMZeRfUINVgUw3XViLbMIEuAShBza
+R8u4Sg2gbX30BeURI3/CitlAlNO7nyQXWD2EyyiTQpaoPuIW8yOsvuDgDicPbGEZlJSBhwtdWtSe
+t+ylx3TzXffHFrF7rkzBrVdFUsecBHd7wb6WRh7YuV1h1/Om+VUl</CounterSignature></Object></Signature></ObjectCollector>

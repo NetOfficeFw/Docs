@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Access Configuration" ChangeDescription="1.0.1411.07" ConfigVersion="1.0.1411.07" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,access.crashes.config.xml" Symptoms="1">
+	<Configuration ConfigName="Access Configuration" ChangeDescription="2.0.1505.18" ConfigVersion="2.0.1505.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,access.crashes.config.xml" Symptoms="1">
+    <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"/>
 		<Substitution Name="INSTALLTYPE"/>
@@ -173,7 +174,7 @@
 						</Object>
 					</Object>
 					<Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
-						<Object Type="C2RSKU" Key1="access" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+						<Object Type="C2RSKU" Key1="Access" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
 							<Setting Key1="ProductName">
 							</Setting>
 						</Object>
@@ -362,8 +363,8 @@
 					</Object>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Access\Resiliency\DoNotDisableAddinList" Display="Right">
-					<Setting Key1="__VALUES"></Setting>
-          <Rule Name="nReEnabledAddins" Query="count(../Instance)"></Rule>
+          <Setting Key1="__VALUES" Key2="^((?!OffCATv2_Addin.Connect).)*$"></Setting>
+          <Rule Name="nReEnabledAddins" Query="count(../Instance/Setting)"></Rule>
           <Rule Name="sUserReenabledAddins" Query="$nReEnabledAddins&gt;0 and $nRestrictToList&lt;1" Error="Warning" P0="$nReEnabledAddins" Title="Problematic add-in(s) re-enabled by the user" Text="{0} add-in(s) disabled by Access because of performance or stability issues was/were re-enabled by the user. To see the list of disabled add-ins that were re-enabled by the user, click the Configuration Details tile (above) and then search for 'DoNotDisableAddinList' using the Find feature." GUID="272802" SSID="ddc3cc43-4860-420e-859b-a2fe3c0fab38" Symptoms="Slowness,Error message,Add-ins"></Rule>
         </Object>
 				<!--O15 and above resiliency policy-->
@@ -485,9 +486,9 @@
 					</Setting>
 					<Rule Name="sACEDAOReg32" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')">
 					</Rule>
-					<Rule Name="sBadACEDAORegWow" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness!=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg32)!=$ACEDAOPathWow" Error="Warning" Title="Registry information related to Acedao.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the '64-bit Windows, 32-bit Office' instructions in article 2019235." GUID="275556" SSID="c5dcb0d7-c600-4ec1-a952-62606ed869e2" Symptoms="Access Wizards,Error message">
+					<Rule Name="sBadACEDAORegWow" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness!=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg32)!=$ACEDAOPathWow" Error="Warning" Title="Error using Access wizards due incorrect path for Acedao.dll in the registry" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the '64-bit Windows, 32-bit Office' instructions in article 2019235." GUID="275556" SSID="c5dcb0d7-c600-4ec1-a952-62606ed869e2" Symptoms="Access Wizards,Error message">
 					</Rule>
-					<Rule Name="sBadACEDAOReg32" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness='x86' and $bitness=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg32)!=$ACEDAOPath" Error="Warning" Title="Registry information related to Acedao.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the instructions for '32-bit Windows, 32-bit Office' in article 2019235." GUID="275556" SSID="5ab210d5-fd48-43aa-a00e-93a92207e75d" Symptoms="Access Wizards,Error message">
+					<Rule Name="sBadACEDAOReg32" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness='x86' and $bitness=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg32)!=$ACEDAOPath" Error="Warning" Title="Error using Access wizards due incorrect path for Acedao.dll in the registry" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the instructions for '32-bit Windows, 32-bit Office' in article 2019235." GUID="275556" SSID="5ab210d5-fd48-43aa-a00e-93a92207e75d" Symptoms="Access Wizards,Error message">
 					</Rule>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CLASSES_ROOT" Key3="TypeLib\{4AC9E1DA-5BAD-4AC7-86E3-24F4CDCECA28}\c.0\0\win64">
@@ -495,7 +496,7 @@
 					</Setting>
 					<Rule Name="sACEDAOReg64" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')">
 					</Rule>
-					<Rule Name="sBadACEDAOReg64" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness='x64' and $bitness=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg64)!=$ACEDAOPath" Error="Warning" Title="Registry information related to Acedao.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the instructions for '64-bit Windows, 64-bit Office' in article 2019235." GUID="275556" SSID="aab3435e-cedf-49b9-8db4-f38aab18d2e9" Symptoms="Access Wizards,Error message">
+					<Rule Name="sBadACEDAOReg64" Query="$n2DigitVersion!=11 and '%INSTALLTYPE%'='MSI' and $bitness='x64' and $bitness=$MachineDetails_OSArchitecture and lower-case($sACEDAOReg64)!=$ACEDAOPath" Error="Warning" Title="Error using Access wizards due incorrect path for Acedao.dll in the registry" Text="To resolve this issue, you will need to update the TypeLib registration for ACEDAO.dll. Please use the instructions for '64-bit Windows, 64-bit Office' in article 2019235." GUID="275556" SSID="aab3435e-cedf-49b9-8db4-f38aab18d2e9" Symptoms="Access Wizards,Error message">
 					</Rule>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\REGISTRY\MACHINE\SOFTWARE\Classes\TypeLib\{4AC9E1DA-5BAD-4AC7-86E3-24F4CDCECA28}\c.0\0\win32">
@@ -503,7 +504,17 @@
 					</Setting>
 					<Rule Name="sACEDAOC2RReg32" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')">
 					</Rule>
-					<Rule Name="sBadACEDAO2013C2RReg" Query="$n2DigitVersion=15 and '%INSTALLTYPE%'='ClickToRun' and lower-case($sACEDAOC2RReg32)!=$ACEDAOPathWow" Error="Warning" Title="Registry information related to Acedao.dll is incorrect" Text="To resolve this issue, update the TypeLib registration for Acedao.dll" GUID="275556" SSID="a150dafe-bf53-4715-9775-01eabea2ac4c" Symptoms="Access Wizards,Error message">
+					<Rule Name="sBadACEDAO2013C2RReg" Query="$n2DigitVersion=15 and '%INSTALLTYPE%'='ClickToRun' and $bitness='x86' and $MachineDetails_OSArchitecture='x86'and lower-case($sACEDAOC2RReg32)!=$ACEDAOPath" Error="Warning" Title="Error using Access wizards due incorrect path for Acedao.dll in the registry" Text="To resolve this issue, update the TypeLib registration for Acedao.dll. Please use the '(32-bit Windows, 32-bit Office)' path under '2013 CLICK 2 RUN' in article 2019235." GUID="275556" SSID="a150dafe-bf53-4715-9775-01eabea2ac4c" Symptoms="Access Wizards,Error message">
+					</Rule>
+          <Rule Name="sBadACEDAO2013C2RWowReg" Query="$n2DigitVersion=15 and '%INSTALLTYPE%'='ClickToRun' and $bitness='x86' and $MachineDetails_OSArchitecture='x64'and lower-case($sACEDAOC2RReg32)!=$ACEDAOPathWow" Error="Warning" Title="Error using Access wizards due incorrect path for Acedao.dll in the registry" Text="To resolve this issue, update the TypeLib registration for Acedao.dll. Please use the '(64-bit Windows, 32-bit Office)' path under '2013 CLICK 2 RUN' in article 2019235." GUID="275556" SSID="23ca7c69-79af-4e03-9445-5ef7054b28de" Symptoms="Access Wizards,Error message">
+					</Rule>
+				</Object>
+        <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="SOFTWARE\Microsoft\Office\15.0\ClickToRun\REGISTRY\MACHINE\SOFTWARE\Classes\TypeLib\{4AC9E1DA-5BAD-4AC7-86E3-24F4CDCECA28}\c.0\0\win64">
+          <Setting Key1="(Default)">
+          </Setting>
+          <Rule Name="sACEDAOC2RReg64" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')">
+          </Rule>
+          <Rule Name="sBadACEDAO2013C2Rx64Reg" Query="$n2DigitVersion=15 and '%INSTALLTYPE%'='ClickToRun' and $bitness='x64' and $MachineDetails_OSArchitecture='x64'and lower-case($sACEDAOC2RReg64)!=$ACEDAOPath" Error="Warning" Title="Error using Access wizards due incorrect path for Acedao.dll in the registry" Text="To resolve this issue, update the TypeLib registration for Acedao.dll. Please use the '(64-bit Windows, 64-bit Office)' path under '2013 CLICK 2 RUN' in article 2019235." GUID="275556" SSID="470eca86-4cdf-448c-8dd1-dc827a421aaf" Symptoms="Access Wizards,Error message">
 					</Rule>
 				</Object>
 			</Object>
@@ -513,9 +524,9 @@
 					</Setting>
 					<Rule Name="sDAOReg" Query="if(../Instance/Setting[@Key1='(Default)'],../Instance/Setting[@Key1='(Default)']/Value,'')">
 					</Rule>
-					<Rule Name="sBadDAORegAccess32Win64" Query="$n2DigitVersion!=11 and $bitness='x86' and $MachineDetails_OSArchitecture='x64' and lower-case($sDAOReg)!='%commonprogramfiles%\microsoft shared\dao\dao360.dll' and lower-case($sDAOReg)!='%commonprogramfiles(x86)%\microsoft shared\dao\dao360.dll'" Error="Warning" Title="Registry information related to DAO360.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for DAO360.dll. Please use the '64-bit Windows, 32-bit Office' instructions in article 2019235. To open that article click the first link below" GUID="275556" SSID="3e20105d-42a8-4e75-8f2d-dbbc48a114b8" Symptoms="Access Wizards,Error message">
+					<Rule Name="sBadDAORegAccess32Win64" Query="$n2DigitVersion!=11 and $bitness='x86' and $MachineDetails_OSArchitecture='x64' and lower-case($sDAOReg)!='%commonprogramfiles%\microsoft shared\dao\dao360.dll' and lower-case($sDAOReg)!='%commonprogramfiles(x86)%\microsoft shared\dao\dao360.dll'" Error="Warning" Title="Registry information related to DAO360.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for DAO360.dll. Please use the '64-bit Windows, 32-bit Office' instructions in article 2019235. To open that article, click the 'Click here ...' link." GUID="275556" SSID="3e20105d-42a8-4e75-8f2d-dbbc48a114b8" Symptoms="Access Wizards,Error message">
 					</Rule>
-					<Rule Name="sBadDAORegMatchingBitness" Query="$n2DigitVersion!=11 and $bitness=$MachineDetails_OSArchitecture and lower-case($sDAOReg)!='%commonprogramfiles%\microsoft shared\dao\dao360.dll' and lower-case($sDAOReg)!='%commonprogramfiles(x86)%\microsoft shared\dao\dao360.dll'" Error="Warning" Title="Registry information related to DAO360.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for DAO360.dll. Please use the (64-bit Windows, 64-bit Office) or (32-bit Windows, 32-bit Office)' instructions in article 2019235. To open that article click the first link below" GUID="275556" SSID="5c61f39d-de48-43c8-a283-b2fd513db3f6" Symptoms="Access Wizards,Error message">
+					<Rule Name="sBadDAORegMatchingBitness" Query="$n2DigitVersion!=11 and $bitness=$MachineDetails_OSArchitecture and lower-case($sDAOReg)!='%commonprogramfiles%\microsoft shared\dao\dao360.dll' and lower-case($sDAOReg)!='%commonprogramfiles(x86)%\microsoft shared\dao\dao360.dll'" Error="Warning" Title="Registry information related to DAO360.dll is incorrect" Text="To resolve this issue, you will need to update the TypeLib registration for DAO360.dll. Please use the (64-bit Windows, 64-bit Office) or (32-bit Windows, 32-bit Office)' instructions in article 2019235. To open that article, click the 'Click here ...' link." GUID="275556" SSID="5c61f39d-de48-43c8-a283-b2fd513db3f6" Symptoms="Access Wizards,Error message">
 					</Rule>
 				</Object>
 			</Object>
@@ -696,12 +707,15 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
   <Rule Name="sWordVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>Bj1Beq+/DRJoMc1KgWByFUu1AOU=</DigestValue></Reference></SignedInfo><SignatureValue>
-    JkyNw2U2DvVjV7OKxF+SR9d9G7ZJRyWxi4Psu8uPk3WwC3n34TywDGMXdyIqCATTKwKI9b7C
-    mjtXb9ZMzkhZNqT01o01GxK65o4V3eO/B6wJEM/aRJz0TRnVaoV+QDdXc2/q4cQdmQBD6SWI
-    Xo17xahQhxs7EMEpbcyz5id+hOMLkXBOK8MSxnLafk2RkGTUuLyFU2bWZL+F3R2zc1li8lDp
-    /dgPF551JDGcg0ClREqkNyLcAM6MrpG2nZN6SN0vSXsATkTxK3SIC5EGIfMP86L31is94Gb8
-    Q0poncNwWHrOSgPs/Ks7c1mQyI4kwtnT+ToEUAbEAg+sPItD03x6dg==
+  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="fLync2013AddinFoundWow"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>Zf8sbFsgr/tmqrrpEjPnwm8EPGA=</DigestValue></Reference></SignedInfo><SignatureValue>
+    Sz1imnxOAR13k1EDrrAi5/DzAO+m0SUdYoPPBnPHcLRCRffuEnLCBN3EsgDf+6S/ZOUBwQgr
+    56VD4e34d67TaXFAlSKPwNeHo/D3aPZLe8pULdX7IJ1pZNp8TX8oflApuo/vTar5ZpOYk71q
+    Hkd6FkQgK7qcsADQs0NFTwYZRVXYqPw1HqTQMl8xV9nRyTp+FX2NlfJJH4nvJ2zs5MQIxSjE
+    NQS2jCeOdogSTbKoylq6yceSf0erXvb/TV9hW1Fa6QXJQntVOP78dhfcHJpueuL7ZFfI6KH2
+    E9FcX//5874QLAbMz8TtWtrZ3Z9pbMhb6Pl1OECRvsqGDUPe1b3VfA==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -806,28 +820,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEuzCCA6OgAwIBAgITMwAAAFtDPHJBxWzA7gAAAAAAWzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHPGWcJSl4OjOgAAAAAAczANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTQwNTIzMTcxMzE2WhcNMTUwODIzMTcxMzE2WjCBqzELMAkGA1UEBhMCVVMxCzAJBgNVBAgT
-AldBMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTAL
-BgNVBAsTBE1PUFIxJzAlBgNVBAsTHm5DaXBoZXIgRFNFIEVTTjozMUM1LTMwQkEtN0M5MTElMCMG
-A1UEAxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-ADCCAQoCggEBAJO2gxkc4ZlPSL6curaAqyM+cxMZpbyNUkEWY49+BhzsvpPybh2Hv1guJrhjk9Nm
-Y/SqrbCrUWX//TK650z4tkWiM7sUcRG8kpYzmfF61YdzcGDC+7phlMOg5nGmLtwTGbFq2hpkVe0U
-sh1SGEaJ7zeulRzx7RxaNj7W8O3EZU3vI0rjTMSQiWu01MqBr8x2Ubfgk6HU/n9P4aVT0jCY1/N3
-TEy+ijg5n2xyysvD32VFFsXQY0OnVRp45SEltH/EJ6gzunUPvJJyxhUdMzwvFSxnnr04pWcMkevA
-7zlstOXaidfEdn+xR/0FQABh70OHGnfHVlQCpqaNtV7rdHPfv0cCAwEAAaOCAQkwggEFMB0GA1Ud
-DgQWBBTNDGkkqFEi29Hu02Wg+BiCdff1IzAfBgNVHSMEGDAWgBQjNPjZUkZwCu1A+3b7syuwwzWz
-DzBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
-dWN0cy9NaWNyb3NvZnRUaW1lU3RhbXBQQ0EuY3JsMFgGCCsGAQUFBwEBBEwwSjBIBggrBgEFBQcw
-AoY8aHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraS9jZXJ0cy9NaWNyb3NvZnRUaW1lU3RhbXBQ
-Q0EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBBQUAA4IBAQCFZLbdqiTl4Pvp
-aqSQwDnvTfrzf5LEB3/xqY832xz49neml+bIRHEIRH0KcJfJx68MK2DEhExOTZgsfvzoFn1H2ygK
-ORzb7OKHfCItu//Rl22AQK3v3SgzzkHZ53xu+bjJKyDaeDclxQR6COuUvJomC/QqzUG9/fyImMQZ
-HFcFElrogLzIiSei6vcVUY7azSrz5fs8ySz9spMa2vyM2Tc6t1R+HekTNMUfxQPaD1qVrCmFszlM
-z58CWcVSKd28O1SByMdZS+2LpzDPTLWVnyZVp2tnhF24jf+5oV+NLk82eOsbX8zMctyL36eb+8n+
-1flHpAnDRDpch5aHPlRovDSv</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOkJCRUMtMzBDQS0y
+REJFMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAp0QvcscV762cvJQkN4+yFC55LDaPb7KevwD6jHhhG5S5Uij0cT8H
+GE/y6Je/f3Ow4zVsoSviUbYnqqI1ASnzKaVQ3natkrIUuQ8Mllkya3MeSL9Q877ogSskJFB0fOph
+5o8RAe6yfSD1CkMqVGVAxRwMNFDik+TCDS7gUJlQaAZ9h3v2jQWOR+Xt0ELjY93j7iXPqVCjT4K7
+x5WFfasB4FBCFeBZg8lR4D2gKOh/gnzSuRoCHqhzdFfIf7gJs7pF4EfCdNSp2BLXLxuc1K567c/C
+WXMh3LDjZMMd5i8EvFv9ssV+Nua6VnlcHRWrsaB9FygH8+OpkVg8tkWf1jVh3QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFDUsc4HZ7HD5Sj2P/0fAfApoobgbMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBABhW
+2Lwu5/R0+yuB1kWyYWp9G8CaWAHqZhnXuCn1jzz09iI2d1FUmQud9f7Fg9U7F18kV7sSywfz8omz
+n+eIMTZc0N0QbbGdHG5zeUCA26QRbUwQ6BCVoUNlxEgptx5suXvzd7dgvF0jpzSnWPUVzaasjBvd
+qMfy/L2f24Jaiu9s8vsuw79c0Y2DVhPd4x2T7ReueUVSCxzhK8AzUN271fiW2JRLQ0tRCF8tnA5T
+KJe7RuvGemKndxIklRnPRf1Y2R0getwBvO8Lg3pDeZDUR+AIteZ96oBsSHnsJwxb8T45Ur6alIw5
+sEMholc7XInenHZH5DEg0aJpQ86Btpv5rzg=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -854,34 +868,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIGzAYJKoZIhvcNAQcCoIIGvTCCBrkCAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQAmTI3DZTYO9WNXs4rEX5JH130btklHJbGLg+y7y4+TdbALeffhPLAMYxd3IioIBNMrAoj1
-vsKaO1dv1kzOSFk2pPTWjTUbErrmjhXd478HrAkQz9pEnPRNGdVqhX5AN1dzb+rhxB2ZAEPpJYhe
-jXvFqFCHGzsQwSltzLPmJ36E4wuRcE4rwxLGctp+TZGQZNS4vIVTZtZkv4XdHbNzWWLyUOn92A8X
-nnUkMZyDQKVESqQ3ItwAzoyukbadk3pI3S9JewBORPErdIgLkQYh8w/zovfWKz3gZvxDSmidw3BY
-es5KA+z8qztzWZDIjiTC2dP5OgRQBsQCD6w8i0PTfHp2oIIDdaGCA3EwggJZAgEBMIHboYGxpIGu
-MIGrMQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0ExEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoT
-FU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBE
-U0UgRVNOOjMxQzUtMzBCQS03QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2
-aWNloiUKAQEwCQYFKw4DAhoFAAMVACgI5jPW6+ucStSwO6kgUfU5Rg5DoIHCMIG/pIG8MIG5MQsw
-CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
-ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVy
-IE5UUyBFU046NTdGNi1DMUUwLTU1NEMxKzApBgNVBAMTIk1pY3Jvc29mdCBUaW1lIFNvdXJjZSBN
-YXN0ZXIgQ2xvY2swDQYJKoZIhvcNAQEFBQACBQDYDhCOMCIYDzIwMTQxMTEyMTY1OTU4WhgPMjAx
-NDExMTMxNjU5NThaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFANgOEI4CAQAwCgIBAAICJxQCAf8w
-BwIBAAICGJIwCgIFANgPYg4CAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGEWQoDAaAKMAgC
-AQACAxbjYKEKMAgCAQACAwehIDANBgkqhkiG9w0BAQUFAAOCAQEAJRPmxNWqpkDJePCUruHGED6C
-dMHfZxEXaKdsUu1Gx2Hgg8g2Syau6D5q1LZ8OIUDgHLvtFIhJgkgvSvBJwMLzNkzCRnAb8hdZR1O
-FYMqQ0gi8LFT481Z4nDzr8hWNu/gH3qB4UvaU/qQPNmVndJQiSzXas5/2T6C7u5z2a1DQNR4W12E
-1S03z4O/OhU8IwpZPDv/L1QLagYzcA4qvMYyRsJ0qGDE6ptWcbXjPr9BQDiFYf0gAfaA1hde8ra6
-FLQoshKROdlD6lh+WfO1YbpIvTeubYDnCULlHh1lhaCJ68tpByafPBEgjbM0JrbIVY+Wro2ELEt/
-nZYrZFrT15MslTGCAhUwggIRAgEBMIGOMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
-dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xITAf
-BgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQQITMwAAAFtDPHJBxWzA7gAAAAAAWzAJBgUr
-DgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTQxMTEy
-MjM0NzM5WjAjBgkqhkiG9w0BCQQxFgQUM/TFAaIug6laLoPGcQrs46O7BIgwDQYJKoZIhvcNAQEF
-BQAEggEAPwoUkEdLgnFtpr1tYybuH85COs/PTw+TBWJpQTIB1JOWplH+yQy+fzvjFv7Uf9OHszQZ
-GaJPdKA1Nab/zAjEcBpJy+bv63x+4tUuGEnphV1pS8zR+i/82qZ7u9twV3RRea2ImUxx4MxAHu6S
-kqcaQTVrkBWitnqKo/pk14KHhcYUtmE26jakakL9A70a1VhrmYfroFbewsaoN4I/SVLfdSUQM4HL
-ppe39HL0UsvSuCTJHAeMmd/6h8nC4rttUAEiQuCsz6E8lnYltk9XdI5KV0pHUlZjnqXfVfK6hjuh
-HZLrCIgV0KLH0yyGmg5y70ox9gUptmjbSvMzFaUp0wZgtQ==</CounterSignature></Object></Signature></ObjectCollector>
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

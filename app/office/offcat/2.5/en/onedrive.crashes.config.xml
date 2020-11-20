@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Infopath Crashes" ChangeDescription="2.0.1504.21" ConfigVersion="2.0.1504.21" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
+	<Configuration ConfigName="Infopath Configuration" ChangeDescription="2.0.1504.21" ConfigVersion="2.0.1504.21" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"></Substitution>
 		<Substitution Name="INSTALLTYPE"></Substitution>
@@ -28,7 +28,7 @@
 		<ExtFormat Name="Wow6432Node" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Formats" Convert="Wow6432Node"/>
 	</Configuration>
 
-	<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="InfoPath" Key6="infopath" Key7="%MAJORVERSION%">
+	<Object Type="MSI" Key1="INSTALLEDAPPLICATIONS" Key5="OneDrive" Key6="onedrive" Key7="%MAJORVERSION%">
 		<Setting Key1="Bitness" Substitution="WOW6432NODE" SubstitutionFormat="Wow6432Node" Display="Hide">
 		</Setting>
 		<Setting Key1="Bitness" Substitution="APPBITNESS">
@@ -60,7 +60,7 @@
 			<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
 				<Rule Name="SKU2013" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
 				<Rule Name="ReleaseType2013" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
-				<Rule Name="sNoIRMInfoPath2013" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU2013='0011' and ($ReleaseType2013='1' or $ReleaseType2013='0')) or $SKU2013='0044')" P0="$SKUName2013" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="b5a7887a-f4c6-4622-bd17-ed771c6f874b" Symptoms="Information Rights Management"></Rule>
+
 				<Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
 					<Setting Key1="" Display="Hide"></Setting>
 				</Object>
@@ -84,7 +84,7 @@
 			<Object Type="If" Key1="contains('%PRODUCTCODE%','0FF1CE')">
 				<Rule Name="SKU201364" Query="substring('%PRODUCTCODE%',11,4)"></Rule>
 				<Rule Name="ReleaseType201364" Query="substring('%PRODUCTCODE%',3,1)"></Rule>
-				<Rule Name="sNoIRMInfoPath201364" Query="contains('%PRODUCTCODE%','0FF1CE') and $n2DigitVersion=15 and not(($SKU201364='0011' and ($ReleaseType201364='1' or $ReleaseType201364='0')) or $SKU201364='0044')" P0="$SKUName201364" Title="{0} doesn't support Information Rights Management" Text="You have {0} installed. It does not support the Information Rights Management feature." Error="Warning" GUID="302311" SSID="10fbf07a-d90e-4407-871e-aafdc97a0a6b" Symptoms="Information Rights Management"></Rule>
+
 				<Object Type="Group" Name="ProductCode =%PRODUCTCODE%" Display="Hide">
 					<Setting Key1="" Display="Hide"></Setting>
 				</Object>
@@ -102,10 +102,10 @@
 		</Object>
 	</Object>
   
-  <Type Name="InfoPathCrashes">
+  <Type Name="OneDriveCrashes">
     
 	  <!--EVENTLOGS-->
-		<Object Type="EventLog" Key1="Application" Key3="1000" Key4="infopath.exe" Key5="%MAXEVENTS%" Key7="%DAYS%" Key8="10000">
+		<Object Type="EventLog" Key1="Application" Key3="1000" Key4="groove.exe" Key5="%MAXEVENTS%" Key7="%DAYS%" Key8="10000">
 			<Setting Key1="__ALL"></Setting>
       <Setting Key1="Faulting Application Name" Display="Right"></Setting>
       <Setting Key1="Faulting Application Version" Display="Right">
@@ -135,7 +135,7 @@
     
   </Type>
 
-  <Reference Type="InfoPathCrashes" Name="InfoPathCrashes" File="infopath.crashes.config.xml">
+  <Reference Type="OneDriveCrashes" Name="OneDriveCrashes" File="onedrive.crashes.config.xml">
   </Reference>
 	<Reference Type="Office_Updates" Name="OfficeUpdates" File="officeupdates.config.xml">
 	</Reference>
@@ -148,12 +148,12 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
 	<Rule Name="sWordVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>ZV3kJgN8evF8kHCG9/1fIZOUEc0=</DigestValue></Reference></SignedInfo><SignatureValue>
-    YBuAMnjBxNgHekMg9dUv00al7asEQKE9JlVAE8E39oVFeIVl8KmygDAa5jHMfjdqQd22nNqC
-    LXncIO3um4UaMxsBRbc759+UO/6kLWQunUhnvUgW4dNFc6/T2egRV06hf4TWrlkhbHH6WP/6
-    ewoA0z4Nd4CRIT/YebGB2BCglVyEqo7yrW1Fx83LhyXBD6jCpUAqwnfMlby/B0USXpnYs/i8
-    g+QCCvIl81okYYQ94Ydnw8eC/9Ajm3qzOdMDeEiO9YWQndehoJCMwTVoErOhJBdI8FFo35GR
-    4+AbZc5YQDiiTmgHI7YPTx3bl63wK5VbqurZpN+jXJiddVeEpVW45w==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>WGmYIQsEF8+JaCR0Nil7EzNgaXI=</DigestValue></Reference></SignedInfo><SignatureValue>
+    KVlpsMoVy/gnA6nW6zZ/Qh00Qy7eN4z1hqQ7rld1clh7ORB+dGxiWOFI3LJldIm9BP0eW+IG
+    rS3RQs1IP+c2G8EP64Qe3KNvCY0ScoOCwRsn7XEAVZMfOqBdSGLuuUPax3Uba9fv6q8McacH
+    +pJpk2GvSsR15p/yhZtaRqcGVA1B5sLp3/Xo7lFNv5p88NznSBfnA7KQgN/iLC2eAMeIuPoP
+    eBV1orb9AgsC8h7aHiticIgsMRI9ACeEQAp+SnxVDKp1JNzRRBlneNWNEKyqtosQpbN036rh
+    8qIXQeRkO6T+Rjn598/FYe7Fd/GV79XgStsq1JrMJz4sVTC9bvpLpg==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -307,11 +307,11 @@ zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
 LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQBgG4AyeMHE2Ad6QyD11S/TRqXtqwRAoT0mVUATwTf2hUV4hWXwqbKAMBrmMcx+N2pB3bac
-2oItedwg7e6bhRozGwFFtzvn35Q7/qQtZC6dSGe9SBbh00Vzr9PZ6BFXTqF/hNauWSFscfpY//p7
-CgDTPg13gJEhP9h5sYHYEKCVXISqjvKtbUXHzcuHJcEPqMKlQCrCd8yVvL8HRRJemdiz+LyD5AIK
-8iXzWiRhhD3hh2fDx4L/0COberM50wN4SI71hZCd16GgkIzBNWgSs6EkF0jwUWjfkZHj4BtlzlhA
-OKJOaAcjtg9PHduXrfArlVuq6tmk36NcmJ11V4SlVbjnoIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+BASCAQApWWmwyhXL+CcDqdbrNn9CHTRDLt43jPWGpDuuV3VyWHs5EH50bGJY4UjcsmV0ib0E/R5b
+4gatLdFCzUg/5zYbwQ/rhB7co28JjRJyg4LBGyftcQBVkx86oF1IYu65Q9rHdRtr1+/qrwxxpwf6
+kmmTYa9KxHXmn/KFm1pGpwZUDUHmwunf9ejuUU2/mnzw3OdIF+cDspCA3+IsLZ4Ax4i4+g94FXWi
+tv0CCwLyHtoeK2JwiCwxEj0AJ4RACn5KfFUMqnUk3NFEGWd41Y0QrKq2ixCls3TfquHyohdB5GQ7
+pP5GOfn3z8Vh7sV38ZXv1eBK2yrUmswnPixVML1u+kumoIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
 MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
 Q2lwaGVyIERTRSBFU046QkJFQy0zMENBLTJEQkUxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
@@ -331,9 +331,9 @@ Y+lqFUbiE4yNKdZmSdnzMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
 c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
 bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAc8ZZwlKXg6M6AAAAAABz
 MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
-NTA2MDkxMjQ0NDBaMCMGCSqGSIb3DQEJBDEWBBSW6o/ZDUUaX4DZ4vqjkf1dJScVYDANBgkqhkiG
-9w0BAQUFAASCAQARPzOLhmohLSQda7KmVkjLX70rJawb3coQMcfHMfRGYXzJSILNZH04hjvFXJl/
-rkPXXGSG6EIde0jqys/QXd2C7XWrLQLmDqgTFZWrqcu+Vt043X0jApBw2E6d5DpF3mggr+idAh9Q
-I9glOWVBKtNKFVy3GyNCYFSvzFFqh3rtiJw1Mc9WWxzm/UIIG108TrstGPPkH3KhAd9vsBTNZbXy
-Vc8Z4R4EEPFE231qahXyppcIv2F23zsIkwYSQrgPVqVpybSsWt8FdHANuZ3nwrGqCiGXoQ+JdvSa
-6b57SnbknSkrcWD5Zq72wkKL+DVKQotAQAu3bbrzy5M9Wb14Aczc</CounterSignature></Object></Signature></ObjectCollector>
+NTA2MDkxMjQ0NDBaMCMGCSqGSIb3DQEJBDEWBBRC082a59QOaT5BWYzGcTXMkW1agjANBgkqhkiG
+9w0BAQUFAASCAQAxh85uDy6/L2iGBrbB4nCamIJu/4mpiaZxTtCG+Ww8Qp8eIjJ8LRW74PrTiBFf
+8xO5Zy6v7SJpUEMuOboFzlyAKBpvGrtR1gBfyUut9pW0RfriDY8zaKqm0gMYxZYyyVK1rUEykD7l
+ezX85mDYbP4QDeAQ3EAyGWhnqOqYv9awmoGD2bfmbV5zCsujgGTh/4+r8OdtCqqw/QBajGOhbCyZ
+R3hCNIB4+eKz9VEpirCA766ugShR/nT9xSOCNudyAowyKFB1o73+XQ9oPGsdeXXg6H4neDQR/OPj
+3wrtRSckVRnXT9mO7hB+NGUYcfhZy6Amf7fSaSrFsm9CWVbQj9R3</CounterSignature></Object></Signature></ObjectCollector>

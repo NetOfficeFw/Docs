@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Infopath Configuration" ChangeDescription="1.0.1411.07" ConfigVersion="1.0.1411.07" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,infopath.crashes.config.xml" Symptoms="1">
-		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
+	<Configuration ConfigName="Infopath Configuration" ChangeDescription="2.0.1504.15" ConfigVersion="2.0.1504.15" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,infopath.crashes.config.xml" Symptoms="1">
+    <DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
+    <!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"></Substitution>
 		<Substitution Name="INSTALLTYPE"></Substitution>
 		<Substitution Name="APPNAME">InfoPath</Substitution>
@@ -446,12 +447,15 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
 	<Rule Name="sWordVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>Eg4n7jba95kQZedn5hK7KPfTc58=</DigestValue></Reference></SignedInfo><SignatureValue>
-    M9AarLFyO3ZtZuE4QewW5/Pyc8q0nbpUsEZgGIamdI4fzEMGZICs4LQKWmS6C2r43UMICKC1
-    RfsJwMCwYPIdo0HzFg4S3St/GHcNon7L4RQ0OApvzQHSgtW4LUxP3SCD8piGe6nKtCisSOxA
-    O+VXz29H+utXtAiRPsN9OkwXkSL6piIwvmTADj0SqXjKRFt7WLXu4PcKVoEYYym2NdfT7kSr
-    0UUxJHvzZve9Fk4tXkxFbhqlJlifjcsv2lCvwpPSQkOcmuCG2cjKA9rSgTlvlxfoBvFWIoPN
-    Bt5r3bPEkodIOLMp97IdkcyHFpD47lEtDw3uH1aZyuG2jT6xWTs3SQ==
+  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="fLync2013AddinFoundWow"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>mi8kFmW8Ba5RPnHI2e5kXzBa6/c=</DigestValue></Reference></SignedInfo><SignatureValue>
+    dtkIYt1FCIul/PFOnpvspviIwKQ+CIrqndmnnVBLIdTilqp270T8AbCcMC2AsqDAkyec3P/R
+    DgbtuPqF5JtLgGnKIHZIKGF6y7i8DC8v7ez8im9jsyiEsu4aC8Qw90zcCKxnrwQjaBoGul/Q
+    SzO59Y4G2Ivla+w7gKTOWvZPmwBjNZMSL2xjLtlpEgBtIWmEkdvkGV8V5uKjrhMlTys/oZit
+    sekPjDO2cMl/rXJW1rc44WQQ3JchYEnhl/V3y68fq2eJK2ENZh+m5wqmJIqDp7ej8ZQdV58/
+    RTDkqIL8X0ZfTutc3sYIY8DHOQ0nsTgMlzyA1tepxhZDtJgBdJJnig==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -556,28 +560,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEuzCCA6OgAwIBAgITMwAAAF3JyvZpIzdoUAAAAAAAXTANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHPGWcJSl4OjOgAAAAAAczANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTQwNTIzMTcxMzE3WhcNMTUwODIzMTcxMzE3WjCBqzELMAkGA1UEBhMCVVMxCzAJBgNVBAgT
-AldBMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTAL
-BgNVBAsTBE1PUFIxJzAlBgNVBAsTHm5DaXBoZXIgRFNFIEVTTjo3RDJFLTM3ODItQjBGNzElMCMG
-A1UEAxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-ADCCAQoCggEBAKu6ei+vVB909A1zsuALhVjsq6u/RwD+jTcx8hyTPqa6zhvmUUBo1IAY11hjXQM3
-NvuDWHDexDM2sF8Hf33991irWpduRc648Rs9Us+lPQVDm6CxNHLT7/MxvC5ojio1Cy50sO/kK1Vy
-ZZWPZ/SjyO8DEafcCzyhbA7/YYxCkuRWw5Gxj/au18Hj6KgZAaIXYL9DmHoqWmo0yJINP+BcHbd/
-sFodvcxsahFDHgINW0LpbUtjCzn7UqPseibSojBHY9L46hXYaS6eJulOTxyz0uJgJj9uXZIUkF40
-bXgEfFJRmwsBdutBAFlTztuN1kmFbII7fsTph0ayOTzxXthvcv8CAwEAAaOCAQkwggEFMB0GA1Ud
-DgQWBBTXVOYV2dNdyiTVARjweGSZe2hMMzAfBgNVHSMEGDAWgBQjNPjZUkZwCu1A+3b7syuwwzWz
-DzBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
-dWN0cy9NaWNyb3NvZnRUaW1lU3RhbXBQQ0EuY3JsMFgGCCsGAQUFBwEBBEwwSjBIBggrBgEFBQcw
-AoY8aHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraS9jZXJ0cy9NaWNyb3NvZnRUaW1lU3RhbXBQ
-Q0EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBBQUAA4IBAQCJMKxtI1M8/5xe
-n1dwDBzeF903pNyVsaYkzAfuqYXRHNXZm0k3IZ8xPmmuv7UwG+ekLFDrwVCISqq17KiyCUCwau9z
-VEKtnimFVG2zD/GYfuP4wDAbTNKGKfCi5V6bN41mnei8W2+6lcb20i5BNfnHvgyK5iZEdmgcnKQW
-7iJVpNZXK/gNgSAsoQ+ajvzHlcVeh4RB4tJvnM/QZSMW29B9hNAGFhKlZy17hYk+RZPYzSaZ+7Yq
-4VJCmhCXHzTakcGshvOSRG1Qu4mykew1qEj2weHE/sZlfUHv7W3KkeTmsNnlWFy0u5romkYcZt0e
-S0SYyfRKWBF/kMshN4hDyN71</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOkJCRUMtMzBDQS0y
+REJFMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAp0QvcscV762cvJQkN4+yFC55LDaPb7KevwD6jHhhG5S5Uij0cT8H
+GE/y6Je/f3Ow4zVsoSviUbYnqqI1ASnzKaVQ3natkrIUuQ8Mllkya3MeSL9Q877ogSskJFB0fOph
+5o8RAe6yfSD1CkMqVGVAxRwMNFDik+TCDS7gUJlQaAZ9h3v2jQWOR+Xt0ELjY93j7iXPqVCjT4K7
+x5WFfasB4FBCFeBZg8lR4D2gKOh/gnzSuRoCHqhzdFfIf7gJs7pF4EfCdNSp2BLXLxuc1K567c/C
+WXMh3LDjZMMd5i8EvFv9ssV+Nua6VnlcHRWrsaB9FygH8+OpkVg8tkWf1jVh3QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFDUsc4HZ7HD5Sj2P/0fAfApoobgbMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBABhW
+2Lwu5/R0+yuB1kWyYWp9G8CaWAHqZhnXuCn1jzz09iI2d1FUmQud9f7Fg9U7F18kV7sSywfz8omz
+n+eIMTZc0N0QbbGdHG5zeUCA26QRbUwQ6BCVoUNlxEgptx5suXvzd7dgvF0jpzSnWPUVzaasjBvd
+qMfy/L2f24Jaiu9s8vsuw79c0Y2DVhPd4x2T7ReueUVSCxzhK8AzUN271fiW2JRLQ0tRCF8tnA5T
+KJe7RuvGemKndxIklRnPRf1Y2R0getwBvO8Lg3pDeZDUR+AIteZ96oBsSHnsJwxb8T45Ur6alIw5
+sEMholc7XInenHZH5DEg0aJpQ86Btpv5rzg=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -604,34 +608,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIGzAYJKoZIhvcNAQcCoIIGvTCCBrkCAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQAz0BqssXI7dm1m4ThB7Bbn8/JzyrSdulSwRmAYhqZ0jh/MQwZkgKzgtApaZLoLavjdQwgI
-oLVF+wnAwLBg8h2jQfMWDhLdK38Ydw2ifsvhFDQ4Cm/NAdKC1bgtTE/dIIPymIZ7qcq0KKxI7EA7
-5VfPb0f661e0CJE+w306TBeRIvqmIjC+ZMAOPRKpeMpEW3tYte7g9wpWgRhjKbY119PuRKvRRTEk
-e/Nm970WTi1eTEVuGqUmWJ+Nyy/aUK/Ck9JCQ5ya4IbZyMoD2tKBOW+XF+gG8VYig80G3mvds8SS
-h0g4syn3sh2RzIcWkPjuUS0PDe4fVpnK4baNPrFZOzdJoIIDdaGCA3EwggJZAgEBMIHboYGxpIGu
-MIGrMQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0ExEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoT
-FU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBE
-U0UgRVNOOjdEMkUtMzc4Mi1CMEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2
-aWNloiUKAQEwCQYFKw4DAhoFAAMVADGQj3DCILvjoZE/7XwqqDC1ZVQ1oIHCMIG/pIG8MIG5MQsw
-CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
-ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVy
-IE5UUyBFU046NTdGNi1DMUUwLTU1NEMxKzApBgNVBAMTIk1pY3Jvc29mdCBUaW1lIFNvdXJjZSBN
-YXN0ZXIgQ2xvY2swDQYJKoZIhvcNAQEFBQACBQDYDhGHMCIYDzIwMTQxMTEyMTcwNDA3WhgPMjAx
-NDExMTMxNzA0MDdaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFANgOEYcCAQAwCgIBAAICI1kCAf8w
-BwIBAAICGKswCgIFANgPYwcCAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGEWQoDAaAKMAgC
-AQACAxbjYKEKMAgCAQACAwehIDANBgkqhkiG9w0BAQUFAAOCAQEABbNqaawM1wOh4KSuIMP3keS/
-w5Ua3ILC8SDGe/jNTw+M+j8CmOGus0y87HA7R8SfRHATEHj6sJLlewMtgFr4Dm8jxBZNii0VN8gq
-0Ht0JfR5IIlPGydV9wHgLGb1pzFC+3WDPeBL7MrgHknjZFr6ynyMgp2knYEywcZYO/0LEh6I3IHQ
-vHqGc0d+Cq2UWFtfcb/LyZakt/sOp4tutkNQf8SrBzt+7zY1GClRMP+bDTDotAmLEr8ORxeFnvRc
-Cr0VhCZsU50JraJfFrATKCglxUNHq+HL3+ZUlqeCxIG6huslWsOSyXoGMk5EYAgypTp6BmZoB7jH
-JYXTxuwABvKD4DGCAhUwggIRAgEBMIGOMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
-dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xITAf
-BgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQQITMwAAAF3JyvZpIzdoUAAAAAAAXTAJBgUr
-DgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTQxMTEy
-MjM0NzM5WjAjBgkqhkiG9w0BCQQxFgQUNrkPObtlcP91+H+mWSi+GdN4kb8wDQYJKoZIhvcNAQEF
-BQAEggEAH1ZiZ1HZqLoSLb/1Y2ws/RZswhMKUyF1W7dQqxCPNsTwyT1h5/aBok8dr7MBvTLzfhU3
-lak9d+T73yMaEOIeo20fNhomlmTPbyRVcd2KVx8b26nXHQ28RKADmDDG9mPVscdeOg0jJTrOSURv
-5GlkHuY3IhRvxkzOL/GheqZKTOeKuBHMZkV3HaDzCAvioHplo+ZPthGS48itHzmaqKZTfOi57Hm3
-wFQXWkf4kWUakNqRu28onZf/fxGu4BIN2KamlKaLV1HwGyXN1lgjCzUcdxb7o5oJ359YLFMyHPo0
-3eYH9ZsTBEh+nu1d7eDjSRPc9wC4F0z/wrHBKloxNsRFnQ==</CounterSignature></Object></Signature></ObjectCollector>
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIG0QYJKoZIhvcNAQcCoIIGwjCCBr4CAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
+BASCAQB22Qhi3UUIi6X88U6em+ym+IjApD4Iiuqd2aedUEsh1OKWqnbvRPwBsJwwLYCyoMCTJ5zc
+/9EOBu24+oXkm0uAacogdkgoYXrLuLwMLy/t7PyKb2OzKISy7hoLxDD3TNwIrGevBCNoGga6X9BL
+M7n1jgbYi+Vr7DuApM5a9k+bAGM1kxIvbGMu2WkSAG0haYSR2+QZXxXm4qOuEyVPKz+hmK2x6Q+M
+M7ZwyX+tclbWtzjhZBDclyFgSeGX9XfLrx+rZ4krYQ1mH6bnCqYkioOnt6PxlB1Xnz9FMOSogvxf
+Rl9O61zexghjwMc5DSexOAyXPIDW16nGFkO0mAF0kmeKoIIDeqGCA3YwggJeAgEBMIHjoYG5pIG2
+MIGzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
+MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5u
+Q2lwaGVyIERTRSBFU046QkJFQy0zMENBLTJEQkUxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0
+YW1wIFNlcnZpY2WiJQoBATAJBgUrDgMCGgUAAxUAtKSbD5z5pT1hw8ty8W4Tt0oZjBiggcIwgb+k
+gbwwgbkxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25k
+MR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTALBgNVBAsTBE1PUFIxJzAlBgNVBAsT
+Hm5DaXBoZXIgTlRTIEVTTjo1N0Y2LUMxRTAtNTU0QzErMCkGA1UEAxMiTWljcm9zb2Z0IFRpbWUg
+U291cmNlIE1hc3RlciBDbG9jazANBgkqhkiG9w0BAQUFAAIFANkg8gowIhgPMjAxNTA2MDkwNTAz
+MDZaGA8yMDE1MDYxMDA1MDMwNlowdDA6BgorBgEEAYRZCgQBMSwwKjAKAgUA2SDyCgIBADAHAgEA
+AgIkzDAHAgEAAgIYlDAKAgUA2SJDigIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgorBgEEAYRZCgMB
+oAowCAIBAAIDFuNgoQowCAIBAAIDB6EgMA0GCSqGSIb3DQEBBQUAA4IBAQApnvE8KuqF+jOnEknH
+WMO/Akfj1fwxwQPlMRDTTTa87yulLd39MCjrFlr7jHWw9yUj49rfmEu6hAJmBocDkF4TJVqGDMte
+EbvHQFl+ZyrJAvHYMzQSIWtCDlb20MxtnqtfHQhRSGUL0PXqd2rU+q13WsjYZ5zsGOrgyQ6Lz2VX
+jFRlNqnYHoBijYG4RemIKT/uh6iyb/sIIsY4eqmWXYpG3iUPmvD4AkN8DEyo86+8761hMtegKW3S
+7evqk8POrB+U24B0Q+/1BUlW1RCt45+MH4baCkD35dJllQoZ1EE0hoyLm3I/cr/VvIExFb1kMGsz
+Y+lqFUbiE4yNKdZmSdnzMYICFTCCAhECAQEwgY4wdzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh
+c2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
+bjEhMB8GA1UEAxMYTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBAhMzAAAAc8ZZwlKXg6M6AAAAAABz
+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0x
+NTA2MDkxMjQ0NDBaMCMGCSqGSIb3DQEJBDEWBBTa77xN5dyogOBt1LPXDGbgRO5KDDANBgkqhkiG
+9w0BAQUFAASCAQAX6pCVv2m9HG19E9CMasN6+s5UiVgl7qOPNbyvsHy9CqJbdjkgAkuIWM2tDDH0
+1CcXZRuy8Kw2oGhyyFCD8AfyI6qqOfU/o7Db7SgbrIdZGHGjkTDiPF721Gh1zk6jT/iGzFfj+S6y
+kJ1WKt3CjHTyIW3+2ebNHnV9+LWWi/4dMz6glTtpHZvoA+mmebm/HMwJhhs1BppgXWBPKACbovPq
+Wb0+6PkV2HZW1RWKu/qFVF9J9ytWoFxE7YwN8U+MBFhtGmzL2odSxmSBUwC1DnpbR+pDbQLOt5LE
+2pdjYSn9Ur1rVZgx4xsJs6SIQxE92Zt64TRso1nq5sBuvR8V+Ujr</CounterSignature></Object></Signature></ObjectCollector>

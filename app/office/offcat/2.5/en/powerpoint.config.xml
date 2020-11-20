@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="PowerPoint Configuration" ChangeDescription="1.0.1411.10" ConfigVersion="1.0.1411.10" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,powerpoint.crashes.config.xml" Symptoms="1">
-		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
+	<Configuration ConfigName="PowerPoint Configuration" ChangeDescription="2.0.1504.15" ConfigVersion="2.0.1504.15" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,powerpoint.crashes.config.xml" Symptoms="1">
+		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"/>
 		<Substitution Name="INSTALLTYPE"/>
@@ -199,7 +199,7 @@
 						</Object>
 					</Object>
 					<Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
-						<Object Type="C2RSKU" Key1="powerpoint" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+						<Object Type="C2RSKU" Key1="PowerPoint" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
 							<Setting Key1="ProductName">
 								<Rule Name="SKUNameC2R" Query="$."></Rule>
 							</Setting>
@@ -341,11 +341,10 @@
 						<Setting Key1="(Default)" Substitution="PDFMAKERPATH">
 						</Setting>
 						<Object Type="File" Key2="%PDFMAKERPATH%">
-							<Setting Key1="Version">
-								<Rule Name="sPDFMakerPPT" Query="$n2DigitVersion&gt;13 and number(substring($.,1,1))!=1 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version of the PDFMaker add-in installed that is not compatible with PowerPoint. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="dee70b89-016d-4c22-a29d-ea65d3214bcc" Symptoms="Crash,Add-ins">
-								</Rule>
-								<Rule Name="sPDFMakerx64" Query="$n2DigitVersion&gt;13 and ((substring($.,1,2)='10' and number(substring($.,4,1))&lt;1) or substring($.,1,1)!='1')  and $bitness='x64'" Error="Warning" Title="Adobe PDFMaker detected on a client with 64-bit Office" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="43f92f91-0f4c-44a6-b410-5ddc6d7270d9" Symptoms="Crash,Add-ins">
-								</Rule>
+							<Setting Key1="Version">&gt;
+                <Rule Name="sPDFMakerPowerPoint14" Query="$n2DigitVersion=14 and versioncompare($.,'10.0.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with PowerPoint. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="dee70b89-016d-4c22-a29d-ea65d3214bcc" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerPowerPoint14x64" Query="$n2DigitVersion=14 and $bitness='x64' and versioncompare($.,'10.1.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have ({0}) is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="6ec78a53-22a8-473a-9058-90cf76d4607f" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerPowerPoint15" Query="$n2DigitVersion=15 and versioncompare($.,'11.0.1.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with PowerPoint. Please update the add-in to version 11.0.1 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="e0973a7a-2a7a-47c3-b735-15cdbac0b6ca" Symptoms="Crash,Add-ins"></Rule>
 							</Setting>
 						</Object>
 					</Object>
@@ -356,6 +355,8 @@
 			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Powerpoint\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
 				</Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hkcuPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]">
 				</Rule>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
@@ -367,13 +368,21 @@
 					</Setting>
 					<Setting Key1="Loadbehavior">
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayHKCU" Query="true()" P0="if($sHKCUAddInLoadTimeFromRegistry&gt;=0,concat($sHKCUAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\PowerPoint\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKCUAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
 			</Object>
+      </Object>
 			<!--/HKCU addins-->
 			<!--HKLM addins-->
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Powerpoint\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
 				</Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hklmPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]">
 				</Rule>
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
@@ -387,13 +396,21 @@
 						<Rule Name="sPentarBarPPTAddin" Query="contains(lower-case('%KP%'),'pentabar') and $n2DigitVersion&gt;14" Error="Warning" Title="The CoPentaBar add-in is installed" Text="The CoPentaBar add-in is installed and it has been known to cause high CPU problems in PowerPoint 2013." GUID="273803" SSID="8b96b509-6e95-4749-aed4-54e0acda2b30" Symptoms="High CPU">
 						</Rule>
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayHKLM" Query="true()" P0="if($sHKLMAddInLoadTimeFromRegistry&gt;=0,concat($sHKLMAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\PowerPoint\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKLMAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
+        </Object>
 			</Object>
 			<!--/HKLM addins-->
 			<!--HKLM WOW addins-->
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Powerpoint\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide">
 				</Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hklmWowPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]">
 				</Rule>
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
@@ -405,8 +422,14 @@
 					</Setting>
 					<Setting Key1="Loadbehavior">
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayWow" Query="true()" P0="if($sHKLMWowAddInLoadTimeFromRegistry&gt;=0,concat($sHKLMWowAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\PowerPoint\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKLMWowAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
 			</Object>
+      </Object>
 			<!--/HKLM WOW addins-->
 			<!--RESILIENCY-->
 			<Object Type="Group" Name="Resiliency" Class="Add-ins" Display="Right">
@@ -424,8 +447,8 @@
 					</Object>					
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\PowerPoint\Resiliency\DoNotDisableAddinList" Display="Right">
-					<Setting Key1="__VALUES"></Setting>
-          <Rule Name="nReEnabledAddins" Query="count(../Instance)"></Rule>
+          <Setting Key1="__VALUES" Key2="^((?!OffCATv2_Addin.Connect).)*$"></Setting>
+          <Rule Name="nReEnabledAddins" Query="count(../Instance/Setting)"></Rule>
           <Rule Name="sUserReenabledAddins" Query="$nReEnabledAddins&gt;0 and $nRestrictToList&lt;1" Error="Warning" P0="$nReEnabledAddins" Title="Problematic add-in(s) re-enabled by the user" Text="{0} add-in(s) disabled by PowerPoint because of performance or stability issues was/were re-enabled by the user. To see the list of disabled add-ins that were re-enabled by the user, click the Configuration Details tile (above) and then search for 'DoNotDisableAddinList' using the Find feature." GUID="272802" SSID="cdb5068b-3dff-42d9-b722-08de17653884" Symptoms="Slowness,Error message,Add-ins"></Rule>
         </Object>
 				<!--O15 and above resiliency policy-->
@@ -640,12 +663,15 @@
 	<!--EXTERNALREFS-->
 	<Rule Name="effectiveSlowBitrate"></Rule>
 	<Rule Name="sWordVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>jYe5RPmBLvSvv6yARu5DtKA6cFY=</DigestValue></Reference></SignedInfo><SignatureValue>
-    eDDvj/afDPv4s28SY+I+TRGA0JyDU77jxfTBsvEZy5f4JuEKAmjcZwbidoYYSzitYtnAQfqT
-    3ajqEo4wfP5MKppcQU7bq3wk1v6LIXEvcSmSHFTOVFOdQUm4wixkxx9sozzvwkABU+4dst4I
-    n+PjMJ4bU4457eMljq+pUCI+DSCO9AFSYiwA/2bLzlhJpirdnHY4bxCqqKvBBQx2tSnXWSCM
-    z43xCLnJxuDwbH5MGkqiGYdKPvw5ZxNHVnsYyNfWtpMxZNqCEh8I3r1m9Gg1gnqynJEUBcG9
-    4AfJwvO9QjqD05NqVk0GuZ0oRKStcszU4tzCjqsF2TGCQfqwdg6iVw==
+  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="fLync2013AddinFoundWow"></Rule>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>zmZ3MryGETXN1Uo1k1H5M3E8wWo=</DigestValue></Reference></SignedInfo><SignatureValue>
+    gnMmADICDKVCJaF4Z8cW2M2cSMb/QMeWQiWCMZClY4BfI+M3x6lpXkiPBTbSmy4+bn2gMV5P
+    68Kf6xbeXQ/UQUbspkdnnkX9MI7dxVVCSJ6N3eKBJ63oBIONPDT3+wN3HAGXE4l87EdMOoQ+
+    VI/RuQTukM67B70JqvEXLXAIUMuFabCIpaCMJS7CZeQGQHP4E/O0G1lBg3bqS6i/+U+khfQM
+    ObpEX0rYp0S467//Kl3WsNluvtaq2gtkX0z+nCZ2zYhCU/mqu59aa9/PLXELP362lKdXcqe5
+    cX6+TOIlAiAfiZZjBW4T66AxPjOpALqQIBOc0IE40drdTLtcyFZYoQ==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -750,28 +776,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEuzCCA6OgAwIBAgITMwAAAF3JyvZpIzdoUAAAAAAAXTANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHQNgGQOfWd9owAAAAAAdDANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTQwNTIzMTcxMzE3WhcNMTUwODIzMTcxMzE3WjCBqzELMAkGA1UEBhMCVVMxCzAJBgNVBAgT
-AldBMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTAL
-BgNVBAsTBE1PUFIxJzAlBgNVBAsTHm5DaXBoZXIgRFNFIEVTTjo3RDJFLTM3ODItQjBGNzElMCMG
-A1UEAxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-ADCCAQoCggEBAKu6ei+vVB909A1zsuALhVjsq6u/RwD+jTcx8hyTPqa6zhvmUUBo1IAY11hjXQM3
-NvuDWHDexDM2sF8Hf33991irWpduRc648Rs9Us+lPQVDm6CxNHLT7/MxvC5ojio1Cy50sO/kK1Vy
-ZZWPZ/SjyO8DEafcCzyhbA7/YYxCkuRWw5Gxj/au18Hj6KgZAaIXYL9DmHoqWmo0yJINP+BcHbd/
-sFodvcxsahFDHgINW0LpbUtjCzn7UqPseibSojBHY9L46hXYaS6eJulOTxyz0uJgJj9uXZIUkF40
-bXgEfFJRmwsBdutBAFlTztuN1kmFbII7fsTph0ayOTzxXthvcv8CAwEAAaOCAQkwggEFMB0GA1Ud
-DgQWBBTXVOYV2dNdyiTVARjweGSZe2hMMzAfBgNVHSMEGDAWgBQjNPjZUkZwCu1A+3b7syuwwzWz
-DzBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
-dWN0cy9NaWNyb3NvZnRUaW1lU3RhbXBQQ0EuY3JsMFgGCCsGAQUFBwEBBEwwSjBIBggrBgEFBQcw
-AoY8aHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraS9jZXJ0cy9NaWNyb3NvZnRUaW1lU3RhbXBQ
-Q0EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBBQUAA4IBAQCJMKxtI1M8/5xe
-n1dwDBzeF903pNyVsaYkzAfuqYXRHNXZm0k3IZ8xPmmuv7UwG+ekLFDrwVCISqq17KiyCUCwau9z
-VEKtnimFVG2zD/GYfuP4wDAbTNKGKfCi5V6bN41mnei8W2+6lcb20i5BNfnHvgyK5iZEdmgcnKQW
-7iJVpNZXK/gNgSAsoQ+ajvzHlcVeh4RB4tJvnM/QZSMW29B9hNAGFhKlZy17hYk+RZPYzSaZ+7Yq
-4VJCmhCXHzTakcGshvOSRG1Qu4mykew1qEj2weHE/sZlfUHv7W3KkeTmsNnlWFy0u5romkYcZt0e
-S0SYyfRKWBF/kMshN4hDyN71</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+HhcNMTUwMzIwMTczMjA1WhcNMTYwNjIwMTczMjA1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEA4NFrifjVvo5YgN/jD+4M6zszXn3GnmZHP9AerBSCDRiftpwnIvG2
+hpREQXSJkW8X9t+Y5jbLX3iS6XJ+S7kExWIUc3HGf2NBW+tk8r1cVWJGzA9ewQnEr9nxvyV94Beg
+UO4lqkXl48Z+vxBZqcGPPtn77GQbY1u1p7jq681X6xtD9WWRv1D1+cEGvH2qzDfnBqmgzLH1M8wN
+ssh1ZgDRbTCTR8+OomdEXhoTf/McHucPncG8SPyBgW1UauJpE8bO9ZdnMmxIyhHCVjrW3Dpi9PwQ
+l2RIC4pc8RbClfDLYBukA5sMyfe7kr8Ac2czHKJ673VKGUZaDH6aW6A6HVQ16wIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFCUsOGYFtEU5DmC29u69PuDdr4wNMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEEG
+50j6xJHcMBMNInjC0iPTszPL+yYh1978CncY+4Nyzu/ULIaP4xXj1RICZ1xbN9MDe02RW0FTZgn9
+457fLHgJORo2HYqBocllfJx7kbIPSptB3cdEC2EFyUwu8rRrKKoIR+4IrGZUF1aQiMbpddAhEDh5
+yT+7VTDFpjmmU7/NXFbSThcUvGISy+lL8MWR3J2EypjWDttWFGht21OLMM+6J2V1oDFvk6N1EGDq
+qu7uduvljAup0655zzS+SR8i0MT1o+/zrjDcjohGI4ygqjyXrwfbdug2VN+Ls4mewOospGBr8d/D
+thI6rzM4elFxNTXm5AjiUZaC+b7hG4N8e2c=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -798,34 +824,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIGzAYJKoZIhvcNAQcCoIIGvTCCBrkCAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQB4MO+P9p8M+/izbxJj4j5NEYDQnINTvuPF9MGy8RnLl/gm4QoCaNxnBuJ2hhhLOK1i2cBB
-+pPdqOoSjjB8/kwqmlxBTturfCTW/oshcS9xKZIcVM5UU51BSbjCLGTHH2yjPO/CQAFT7h2y3gif
-4+MwnhtTjjnt4yWOr6lQIj4NII70AVJiLAD/ZsvOWEmmKt2cdjhvEKqoq8EFDHa1KddZIIzPjfEI
-ucnG4PBsfkwaSqIZh0o+/DlnE0dWexjI19a2kzFk2oISHwjevWb0aDWCerKckRQFwb3gB8nC871C
-OoPTk2pWTQa5nShEpK1yzNTi3MKOqwXZMYJB+rB2DqJXoIIDdaGCA3EwggJZAgEBMIHboYGxpIGu
-MIGrMQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0ExEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoT
-FU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBE
-U0UgRVNOOjdEMkUtMzc4Mi1CMEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2
-aWNloiUKAQEwCQYFKw4DAhoFAAMVADGQj3DCILvjoZE/7XwqqDC1ZVQ1oIHCMIG/pIG8MIG5MQsw
-CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
-ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVy
-IE5UUyBFU046NTdGNi1DMUUwLTU1NEMxKzApBgNVBAMTIk1pY3Jvc29mdCBUaW1lIFNvdXJjZSBN
-YXN0ZXIgQ2xvY2swDQYJKoZIhvcNAQEFBQACBQDYDhGHMCIYDzIwMTQxMTEyMTcwNDA3WhgPMjAx
-NDExMTMxNzA0MDdaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFANgOEYcCAQAwCgIBAAICI1kCAf8w
-BwIBAAICGKswCgIFANgPYwcCAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGEWQoDAaAKMAgC
-AQACAxbjYKEKMAgCAQACAwehIDANBgkqhkiG9w0BAQUFAAOCAQEABbNqaawM1wOh4KSuIMP3keS/
-w5Ua3ILC8SDGe/jNTw+M+j8CmOGus0y87HA7R8SfRHATEHj6sJLlewMtgFr4Dm8jxBZNii0VN8gq
-0Ht0JfR5IIlPGydV9wHgLGb1pzFC+3WDPeBL7MrgHknjZFr6ynyMgp2knYEywcZYO/0LEh6I3IHQ
-vHqGc0d+Cq2UWFtfcb/LyZakt/sOp4tutkNQf8SrBzt+7zY1GClRMP+bDTDotAmLEr8ORxeFnvRc
-Cr0VhCZsU50JraJfFrATKCglxUNHq+HL3+ZUlqeCxIG6huslWsOSyXoGMk5EYAgypTp6BmZoB7jH
-JYXTxuwABvKD4DGCAhUwggIRAgEBMIGOMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
-dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xITAf
-BgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQQITMwAAAF3JyvZpIzdoUAAAAAAAXTAJBgUr
-DgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTQxMTEy
-MjM0NzM5WjAjBgkqhkiG9w0BCQQxFgQU3nVzxT9zpD+38QdZ3fwHWICZ/9swDQYJKoZIhvcNAQEF
-BQAEggEAdtD74Yzmv5ZwwJqkcozBWPy87JBrKA1nPbeSKAy8vHjqrfJAab2x+eEMeUUE/5rrj4dh
-cDw193JKfgQ/7PmzDms9hLzluv+Bxl/sX4/WwIml/GvZr2Nf72jIa/yFVjqkDn3sghVD2MXjasU5
-nTYF59tZBPmfIxXYdlnEER0FiqpalIU5DMLgAwz0552WVAzlcdDvlMyjxomsJLzBJM/yn/DxKMUA
-tfylxyGsKeXMar27281jZZ00U447owfHMSDFKDyGS0W5D4K/MF/jR4S6V9HFjUinCbSOU0++pRgl
-zuVGxb7h8Y30TZNhXzhKDP8RUIKBiBvl0RQKSrEqANsK7w==</CounterSignature></Object></Signature></ObjectCollector>
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

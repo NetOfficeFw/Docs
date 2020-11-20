@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
-	<Configuration ConfigName="Word Configuration" ChangeDescription="1.0.1411.10" ConfigVersion="1.0.1411.10" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,word.crashes.config.xml" Symptoms="1">
-		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryDataPostprocessor"/>
+	<Configuration ConfigName="Word Configuration" ChangeDescription="2.0.1505.18" ConfigVersion="2.0.1505.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml,word.crashes.config.xml" Symptoms="1">
+		<DataPostprocessor Name="0 Configuration Sumary Data Generation" Assembly="BPA.OfficeCommon.dll" Class="Microsoft.WindowsServerSystem.BestPracticesAnalyzer.Common.ConfigSummaryGenerator"/>
 		<!--!!! GLOBAL SUBSTITUTIONS SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"></Substitution>
 		<Substitution Name="INSTALLTYPE"></Substitution>
@@ -217,7 +217,7 @@
 						</Object>
 					</Object>
           <Object Type="If" Key1="number('%MAJORVERSION%')&gt;14 and '%INSTALLTYPE%'='ClickToRun'">
-						<Object Type="C2RSKU" Key1="word" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
+						<Object Type="C2RSKU" Key1="Word" Key2="%APPBITNESS%" Key3="%MAJORVERSION%">
 							<Setting Key1="ProductName">
                 <Rule Name="SKUNameC2R" Query="$."></Rule>
 							</Setting>
@@ -352,8 +352,9 @@
 						<Setting Key1="(Default)" Substitution="PDFMAKERPATH"></Setting>
 						<Object Type="File" Key2="%PDFMAKERPATH%">
 							<Setting Key1="Version">
-								<Rule Name="sPDFMakerWord" Query="$n2DigitVersion&gt;13 and number(substring($.,1,1))!=1 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version of the PDFMaker add-in installed that is not compatible with Word. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="486fb2a4-558b-4028-920b-83ea82c30c2e" Symptoms="Crash,Add-ins"></Rule>
-								<Rule Name="sPDFMakerx64" Query="$n2DigitVersion&gt;13 and ((substring($.,1,2)='10' and number(substring($.,4,1))&lt;1) or substring($.,1,1)!='1')  and $bitness='x64'" Error="Warning" Title="Adobe PDFMaker detected on a client with 64-bit Office" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="43f92f91-0f4c-44a6-b410-5ddc6d7270d9" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerWord14" Query="$n2DigitVersion=14 and versioncompare($.,'10.0.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with Word. Please update the add-in to version 10 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="486fb2a4-558b-4028-920b-83ea82c30c2e" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerWord14x64" Query="$n2DigitVersion=14 and $bitness='x64' and versioncompare($.,'10.1.0.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="The Adobe PDFMaker add-in was found on a computer that also has a 64-bit install of Office. The PDFMaker add-in version you have ({0}) is not supported with 64-bit versions of Office. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="fd1d2d6c-ec19-4d42-a129-0c4b7ae6e902" Symptoms="Crash,Add-ins"></Rule>
+                <Rule Name="sPDFMakerWord15" Query="$n2DigitVersion=15 and versioncompare($.,'11.0.1.0')&lt;0 and ($hkcuPDFMaker or $hklmPDFMaker or $hklmWowPDFMaker)" Error="Warning" P0="$." Title="An incompatible version of the PDFMaker add-in is installed" Text="You have a version ({0}) of the PDFMaker add-in installed that is not compatible with Word. Please update the add-in to version 11.0.1 or higher. &#xA;http://helpx.adobe.com/acrobat/kb/compatible-web-browsers-pdfmaker-applications.html" GUID="275735" SSID="dc29c397-3a3b-4efc-bfcb-6fe07952dd68" Symptoms="Crash,Add-ins"></Rule>
 							</Setting>
 						</Object>
 					</Object>
@@ -363,6 +364,8 @@
 			<!--HKCU addins-->
 			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\Word\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hkcuPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
 					<Setting Key1="CommandLineSafe"></Setting>
@@ -371,12 +374,20 @@
 					<Setting Key1="Loadbehavior">
 						<Rule Name="sPowerWordAddinFoundWD13" Query="'%KP%'='Software\Microsoft\Office\Word\Addins\PWOffice2007.WordAddin.1' and $n2DigitVersion&gt;14 and $.&gt;0" Error="Warning" Title="PowerWord add-in is installed and has been known to crash Word 2013" Text="You have the PowerWord add-in installed and it has been found to crash Word 2013 on some computers." GUID="279954" SSID="ad30f3fe-6a12-4243-baf7-64da89272a28" Symptoms="Crash,Add-ins"></Rule>
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayHKCU" Query="true()" P0="if($sHKCUAddInLoadTimeFromRegistry&gt;=0,concat($sHKCUAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKCUAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
+			</Object>
 			</Object>
 			<!--/HKCU addins-->
 			<!--HKLM addins-->
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Microsoft\Office\Word\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hklmPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
 					<Setting Key1="CommandLineSafe"></Setting>
@@ -384,12 +395,20 @@
 					<Setting Key1="FriendlyName"></Setting>
 					<Setting Key1="Loadbehavior">
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayHKLM" Query="true()" P0="if($sHKLMAddInLoadTimeFromRegistry&gt;=0,concat($sHKLMAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKLMAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
+			</Object>
 			</Object>
 			<!--/HKLM addins-->
 			<!--HKLM WOW addins-->
 			<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Wow6432Node\Microsoft\Office\Word\Addins" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
+        <Setting Key1="__KEYNAME" Substitution="ADDINPROGID" Display="Hide">
+        </Setting>
 				<Rule Name="hklmWowPDFMaker" Query="../Instance/Setting[@Key1='__KEYPATH' and contains(Value,'PDFMaker.OfficeAddin')]"></Rule>
 				<Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="%KP%" Display="Hide">
 					<Setting Key1="CommandLineSafe"></Setting>
@@ -397,7 +416,13 @@
 					<Setting Key1="FriendlyName"></Setting>
 					<Setting Key1="Loadbehavior">
 					</Setting>
+          <Rule Name="sAddInLoadTimeDisplayWow" Query="true()" P0="if($sHKLMWowAddInLoadTimeFromRegistry&gt;=0,concat($sHKLMWowAddInLoadTimeFromRegistry,' milliseconds'),'not found in the registry')" Text="Load time = {0}"></Rule>
 				</Object>
+        <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\AddInLoadTimes" Display="Hide">
+          <Setting Key1="%ADDINPROGID%" Display="Hide">
+            <Rule Name="sHKLMWowAddInLoadTimeFromRegistry" Query="hex(concat(substring($.,11,2),substring($.,9,2)))" AlwaysEvaluate="True"></Rule>
+          </Setting>
+			</Object>
 			</Object>
 			<!--/HKLM WOW addins-->
 			<!--RESILIENCY-->
@@ -416,8 +441,8 @@
 					</Object>
 				</Object>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word\Resiliency\DoNotDisableAddinList" Display="Right">
-					<Setting Key1="__VALUES"></Setting>
-          <Rule Name="nReEnabledAddins" Query="count(../Instance)"></Rule>
+          <Setting Key1="__VALUES" Key2="^((?!OffCATv2_Addin.Connect).)*$"></Setting>
+          <Rule Name="nReEnabledAddins" Query="count(../Instance/Setting)"></Rule>
           <Rule Name="sUserReenabledAddins" Query="$nReEnabledAddins&gt;0 and $nRestrictToList&lt;1" Error="Warning" P0="$nReEnabledAddins" Title="Problematic add-in(s) re-enabled by the user" Text="{0} add-in(s) disabled by Word because of performance or stability issues was/were re-enabled by the user. To see the list of disabled add-ins that were re-enabled by the user, click the Configuration Details tile (above) and then search for 'DoNotDisableAddinList' using the Find feature." GUID="272802" SSID="6dc0a269-3253-4a35-8e41-25851e8693ef" Symptoms="Slowness,Error message,Add-ins"></Rule>
         </Object>
 				<!--O15 and above resiliency policy-->
@@ -490,7 +515,7 @@
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Microsoft\Office\%MAJORVERSION%.0\Word" Key4="^((?!File MRU)(?!Place MRU)(?!Reading Locations).)*$" Key5="Subtree" Key6="True" Display="Right">
 					<Setting Key1="__VALUES"></Setting>
 					<Setting Key1="Latin">
-						<Rule Name="sLatinFontSettingBlankWD" Query="string-length($.)=0" P0="../../@Name" Error="Warning" Title="Text in email messages may display as unreadable characters" Text="The text in email messages you receive may contain characters that are unreadable. This problem occurs when the 'Latin' string value under {0} is blank. Click the 'Click here ...' link below for details." GUID="325399" SSID="e1646afe-c684-4abd-b2c2-2a079b701a9c" Symptoms="Email message display,Email send/receive"/>
+						<Rule Name="sLatinFontSettingBlankWD" Query="string-length($.)=0" P0="../../@Name" Error="Warning" Title="Text in email messages may display as unreadable characters" Text="The text in email messages you receive may contain characters that are unreadable. This problem occurs when the 'Latin' string value under {0} is blank. Click the 'Click here ...' link for details." GUID="325399" SSID="e1646afe-c684-4abd-b2c2-2a079b701a9c" Symptoms="Email message display,Email send/receive"/>
 					</Setting>
 					<Setting Key1="DisableRobustifiedUNC">
 						<Rule Name="sDisableRobustifiedUNC" Query="$.=1" Error="Warning" Title="DisableRobustifiedUNC=1" Text="This registry value is only intended for troubleshooting purpose and is not supported in production environment." GUID="" SSID="000b795b-9490-457f-9db0-ba5a8461633c" Symptoms="Configuration (unsupported or problematic)"/>
@@ -550,7 +575,7 @@
 		<!--/REG SETTINGS-->
 		<!--OFFICE POLICIES-->
 		<Object Type="Group" Name="Office Policies" Class="Policies" GroupingClass="True" TrackProgress="TrackProgress" LogText="Collecting Office Policies">
-			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0" Key4="^((?!Assist).)*$" Key5="Subtree" Display="Right">
+			<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0" Key4="^(?i:(?!Assist)(?!VPRSU).)*$" Key5="Subtree" Display="Right">
 				<Setting Key1="__KEYPATH" Substitution="KP" Display="Hide"></Setting>
 				<Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="%KP%" Display="Hide">
 					<Setting Key1="__VALUES"></Setting>
@@ -570,8 +595,15 @@
       <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Word\Options\Assist">
         <Setting Key1="__VALUES"/>
         <Setting Key1="KeyExists">
-          <Rule Name="sWordOptionsAssistFound" Query="$.='True'" Error="Warning" Title="Outlook preview of Word documents is impaired due to Policy under HKCU" Text="The registry contains the following subkey: HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\15.0\Word\Options\Assist. When the registry contains this subkey, Outlook cannot preview a Word document. Click the 'Click here ...' link below for details." GUID="511320" SSID="b9b6875d-93ba-48cf-af32-1122c6b6dbfd" Symptoms="Email attachments,Error message"></Rule>
+          <Rule Name="sWordOptionsAssistFound" Query="$.='True'" Error="Warning" Title="Outlook preview of Word documents is impaired due to Policy under HKCU" Text="The registry contains the following subkey: HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\15.0\Word\Options\Assist. When the registry contains this subkey, Outlook cannot preview a Word document. Click the 'Click here ...' link for details." GUID="511320" SSID="b9b6875d-93ba-48cf-af32-1122c6b6dbfd" Symptoms="Email attachments,Error message"></Rule>
         </Setting>
+        <Rule Name="sKB2899568FreezeAssistMsi" Query="$n2DigitVersion=15 and $nInstallType='MSI' and versioncompare($sFullAppVersion,'15.0.4667.1000')&lt;0 and count(../Instance/Setting[@Key1!='KeyExists']/Value)&gt;0" Error="Warning" P0="if($bitness='x86','x86 (32-bit)','x64 (64-bit)')" P1="$sFullAppVersion" Title="Registry data found under \Assist that may cause Word to stop responding" Text="You have one or more values under HKCU\Software\Policies\Microsoft\Office\15.0\Word\Options\Assist and your Microsoft Word version is {1}. In this configuration, Word has been known to stop responding.&#xA;&#xA;To resolve this problem, click the 'Click here ...' link and install the {0} update from the article. Or, install the latest Word 2013 update from Microsoft Update." GUID="519373" SSID="a1910dd4-8d7e-4057-9446-14013f5fd828" Symptoms="Crash,Freeze"></Rule>
+        <Rule Name="sKB2899568FreezeAssistC2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4667.1000')&lt;0 and count(../Instance/Setting[@Key1!='KeyExists']/Value)&gt;0" Error="Warning" P1="$sFullAppVersion" Title="Registry data found under \Assist that may cause Word to stop responding" Text="You have one or more values under HKCU\Software\Policies\Microsoft\Office\15.0\Word\Options\Assist and your Microsoft Word version is {1}. In this configuration, Word has been known to stop responding.&#xA;&#xA;To resolve this problem, click the 'Click here...' link and then follow the instructions provided in the article to update your Office installation." GUID="526631" SSID="a389db11-b62e-43b0-a94a-715bba5c85e4" Symptoms="Crash,Freeze"></Rule>
+      </Object>
+      <Object Type="Registry" Key2="HKEY_CURRENT_USER" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Word\Options\vprsu">
+        <Setting Key1="__VALUES"/>
+        <Rule Name="sKB2899568FreezeVprsuMsi" Query="$n2DigitVersion=15 and $nInstallType='MSI' and versioncompare($sFullAppVersion,'15.0.4667.1000')&lt;0 and count(../Instance/Setting/Value)&gt;0" Error="Warning" P0="if($bitness='x86','x86 (32-bit)','x64 (64-bit)')" P1="$sFullAppVersion" Title="Registry data found under \VPRSU that may cause Word to stop responding" Text="You have one or more values under HKCU\Software\Policies\Microsoft\Office\15.0\Word\Options\VPRSU and your Microsoft Word version is {1}. In this configuration, Word has been known to stop responding.&#xA;&#xA;To resolve this problem, click the 'Click here ...' link and install the {0} update from the article. Or, install the latest Word 2013 update from Microsoft Update." GUID="519373" SSID="39ff03ea-1b9e-41b1-ba23-e7fd5fe71d80" Symptoms="Crash,Freeze"></Rule>
+        <Rule Name="sKB2899568FreezeVprsuC2R" Query="$n2DigitVersion=15 and $nInstallType='ClickToRun' and versioncompare($sFullAppVersion,'15.0.4667.1000')&lt;0 and count(../Instance/Setting/Value)&gt;0" Error="Warning" P1="$sFullAppVersion" Title="Registry data found under \VPRSU that may cause Word to stop responding" Text="You have one or more values under HKCU\Software\Policies\Microsoft\Office\15.0\Word\Options\VPRSU and your Microsoft Word version is {1}. In this configuration, Word has been known to stop responding.&#xA;&#xA;To resolve this problem, click the 'Click here...' link and then follow the instructions provided in the article to update your Office installation." GUID="526631" SSID="786f135a-b8dd-4c13-a693-b2689ca1af1a" Symptoms="Crash,Freeze"></Rule>
       </Object>
 		  <Object Type="Registry" Key2="HKEY_LOCAL_MACHINE" Key3="Software\Policies\Microsoft\Office\%MAJORVERSION%.0\Common" Display="Right">
 			  <Setting Key1="__VALUES"></Setting>
@@ -644,12 +676,15 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
   <Rule Name="sWordVersion"></Rule>
-	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>zM4s2Ba8ajBoHzgJhI6gegQCTLk=</DigestValue></Reference></SignedInfo><SignatureValue>
-	    Nbdyy8VTREJ+htS9dkdmHI5448dCcPpaZQf/tz5TM+JOxdi1MXzuGmE6xtHmz+9/tsvUNEav
-	    VOjxyCGzNURjCPzqwctyqLAZNQNnJjYGEpDUZegYn6plymon3I0zY4ASCEDQNwZQsCJQtOd0
-	    QwDIWNbxBWUbzxnSKSZ2i04Qy2iZAjAlx7AvSK6S8JSTGSqlLyLZ21pXBVZJCwx+N5dX71R3
-	    EA29B03blWTEPMR9aJE+uU6ddrtEN2J3J0cFA2LmF74RdeyCbUTqDzChT3xtI5deljeHCjq0
-	    B4+Jo1uVzpLaWa6fWI7h61BAK3fmq/ZE9sqnmpTj6Oe+/X0NuWdgRw==
+  <Rule Name="fLync2013AddinFoundHKCU"></Rule>
+  <Rule Name="fLync2013AddinFoundHKLM"></Rule>
+  <Rule Name="fLync2013AddinFoundWow"></Rule>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>3P5ZJr5xWFR/qntIGuL9rZV1p6w=</DigestValue></Reference></SignedInfo><SignatureValue>
+	    gV+45m6/CVhyv6QBdp3CFLN3+U3fIh5KHAvFEZM3B6DXmRfTDBnRaeM+Ioi++nIK7ErmppId
+	    q/k2sXZ4lGc8yQVevJiYw/PFnDDfbx3hVfNE4gH23nXIJlX/luEPEgddKOWIbIx94sNIQFqx
+	    H2UDo1PjZws263CXekuIVZ4lgE3EE7jtdBvXoghgp4EYJpJhRpbnXfhEBJDcJaJuBE2O3oh2
+	    G1aqwgDE7dJEse4Eu0Xl2ZfTc57EK1wl0ihkCUEqwSUHGtms2GoijIh6DAf4suWZXhJPvOa/
+	    TtfxnPL3rigsa6quVjRMNLAHe90bPiCkxrNoKsdMrnYHz2r65jnSOQ==
 	  </SignatureValue><KeyInfo>
 	      <KeyValue>
 	        <RSAKeyValue>
@@ -754,28 +789,28 @@
 	          aZuW4hCoELQ3UAjWwz0=
 	        </X509Certificate>
 	      </X509Data>
-	    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEuzCCA6OgAwIBAgITMwAAAF3JyvZpIzdoUAAAAAAAXTANBgkqhkiG9w0BAQUFADB3MQswCQYD
+	    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHQNgGQOfWd9owAAAAAAdDANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTQwNTIzMTcxMzE3WhcNMTUwODIzMTcxMzE3WjCBqzELMAkGA1UEBhMCVVMxCzAJBgNVBAgT
-AldBMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTAL
-BgNVBAsTBE1PUFIxJzAlBgNVBAsTHm5DaXBoZXIgRFNFIEVTTjo3RDJFLTM3ODItQjBGNzElMCMG
-A1UEAxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-ADCCAQoCggEBAKu6ei+vVB909A1zsuALhVjsq6u/RwD+jTcx8hyTPqa6zhvmUUBo1IAY11hjXQM3
-NvuDWHDexDM2sF8Hf33991irWpduRc648Rs9Us+lPQVDm6CxNHLT7/MxvC5ojio1Cy50sO/kK1Vy
-ZZWPZ/SjyO8DEafcCzyhbA7/YYxCkuRWw5Gxj/au18Hj6KgZAaIXYL9DmHoqWmo0yJINP+BcHbd/
-sFodvcxsahFDHgINW0LpbUtjCzn7UqPseibSojBHY9L46hXYaS6eJulOTxyz0uJgJj9uXZIUkF40
-bXgEfFJRmwsBdutBAFlTztuN1kmFbII7fsTph0ayOTzxXthvcv8CAwEAAaOCAQkwggEFMB0GA1Ud
-DgQWBBTXVOYV2dNdyiTVARjweGSZe2hMMzAfBgNVHSMEGDAWgBQjNPjZUkZwCu1A+3b7syuwwzWz
-DzBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
-dWN0cy9NaWNyb3NvZnRUaW1lU3RhbXBQQ0EuY3JsMFgGCCsGAQUFBwEBBEwwSjBIBggrBgEFBQcw
-AoY8aHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraS9jZXJ0cy9NaWNyb3NvZnRUaW1lU3RhbXBQ
-Q0EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBBQUAA4IBAQCJMKxtI1M8/5xe
-n1dwDBzeF903pNyVsaYkzAfuqYXRHNXZm0k3IZ8xPmmuv7UwG+ekLFDrwVCISqq17KiyCUCwau9z
-VEKtnimFVG2zD/GYfuP4wDAbTNKGKfCi5V6bN41mnei8W2+6lcb20i5BNfnHvgyK5iZEdmgcnKQW
-7iJVpNZXK/gNgSAsoQ+ajvzHlcVeh4RB4tJvnM/QZSMW29B9hNAGFhKlZy17hYk+RZPYzSaZ+7Yq
-4VJCmhCXHzTakcGshvOSRG1Qu4mykew1qEj2weHE/sZlfUHv7W3KkeTmsNnlWFy0u5romkYcZt0e
-S0SYyfRKWBF/kMshN4hDyN71</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+HhcNMTUwMzIwMTczMjA1WhcNMTYwNjIwMTczMjA1WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjdEMkUtMzc4Mi1C
+MEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEA4NFrifjVvo5YgN/jD+4M6zszXn3GnmZHP9AerBSCDRiftpwnIvG2
+hpREQXSJkW8X9t+Y5jbLX3iS6XJ+S7kExWIUc3HGf2NBW+tk8r1cVWJGzA9ewQnEr9nxvyV94Beg
+UO4lqkXl48Z+vxBZqcGPPtn77GQbY1u1p7jq681X6xtD9WWRv1D1+cEGvH2qzDfnBqmgzLH1M8wN
+ssh1ZgDRbTCTR8+OomdEXhoTf/McHucPncG8SPyBgW1UauJpE8bO9ZdnMmxIyhHCVjrW3Dpi9PwQ
+l2RIC4pc8RbClfDLYBukA5sMyfe7kr8Ac2czHKJ673VKGUZaDH6aW6A6HVQ16wIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFCUsOGYFtEU5DmC29u69PuDdr4wNMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEEG
+50j6xJHcMBMNInjC0iPTszPL+yYh1978CncY+4Nyzu/ULIaP4xXj1RICZ1xbN9MDe02RW0FTZgn9
+457fLHgJORo2HYqBocllfJx7kbIPSptB3cdEC2EFyUwu8rRrKKoIR+4IrGZUF1aQiMbpddAhEDh5
+yT+7VTDFpjmmU7/NXFbSThcUvGISy+lL8MWR3J2EypjWDttWFGht21OLMM+6J2V1oDFvk6N1EGDq
+qu7uduvljAup0655zzS+SR8i0MT1o+/zrjDcjohGI4ygqjyXrwfbdug2VN+Ls4mewOospGBr8d/D
+thI6rzM4elFxNTXm5AjiUZaC+b7hG4N8e2c=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -802,34 +837,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIGzAYJKoZIhvcNAQcCoIIGvTCCBrkCAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQA1t3LLxVNEQn6G1L12R2Ycjnjjx0Jw+lplB/+3PlMz4k7F2LUxfO4aYTrG0ebP73+2y9Q0
-Rq9U6PHIIbM1RGMI/OrBy3KosBk1A2cmNgYSkNRl6BifqmXKaifcjTNjgBIIQNA3BlCwIlC053RD
-AMhY1vEFZRvPGdIpJnaLThDLaJkCMCXHsC9IrpLwlJMZKqUvItnbWlcFVkkLDH43l1fvVHcQDb0H
-TduVZMQ8xH1okT65Tp12u0Q3YncnRwUDYuYXvhF17IJtROoPMKFPfG0jl16WN4cKOrQHj4mjW5XO
-ktpZrp9YjuHrUEArd+ar9kT2yqealOPo5779fQ25Z2BHoIIDdaGCA3EwggJZAgEBMIHboYGxpIGu
-MIGrMQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0ExEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoT
-FU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBE
-U0UgRVNOOjdEMkUtMzc4Mi1CMEY3MSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2
-aWNloiUKAQEwCQYFKw4DAhoFAAMVADGQj3DCILvjoZE/7XwqqDC1ZVQ1oIHCMIG/pIG8MIG5MQsw
-CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
-ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVy
-IE5UUyBFU046NTdGNi1DMUUwLTU1NEMxKzApBgNVBAMTIk1pY3Jvc29mdCBUaW1lIFNvdXJjZSBN
-YXN0ZXIgQ2xvY2swDQYJKoZIhvcNAQEFBQACBQDYDhGHMCIYDzIwMTQxMTEyMTcwNDA3WhgPMjAx
-NDExMTMxNzA0MDdaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFANgOEYcCAQAwCgIBAAICI1kCAf8w
-BwIBAAICGKswCgIFANgPYwcCAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGEWQoDAaAKMAgC
-AQACAxbjYKEKMAgCAQACAwehIDANBgkqhkiG9w0BAQUFAAOCAQEABbNqaawM1wOh4KSuIMP3keS/
-w5Ua3ILC8SDGe/jNTw+M+j8CmOGus0y87HA7R8SfRHATEHj6sJLlewMtgFr4Dm8jxBZNii0VN8gq
-0Ht0JfR5IIlPGydV9wHgLGb1pzFC+3WDPeBL7MrgHknjZFr6ynyMgp2knYEywcZYO/0LEh6I3IHQ
-vHqGc0d+Cq2UWFtfcb/LyZakt/sOp4tutkNQf8SrBzt+7zY1GClRMP+bDTDotAmLEr8ORxeFnvRc
-Cr0VhCZsU50JraJfFrATKCglxUNHq+HL3+ZUlqeCxIG6huslWsOSyXoGMk5EYAgypTp6BmZoB7jH
-JYXTxuwABvKD4DGCAhUwggIRAgEBMIGOMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
-dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xITAf
-BgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQQITMwAAAF3JyvZpIzdoUAAAAAAAXTAJBgUr
-DgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTQxMTEy
-MjM0NzM5WjAjBgkqhkiG9w0BCQQxFgQUYB8ZVxBFJxRAyZRubhd58fRBA+MwDQYJKoZIhvcNAQEF
-BQAEggEAjCRFcPSWwwEugEL3B58x3YfUHbbDGj0Nl3YIFM0vni7jq9Jg0ygDkFZHVCZvDmHq8T+K
-J5eJixB6orATTy8TNYYLSZPtSLWkFjNW4Ao9fAD4hP9iq/rSKVyTwBd8LUGrEff2iZx3bz9FkBUw
-b9NiKZbVIO/4RyCP+A94+Ovt8BQUUyuO5jlwDEg0tf1tnLBeAyVejVTv91NH7yuudwQb6IrMRkqO
-/ozgsv1A3kdQJZYP1kg3IHpfdlJMb5YKYvhfxO5dQp3n3zCK/hElLwI4J9vKGAY8UpR1RTwD2eU6
-qginPmuN+2Dp6QjVTbWyOIPFulbQMM4HE9VQsJTzV6FGqQ==</CounterSignature></Object></Signature></ObjectCollector>
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>

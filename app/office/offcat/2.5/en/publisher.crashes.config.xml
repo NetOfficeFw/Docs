@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><ObjectCollector>
 	<!--!!! ONLY MODIFY ChangeDescription AND ConfigVersion, DO NOT TOUCH THE REST OR DO IT AT YOUR OWN RISK!!!-->
-	<Configuration ConfigName="Publisher Configuration" ChangeDescription="1.0.1410.23" ConfigVersion="1.0.1410.23" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
+	<Configuration ConfigName="Publisher Crashes" ChangeDescription="2.0.1505.18" ConfigVersion="2.0.1505.18" ArticleURL="http://go.microsoft.com/fwlink/p/?LinkID={2}" DownloadURL="http://www.microsoft.com/office/offcat" FixItURL="http://go.microsoft.com/?linkid={0}" ReferencedFiles="common.config.xml,officeupdates.config.xml" Symptoms="1">
 		<!--!!! GLOBAL SUBSTITUTION SET AT RUN TIME WHEN THE USER SELECTS WHICH VERSION OF THE APP TO SCAN - DO NOT REMOVE !!!-->
 		<Substitution Name="MAJORVERSION"></Substitution>
 		<Substitution Name="INSTALLTYPE"></Substitution>
@@ -50,9 +50,9 @@
 	  <Setting Key1="Version">
 		  <Rule Name="n4DigitSKUVersion" Query="$."></Rule>
 	  </Setting>
-	  <Rule Name="nInstallType" Query="'%INSTALLTYPE%'"></Rule>
 	  <Setting Key1="Type">
 		  <Rule Name="f2013MSI" Query="$n4DigitSKUVersion='2013' and $.='MSI'"></Rule>
+      <Rule Name="nInstallType" Query="$."></Rule>
 	  </Setting>
 	</Object>
 	<Object Type="If" Key1="'%MAJORVERSION%'='15' and '%INSTALLTYPE%'='MSI' and '%APPBITNESS%'='x86'">
@@ -133,11 +133,13 @@
 
       <Rule Name="n3459258MsoCrashPublisher00003ABC" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4631.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00003abc')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
       <Rule Name="n3459258MsoCrashPublisher0000329C" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='0.0.0.0')] and Setting[@Key1='Fault offset' and (lower-case(Value)='0000329c')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
-      <Rule Name="s3459258MsoCrashPublisherX86" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x86' and ($n3459258MsoCrashPublisher00003ABC&gt;0 or $n3459258MsoCrashPublisher0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashPublisher00003ABC + $n3459258MsoCrashPublisher0000329C" Title="Known crashing issue when Publisher stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Publisher stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link below to see how to resolve this issue." GUID="506822" SSID="2cd798ce-0b11-43fe-9504-3be6de999cb6" Symptoms="Crash"></Rule>
+      <Rule Name="s3459258MsoCrashPublisherX86" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x86' and ($n3459258MsoCrashPublisher00003ABC&gt;0 or $n3459258MsoCrashPublisher0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashPublisher00003ABC + $n3459258MsoCrashPublisher0000329C" Title="Known crashing issue when Publisher stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Publisher stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506822" SSID="2cd798ce-0b11-43fe-9504-3be6de999cb6" Symptoms="Crash"></Rule>
       <Rule Name="n3459258MsoCrashPublisher00000000013F766E" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='15.0.4631.1000')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000013f766e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
       <Rule Name="n3459258MsoCrashPublisher00000000013EB86E" Query="count(../Instance[Setting[@Key1='Faulting Module Version' and (Value='0.0.0.0')] and Setting[@Key1='Fault offset' and (lower-case(Value)='00000000013eb86e')] and Setting[@Key1='Faulting Module Name' and (lower-case(Value)='mso.dll')]])"></Rule>
-      <Rule Name="s3459258MsoCrashPublisherX64" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x64' and ($n3459258MsoCrashPublisher00000000013F766E&gt;0 or $n3459258MsoCrashPublisher00000000013EB86E&gt;0)" Error="Error" P0="$n3459258MsoCrashPublisher00000000013F766E + $n3459258MsoCrashPublisher00000000013EB86E" Title="Known crashing issue when Publisher stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Publisher stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link below to see how to resolve this issue." GUID="506823" SSID="39d57396-1cb4-4013-9089-95ec71a3eeb2" Symptoms="Crash"></Rule>
-      <Rule Name="s3459258MsoCrashPublisherC2R" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='ClickToRun' and $n2DigitVersion=15 and ($n3459258MsoCrashPublisher00003ABC&gt;0 or $n3459258MsoCrashPublisher0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashPublisher00003ABC + $n3459258MsoCrashPublisher0000329C" Title="Known crashing issue when Publisher stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Publisher stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link below to see how to resolve this issue." GUID="506874" SSID="2f9f8c73-f325-4510-835e-4e2af1c00c96" Symptoms="Crash"></Rule>
+      <Rule Name="s3459258MsoCrashPublisherX64" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='MSI' and $n2DigitVersion=15 and $bitness='x64' and ($n3459258MsoCrashPublisher00000000013F766E&gt;0 or $n3459258MsoCrashPublisher00000000013EB86E&gt;0)" Error="Error" P0="$n3459258MsoCrashPublisher00000000013F766E + $n3459258MsoCrashPublisher00000000013EB86E" Title="Known crashing issue when Publisher stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Publisher stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506823" SSID="39d57396-1cb4-4013-9089-95ec71a3eeb2" Symptoms="Crash"></Rule>
+      <Rule Name="s3459258MsoCrashPublisherC2R" Query="not($MSO_fMsoAug2014UpdateInstalled) and $nInstallType='ClickToRun' and $n2DigitVersion=15 and ($n3459258MsoCrashPublisher00003ABC&gt;0 or $n3459258MsoCrashPublisher0000329C&gt;0)" Error="Error" P0="$n3459258MsoCrashPublisher00003ABC + $n3459258MsoCrashPublisher0000329C" Title="Known crashing issue when Publisher stops responding or crashes (KB 2987489)" Text="The crashing issue that occurs when Publisher stops responding or crashes (documented in KB 2987489) has been detected {0} time(s). Please click the 'Click here...' link to see how to resolve this issue." GUID="506874" SSID="2f9f8c73-f325-4510-835e-4e2af1c00c96" Symptoms="Crash"></Rule>
+
+      <Reference Type="CommonCrashes" Name="CommonCrashes" File="common.config.xml"></Reference>
 
     </Object>
 		<!--/EVENTLOGS-->
@@ -157,12 +159,12 @@
 	<Rule Name="effectiveSlowBitrate"></Rule>
 	<Rule Name="sWordVersion"></Rule>
   <Rule Name="sPpCoreVersion"></Rule>
-<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>akQA3CFOfp8NtPU5Jei8lP/u1m4=</DigestValue></Reference></SignedInfo><SignatureValue>
-    Zx/pgHguFsOcIP30ZzjJ4iKJHieFY4K3hPdCquOvcGw/B/gPr5dDQvJUantvkYEpcaK/NYxq
-    FfvYUmTfKJ/onvSu7aTr+UPd1NSaW3sZ3cvPBnhEKK1ioKAeWSJmtYgZElb1kjFOz8ECqjq5
-    v5/dk/d7iMme44TZ9CgU27imJGb/+2Z/t4SBwt/U7CSAKQkab8uAaBC6CjlXT41KnnETcgIy
-    exS2XrAvp3TqlgeR8ZsHrUyFPyIIzG4D4M0e84r1aYr6xLECZ3b4RGd26zHIutFlIf13x8zV
-    Fs7KXZMCOCplvLc1K0pRscQWi5lxZ4Bwr1RCin3tR3UFd6smobU63g==
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>3toWtpufMVwbDr+srOT1xJudXFw=</DigestValue></Reference></SignedInfo><SignatureValue>
+    E75gPapvuSQI1MHaukOnHAZK6WODv9c+ry8dvv5jaxJXL5GMnjzN2f7LZBO4uEY6Nh8KFEQt
+    A8dbyknwuiPZtNXwSx4ELVsGD/NZM0qPC/fDO3FMKp0oJ+miJJKBQ5E4bjjNknP9wZhVF07H
+    oYSeds1y85gMdYBtfTMVdTtSayX2SF8zUYZ8+8xvmL+xOBJXLLLGOrocps2+8CEt+jpvY2Sl
+    KcgielfIm68C9cAYhD3JefVwthbovWehrw/u+255d54KM9Vs+gHvtxRj2JGCH6BVA+GjPjF4
+    uCh8gwkcC9YCWcRED7ZyE+/qva8Kn4mqEKL/wZZujXUZhZoPIIdidA==
   </SignatureValue><KeyInfo>
       <KeyValue>
         <RSAKeyValue>
@@ -267,28 +269,28 @@
           aZuW4hCoELQ3UAjWwz0=
         </X509Certificate>
       </X509Data>
-    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEuzCCA6OgAwIBAgITMwAAAFtDPHJBxWzA7gAAAAAAWzANBgkqhkiG9w0BAQUFADB3MQswCQYD
+    </KeyInfo><Object id="ts-countersig"><X509Data><X509Certificate>MIIEwzCCA6ugAwIBAgITMwAAAHPGWcJSl4OjOgAAAAAAczANBgkqhkiG9w0BAQUFADB3MQswCQYD
 VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMV
 TWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Ew
-HhcNMTQwNTIzMTcxMzE2WhcNMTUwODIzMTcxMzE2WjCBqzELMAkGA1UEBhMCVVMxCzAJBgNVBAgT
-AldBMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xDTAL
-BgNVBAsTBE1PUFIxJzAlBgNVBAsTHm5DaXBoZXIgRFNFIEVTTjozMUM1LTMwQkEtN0M5MTElMCMG
-A1UEAxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-ADCCAQoCggEBAJO2gxkc4ZlPSL6curaAqyM+cxMZpbyNUkEWY49+BhzsvpPybh2Hv1guJrhjk9Nm
-Y/SqrbCrUWX//TK650z4tkWiM7sUcRG8kpYzmfF61YdzcGDC+7phlMOg5nGmLtwTGbFq2hpkVe0U
-sh1SGEaJ7zeulRzx7RxaNj7W8O3EZU3vI0rjTMSQiWu01MqBr8x2Ubfgk6HU/n9P4aVT0jCY1/N3
-TEy+ijg5n2xyysvD32VFFsXQY0OnVRp45SEltH/EJ6gzunUPvJJyxhUdMzwvFSxnnr04pWcMkevA
-7zlstOXaidfEdn+xR/0FQABh70OHGnfHVlQCpqaNtV7rdHPfv0cCAwEAAaOCAQkwggEFMB0GA1Ud
-DgQWBBTNDGkkqFEi29Hu02Wg+BiCdff1IzAfBgNVHSMEGDAWgBQjNPjZUkZwCu1A+3b7syuwwzWz
-DzBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtpL2NybC9wcm9k
-dWN0cy9NaWNyb3NvZnRUaW1lU3RhbXBQQ0EuY3JsMFgGCCsGAQUFBwEBBEwwSjBIBggrBgEFBQcw
-AoY8aHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraS9jZXJ0cy9NaWNyb3NvZnRUaW1lU3RhbXBQ
-Q0EuY3J0MBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBBQUAA4IBAQCFZLbdqiTl4Pvp
-aqSQwDnvTfrzf5LEB3/xqY832xz49neml+bIRHEIRH0KcJfJx68MK2DEhExOTZgsfvzoFn1H2ygK
-ORzb7OKHfCItu//Rl22AQK3v3SgzzkHZ53xu+bjJKyDaeDclxQR6COuUvJomC/QqzUG9/fyImMQZ
-HFcFElrogLzIiSei6vcVUY7azSrz5fs8ySz9spMa2vyM2Tc6t1R+HekTNMUfxQPaD1qVrCmFszlM
-z58CWcVSKd28O1SByMdZS+2LpzDPTLWVnyZVp2tnhF24jf+5oV+NLk82eOsbX8zMctyL36eb+8n+
-1flHpAnDRDpch5aHPlRovDSv</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
+HhcNMTUwMzIwMTczMjA0WhcNMTYwNjIwMTczMjA0WjCBszELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3Jh
+dGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOkJCRUMtMzBDQS0y
+REJFMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAp0QvcscV762cvJQkN4+yFC55LDaPb7KevwD6jHhhG5S5Uij0cT8H
+GE/y6Je/f3Ow4zVsoSviUbYnqqI1ASnzKaVQ3natkrIUuQ8Mllkya3MeSL9Q877ogSskJFB0fOph
+5o8RAe6yfSD1CkMqVGVAxRwMNFDik+TCDS7gUJlQaAZ9h3v2jQWOR+Xt0ELjY93j7iXPqVCjT4K7
+x5WFfasB4FBCFeBZg8lR4D2gKOh/gnzSuRoCHqhzdFfIf7gJs7pF4EfCdNSp2BLXLxuc1K567c/C
+WXMh3LDjZMMd5i8EvFv9ssV+Nua6VnlcHRWrsaB9FygH8+OpkVg8tkWf1jVh3QIDAQABo4IBCTCC
+AQUwHQYDVR0OBBYEFDUsc4HZ7HD5Sj2P/0fAfApoobgbMB8GA1UdIwQYMBaAFCM0+NlSRnAK7UD7
+dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kv
+Y3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcmwwWAYIKwYBBQUHAQEETDBKMEgG
+CCsGAQUFBzAChjxodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRp
+bWVTdGFtcFBDQS5jcnQwEwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBABhW
+2Lwu5/R0+yuB1kWyYWp9G8CaWAHqZhnXuCn1jzz09iI2d1FUmQud9f7Fg9U7F18kV7sSywfz8omz
+n+eIMTZc0N0QbbGdHG5zeUCA26QRbUwQ6BCVoUNlxEgptx5suXvzd7dgvF0jpzSnWPUVzaasjBvd
+qMfy/L2f24Jaiu9s8vsuw79c0Y2DVhPd4x2T7ReueUVSCxzhK8AzUN271fiW2JRLQ0tRCF8tnA5T
+KJe7RuvGemKndxIklRnPRf1Y2R0getwBvO8Lg3pDeZDUR+AIteZ96oBsSHnsJwxb8T45Ur6alIw5
+sEMholc7XInenHZH5DEg0aJpQ86Btpv5rzg=</X509Certificate></X509Data><X509Data><X509Certificate>MIIGBzCCA++gAwIBAgIKYRZoNAAAAAAAHDANBgkqhkiG9w0BAQUFADBfMRMwEQYKCZImiZPyLGQB
 GRYDY29tMRkwFwYKCZImiZPyLGQBGRYJbWljcm9zb2Z0MS0wKwYDVQQDEyRNaWNyb3NvZnQgUm9v
 dCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMDcwNDAzMTI1MzA5WhcNMjEwNDAzMTMwMzA5WjB3
 MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwG
@@ -315,34 +317,34 @@ ZlizLS/n+YWGzFFW6J1wlGysOUzU9nm/qhh6YinvopspNAZ3GmLJPR5tH4LwC8csu89Ds+X57H21
 zCzU2DKATCYqSCRfWupW76bemZ3KOm+9gSd0BhHudiG/m4LBJ1S2sWo9iaF2YbRuoROmv6pH8BJv
 /YoybLL+31HIjCPJZr2dHYcSZAI9La9Zj7jkIeW1sMpjtHhUBdRBLlCslLCleKuzoJZ1GtmShxN1
 Ii8yqAhuoFuMJb+g74TKIdbrHk/Jmu5J4PcBZW+JC33Iacjmbuqnl84xKf8OxVtc2E0bodj6L54/
-LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">MIIGzAYJKoZIhvcNAQcCoIIGvTCCBrkCAQMxCzAJBgUrDgMCGgUAMIIBEwYJKoZIhvcNAQcBoIIB
-BASCAQBnH+mAeC4Ww5wg/fRnOMniIokeJ4VjgreE90Kq469wbD8H+A+vl0NC8lRqe2+RgSlxor81
-jGoV+9hSZN8on+ie9K7tpOv5Q93U1Jpbexndy88GeEQorWKgoB5ZIma1iBkSVvWSMU7PwQKqOrm/
-n92T93uIyZ7jhNn0KBTbuKYkZv/7Zn+3hIHC39TsJIApCRpvy4BoELoKOVdPjUqecRNyAjJ7FLZe
-sC+ndOqWB5HxmwetTIU/IgjMbgPgzR7zivVpivrEsQJndvhEZ3brMci60WUh/XfHzNUWzspdkwI4
-KmW8tzUrSlGxxBaLmXFngHCvVEKKfe1HdQV3qyahtTreoIIDdaGCA3EwggJZAgEBMIHboYGxpIGu
-MIGrMQswCQYDVQQGEwJVUzELMAkGA1UECBMCV0ExEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoT
-FU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9QUjEnMCUGA1UECxMebkNpcGhlciBE
-U0UgRVNOOjMxQzUtMzBCQS03QzkxMSUwIwYDVQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2
-aWNloiUKAQEwCQYFKw4DAhoFAAMVACgI5jPW6+ucStSwO6kgUfU5Rg5DoIHCMIG/pIG8MIG5MQsw
-CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
-ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMQ0wCwYDVQQLEwRNT1BSMScwJQYDVQQLEx5uQ2lwaGVy
-IE5UUyBFU046NTdGNi1DMUUwLTU1NEMxKzApBgNVBAMTIk1pY3Jvc29mdCBUaW1lIFNvdXJjZSBN
-YXN0ZXIgQ2xvY2swDQYJKoZIhvcNAQEFBQACBQDYDhCOMCIYDzIwMTQxMTEyMTY1OTU4WhgPMjAx
-NDExMTMxNjU5NThaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFANgOEI4CAQAwCgIBAAICJxQCAf8w
-BwIBAAICGJIwCgIFANgPYg4CAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGEWQoDAaAKMAgC
-AQACAxbjYKEKMAgCAQACAwehIDANBgkqhkiG9w0BAQUFAAOCAQEAJRPmxNWqpkDJePCUruHGED6C
-dMHfZxEXaKdsUu1Gx2Hgg8g2Syau6D5q1LZ8OIUDgHLvtFIhJgkgvSvBJwMLzNkzCRnAb8hdZR1O
-FYMqQ0gi8LFT481Z4nDzr8hWNu/gH3qB4UvaU/qQPNmVndJQiSzXas5/2T6C7u5z2a1DQNR4W12E
-1S03z4O/OhU8IwpZPDv/L1QLagYzcA4qvMYyRsJ0qGDE6ptWcbXjPr9BQDiFYf0gAfaA1hde8ra6
-FLQoshKROdlD6lh+WfO1YbpIvTeubYDnCULlHh1lhaCJ68tpByafPBEgjbM0JrbIVY+Wro2ELEt/
-nZYrZFrT15MslTGCAhUwggIRAgEBMIGOMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
-dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xITAf
-BgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQQITMwAAAFtDPHJBxWzA7gAAAAAAWzAJBgUr
-DgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTQxMTEy
-MjM0NzM5WjAjBgkqhkiG9w0BCQQxFgQUrWUhfBTbZJn2BwHjQip5k9KWPh0wDQYJKoZIhvcNAQEF
-BQAEggEAFF7l9cq/ugtSYjmLUlAuA4k7sOgDXTYu+RR3t6HGw+h9a005rPRUln2TFK8jfIYQ+2mG
-nL99MBvI1e6dkWHUi1bITmUJd7yw8S/lskXVx3SSa/cQPQc2AnTJbjYy1mbHBo0VSupaYHDZQ5KF
-4kH1PgO1po3VJvIbv7+MiAmw8M+JmtQj6V40y7x9ac/gzZFHsVt7a7IhyQhlf0YitJcIZSkcM2/V
-XykXF+BTE0uHsh0gYTh9OMN3piyKZHQiu9E+nY+deKmsOAe4jBVoD/0bwP3k1Z6Bxn3EOiG3I+wN
-AM5ek3sc44n3CgYTcU59c3CFspKdT9y84uHpVwwbqfCm+g==</CounterSignature></Object></Signature></ObjectCollector>
+LlUWa8kTo/0=</X509Certificate></X509Data><CounterSignature xmlns="http://schemas.microsoft.com/xmldsig/timestamp/2003" ts-format="cms-timestamp-message">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</CounterSignature></Object></Signature></ObjectCollector>
