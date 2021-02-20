@@ -32,7 +32,7 @@ hero_body: "NetOffice is a set of libraries for building Microsoft Office Addins
     </div>
     <div class="code-block-body">
       <pre>PM> Install-Package NetOfficeFw.Word
-PM> Install-Package NetOfficeFw.Word -Version 1.7.6</pre>
+PM> Install-Package NetOfficeFw.Word -Version 1.8.1</pre>
     </div>
   </div>
 
