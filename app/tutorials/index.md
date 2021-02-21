@@ -4,9 +4,15 @@ _description: NetOffice Tutorials and Add-ins documentation
 title: Tutorials
 ---
 
+# Tutorials
+
+Learn how to build Office Add-ins using NetOffice and study details about COM object in NetOffice.
+
 ## NetOffice Add-ins
 
+
 1. [Microsoft Office Add-ins using NetOffice](../addins/)
+
 <!--
 1. [Deployment of NetOffice Add-ins](addin02_en.html)
 1. [Isolating Add-in with COM Shim library](addin03_en.html)

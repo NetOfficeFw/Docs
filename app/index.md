@@ -7,44 +7,47 @@ hero_body: "NetOffice is a set of libraries for building Microsoft Office Addins
 
 <div class="usa-grid-full usa-section">
   <div class="usa-width-one-whole">
-  [![Nuget](https://img.shields.io/nuget/v/NetOfficeFw.Core?color=black&label=NetOfficeFw.Core&logo=microsoft-office&style=flat-square)](https://www.nuget.org/profiles/netoffice)
-  [![NetOfficeFw.Outlook](https://img.shields.io/nuget/v/netofficefw.outlook?color=%230078D4&label=&logo=microsoft-outlook&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Outlook/)
-  [![NetOfficeFw.Word](https://img.shields.io/nuget/v/netofficefw.word?color=%232B579A&label=&logo=microsoft-word&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Word/)
-  [![NetOfficeFw.Excel](https://img.shields.io/nuget/v/netofficefw.excel?color=%23217346&label=&logo=microsoft-excel&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Excel/)
-  [![NetOfficeFw.Powerpoint](https://img.shields.io/nuget/v/netofficefw.powerpoint?color=%23B7472A&label=&logo=microsoft-powerpoint&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Powerpoint/)
-  [![NetOfficeFw.Access](https://img.shields.io/nuget/v/netofficefw.access?color=%23A4373A&label=&logo=microsoft-access&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Access/)
-</div>
+    [![Nuget](https://img.shields.io/nuget/v/NetOfficeFw.Core?color=black&label=NetOfficeFw.Core&logo=microsoft-office&style=flat-square)](https://www.nuget.org/profiles/netoffice)
+    [![NetOfficeFw.Outlook](https://img.shields.io/nuget/v/netofficefw.outlook?color=%230078D4&label=&logo=microsoft-outlook&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Outlook/)
+    [![NetOfficeFw.Word](https://img.shields.io/nuget/v/netofficefw.word?color=%232B579A&label=&logo=microsoft-word&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Word/)
+    [![NetOfficeFw.Excel](https://img.shields.io/nuget/v/netofficefw.excel?color=%23217346&label=&logo=microsoft-excel&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Excel/)
+    [![NetOfficeFw.Powerpoint](https://img.shields.io/nuget/v/netofficefw.powerpoint?color=%23B7472A&label=&logo=microsoft-powerpoint&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Powerpoint/)
+    [![NetOfficeFw.Access](https://img.shields.io/nuget/v/netofficefw.access?color=%23A4373A&label=&logo=microsoft-access&style=flat-square)](https://www.nuget.org/packages/NetOfficeFw.Access/)
+  </div>
 </div>
 
 <div class="usa-grid-full usa-section">
-  <div class="usa-width-one-half">
-    
-
+<div class="usa-width-one-half">
   <h2>Getting Started</h2>
 
-  <p>Look for [**NetOfficeFw** packages](https://www.nuget.org/profiles/netoffice) on NuGet published by [netoffice](https://www.nuget.org/profiles/netoffice).</p>
+  <p>Install [**NetOfficeFw** packages](https://www.nuget.org/profiles/netoffice) from NuGet and develop Microsoft Office solutions.</p>
 
-  <p>Install NetOffice Framework as a NuGet package into your Visual Studio project and develop Microsoft Office solution:</p>
-    
+  <p>We publish signed and verified packages on [netoffice](https://www.nuget.org/profiles/netoffice) nuget profile.</p>
+  <!-- Install NetOffice Framework as a NuGet package into your Visual Studio project and develop Microsoft Office solution:</p> -->
+
   <div class="code-block">
     <div class="code-block-header">
-      <span class="language">Package Manager</span>
+      <span class="language">Our packages</span>
     </div>
     <div class="code-block-body">
-      <pre>PM> Install-Package NetOfficeFw.Word
-PM> Install-Package NetOfficeFw.Word -Version 1.8.1</pre>
+      <pre>NetOfficeFw.Word
+NetOfficeFw.Excel
+NetOfficeFw.PowerPoint
+NetOfficeFw.Outlook
+NetOfficeFw.Access
+</pre>
     </div>
   </div>
 
-<div class="notice">
-    **Notice:** Using old _NetOffice.Core_ packages 1.7.4.4?
+  <div class="notice">
+    <h4>Migrate from old packages</h4>
+    **Notice:** Using packages version 1.7.4.4?
     [Learn how to migrate.](migrate-notice)<br>
     <br>
     Official NetOffice libraries use new **NetOfficeFw** prefix, are verified and signed.<br>
     Watch out for invalid packages as they contain incorrect assemblies and your projects will not work.
+  </div>
 </div>
-</div>
-
 <div class="usa-width-one-half">
   <h2 id="features">Features</h2>
   <ul>
@@ -61,7 +64,7 @@ PM> Install-Package NetOfficeFw.Word -Version 1.8.1</pre>
     <!-- <li>Visual Studio Project Templates and Wizards available</li> -->
   </ul>
 
-  <h2 id="supported-msoffice">Supported Microsoft Office</h2>
+  <h2 id="supported-msoffice">Microsoft Office Support</h2>
   <p>NetOffice supports Microsoft Office releases 2010, 2013, 2016, 2019 and Office 365.</p>
 </div>
 </div>
