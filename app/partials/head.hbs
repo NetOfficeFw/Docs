@@ -3,7 +3,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>{{#if title}}{{title}} | {{/if}}{{#if _appTitle}}{{_appTitle}}{{/if}}</title>
   <meta name="viewport" content="width=device-width">
-  {{#_description}}<meta name="description" content="{{_description}}">{{/_description}}
+  {{#_description}}<meta name="description" content="{{{.}}}">{{/_description}}
+  {{#_redirect}}<meta http-equiv="refresh" content="10; URL={{.}}">{{/_redirect}}
   <link rel="shortcut icon" href="{{_rel}}{{{_appFaviconPath}}}{{^_appFaviconPath}}favicon.ico{{/_appFaviconPath}}">
   <!-- build:css /styles/vendor.min.css -->
   <link rel="stylesheet" href="/styles/uswds.min.css">

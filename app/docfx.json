@@ -52,6 +52,10 @@
       "_rel": "/",
       "_nav": true,
       "items": [{
+        "_nav_id": "addins",
+        "name": "Office Add-ins",
+        "href": "addins/"
+      },{
         "_nav_id": "tutorials",
         "name": "Tutorials",
         "href": "tutorials/"
