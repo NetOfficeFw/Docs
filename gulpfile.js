@@ -98,8 +98,7 @@ function handlebars() {
         langPrefix: 'hljs lang-',
         highlight: function(code, lang) {
           if (lang && highlight.getLanguage(lang)) {
-            let ignoreIllegals = true;
-            return highlight.highlight(lang, code, ignoreIllegals).value;
+            return highlight.highlight(code, { language: lang, ignoreIllegals: true }).value;
           }
           return code;
         }
