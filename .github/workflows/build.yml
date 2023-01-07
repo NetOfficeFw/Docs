@@ -1,0 +1,30 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - vitepress
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+    - name: yarn install
+      run: |
+        yarn install --frozen-lockfile
+    - name: build website
+      run: |
+        yarn build
+    - name: archive
+      uses: actions/upload-artifact@v3
+      with:
+        name: netoffice-documentation-website
+        path: dist

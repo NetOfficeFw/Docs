@@ -7,6 +7,7 @@ export default defineConfigWithTheme<ThemeConfig>({
   extends: baseConfig,
 
   srcDir: 'app',
+  outDir: 'dist',
 
   title: 'NetOffice',
   description: 'NetOffice Framework documentation.',
