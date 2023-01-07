@@ -17,7 +17,7 @@ Download our [NetOffice extension](https://marketplace.visualstudio.com/items?it
 In the **Create new project** dialog search for NetOffice and select a template based
 on the Microsoft Office application you want to extend.
 
-<img src="../images/netoffice_extension_create_project.png" width="768" height="510" alt="Create new project - NetOffice add-in templates">
+<img src="./assets/netoffice_extension_create_project.png" width="768" height="510" alt="Create new project - NetOffice add-in templates">
 
 
 Look for the `MyAddin` class in the project. Use the `MyAddin_OnConnection` method
