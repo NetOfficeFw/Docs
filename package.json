@@ -3,65 +3,10 @@
   "engines": {
     "node": ">=14"
   },
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
-    "@babel/core": "^7.14.5",
-    "@babel/preset-env": "^7.14.5",
-    "autoprefixer": "^10.2.6",
-    "browser-sync": "^2.26.14",
-    "chai": "^4.3.4",
-    "cross-env": "^7.0.3",
-    "cssnano": "^5.0.6",
-    "del": "^6.0.0",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-cli": "^2.2.0",
-    "gulp-eslint": "^6.0.0",
-    "gulp-gh-pages": "^0.5.4",
-    "gulp-hbs": "^0.2.0",
-    "gulp-htmlmin": "^5.0.1",
-    "gulp-if": "^3.0.0",
-    "gulp-imagemin": "^7.1.0",
-    "gulp-load-plugins": "^2.0.7",
-    "gulp-marked-json": "^1.0.0",
-    "gulp-plumber": "^1.2.1",
-    "gulp-postcss": "^9.0.0",
-    "gulp-size": "^4.0.1",
-    "gulp-uglify": "^3.0.2",
-    "gulp-useref": "^5.0.0",
-    "handlebars-helpers": "^0.10.0",
-    "helper-markdown": "^1.0.0",
-    "highlight.js": "^11.0.1",
-    "object-assign": "^4.1.1",
-    "postcss": "^8.3.2",
-    "yargs": "17.0.1"
   },
   "scripts": {
-    "serve:dist": "cross-env NODE_ENV=production gulp serve",
-    "start": "gulp serve",
-    "build": "cross-env NODE_ENV=production gulp",
-    "deploy": "cross-env NODE_ENV=production gulp deploy",
-    "tasks": "gulp --tasks"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "Firefox ESR"
-  ],
-  "eslintConfig": {
-    "parserOptions": {
-      "sourceType": "module"
-    },
-    "env": {
-      "es6": true,
-      "node": true,
-      "browser": true
-    },
-    "rules": {
-      "quotes": [
-        2,
-        "single"
-      ]
-    }
   }
 }
