@@ -1,27 +1,7 @@
-# Created by https://www.gitignore.io/api/visualstudiocode
-# Edit at https://www.gitignore.io/?templates=visualstudiocode
+### VitePress ###
+dist/
+**/.vitepress/cache/
 
-### webapp ###
-/dist
-/.tmp
-
-
-### Node ###
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# Dependency directories
-node_modules/
-jspm_packages/
-
-# System Files
-.DS_Store
-Thumbs.db
 
 ### VisualStudioCode ###
 .vscode/*
@@ -29,9 +9,43 @@ Thumbs.db
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/*.code-snippets
 
-### VisualStudioCode Patch ###
-# Ignore all local history of files
-.history
+# Local History for Visual Studio Code
+.history/
 
-# End of https://www.gitignore.io/api/visualstudiocode
+
+### dotenv ###
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+
+### Node ###
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache

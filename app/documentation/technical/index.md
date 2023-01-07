@@ -7,7 +7,7 @@ title: Technical Documentation
 Technical documentation includes short overviews about technology behind NetOffice
 library and redirecst you to relevant tutorials.
 
-[NetOffice Tutorials](/tutorials) includes more detailed explanations and sample code.
+[NetOffice Tutorials](../../tutorials/index.md) includes more detailed explanations and sample code.
 
 * [COM Proxy Management](com.html)
 * [Unknown and variant types](type_system.html)
