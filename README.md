@@ -45,7 +45,7 @@ Small note: If editing the README, please conform to the [standard-readme](https
 Documentation is licensed under the [Creative Commons Attribution 4.0
 International License][cc].
 
-Code is licensed under the [MIT License][mit] © 2016-2020 Jozef Izso
+Code is licensed under the [MIT License][mit]
 
 [cc]: http://creativecommons.org/licenses/by/4.0/legalcode
 [mit]: https://opensource.org/licenses/MIT
