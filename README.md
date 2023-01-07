@@ -18,7 +18,7 @@ This website requires [node](https://nodejs.org), [npm](https://npmjs.com) and [
 
 To install packages required to build the website, run:
 
-```
+```commandline
 yarn install
 ```
 
@@ -26,13 +26,9 @@ yarn install
 
 To run the website locally, run:
 
-```
+```commandline
 gulp serve
 ```
-
-## Maintainers
-
-[@jozefizso](https://github.com/jozefizso)
 
 ## Contribute
 
