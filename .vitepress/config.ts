@@ -62,10 +62,10 @@ export default defineConfigWithTheme<ThemeConfig>({
 
     footer: {
       license: {
-        text: 'MIT License',
-        link: 'https://opensource.org/licenses/MIT'
+        text: 'CC BY 4.0',
+        link: 'https://creativecommons.org/licenses/by/4.0/'
       },
-      copyright: `Copyright © 2016-2023 NetOffice Framework. Documentation licensed under <a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0</a>.`
+      copyright: `© 2016-2023 NetOffice contributors.`
     },
   },
 })
